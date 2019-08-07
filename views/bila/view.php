@@ -1,0 +1,105 @@
+<?php
+
+use yii\helpers\Html;
+use yii\widgets\DetailView;
+use app\models\User;
+use app\models\Bila;
+use yii\helpers\Url;
+
+/* @var $this yii\web\View */
+/* @var $model app\models\WebLink */
+
+$this->title = $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Bila', 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
+?>
+<div class="box box-primary">
+			
+	<div class="box-body">
+		<div id="wra_example1" class="dataTables_wrapper form-inline dt-bootstrap">
+                
+                <h2 class="alert alert-success fade in">
+                    
+                    <?= User::getProfileNameById($model->user_id);?> 
+                    <sup class="badge bg-color-orange bounceIn animated"><?= $model->cat ?></sup>                    
+                </h2>
+                <!-- <h2><?= $model->cat ?></h2> -->
+
+    <table class="table table-bordered table-condensed">
+      
+			<tr>
+                <td class="text-right">
+                    รหัสใบลา
+                </td>
+                <td>
+                    <?= $model->id ?>
+                </td>
+            </tr>
+            <tr>   
+                <td class="text-right">
+                    ชื่อ
+                </td>
+                <td>
+                    <?= User::getProfileNameById($model->user_id);?>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-right">
+                    ตำแหน่ง
+                </td>
+                <td>
+                    <?=User::getProfileDepById($model->user_id);?>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-right">
+                    ประเภทการลา
+                </td>
+                <td>
+                    <?= $model->cat ?>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-right">
+                    จำนวนวันที่ลา
+                </td>
+                <td>
+                    <?= $model->date_total ;?> วัน
+                </td>
+            </tr>
+            <tr>
+                <td class="text-right">
+                    ตั้งแต่วันที่
+                </td>
+                <td>
+                    <?= Bila::DateThai_full($model->date_begin);?>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-right">
+                    ถึงวันที่
+                </td>
+                <td>
+                    <?= Bila::DateThai_full($model->date_end);?>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-right">
+                    
+                </td>
+                <td>
+                <?= $model->file ?
+                '<a href="'.Url::to(['bila/file_view','id' => $model->id]).'"  target="_blank" data-id='.$model->id.'>ไฟล์เอกสาร</a>' 
+                :
+                '<a href="'.Url::to(['bila/print1','id' => $model->id]).'" class="btn btn-primary btn-xs" target="_blank" data-id='.$model->id.'>print</a>' ?>
+                     
+                </td>
+            </tr>
+        
+        </table>
+    
+        </tbody>
+		</table>
+								</div>
+	</div>
+</div>
