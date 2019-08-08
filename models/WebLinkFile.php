@@ -30,7 +30,7 @@ class WebLinkFile extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            // [['file'], 'required'],
+            // [['url'], 'required'],
             [['web_link_id', 'sort'], 'integer'],
             [['name', 'type', 'file', 'url'], 'string', 'max' => 255],
             [['url'],'url', 'defaultScheme' => 'http'],

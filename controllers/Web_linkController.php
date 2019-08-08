@@ -31,10 +31,10 @@ class Web_linkController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['admin'],
+                'only' => ['index_admin'],
                 'rules' => [
                     [
-                        'actions' => ['admin'],
+                        'actions' => ['index_admin'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -63,38 +63,27 @@ class Web_linkController extends Controller
 
     public function actionIndex()
     {
-        // $sql = 'SELECT * FROM web_link';
-        // $models = Yii::$app->db->createCommand($sql)->queryAll();
         $models = WebLink::find()->orderBy([
             'create_at'=>SORT_DESC,
             'id' => SORT_DESC,
-            ])->limit(100)->all();
+            ])->all();
                 
-        $countAll = WebLink::getCountAll();
 
         return $this->render('index', [
             'models' => $models,
-            'countAll' => $countAll,
         ]);
     }
 
-
-
-    public function actionAdmin()
-    {
-        $sql = 'SELECT * FROM web_link';
-        // $models = Yii::$app->db->createCommand($sql)->queryAll();
+    public function actionIndex_admin()
+    {       
         $models = WebLink::find()->orderBy([
             'create_at'=>SORT_DESC,
             'id' => SORT_DESC,
-            ])->limit(100)->all();
+            ])->all();
         
-        
-        $countAll = WebLink::getCountAll();
 
         return $this->render('index_admin', [
             'models' => $models,
-            'countAll' => $countAll,
         ]);
     }
     
@@ -147,7 +136,7 @@ class Web_linkController extends Controller
             $model->update_at = date("Y-m-d H:i:s");
             if($model->save()){
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
-                return $this->redirect(['admin']);
+                return $this->redirect(['index_admin']);
             }   
         }
 
@@ -202,7 +191,7 @@ class Web_linkController extends Controller
             $modelFile->sort = 1;
             if($modelFile->save()){
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'.$_POST['WebLinkFile']['name']);
-                return $this->redirect(['admin']);
+                return $this->redirect(['index_admin']);
             }   
 
         }
@@ -245,7 +234,7 @@ class Web_linkController extends Controller
             $modelFile->sort = 1;
             if($modelFile->save()){
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'.$_POST['WebLinkFile']['name']);
-                return $this->redirect(['admin']);
+                return $this->redirect(['index_admin']);
             }   
 
         }
@@ -261,59 +250,7 @@ class Web_linkController extends Controller
         }
     }
     
-    public function actionC2()
-    {
-        $model = $this->findModel($id);
-
-        $fileName = $model->img;
-
-        //Add This For Ajax Email Exist Validation 
-        if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ActiveForm::validate($model);
-          }
-
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-           if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            
-            $f = UploadedFile::getInstance($model, 'img');
-            if(!empty($f)){
-                $dir = Url::to('@webroot/uploads/weblink/');
-                if (!is_dir($dir)) {
-                    mkdir($dir, 0777, true);
-                }
-                if($fileName && is_file($dir.$fileName)){
-                    unlink($dir.$fileName);// ลบ รูปเดิม;   
-                }
-                $fileName = md5($f->baseName . time()) . '.' . $f->extension;
-                if($f->saveAs($dir . $fileName)){
-                    $model->img = $fileName;
-                }               
-            } 
-            $model->name = $_POST['WebLink']['name'];
-            $model->link = $_POST['WebLink']['link'];
-            $model->img = $fileName;
-            $model->update_at = date("Y-m-d H:i:s");
-            if($model->save()){
-                Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
-                return $this->redirect(['admin']);
-            }   
-        }
-        }
-
-        // $model->tel = explode(',', $model->tel);
-        if(Yii::$app->request->isAjax){
-            return $this->renderAjax('f2',[
-                    'model' => $model,                    
-            ]);
-        }else{
-            return $this->render('f2',[
-                'model' => $model,                    
-            ]); 
-        }
-    }
-
+    
     /**
      * Updates an existing WebLink model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -357,7 +294,7 @@ class Web_linkController extends Controller
             $model->update_at = date("Y-m-d H:i:s");
             if($model->save()){
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
-                return $this->redirect(['admin']);
+                return $this->redirect(['index_admin']);
             }   
         }
         }
@@ -412,7 +349,7 @@ class Web_linkController extends Controller
             // $modelFile->sort = 1;
             if($modelFile->save()){
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'.$_POST['WebLinkFile']['name']);
-                return $this->redirect(['admin']);
+                return $this->redirect(['index_admin']);
             }   
 
         }
@@ -450,7 +387,7 @@ public function actionUpdateurl($id)
 
             if($modelFile->save()){
                 // Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'.$_POST['WebLinkFile']['name']);
-                return $this->redirect(['admin']);
+                return $this->redirect(['index_admin']);
             }   
 
         }
@@ -505,7 +442,7 @@ public function actionUpdateurl($id)
             rmdir($dir);
         }
        
-        return $this->redirect(['admin']);
+        return $this->redirect(['index_admin']);
     }
     
 public function actionDeletefile($id)
@@ -522,7 +459,7 @@ public function actionDeletefile($id)
         
         $modelfile->delete();
 
-        return $this->redirect(['admin']);
+        return $this->redirect(['index_admin']);
     }
 
     public function actionDeleteurl($id)
@@ -531,7 +468,7 @@ public function actionDeletefile($id)
         
         $modelfile->delete();
 
-        return $this->redirect(['admin']);
+        return $this->redirect(['index_admin']);
     }
 
     public function actionShow($id=null){

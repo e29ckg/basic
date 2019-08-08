@@ -34,6 +34,11 @@ $menu_admin = [
             ['label' => 'ประเภทหนังสือ', 'icon' => 'pencil', 'url' => ['cletter/caid_index']],
             ['label' => 'Line', 'icon' => 'pencil', 'url' => ['cletter/line_index']],
         ]], 
+        ['label' => 'WebLink', 'icon' => 'pencil', 'url' => '#',
+          'items' => [
+            ['label' => 'WebLink', 'icon' => 'pencil', 'url' => ['web_link/index']],
+            ['label' => 'จัดการ WebLink', 'icon' => 'pencil', 'url' => ['web_link/index_admin']],
+        ]], 
         ['label' => 'โปรแกรมใบลา', 'icon' => 'pencil', 'url' => '#',
           'items' => [
             ['label' => 'เขียนใบลา', 'icon' => 'pencil', 'url' => ['bila/index']],

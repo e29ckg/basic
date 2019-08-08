@@ -47,11 +47,8 @@ $this->params['breadcrumbs'][] = $this->title;
 							?>
 							<a href= "#" class="btn btn-warning act-update" data-id=<?=$model->id?>><i class="fa fa-pencil-square-o"></i> แก้ไข</a>
 							<!-- <a href= "#" class="btn btn-info act-view" data-id=<?=$model->id?>><i class="fa fa-eye"></i> ดู</a> -->
-							<form method="post">
-    <input type="hidden" name="<?= Yii::$app->request->csrfParam; ?>" value="<?= Yii::$app->request->csrfToken; ?>" />
-    <button type="submit"> Save </button>
-</form>
-<?= Html::a('<i class="fa fa-remove"></i> ลบ',['cletter/delete','id' => $model->id],
+							
+								<?= Html::a('<i class="fa fa-remove"></i> ลบ',['cletter/delete','id' => $model->id],
 									[
 										'name'=>'Yii::$app->request->csrfParam',
 										'value'=>'Yii::$app->request->csrfToken',
@@ -60,6 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
 										'data-method' => 'post',
 									]);
 							?>
+							
 						</td>
 													
 					</tr>
