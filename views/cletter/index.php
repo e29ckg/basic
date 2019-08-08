@@ -52,11 +52,8 @@ $script = <<< JS
 $(document).ready(function() {	
 /* BASIC ;*/
 
-	$('#example1').DataTable({	
-		rowReorder: {
-			selector: 'td:nth-child(2)'
-		},
-		responsive: true
+	$('#example1').DataTable({
+		"order": [[ 0, 'desc' ], [ 3, 'desc' ]]
 	})
 
 	function init_click_handlers(){        	

@@ -58,9 +58,9 @@ class CletterController extends Controller
     public function actionIndex()
     {
         $model = CLetter::find()->orderBy([
-            // 'created_at'=>SORT_ASC,
-            'id' => SORT_DESC,
-            ])->limit(10)->all();
+            // 'created_at'=>SORT_DESC,
+            'id' => SORT_ASC,
+            ])->limit(100)->all();
         
         return $this->render('index',[
             'models' => $model,
@@ -70,9 +70,9 @@ class CletterController extends Controller
     public function actionIndex_admin()
     {
         $model = CLetter::find()->orderBy([
-            // 'created_at'=>SORT_ASC,
-            'id' => SORT_DESC,
-            ])->limit(10)->all();        
+            'created_at'=>SORT_DESC,
+            // 'id' => SORT_DESC,
+            ])->limit(100)->all();        
         
         return $this->render('index_admin',[
             'models' => $model,
@@ -166,7 +166,7 @@ class CletterController extends Controller
                         Yii::$app->session->setFlash('warning', 'Line Notify '.$res->message);
                     }
                 }               
-                return $this->redirect(['index']);
+                return $this->redirect(['index_admin']);
             }   
         }
 
@@ -235,7 +235,7 @@ class CletterController extends Controller
             }
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
             };          
-            return $this->redirect(['index', 'id' => $filename]);
+            return $this->redirect(['index_admin', 'id' => $filename]);
         }
 
         if(Yii::$app->request->isAjax){
@@ -277,7 +277,7 @@ class CletterController extends Controller
             
         }        
 
-        return $this->redirect(['index']);
+        return $this->redirect(['index_admin']);
     }
 
     public function actionShow($file=null,$name=null) {
@@ -315,7 +315,7 @@ class CletterController extends Controller
             
         }else{
             Yii::$app->session->setFlash('warning', 'ไม่พบ File... ');
-            return $this->redirect(['index']);;
+            return $this->redirect(['index_admin']);;
         }
     }
 
@@ -354,7 +354,7 @@ class CletterController extends Controller
         }
         
         
-        return $this->redirect(['index']);
+        return $this->redirect(['index_admin']);
         
     }
     
