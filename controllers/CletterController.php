@@ -314,8 +314,8 @@ class CletterController extends Controller
             }
             
         }else{
-            Yii::$app->session->setFlash('error', 'ไม่พบ File... ');
-            return $this->redirect(['site/main']);;
+            Yii::$app->session->setFlash('warning', 'ไม่พบ File... ');
+            return $this->redirect(['index']);;
         }
     }
 
