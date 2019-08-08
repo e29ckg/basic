@@ -306,7 +306,7 @@ class CletterController extends Controller
             $modelLog->ip = Yii::$app->getRequest()->getUserIP();
             if($modelLog->save()){
                 $modelLine = Line::findOne(['name' => 'Cletter_Admin']);        
-                    if($modelLine->token && $modelLine->status == 1){
+                    if(!empty($modelLine->token) && $modelLine->status == 1){
                         $message .= '';
                         Line::notify_message($modelLine->token,$message);                        
                     }                        
@@ -341,7 +341,7 @@ class CletterController extends Controller
         if($model->name){            
             $message = $model->name .' ดูรายละเอียดเพิ่มเติมได้ที่ เว็บภายใน ';
             $modelLine = Line::findOne(['name' => 'Cletter']);        
-            if($modelLine->token && $modelLine->status == 1){
+            if(!empty($modelLine->token) && $modelLine->status == 1){
                 $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.';
                 $res = Line::notify_message($modelLine->token,$message);
                 if($res->status == 200){
@@ -456,6 +456,15 @@ class CletterController extends Controller
             $model = new Line();
             $model->name = 'Cletter';
             $model->save();
+
+            $modelA = Line::findOne(['name' => 'Cletter_Admin']);  
+
+            if(empty($modelA->name)){
+                $modelA = new Line();
+                $modelA->name = 'Cletter_Admin';
+                $modelA->save();
+            } 
+
         } 
 
         if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){

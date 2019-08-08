@@ -12,6 +12,7 @@ class m180924_030329_create_user_table extends Migration
      */
     public function safeUp()
     {
+
         $tableOptions = null;
  
         if ($this->db->driverName === 'mysql') {
