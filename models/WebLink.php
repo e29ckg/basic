@@ -72,7 +72,7 @@ class WebLink extends \yii\db\ActiveRecord
         if(is_file($source)){
             $link = '/uploads/weblink/'.$model->id.'/'.$model->img;
         }else{
-            $link = '/img/none.png';
+            $link = '/adminlte2/dist/img/default-50x50.gif';
         } 
         return $link ;        
     }

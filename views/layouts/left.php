@@ -3,9 +3,10 @@ $menuG = [
     'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
     'items' => [
         ['label' => 'Menu', 'options' => ['class' => 'header']],
-        ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
-        
-                            
+        ['label' => 'หนังสือเวียน', 'icon' => 'pencil', 'url' => ['cletter/index']],
+        ['label' => 'WebLink', 'icon' => 'pencil', 'url' => ['web_link/index']],
+        ['label' => '#', 'options' => ['class' => 'header']],
+        ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],                    
     ],
 ];
 
@@ -14,6 +15,7 @@ $menu = [
     'items' => [
         ['label' => 'Menu', 'options' => ['class' => 'header']],
         ['label' => 'หนังสือเวียน', 'icon' => 'pencil', 'url' => ['cletter/index']],
+        ['label' => 'WebLink', 'icon' => 'pencil', 'url' => ['web_link/index']],
         ['label' => 'เขียนใบลา', 'icon' => 'pencil', 'url' => ['bila/index']],
         ['label' => 'ตั้งค่า', 'options' => ['class' => 'header']],
         ['label' => 'Profile', 'icon' => 'id-card-o', 'url' => ['user/profile']],
@@ -30,7 +32,6 @@ $menu_admin = [
         ['label' => 'หนังสือเวียน', 'icon' => 'pencil', 'url' => '#',
           'items' => [
             ['label' => 'หนังสือเวียน', 'icon' => 'pencil', 'url' => ['cletter/index_admin']],
-            // ['label' => 'เพิ่มหนังสือเวียน', 'icon' => 'pencil', 'url' => ['cletter/create']],
             ['label' => 'ประเภทหนังสือ', 'icon' => 'pencil', 'url' => ['cletter/caid_index']],
             ['label' => 'Line', 'icon' => 'pencil', 'url' => ['cletter/line_index']],
         ]], 

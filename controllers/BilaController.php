@@ -6,20 +6,16 @@ use app\models\Bila;
 use app\models\BilaFileUp;
 use app\models\User;
 use app\models\SignBossName;
-use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use app\models\UploadForm;
 use yii\web\UploadedFile;
 use yii\helpers\Url;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
 use kartik\mpdf\Pdf;
-use yii\helpers\ArrayHelper;
 use Da\QrCode\QrCode;
-use Da\QrCode\Format\PhoneFormat; 
 
 /**
  * Web_linkController implements the CRUD actions for Bila model.
@@ -34,10 +30,10 @@ class BilaController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['admin','index'],
+                'only' => ['index','admin','create_a','create_b','sbm_index','sbn_create'],
                 'rules' => [
                     [
-                        'actions' => ['admin','index'],
+                        // 'actions' => ['index'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -137,7 +133,6 @@ class BilaController extends Controller
                     mkdir($dir, 0777, true);
                 } 
 
-                // $format = new PhoneFormat(['phone' => $model->id]);
                 $sms_qr = 'http://'.$_SERVER['HTTP_HOST'].'/bila.php?ref='.$model->id;
                 $qrCode = (new QrCode($sms_qr))
                     ->setSize(250)
@@ -219,7 +214,6 @@ class BilaController extends Controller
                     mkdir($dir, 0777, true);
                 } 
 
-                // $format = new PhoneFormat(['phone' => $model->id]);
                 $sms_qr = 'http://'.$_SERVER['HTTP_HOST'].'/bila.php?ref='.$model->id;
                 $qrCode = (new QrCode($sms_qr))
                     ->setSize(250)
@@ -428,11 +422,11 @@ class BilaController extends Controller
         $model = new BilaFileUp();
         
                   
-        //Add This For Ajax Email Exist Validation 
-        // if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post()) ){
-        //     Yii::$app->response->format = Response::FORMAT_JSON;
-        //     return ActiveForm::validate($model) ;
-        // } 
+        // Add This For Ajax Email Exist Validation 
+        if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post()) ){
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model) ;
+        } 
         
         if ($model->load(Yii::$app->request->post()) && $model->validate()){ 
             $f = UploadedFile::getInstance($model, 'file');

@@ -24,10 +24,10 @@ class UserController extends Controller{
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['user_index','profile'],
+                'only' => ['user_index','profile','dep','fname'],
                 'rules' => [
                     [
-                        'actions' => ['user_index','profile'],
+                        'actions' => ['user_index','profile','dep','fname'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -63,7 +63,7 @@ class UserController extends Controller{
     public function actionUser_index2($id = null){
         // $this->layout = 'main'; 
         
-            $models = User::find()->all();
+        $models = User::find()->all();
         
         return $this->render('user_index2',[
             'models' => $models,

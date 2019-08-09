@@ -16,9 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="box box-primary">
 	<div class="box-header with-border">
 		<h3 class="box-title"><?= Html::encode($this->title) ?></h3>
-		<div class="box-tools pull-right">
-			<button id="act-create" class="btn btn-danger btn-md" alt="act-create"><i class="fa fa-pencil-square-o "></i> เพิ่ม</button>  
-		</div>	
+			
 	</div>
 	<div class="box-body">
 		<div id="example" class="dataTables_wrapper form-inline dt-bootstrap">

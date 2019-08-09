@@ -44,7 +44,8 @@ class Line extends \yii\db\ActiveRecord
             'stutus' => 'สถานะ',
         ];
     }
-    public function notify_message($token,$message)
+    // public function notify_message($token,$message)
+    public function notify_message1($token,$message)
     {
         
         // $message = 'test send photo';    //text max 1,000 charecter
@@ -65,33 +66,47 @@ class Line extends \yii\db\ActiveRecord
             )
         );
         $context = stream_context_create($headerOptions);
-        $result = file_get_contents($line_api, FALSE, $context);
-        $res = json_decode($result);
+        
+            $result = file_get_contents($line_api, FALSE, $context) ;
+            $res = json_decode($result);
+       
+        
         
         return $res;
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function send_notify_message($line_api, $access_token, $message_data){
-        $headers = array('Method: POST', 'Content-type: multipart/form-data', 'Authorization: Bearer '.$access_token );
-     
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $line_api);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $message_data);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $result = curl_exec($ch);
+    public function notify_message($token,$message){
+        $mms =  trim($message);
+        date_default_timezone_set("Asia/Bangkok");
+        $line_api = $token;
+    // public function send_notify_message($line_api, $access_token, $message_data){
+        
+        $chOne = curl_init();
+        curl_setopt($chOne, CURLOPT_URL, "https://notify-api.line.me/api/notify");
+        // SSL USE 
+        curl_setopt( $chOne, CURLOPT_SSL_VERIFYHOST, 0); 
+        curl_setopt( $chOne, CURLOPT_SSL_VERIFYPEER, 0); 
+
+        //POST 
+        curl_setopt( $chOne, CURLOPT_POST, 1); 
+        curl_setopt( $chOne, CURLOPT_POSTFIELDS, "message=$mms"); 
+        curl_setopt( $chOne, CURLOPT_FOLLOWLOCATION, 1); 
+        $headers = array( 'Content-type: application/x-www-form-urlencoded', 'Authorization: Bearer '.$line_api.'', );
+        curl_setopt($chOne, CURLOPT_HTTPHEADER, $headers); 
+        curl_setopt( $chOne, CURLOPT_RETURNTRANSFER, 1); 
+        
+        $result = curl_exec($chOne);
         // Check Error
-        if(curl_error($ch))
+        if(curl_error($chOne))
         {
-           $return_array = array( 'status' => '000: send fail', 'message' => curl_error($ch) ); 
+           $res = ['status' => '000: send fail', 'message' => curl_error($chOne)]; 
         }
         else
         {
-           $return_array = json_decode($result, true);
+           $res = json_decode($result, true);
         }
-        curl_close($ch);
-     return $return_array;
+        curl_close($chOne);
+     return $res;
      }
 }

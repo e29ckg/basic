@@ -7,18 +7,14 @@ use app\models\CLetter;
 use app\models\CLetterCaid;
 use app\models\Log;
 use app\models\Line;
-use KS\Line\LineNotify;
-use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use app\models\UploadForm;
 use yii\web\UploadedFile;
 use yii\helpers\Url;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
-use yii\db\Query;
 
 /**
  * CletterController implements the CRUD actions for CLetter model.
@@ -33,10 +29,10 @@ class CletterController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index','create','show','all'],
+                'only' => ['create','show','all','index_admin','caid_index','caid_create'],
                 'rules' => [
                     [
-                        'actions' => ['index','create','show','all'],
+                        // 'actions' => ['create','show','all'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -160,10 +156,11 @@ class CletterController extends Controller
                 if(!empty($modelLine->token) && $modelLine->status == 1){
                     $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.';
                     $res = Line::notify_message($modelLine->token,$message);
-                    if($res->status == 200){
-                        Yii::$app->session->setFlash('success', 'Line Notify '.$res->message);
+                    
+                    if($res['status'] == 200){
+                        Yii::$app->session->setFlash('success', 'Line Notify ส่งได้');
                     }else{
-                        Yii::$app->session->setFlash('warning', 'Line Notify '.$res->message);
+                        Yii::$app->session->setFlash('warning', 'Line Notify ส่งไม่ได้ Error'.$res['status']);
                     }
                 }               
                 return $this->redirect(['index_admin']);
@@ -344,10 +341,11 @@ class CletterController extends Controller
             if(!empty($modelLine->token) && $modelLine->status == 1){
                 $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.';
                 $res = Line::notify_message($modelLine->token,$message);
-                if($res->status == 200){
-                    Yii::$app->session->setFlash('success', 'Line Notify '.$res->message);
+
+                if($res['status'] == 200){
+                    Yii::$app->session->setFlash('success', 'Line Notify ส่งได้');
                 }else{
-                    Yii::$app->session->setFlash('warning', 'Line Notify '.$res->message);
+                    Yii::$app->session->setFlash('warning', 'Line Notify ส่งไม่ได้ Error'.$res['status']);
                 }
             } 
                 
