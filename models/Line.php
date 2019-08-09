@@ -44,43 +44,11 @@ class Line extends \yii\db\ActiveRecord
             'stutus' => 'สถานะ',
         ];
     }
-    // public function notify_message($token,$message)
-    public function notify_message1($token,$message)
-    {
-        
-        // $message = 'test send photo';    //text max 1,000 charecter
-        
-        $line_api = 'https://notify-api.line.me/api/notify';
-        // $line_token = 'FVJfvOHD7nkd9mSTxN5573tVSpVuiK8JTEAIgSAOYZx'; //แบบแซบ
-        // $line_token = '4A51UznK0WDNjN1W7JIOMyvcsUl9mu7oTHJ1G1u8ToK';
-        $line_token = $token;
-        $queryData = array('message' => $message);
-        $queryData = http_build_query($queryData,'','&');
-        $headerOptions = array(
-            'http'=>array(
-                'method'=>'POST',
-                'header'=> "Content-Type: application/x-www-form-urlencoded\r\n"
-                    ."Authorization: Bearer ".$line_token."\r\n"
-                    ."Content-Length: ".strlen($queryData)."\r\n",
-                'content' => $queryData
-            )
-        );
-        $context = stream_context_create($headerOptions);
-        
-            $result = file_get_contents($line_api, FALSE, $context) ;
-            $res = json_decode($result);
-       
-        
-        
-        return $res;
-        throw new NotFoundHttpException('The requested page does not exist.');
-    }
 
     public function notify_message($token,$message){
         $mms =  trim($message);
         date_default_timezone_set("Asia/Bangkok");
         $line_api = $token;
-    // public function send_notify_message($line_api, $access_token, $message_data){
         
         $chOne = curl_init();
         curl_setopt($chOne, CURLOPT_URL, "https://notify-api.line.me/api/notify");
@@ -108,5 +76,5 @@ class Line extends \yii\db\ActiveRecord
         }
         curl_close($chOne);
      return $res;
-     }
+    }
 }

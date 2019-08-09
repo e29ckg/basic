@@ -24,6 +24,9 @@ class CletterController extends Controller
     /**
      * {@inheritdoc}
      */
+    public $line_sms ='10.37.64.01';
+    public $upload ='/uploads/user/';
+
     public function behaviors()
     {
         return [
@@ -158,7 +161,7 @@ class CletterController extends Controller
                     $res = Line::notify_message($modelLine->token,$message);
                     
                     if($res['status'] == 200){
-                        Yii::$app->session->setFlash('success', 'Line Notify ส่งได้');
+                        Yii::$app->session->setFlash('info', 'Line Notify ส่งได้');
                     }else{
                         Yii::$app->session->setFlash('warning', 'Line Notify ส่งไม่ได้ Error'.$res['status']);
                     }
@@ -228,7 +231,18 @@ class CletterController extends Controller
             $modelLog->create_at = date("Y-m-d H:i:s");
             $modelLog->ip = Yii::$app->getRequest()->getUserIP();
             if($modelLog->save()){
-                $res = $this->notify_message_admin($message);
+                
+                $modelLine = Line::findOne(['name' => 'Cletter_Admin']);        
+                if(!empty($modelLine->token) && $modelLine->status == 1){
+                    $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.';
+                    $res = Line::notify_message($modelLine->token,$message);
+                    
+                    if($res['status'] == 200){
+                        Yii::$app->session->setFlash('info', 'Line Notify ส่งได้');
+                    }else{
+                        Yii::$app->session->setFlash('warning', 'Line Notify ส่งไม่ได้ Error'.$res['status']);
+                    }
+                } 
             }
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
             };          
@@ -239,8 +253,7 @@ class CletterController extends Controller
             return $this->renderAjax('update',[
                     'model' => $model,                    
             ]);
-        }
-        
+        }        
         return $this->render('update',[
                'model' => $model,                    
         ]); 
@@ -270,23 +283,17 @@ class CletterController extends Controller
             $modelLog->manager = 'Cletter_delete';
             $modelLog->detail =  'ลบ '.$model->name;
             $modelLog->create_at = date("Y-m-d H:i:s");
-            $modelLog->ip = Yii::$app->getRequest()->getUserIP();
-            
+            $modelLog->ip = Yii::$app->getRequest()->getUserIP();            
         }        
 
         return $this->redirect(['index_admin']);
     }
 
     public function actionShow($file=null,$name=null) {
-
-        // $model = $this->findModel($id);
-        // if($name=null){
-            $modelF = Cletter::find()->where(['file' => $file])->one();   
-            $name = $modelF ? $modelF->name : $file;          
-        // } else{
-        //     $modelF = Cletter::find()->where(['file' => $file])->one();  
-        // }
         
+        $modelF = Cletter::find()->where(['file' => $file])->one();   
+        $name = $modelF ? $modelF->name : $file;          
+                
         // This will need to be the path relative to the root of your app.
         $filePath = '/web/uploads/cletter';
         // Might need to change '@app' for another alias
@@ -343,17 +350,14 @@ class CletterController extends Controller
                 $res = Line::notify_message($modelLine->token,$message);
 
                 if($res['status'] == 200){
-                    Yii::$app->session->setFlash('success', 'Line Notify ส่งได้');
+                    Yii::$app->session->setFlash('info', 'Line Notify ส่งได้');
                 }else{
                     Yii::$app->session->setFlash('warning', 'Line Notify ส่งไม่ได้ Error'.$res['status']);
                 }
             } 
                 
-        }
-        
-        
-        return $this->redirect(['index_admin']);
-        
+        }        
+        return $this->redirect(['index_admin']);        
     }
     
 
