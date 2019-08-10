@@ -25,8 +25,8 @@ $profileActive = Profile::getProfileActive();
 <head>
   <meta charset="<?= Yii::$app->charset ?>">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
- <meta name="viewport" content="width=device-width, initial-scale=1"> <title><?= Html::encode($this->title) ?></title>
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1"> <title><?= Html::encode($this->title) ?></title>
+  <link rel="shortcut icon" type="image/x-icon" href="<?=Url::to(['/img/favicon.ico'])?>">
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   <?php $this->head() ?>
@@ -227,6 +227,7 @@ $profileActive = Profile::getProfileActive();
         echo "<div id='modalContent'></div>";
         Modal::end();
     ?>
+
 </body>
 </html>
 <?php $this->endPage() ?>
