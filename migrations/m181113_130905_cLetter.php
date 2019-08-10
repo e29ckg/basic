@@ -21,7 +21,7 @@ class m181113_130905_cLetter extends Migration
         $this->createTable('c_letter', [
             'id' => $this->primaryKey(),
             'name' => $this->string()->notNull()->unique(),
-            'caid' => $this->integer()->notNull(),
+            'ca_name' => $this->string(),
             'file' => $this->string(),
             'status' => $this->smallInteger()->notNull()->defaultValue(1),
             'created_at' => $this->dateTime(),
@@ -30,7 +30,7 @@ class m181113_130905_cLetter extends Migration
 
         $this->insert('c_letter', [
             'name' => 'ชื่อเรื่อง',
-            'caid' => 1,
+            'ca_name' => 'ประเภทหนังสือ',
             'status' => 1,
             'created_at' => date("Y-m-d H:i:s"),
             'updated_at' => date("Y-m-d H:i:s")

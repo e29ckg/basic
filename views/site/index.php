@@ -1,11 +1,60 @@
 <?php
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 
 $this->title = 'Home';
 ?>
 <div class="row">
-    <div class="col-xs-6">
+  <div class="col-md-6">
+              <!-- DIRECT CHAT -->
+    <div class="box box-warning direct-chat direct-chat-warning">
+      <div class="box-header with-border">
+        <h3 class="box-title">หนังสือเวียนล่าสุด.</h3>
+
+        <div class="box-tools pull-right">
+          <!-- <span data-toggle="tooltip" title="" class="badge bg-yellow" data-original-title="3 New Messages">3</span> -->
+          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+          </button>
+         
+        </div>
+      </div>
+                <!-- /.box-header -->
+      <div class="box-body">
+        <!-- Conversations are loaded here -->
+        <div class="direct-chat-messages">
+          <!-- Message. Default to the left -->
+
+            <?php foreach ($models as $model): ?>
+              <div class="direct-chat-msg">
+                <div class="direct-chat-info clearfix">
+                  <span class="direct-chat-name pull-left"><?=$model->ca_name?></span>
+                  <span class="direct-chat-timestamp pull-right"><?=$model->created_at?></span>
+                </div>
+                <!-- /.direct-chat-info -->
+                <img class="direct-chat-img" src="<?=Url::to(['img/pr.png'])?>" alt="message user image">
+                <!-- /.direct-chat-img -->
+                <div class="direct-chat-text">
+                    <?= $model->file ?
+                        '<a href="'.Url::to(['cletter/show','file' => $model->file]).'" class="uppercase" target="_blank">'.$model->name.'</a>'
+                        :
+                        $model->name;
+                    ?>
+                    
+                <?php ?>
+                    </div>
+                <!-- /.direct-chat-text -->
+              </div>
+              <?php  endforeach; ?>
+
+          </div>  
+          <div class="box-footer text-center">
+            <a href="<?=Url::to(['cletter/index'])?>" class="uppercase">View All </a>
+          </div>       
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
         <div class="box box-solid">
             <div class="box-header with-border">
             <h3 class="box-title"> </h3>

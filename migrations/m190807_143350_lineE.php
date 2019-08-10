@@ -25,7 +25,7 @@ class m190807_143350_lineE extends Migration
             'status' => $this->smallInteger()->defaultValue(1),
         ], $tableOptions);
     
-        $this->insert('line', ['name' => 'group','token' => null]);
+        // $this->insert('line', ['name' => 'group','token' => null]);
     }
 
     /**

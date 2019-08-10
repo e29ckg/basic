@@ -35,6 +35,7 @@ $profileActive = Profile::getProfileActive();
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <?php $this->beginBody() ?>
+
 <!-- Site wrapper -->
 <div class="wrapper">
 
@@ -42,7 +43,7 @@ $profileActive = Profile::getProfileActive();
     <!-- Logo -->
     <a href="<?=Url::to(['site/index'])?>" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>A</b>LT</span>
+      <span class="logo-mini"><b>App</b></span>
       <!-- logo for regular state and mobile devices -->
       <span class="logo-lg">  <b><?= Yii::$app->name ?></b></span>
     </a>
@@ -62,14 +63,14 @@ $profileActive = Profile::getProfileActive();
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="<?=  $profileActive["img"]; ?>" class="user-image" alt="User Image">
+              <img src="<?= $profileActive["img"]; ?>" class="user-image" alt="User Image">
               
-              <span class="hidden-xs"><?=  $profileActive["fullname"]; ?></span>
+              <span class="hidden-xs"><?= $profileActive["fullname"]; ?></span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="<?=  $profileActive["img"]; ?>" class="img-circle" alt="User Image">
+                <img src="<?= $profileActive["img"]; ?>" class="img-circle" alt="User Image">
 
                 <p>
                   <?=  $profileActive["fullname"]; ?>
@@ -196,8 +197,8 @@ $profileActive = Profile::getProfileActive();
     <div class="pull-right hidden-xs">
       <b>Version</b> 2.4.13
     </div>
-      <small># <?= $csrf =yii::$app->request->csrfParam;?> # 
-      <?= $token = yii::$app->request->csrfToken;?> # <?= Yii::$app->getRequest()->getUserIP();?></small>
+      <small># <?php $csrf =yii::$app->request->csrfParam;?> 
+      <?php $token = yii::$app->request->csrfToken;?> <?= Yii::$app->getRequest()->getUserIP();?></small>
     <!-- <strong>Copyright &copy; 2014-2019 <a href="https://adminlte.io">AdminLTE</a>.</strong> All rights -->
     <!-- reserved. -->
   </footer>

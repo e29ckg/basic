@@ -292,7 +292,7 @@ class CletterController extends Controller
 
     public function actionShow($file=null,$name=null) {
         
-        $modelF = Cletter::find()->where(['file' => $file])->one();   
+        $modelF = Cletter::findOne(['file' => $file]);   
         $name = $modelF ? $modelF->name : $file;          
                 
         // This will need to be the path relative to the root of your app.
@@ -301,8 +301,6 @@ class CletterController extends Controller
         $completePath = Yii::getAlias('@app'.$filePath.'/'.$file);
         if(is_file($completePath)){
             
-            $message = Cletter::getProfileName(Yii::$app->user->identity->id) .' เปิดอ่าน '.$name;
-
             $modelLog = new Log();
             $modelLog->user_id = Yii::$app->user->identity->id;
             $modelLog->manager = 'Cletter_Read';
@@ -312,7 +310,7 @@ class CletterController extends Controller
             if($modelLog->save()){
                 $modelLine = Line::findOne(['name' => 'Cletter_Admin']);        
                     if(!empty($modelLine->token) && $modelLine->status == 1){
-                        $message .= '';
+                        $message = Yii::$app->user->identity->username.' เปิดอ่าน '.$name.' '.date("Y-m-d H:i:s");
                         Line::notify_message($modelLine->token,$message);                        
                     }                        
                 return Yii::$app->response->sendFile($completePath, $file, ['inline'=>true]);
@@ -320,7 +318,7 @@ class CletterController extends Controller
             
         }else{
             Yii::$app->session->setFlash('warning', 'ไม่พบ File... ');
-            return $this->redirect(['index_admin']);;
+            return $this->redirect(['index']);;
         }
     }
 
@@ -489,9 +487,31 @@ class CletterController extends Controller
         return $this->render('line_form',[
             'model' => $model,
         ]);
-
     }
     
+    public function actionCaid_update_to_name()
+    {
+        $models = CLetter::find()->all();
+
+        foreach ($models as $model):
+            if($model->ca_name == 1){                
+                $model->ca_name = 'หนังเวียนสำนักงานศาล';
+                $model->save();
+            }elseif($model->ca_name == 2){                
+                $model->ca_name = 'ภายใน';
+                $model->save();
+            }elseif($model->ca_name == 3){                
+                $model->ca_name = 'ตารางเวร';
+                $model->save();
+            }elseif($model->ca_name == 4){                
+                $model->ca_name = '	คำสั่งศาลฯ';
+                $model->save();
+            }
+        endforeach;
+                
+
+        return $this->redirect(['index']);
+    }
            
 
 }

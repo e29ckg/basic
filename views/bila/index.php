@@ -93,12 +93,7 @@ $script = <<< JS
     
 $(document).ready(function() {	
 /* BASIC ;*/	
-$('#example1').DataTable({	
-	rowReorder: {
-		selector: 'td:nth-child(2)'
-	},
-	responsive: true
-})
+$('#example1').DataTable()
 $('#example2').DataTable({
       'paging'      : true,
       'lengthChange': false,

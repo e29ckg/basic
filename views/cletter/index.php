@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					<tr>
 						<td><?=$model->id?></td>
 						<td><?= $model->file ? Html::a($model->name,['cletter/show','file' => $model->file],['target' => '_blank']) : $model->name;?></td>
-						<td><?=$model->getCaidName()?></td>
+						<td><?=$model->ca_name?></td>
 						<td><?=$model->created_at?></td>						
 																			
 					</tr>

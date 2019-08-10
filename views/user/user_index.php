@@ -169,7 +169,7 @@ $script = <<< JS
      
 $(document).ready(function() {
 
-	$('#example1').DataTable()
+	// $('#example1').DataTable()
 	$('#example2').DataTable({
       'paging'      : true,
       'lengthChange': false,
@@ -180,10 +180,12 @@ $(document).ready(function() {
     })
 
 	
-	function init_click_handlers(){        	
-		$('#activity-modal').on('hidden.bs.modal', function () {
- 		location.reload();
-	});
+	function init_click_handlers(){  
+		
+
+		// $('#activity-modal').on('hidden.bs.modal', function () {
+ 		// location.reload();
+		// });
 
 		var url_update = "update_profile";
     	$(".act-update-profile").click(function(e) {            
@@ -272,6 +274,8 @@ $(document).ready(function() {
 			//   $("#myModal").modal('toggle');
 		});     
 	}); 
+	
+	$('#example1').DataTable()
 	
 });
 JS;

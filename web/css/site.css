@@ -74,3 +74,15 @@ body {
       top: -1px;
     }
   }
+
+td.img-weblink img {
+    width: 50px;
+	height: 46px;
+}
+
+td.img-weblink {
+	width: 50px; 
+	height: 46px;
+	overflow: hidden;
+	text-align: center;
+}

@@ -50,7 +50,7 @@ use kartik\file\FileInput;
                 <div class ="col-md-4">
                     <div class="form-group">			
                     <?php 
-                        echo $form->field($model, 'caid')->widget(Select2::classname(), [
+                        echo $form->field($model, 'ca_name')->widget(Select2::classname(), [
                             'data' => $model->getCaidList(),
                             'language' => 'th',
                             'options' => ['class'=>'form-control','placeholder' => ' เลือกประเภทหนังสือ...'],

@@ -3,8 +3,11 @@ $menuG = [
     'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
     'items' => [
         ['label' => 'Menu', 'options' => ['class' => 'header']],
-        ['label' => 'หนังสือเวียน', 'icon' => 'pencil', 'url' => ['cletter/index']],
-        ['label' => 'WebLink', 'icon' => 'pencil', 'url' => ['web_link/index']],
+        ['label' => 'หน้าหลัก', 'icon' => 'home', 'url' => ['site/index']],
+        ['label' => 'หนังสือเวียน', 'icon' => 'briefcase', 'url' => ['cletter/index']],
+        ['label' => 'WebLink', 'icon' => 'link', 'url' => ['web_link/index']],
+        ['label' => 'เขียนใบลา', 'icon' => 'briefcase', 'url' => ['bila/index']],
+        ['label' => 'เบิกของ CartX', 'icon' => 'shopping-cart', 'url' => 'http://10.37.64.1/cartx/web'], 
         ['label' => '#', 'options' => ['class' => 'header']],
         ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],                    
     ],
@@ -14,12 +17,13 @@ $menu = [
     'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
     'items' => [
         ['label' => 'Menu', 'options' => ['class' => 'header']],
-        ['label' => 'หนังสือเวียน', 'icon' => 'pencil', 'url' => ['cletter/index']],
-        ['label' => 'WebLink', 'icon' => 'pencil', 'url' => ['web_link/index']],
-        ['label' => 'เขียนใบลา', 'icon' => 'pencil', 'url' => ['bila/index']],
+        ['label' => 'หน้าหลัก', 'icon' => 'home', 'url' => ['site/index']],
+        ['label' => 'หนังสือเวียน', 'icon' => 'bullhorn', 'url' => ['cletter/index']],
+        ['label' => 'WebLink', 'icon' => 'link', 'url' => ['web_link/index']],
+        ['label' => 'เขียนใบลา', 'icon' => 'briefcase', 'url' => ['bila/index']],
+        ['label' => 'เบิกของ CartX', 'icon' => 'shopping-cart', 'url' => 'http://10.37.64.1/cartx/web'], 
         ['label' => 'ตั้งค่า', 'options' => ['class' => 'header']],
-        ['label' => 'Profile', 'icon' => 'id-card-o', 'url' => ['user/profile']],
-        
+        ['label' => 'Profile', 'icon' => 'id-card-o', 'url' => ['user/profile']],        
                             
     ],
 ];
@@ -28,24 +32,28 @@ $menu_admin = [
     'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
     'items' => [
         ['label' => 'Menu', 'options' => ['class' => 'header']],
-        
-        ['label' => 'หนังสือเวียน', 'icon' => 'pencil', 'url' => '#',
+        ['label' => 'หน้าหลัก', 'icon' => 'home', 'url' => ['site/index'],
+        // 'template' => '<a href="{url}" title="{label}"><i class="fa fa-lg fa-fw fa-wrench"></i> <span class="menu-item-parent">{label}</span></a>',
+    ],
+        ['label' => 'หนังสือเวียน', 'icon' => 'bullhorn', 'url' => '#',
           'items' => [
-            ['label' => 'หนังสือเวียน', 'icon' => 'pencil', 'url' => ['cletter/index_admin']],
-            ['label' => 'ประเภทหนังสือ', 'icon' => 'pencil', 'url' => ['cletter/caid_index']],
-            ['label' => 'Line', 'icon' => 'pencil', 'url' => ['cletter/line_index']],
+            ['label' => 'หนังสือเวียน', 'icon' => 'bullhorn', 'url' => ['cletter/index']],
+            ['label' => 'จัดการ หนังสือเวียน', 'icon' => 'bullhorn', 'url' => ['cletter/index_admin']],
+            ['label' => 'ประเภทหนังสือ', 'icon' => 'bullhorn', 'url' => ['cletter/caid_index']],
+            ['label' => 'Line', 'icon' => 'bullhorn', 'url' => ['cletter/line_index']],
         ]], 
-        ['label' => 'WebLink', 'icon' => 'pencil', 'url' => '#',
+        ['label' => 'WebLink', 'icon' => 'link', 'url' => '#',
           'items' => [
-            ['label' => 'WebLink', 'icon' => 'pencil', 'url' => ['web_link/index']],
-            ['label' => 'จัดการ WebLink', 'icon' => 'pencil', 'url' => ['web_link/index_admin']],
+            ['label' => 'WebLink', 'icon' => 'link', 'url' => ['web_link/index']],
+            ['label' => 'จัดการ WebLink', 'icon' => 'link', 'url' => ['web_link/index_admin']],
         ]], 
-        ['label' => 'โปรแกรมใบลา', 'icon' => 'pencil', 'url' => '#',
+        ['label' => 'โปรแกรมใบลา', 'icon' => 'briefcase', 'url' => '#',
           'items' => [
-            ['label' => 'เขียนใบลา', 'icon' => 'pencil', 'url' => ['bila/index']],
-            ['label' => 'ใบลาทั้งหมด', 'icon' => 'pencil', 'url' => ['bila/admin']],
-            ['label' => 'ผู้ลงนาม', 'icon' => 'pencil', 'url' => ['bila/sbn_index']],
-        ]],        
+            ['label' => 'เขียนใบลา', 'icon' => 'briefcase', 'url' => ['bila/index']],
+            ['label' => 'ใบลาทั้งหมด', 'icon' => 'briefcase', 'url' => ['bila/admin']],
+            ['label' => 'ผู้ลงนาม', 'icon' => 'briefcase', 'url' => ['bila/sbn_index']],
+        ]], 
+        ['label' => 'เบิกของ CartX', 'icon' => 'shopping-cart', 'url' => 'http://10.37.64.1/cartx/web'],       
         
         ['label' => 'ตั้งค่า', 'options' => ['class' => 'header']],
         ['label' => 'Profile', 'icon' => 'id-card-o', 'url' => ['user/profile']],
@@ -67,7 +75,7 @@ $menu_admin = [
 ];
     if(Yii::$app->user->isGuest){
             echo dmstr\widgets\Menu::widget($menuG) ;
-        }elseif(Yii::$app->user->id ==1 ){
+        }elseif(Yii::$app->user->identity->role == 9 ){
             echo dmstr\widgets\Menu::widget($menu_admin);
         }else{
             echo dmstr\widgets\Menu::widget($menu) ;

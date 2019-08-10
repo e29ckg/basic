@@ -142,7 +142,7 @@ class Bila extends \yii\db\ActiveRecord
 
     public function getProfile()
     {
-        return $this->hasOne(Profile::className(), ['id' => 'user_id']);
+        return $this->hasOne(Profile::className(), ['user_id' => 'user_id']);
     }
     public function getProfileName(){
         $model=$this->profile;

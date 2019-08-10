@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						<?php $i = 1?>                              
 						<?php foreach ($models as $model): ?>
 						<tr>
-							<td><?= $i++?></td>
+							<td><?= $model->id?></td>
 							<td class="img-weblink" >
 							<a href="#" ><img src="<?= Url::to('@web'.WebLink::getImg($model->id)) ?>" alt="Smiley face" data-id= "<?=$model->id?>" class = "act-show img"></a>
 							</td>

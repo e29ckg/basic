@@ -200,7 +200,7 @@ class UserController extends Controller{
     }
 
     public function actionUpdate_profile($id){
-        $mdProfile = Profile::findOne($id);
+        $mdProfile = Profile::findOne(['user_id'=>$id]);
         $modelU = User::findOne($id);
         $modelReg = new RegFormUpdate();        
         $fileName = $mdProfile->img ;
@@ -492,6 +492,24 @@ class UserController extends Controller{
             return $this->redirect(['fname']);
         }        
         return $this->redirect(['fname']);
+    }
+
+    public function actionU()
+    {
+        $models = Profile::find()->all();        
+
+        
+        foreach ($models as $model):
+           
+                $model->id = $model->user_id ;
+                
+               $model->save() ;
+        
+         
+        endforeach;
+                
+
+        return $this->redirect(['index_admin']);
     }
     
 }

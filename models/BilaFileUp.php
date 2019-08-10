@@ -32,7 +32,7 @@ class BilaFileUp extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'bila_file_up';
+        return 'bila';
     }
 
     /**

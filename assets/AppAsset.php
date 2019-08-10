@@ -29,7 +29,7 @@ class AppAsset extends AssetBundle
          
         'adminlte2/bower_components/bootstrap/dist/css/bootstrap.min.css',
         'adminlte2/bower_components/toastr/toastr.min.css',
-        'css/site.css?v=1.11',     
+        'css/site.css?v=1.12',     
     ];
     public $js = [
         // 'adminlte2/bower_components/jquery/dist/jquery.min.js',

@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
 									<?php $i = 1?>                              
 									<?php foreach ($models as $model): ?>
 						            <tr>
-						                <td><?= $i++ . $model->id?></td>
+						                <td><?= $model->id?></td>
 										<td><?=$model->getProfileName();?></td>
 										<td class="img-weblink" ><?=$model->cat?></td>										
                                         <td><?=DateThai_full($model->date_begin)?></td>										
@@ -90,11 +90,8 @@ $this->params['breadcrumbs'][] = $this->title;
 												'data-id' => $model->id,
 												'target' => '_blank'
 											]) . ' ' . 
-											Html::a('<i class="fa fa-wrench"></i> แก้ไข','#',
-											[
-												'class' => 'btn btn-warning btn-xs act-update',
-												'data-id' => $model->id,
-											]) 
+											'<a href= "#" class="btn btn-warning btn-xs act-update" data-id='.$model->id.'><i class="fa fa-wrench"></i> แก้ไข</a>';
+							
 											?>
 											<?php
 											 	Html::a('<i class="fa fa-remove"></i> ลบ',['bila/delete','id' => $model->id],
@@ -124,39 +121,13 @@ $script = <<< JS
     
 $(document).ready(function() {	
 	
-	var table = $('#example1').DataTable({
-		rowReorder: {
-			selector: 'td:nth-child(2)'
-		},
-		responsive: true
-})
-	$('#example2').DataTable({
-      'paging'      : true,
-      'lengthChange': false,
-      'searching'   : true,
-      'ordering'    : true,
-      'info'        : true,
-      'autoWidth'   : false
-    })
+	  
+			
+	$('#activity-modal').on('hidden.bs.modal', function () {
+ 		// location.reload();
+	})
 
-/* BASIC ;*/	
-		        
-	function init_click_handlers(){    
-
-		var url_show = "show";				
-			$( ".act-show" ).click(function() {
-				var fID = $(this).data("id");
-        	$.get(url_show,{id: fID},function (data){
-                $("#activity-modal").find(".modal-body").html(data);
-                $(".modal-body").html(data);
-                $(".modal-title").html("show");
-            	// $(".modal-footer").html(footer);
-                $("#activity-modal").modal("show");
-                //   $("#myModal").modal('toggle');
-        	});     
-		});
-
-		var url_update = "update";
+	var url_update = "update";
     	$(".act-update").click(function(e) {            
 			var fID = $(this).data("id");
 			// alert(fID);
@@ -166,53 +137,23 @@ $(document).ready(function() {
             	$(".modal-title").html("แก้ไขข้อมูล");
             	$("#activity-modal").modal("show");
         	});
-    	});    	
+		});  
 		
-    	var url_file_up = "file_up";		
+	var url_file_up = "file_up";		
     	$(".act-file-up").click(function(e) {			
-                var fID = $(this).data("id");
-                $.get(url_file_up,{id: fID},function (data){
-                        $("#activity-modal").find(".modal-body").html(data);
-                        $(".modal-body").html(data);
-                        $(".modal-title").html("ข้อมูล");
-                        $("#activity-modal").modal("show");
-                    }
-                );
-            });   
-    
-	}
-
-    init_click_handlers(); //first run
+			var fID = $(this).data("id");
+			$.get(url_file_up,{id: fID},function (data){
+					$("#activity-modal").find(".modal-body").html(data);
+					$(".modal-body").html(data);
+					$(".modal-title").html("ข้อมูล");
+					$("#activity-modal").modal("show");
+				}
+			);
+		});
 			
-	$('#activity-modal').on('hidden.bs.modal', function () {
- 		location.reload();
-	})
-
-
-		// var url_create = "index.php?r=bila/create";
-		var url_create = "create";
-    	$( "#act-create" ).click(function() {
-        	$.get(url_create,function (data){
-                $("#activity-modal").find(".modal-body").html(data);
-                $(".modal-body").html(data);
-                $(".modal-title").html("เพิ่มข้อมูล");
-            	// $(".modal-footer").html(footer);
-                $("#activity-modal").modal("show");
-                //   $("#myModal").modal('toggle');
-        	});     
-		}); 
-
-		var url_create = "createb";
-    	$( "#act-create-b" ).click(function() {
-        	$.get(url_create,function (data){
-                $("#activity-modal").find(".modal-body").html(data);
-                $(".modal-body").html(data);
-                $(".modal-title").html("เพิ่มข้อมูล");
-            	// $(".modal-footer").html(footer);
-                $("#activity-modal").modal("show");
-                //   $("#myModal").modal('toggle');
-        	});     
-		}); 
+		$('#example1').DataTable({
+			"order": [[ 0, 'desc' ]]
+		})
 		
 });
 JS;

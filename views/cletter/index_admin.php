@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					<tr>
 						<td><?=$model->id?></td>
 						<td><?= $model->file ? Html::a($model->name,['cletter/show','file' => $model->file],['target' => '_blank']) : $model->name;?></td>
-						<td><?=$model->getCaidName()?></td>
+						<td><?=$model->ca_name?></td>
 						<td><?=$model->created_at?></td>
 						
 						<td>
@@ -77,9 +77,7 @@ $script = <<< JS
 $(document).ready(function() {	
 /* BASIC ;*/
 
-	$('#example1').DataTable({
-    "order": [[ 0, 'desc' ], [ 3, 'desc' ]]
-})
+	
 
 	function init_click_handlers(){        	
 		
@@ -137,7 +135,9 @@ $(document).ready(function() {
         	});     
 		}); 
 	
-		
+		$('#example1').DataTable({
+    "order": [[ 0, 'desc' ], [ 3, 'desc' ]]
+})	
 });
 JS;
 $this->registerJs($script);
