@@ -283,7 +283,8 @@ class CletterController extends Controller
             $modelLog->manager = 'Cletter_delete';
             $modelLog->detail =  'ลบ '.$model->name;
             $modelLog->create_at = date("Y-m-d H:i:s");
-            $modelLog->ip = Yii::$app->getRequest()->getUserIP();            
+            $modelLog->ip = Yii::$app->getRequest()->getUserIP();
+            Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');            
         }        
 
         return $this->redirect(['index_admin']);

@@ -190,7 +190,7 @@ class Web_linkController extends Controller
                 
             $modelFile->sort = 1;
             if($modelFile->save()){
-                Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'.$_POST['WebLinkFile']['name']);
+                Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
                 return $this->redirect(['index_admin']);
             }   
 

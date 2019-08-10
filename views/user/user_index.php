@@ -17,7 +17,6 @@ $this->title = 'จัดการสมาชิก';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-
 <!-- MAIN CONTENT -->
 
 <div class="row">
@@ -163,7 +162,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		    </div>
 		</div>
 	</div>		
-</div>>
+</div>
 
 <?php
 $script = <<< JS
