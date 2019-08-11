@@ -21,7 +21,7 @@ $menu = [
         ['label' => 'หนังสือเวียน', 'icon' => 'bullhorn', 'url' => ['cletter/index']],
         ['label' => 'WebLink', 'icon' => 'link', 'url' => ['web_link/index']],
         ['label' => 'เขียนใบลา', 'icon' => 'briefcase', 'url' => ['bila/index']],
-        ['label' => 'เบิกของ CartX', 'icon' => 'shopping-cart', 'url' => 'http://10.37.64.1/cartx/web'], 
+        ['label' => 'เบิกของ CartX', 'icon' => 'shopping-cart', 'url' => '/cartx/web'], 
         ['label' => 'ตั้งค่า', 'options' => ['class' => 'header']],
         ['label' => 'Profile', 'icon' => 'id-card-o', 'url' => ['user/profile']],        
                             
@@ -53,7 +53,7 @@ $menu_admin = [
             ['label' => 'ใบลาทั้งหมด', 'icon' => 'briefcase', 'url' => ['bila/admin']],
             ['label' => 'ผู้ลงนาม', 'icon' => 'briefcase', 'url' => ['bila/sbn_index']],
         ]], 
-        ['label' => 'เบิกของ CartX', 'icon' => 'shopping-cart', 'url' => 'http://10.37.64.1/cartx/web'],       
+        ['label' => 'เบิกของ CartX', 'icon' => 'shopping-cart', 'url' => '/cartx/web'],       
         
         ['label' => 'ตั้งค่า', 'options' => ['class' => 'header']],
         ['label' => 'Profile', 'icon' => 'id-card-o', 'url' => ['user/profile']],
