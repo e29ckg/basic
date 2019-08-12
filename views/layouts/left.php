@@ -7,7 +7,7 @@ $menuG = [
         ['label' => 'หนังสือเวียน', 'icon' => 'briefcase', 'url' => ['cletter/index']],
         ['label' => 'WebLink', 'icon' => 'link', 'url' => ['web_link/index']],
         ['label' => 'เขียนใบลา', 'icon' => 'briefcase', 'url' => ['bila/index']],
-        ['label' => 'เบิกของ CartX', 'icon' => 'shopping-cart', 'url' => 'http://10.37.64.1/cartx/web'], 
+        ['label' => 'เบิกของ CartX', 'icon' => 'shopping-cart', 'url' => '/cartx/web'], 
         ['label' => '#', 'options' => ['class' => 'header']],
         ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],                    
     ],
@@ -23,7 +23,7 @@ $menu = [
         ['label' => 'เขียนใบลา', 'icon' => 'briefcase', 'url' => ['bila/index']],
         ['label' => 'เบิกของ CartX', 'icon' => 'shopping-cart', 'url' => '/cartx/web'], 
         ['label' => 'ตั้งค่า', 'options' => ['class' => 'header']],
-        ['label' => 'Profile', 'icon' => 'id-card-o', 'url' => ['user/profile']],   
+        ['label' => 'Profile', 'icon' => 'id-card-o', 'url' => ['user/profile']],  
                             
     ],
 ];
@@ -40,7 +40,6 @@ $menu_admin = [
             ['label' => 'หนังสือเวียน', 'icon' => 'bullhorn', 'url' => ['cletter/index']],
             ['label' => 'จัดการ หนังสือเวียน', 'icon' => 'bullhorn', 'url' => ['cletter/index_admin']],
             ['label' => 'ประเภทหนังสือ', 'icon' => 'bullhorn', 'url' => ['cletter/caid_index']],
-            ['label' => 'Line', 'icon' => 'bullhorn', 'url' => ['cletter/line_index']],
         ]], 
         ['label' => 'WebLink', 'icon' => 'link', 'url' => '#',
           'items' => [

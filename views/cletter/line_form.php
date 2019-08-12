@@ -8,6 +8,12 @@ use yii\helpers\ArrayHelper;
 
 
 ?>
+<?=  !empty($model->token) ? $model->token 
+              . ' ' 
+              . Html::a('ทดสอบการส่ง', ['user_line_send'],['class' => 'btn btn-success'])
+              .' '
+              . Html::a('ลบ', ['line_delete','id' => $model->id],['class' => 'btn btn-warning'])
+              : Html::a('ลงทะเบียน', $result, ['class' => 'btn btn-success']) ;?>
 
 <div class="box box-danger">
     <div class="box-header with-border">

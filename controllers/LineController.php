@@ -4,8 +4,8 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Line;
-use app\models\Notify;
-use KS\Line\LineNotify;
+use app\models\LineFormSend;
+use app\models\LineHome;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -180,11 +180,11 @@ class LineController extends Controller
      
     public function actionLine_index()
     {
-        $model = Line::find()->orderBy([
+        $models = Line::find()->orderBy([
             'name'=>SORT_ASC,
             // 'id' => SORT_DESC,
             ])->all();
-                
+        $LineGroup = Line::findOne(['name' => 'LineGroup']);      
             // $client_id = '4FLzeUXbqtIa5moAG1wtel';
             $api_url = 'https://notify-bot.line.me/oauth/authorize?';
             // $callback_url = 'http://192.168.0.15/basic/web/line/callback';
@@ -194,13 +194,31 @@ class LineController extends Controller
                 'client_id' => $this->client_id,
                 'redirect_uri' => $this->callback_url,
                 'scope' => 'notify',
-                'state' => 'MyApp'
+                'state' => 'LineGroup'
             ];
             
             $result = $api_url . http_build_query($query);    
+        
+        $modelLineHome = LineHome::findOne(1);                 
+        
+        if ($modelLineHome->load(Yii::$app->request->post()) && $modelLineHome->validate()) {            
+            // $model->name = 'name';
+            $modelLineHome->client_id = $_POST['LineHome']['client_id'];
+            $modelLineHome->client_secret = $_POST['LineHome']['client_secret'];
+            $modelLineHome->name_ser = $_POST['LineHome']['name_ser'];
+            $modelLineHome->api_url = $_POST['LineHome']['api_url'];
+            $modelLineHome->callback_url = $_POST['LineHome']['callback_url'];
+            if($modelLineHome->save()){                          
+                Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');                
+                return $this->redirect(['line_index']);
+            }   
+        }
+        
             
         return $this->render('line_index',[
-            'models' => $model,
+            'LineGroup' => $LineGroup,
+            'modelLineHome' => $modelLineHome,
+            'models' => $models,
             'result' => $result
         ]);
 
@@ -272,7 +290,7 @@ class LineController extends Controller
         }
     }
 
-    public function actionLine_del($id)
+    public function actionLine_delete($id)
     {
         $model = Line::findOne($id);
         
@@ -294,7 +312,7 @@ class LineController extends Controller
             'client_id' => $client_id,
             'redirect_uri' => $callback_url,
             'scope' => 'notify',
-            'state' => 'Cletter'
+            'state' => 'LineGroup'
         ];
         
         $result = $api_url . http_build_query($query);
@@ -372,18 +390,18 @@ class LineController extends Controller
         return $this->redirect('line_index');
     }
 
-    public function actionNotify($token)
+    public function actionLine_send($token)
     {
         $api_url = 'https://notify-api.line.me/api/notify';
 
-        $model = new Notify();
+        $model = new LineFormSend();
         $json = null;
         if($model->load(Yii::$app->request->post())){
             $headers = [
                 'Authorization: Bearer ' . $token
             ];
             $fields = [
-                'message' => 'ทดสอบการส่งข้อความไปยังผู้ใช้งาน '. $model->name
+                'message' => 'ทดสอบการส่งข้อความ '. $model->name
             ];
             
             try {
@@ -403,14 +421,22 @@ class LineController extends Controller
                     throw new Exception(curl_error($ch), curl_errno($ch));
             
                 $json = json_decode($res);
-                //$status = $json->status;
-            
+                if($json->status == 200){
+                    Yii::$app->session->setFlash('success', 'ส่งข้อความเรียบร้อย '.$json->status);
+                    return $this->redirect(['line_index']);
+                }
                 //var_dump($status);
             } catch (Exception $e) {
                 throw new Exception($e->getMessage);
             }
         }
-        return $this->render('notify', [
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('line_form_send',[
+                    'model' => $model,  
+                    'json' => $json                  
+            ]);
+        }
+        return $this->render('line_form_send', [
             'model' => $model,
             'json' => $json
         ]);

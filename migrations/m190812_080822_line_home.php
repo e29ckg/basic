@@ -23,11 +23,19 @@ class m190812_080822_line_home extends Migration
             'id' => $this->primaryKey(),
             'client_id' => $this->string(),
             'client_secret' => $this->string(),
+            'name_ser' => $this->string(),
             'api_url' => $this->string(),
             'callback_url' => $this->string(),
         ], $tableOptions);
     
-        // $this->insert('line', ['name' => 'group','token' => null]);
+        $this->insert('line_home', [
+            'id' => 1,
+            'client_id' => 'xxxx',
+            'client_secret' => 'xxxx',
+            'name_ser' => 'webApp',
+            'api_url' => 'http://xxx',
+            'callback_url' => 'http://xxx'
+            ]);
     }
 
     /**
@@ -35,7 +43,8 @@ class m190812_080822_line_home extends Migration
      */
     public function safeDown()
     {
-        echo "m190812_080822_line_home cannot be reverted.\n";
+        $this->dropTable('line_home');
+         echo "m190812_080822_line_home cannot be reverted.\n";
 
         return false;
     }

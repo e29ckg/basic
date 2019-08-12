@@ -3,17 +3,21 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
-use app\models\Bila;
 use kartik\select2\Select2;
-use kartik\date\DatePicker;
 use yii\helpers\ArrayHelper;
 
 
 ?>
+<?=  !empty($model->token) ? $model->token 
+              . ' ' 
+              . Html::a('ทดสอบการส่ง', ['user_line_send'],['class' => 'btn btn-success'])
+              .' '
+              . Html::a('ลบ', ['line_delete','id' => $model->id],['class' => 'btn btn-warning'])
+              : Html::a('ลงทะเบียน', $result, ['class' => 'btn btn-success']) ;?>
 
 <div class="box box-danger">
     <div class="box-header with-border">
-        <h3 class="box-title"><?=$this->title?></h3>
+        <h3 class="box-title">Line : <?= $model->name ?></h3>
     </div>
     <?php 
         $form = ActiveForm::begin([
@@ -30,24 +34,11 @@ use yii\helpers\ArrayHelper;
             ],
             'enableAjaxValidation' => true,
         ]);  ?>
-     
+   
     <div class="box-body">
         <div class="row">
             
-            <div class="col-md-4">
-                <div class="form-group">
-                    <?= $form->field($model, 'name', [
-                        'inputOptions' => [
-                            'placeholder' => $model->getAttributeLabel('name'),
-                                'class'=>'form-control'
-                            ],
-                            // 'template' => '<div class="form-group"><label>{label}</label> {input}<b class="tooltip tooltip-top-right">'.$model->getAttributeLabel('date_total').'</b><em for="name" class="invalid">{error}{hint}</em></div>'
-                        ]);
-                    ?>
-                </div>
-            </div>
-
-            <div class="col-md-6">
+            <div class="col-md-10">
                 <div class="form-group">
                     <?= $form->field($model, 'token', [
                         'inputOptions' => [

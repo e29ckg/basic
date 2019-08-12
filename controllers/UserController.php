@@ -409,7 +409,13 @@ class UserController extends Controller{
             'json' => $json
         ]);
     }
-      
+     
+    public function actionUser_line_delete()
+    {
+        $model = Line::findOne(['name' => Yii::$app->user->identity->username]);
+        $model->delete();
+        return $this->redirect('profile');
+    }
             
     public function actionEdit_profile($id=null){        
         $mdProfile = Profile::findOne($id);

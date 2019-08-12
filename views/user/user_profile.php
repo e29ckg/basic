@@ -48,7 +48,12 @@ $this->params['breadcrumbs'][] = $this->title;
       <!-- /.box-header -->
       <div class="box-body">
         <strong><i class="fa fa-book margin-r-5"></i> Line Token :</strong>
-            <?=  !empty($model->token) ? $model->token . ' ' . Html::a('ทดสอบการส่ง', ['user_line_send'],['class' => 'btn btn-success']) : Html::a('ลงทะเบียน', $result, ['class' => 'btn btn-success']) ;?>
+            <?=  !empty($model->token) ? $model->token 
+              . ' ' 
+              . Html::a('ทดสอบการส่ง', ['user_line_send'],['class' => 'btn btn-success'])
+              .' '
+              . Html::a('ลบ', ['user_line_delete'],['class' => 'btn btn-warning'])
+              : Html::a('ลงทะเบียน', $result, ['class' => 'btn btn-success']) ;?>
         <p class="text-muted">
          
         </p>

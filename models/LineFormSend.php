@@ -4,7 +4,7 @@ use yii\base\Model;
 
 class LineFormSend extends Model {
     public $name;
-
+    public $token;
     public function rules() {
         return [
             [['name'], 'required']

@@ -155,7 +155,7 @@ class CletterController extends Controller
 
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'); 
                 
-                $modelLine = Line::findOne(['name' => 'Cletter']);        
+                $modelLine = Line::findOne(['name' => 'LineGroup']);        
                 if(!empty($modelLine->token) && $modelLine->status == 1){
                     $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.';
                     $res = Line::notify_message($modelLine->token,$message);
@@ -232,7 +232,7 @@ class CletterController extends Controller
             $modelLog->ip = Yii::$app->getRequest()->getUserIP();
             if($modelLog->save()){
                 
-                $modelLine = Line::findOne(['name' => 'Cletter_Admin']);        
+                $modelLine = Line::findOne(['name' => 'Admin']);        
                 if(!empty($modelLine->token) && $modelLine->status == 1){
                     $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.';
                     $res = Line::notify_message($modelLine->token,$message);
@@ -308,7 +308,7 @@ class CletterController extends Controller
             $modelLog->create_at = date("Y-m-d H:i:s");
             $modelLog->ip = Yii::$app->getRequest()->getUserIP();
             if($modelLog->save()){
-                $modelLine = Line::findOne(['name' => 'Cletter_Admin']);        
+                $modelLine = Line::findOne(['name' => 'Admin']);        
                     if(!empty($modelLine->token) && $modelLine->status == 1){
                         $message = Yii::$app->user->identity->username.' เปิดอ่าน '.$name.' '.date("Y-m-d H:i:s");
                         Line::notify_message($modelLine->token,$message);                        
@@ -343,7 +343,7 @@ class CletterController extends Controller
         
         if($model->name){            
             $message = $model->name .' ดูรายละเอียดเพิ่มเติมได้ที่ เว็บภายใน ';
-            $modelLine = Line::findOne(['name' => 'Cletter']);        
+            $modelLine = Line::findOne(['name' => 'LineGroup']);        
             if(!empty($modelLine->token) && $modelLine->status == 1){
                 $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.';
                 $res = Line::notify_message($modelLine->token,$message);
@@ -449,45 +449,6 @@ class CletterController extends Controller
         return $this->redirect(['caid_index']);
     }
 
-    public function actionLine_index()
-    {
-        $model = Line::findOne(['name' => 'Cletter']);  
-
-        if(empty($model->name)){
-            $model = new Line();
-            $model->name = 'Cletter';
-            $model->save();
-
-            $modelA = Line::findOne(['name' => 'Cletter_Admin']);  
-
-            if(empty($modelA->name)){
-                $modelA = new Line();
-                $modelA->name = 'Cletter_Admin';
-                $modelA->save();
-            } 
-
-        } 
-
-        if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ActiveForm::validate($model);
-          } 
-        
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-             
-            $model->token = $_POST['Line']['token'];
-            $model->status = $_POST['Line']['status'];
-
-            if($model->save()){                          
-                Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');                
-                return $this->redirect(['line_index']);
-            }   
-        }
-
-        return $this->render('line_form',[
-            'model' => $model,
-        ]);
-    }
     
     public function actionCaid_update_to_name()
     {
