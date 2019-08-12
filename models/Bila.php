@@ -32,7 +32,7 @@ class Bila extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'bila';
+        return '{{%bila}}';
     }
 
     /**

@@ -9,6 +9,8 @@ use yii\grid\GridView;
 $this->title = 'Line';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<?=Html::a('ลงทะเบียน', $result, ['class' => 'btn btn-success'])?>
+<?=Html::a('https://notify-bot.line.me/th/', 'https://notify-bot.line.me/th/', ['class' => 'btn btn-success'])?>
 
  <!-- Default box -->
 <div class="box box-primary">
@@ -24,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			<thead>
 				<tr>
 					<th data-class="expand">Id</th>
-					<th >เรื่อง</th>
+					<th >name</th>
 					<th>Token</th>	
 					<th></th>					
 				</tr>
@@ -33,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						<?php foreach ($models as $model): ?>
 						<tr>
 							<td><?=$model->id?></td>
-							<td><?= $model->name?></td>
+							<td><?= $model->name ?></td>
 							<td><?= $model->token?></td>
 							<td>
 								<a href= "#" class="btn btn-warning act-update" data-id=<?=$model->id?>><i class="fa fa-pencil-square-o"></i> แก้ไข</a>
@@ -54,7 +56,6 @@ $this->params['breadcrumbs'][] = $this->title;
 	</div>
 </div>
 
-
 <?php
 
 $script = <<< JS
@@ -62,12 +63,7 @@ $script = <<< JS
 $(document).ready(function() {	
 /* BASIC ;*/
 
-	$('#example1').DataTable({	
-		// rowReorder: {
-		// 	selector: 'td:nth-child(2)'
-		// },
-		// responsive: true
-	})
+	$('#example1').DataTable()
 
 	function init_click_handlers(){        	
 		

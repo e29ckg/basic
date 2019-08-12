@@ -8,6 +8,8 @@ use app\models\RegFormUpdate;
 use app\models\Dep;
 use app\models\Fname;
 use app\models\Profile;
+use app\models\Line;
+use app\models\LineFormSend;
 use yii\web\UploadedFile;
 use yii\helpers\Url;
 use yii\web\Response;
@@ -270,13 +272,144 @@ class UserController extends Controller{
 
     public function actionProfile(){
         $mdUser = User::findOne(Yii::$app->user->id);
-        $mdProfile = Profile::find()->where(['user_id' => Yii::$app->user->id])->one();   
-         
+        $mdProfile = Profile::findOne(['user_id' => Yii::$app->user->id]);   
+        $modelLine = Line::findOne(['name' => $mdUser->username]);
+
+        $client_id = '4FLzeUXbqtIa5moAG1wtel';
+        $api_url = 'https://notify-bot.line.me/oauth/authorize?';
+        $callback_url = 'http://localhost/basic/web/user/callback';
+
+        $query = [
+            'response_type' => 'code',
+            'client_id' => $client_id,
+            'redirect_uri' => $callback_url,
+            'scope' => 'notify',
+            'state' => $mdUser->username
+        ];
+        
+        $result = $api_url . http_build_query($query);
         return $this->render('user_profile',[
             'mdProfile' => $mdProfile,
             'mdUser' => $mdUser,
+            'model' => $modelLine,
+            'result' => $result
             ]);
     }
+
+    public function actionCallback()
+    {
+        if(!empty($_GET['error'])){
+            Yii::$app->session->setFlash('warning', 'ไม่สามารถตั้งค่าได้'.$_GET['error']);
+            return $this->redirect('profile');
+            
+        }
+        $client_id = '4FLzeUXbqtIa5moAG1wtel';
+        $client_secret = 'zJyajyRcooJePqyLBzjWGJA9Zu7rRL6qTC0h8fYn0Xp';
+
+        $api_url_token = 'https://notify-bot.line.me/oauth/token';
+        $callback_url = 'http://localhost/basic/web/user/callback';
+
+        parse_str($_SERVER['QUERY_STRING'], $queries);
+
+        //var_dump($queries);
+        $fields = [
+            'grant_type' => 'authorization_code',
+            'code' => $queries['code'],
+            'redirect_uri' => $callback_url,
+            'client_id' => $client_id,
+            'client_secret' => $client_secret
+        ];
+        
+        try {
+            $ch = curl_init();
+        
+            curl_setopt($ch, CURLOPT_URL, $api_url_token);
+            curl_setopt($ch, CURLOPT_POST, count($fields));
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        
+            $res = curl_exec($ch);
+            curl_close($ch);
+
+            $model = new Line();
+        
+            if ($res == false)
+                throw new Exception(curl_error($ch), curl_errno($ch));
+        
+            $json = json_decode($res);
+
+            if($json->status == 200){
+                $model = new Line();
+                !empty($_GET['state']) ? 
+                    $model->name = $_GET['state']
+                    : 
+                    $model->name = Yii::$app->user->identity->username;
+                $model->token =  $json->access_token;
+                $model->status = 1;
+                $model->save();
+                Yii::$app->session->setFlash('success', 'บันทึกข้อมูล สำเร็จ');
+            }
+            
+        
+            //var_dump($json);
+        } catch(Exception $e) {
+            throw new Exception($e->getMessage());
+            //var_dump($e);
+        }
+        // return $this->render('callback', [
+        //     'json' => $json
+        // ]);
+        return $this->redirect('profile');
+    }
+
+    public function actionUser_line_send()
+    {
+        $modelLine = Line::findOne(['name' => Yii::$app->user->identity->username]);
+
+        $api_url = 'https://notify-api.line.me/api/notify';
+        $token = $modelLine->token;
+
+        $model = new LineFormSend();
+        $json = null;
+        if($model->load(Yii::$app->request->post())){
+            $headers = [
+                'Authorization: Bearer ' . $token
+            ];
+            $fields = [
+                'message' => Yii::$app->user->identity->username.' ทดสอบการส่งข้อความ :'. $model->name
+            ];
+            
+            try {
+                $ch = curl_init();
+            
+                curl_setopt($ch, CURLOPT_URL, $api_url);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                curl_setopt($ch, CURLOPT_POST, count($fields));
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            
+                $res = curl_exec($ch);
+                curl_close($ch);
+            
+                if ($res == false)
+                    throw new Exception(curl_error($ch), curl_errno($ch));
+            
+                $json = json_decode($res);
+                //$status = $json->status;
+            
+                //var_dump($status);
+            } catch (Exception $e) {
+                throw new Exception($e->getMessage);
+            }
+        }
+        return $this->render('line_form_send', [
+            'model' => $model,
+            'json' => $json
+        ]);
+    }
+      
             
     public function actionEdit_profile($id=null){        
         $mdProfile = Profile::findOne($id);

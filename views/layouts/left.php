@@ -23,7 +23,7 @@ $menu = [
         ['label' => 'เขียนใบลา', 'icon' => 'briefcase', 'url' => ['bila/index']],
         ['label' => 'เบิกของ CartX', 'icon' => 'shopping-cart', 'url' => '/cartx/web'], 
         ['label' => 'ตั้งค่า', 'options' => ['class' => 'header']],
-        ['label' => 'Profile', 'icon' => 'id-card-o', 'url' => ['user/profile']],        
+        ['label' => 'Profile', 'icon' => 'id-card-o', 'url' => ['user/profile']],   
                             
     ],
 ];

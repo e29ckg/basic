@@ -16,6 +16,8 @@ use yii\web\Response;
 use yii\widgets\ActiveForm;
 use kartik\mpdf\Pdf;
 use Da\QrCode\QrCode;
+use yii\db\Transaction;
+use yii\db\Connection;
 
 /**
  * Web_linkController implements the CRUD actions for Bila model.
@@ -112,37 +114,52 @@ class BilaController extends Controller
           } 
      
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $model->id = time();
-            $model->user_id =  $_POST['Bila']['user_id'];
-            $model->cat = 'ลาป่วย';
-            $model->date_begin = $_POST['Bila']['date_begin'];
-            $model->date_end = $_POST['Bila']['date_end'];
-            $model->date_total = $_POST['Bila']['date_total'];
-            $model->due = $_POST['Bila']['due'];
-            $model->dateO_begin = $_POST['Bila']['dateO_begin'];
-            $model->dateO_end = $_POST['Bila']['dateO_end'];
-            $model->dateO_total = $_POST['Bila']['dateO_total'];
-            $model->address = $_POST['Bila']['address'];
-            $model->t1 = $_POST['Bila']['t1'];
-            $model->t2 = $_POST['Bila']['date_total'];
-            $model->t3 = $_POST['Bila']['date_total'] + $_POST['Bila']['t1'];
-            $model->date_create = $_POST['Bila']['date_create'];
-            if($model->save()){
-                $dir = Url::to('@webroot/uploads/bila/'.$model->user_id.'/'.$model->id.'/');
-                if (!is_dir($dir)) {
-                    mkdir($dir, 0777, true);
-                } 
 
-                $sms_qr = 'http://'.$_SERVER['HTTP_HOST'].'/bila.php?ref='.$model->id;
-                $qrCode = (new QrCode($sms_qr))
-                    ->setSize(250)
-                    ->setMargin(5)
-                    ->useForegroundColor(51, 153, 255);              
-                $qrCode->writeFile(Url::to('@webroot/uploads/bila/'.$model->user_id.'/'.$model->id.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                    
+                $model->id = time();
+                $model->user_id =  $_POST['Bila']['user_id'];
+                $model->cat = 'ลาป่วย';
+                $model->date_begin = $_POST['Bila']['date_begin'];
+                $model->date_end = $_POST['Bila']['date_end'];
+                $model->date_total = $_POST['Bila']['date_total'];
+                $model->due = $_POST['Bila']['due'];
+                $model->dateO_begin = $_POST['Bila']['dateO_begin'];
+                $model->dateO_end = $_POST['Bila']['dateO_end'];
+                $model->dateO_total = $_POST['Bila']['dateO_total'];
+                $model->address = $_POST['Bila']['address'];
+                $model->t1 = $_POST['Bila']['t1'];
+                $model->t2 = $_POST['Bila']['date_total'];
+                $model->t3 = $_POST['Bila']['date_total'] + $_POST['Bila']['t1'];
+                $model->date_create = $_POST['Bila']['date_create'];
+                if($model->save()){
+                    $dir = Url::to('@webroot/uploads/bila/'.$model->user_id.'/'.$model->id.'/');
+                    if (!is_dir($dir)) {
+                        mkdir($dir, 0777, true);
+                    } 
 
-                Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
+                    $sms_qr = 'http://'.$_SERVER['HTTP_HOST'].'/bila.php?ref='.$model->id;
+                    $qrCode = (new QrCode($sms_qr))
+                        ->setSize(250)
+                        ->setMargin(5)
+                        ->useForegroundColor(51, 153, 255);              
+                    $qrCode->writeFile(Url::to('@webroot/uploads/bila/'.$model->user_id.'/'.$model->id.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
+
+                    Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
+                   
+                }  
+                $transaction->commit();
                 return $this->redirect(['index']);
-            }   
+                
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            } catch (\Throwable $e) {
+                $transaction->rollBack();
+                throw $e;
+            }
+             
         }
         // $model->tel = explode(',', $model->tel);
         $model_cat = Bila::find()

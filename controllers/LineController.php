@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Line;
+use app\models\Notify;
 use KS\Line\LineNotify;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -24,16 +25,22 @@ class LineController extends Controller
 {
     /**
      * {@inheritdoc}
+     * 
+     * 
      */
+    public $client_id = '4FLzeUXbqtIa5moAG1wtel';
+    public $client_secret = 'zJyajyRcooJePqyLBzjWGJA9Zu7rRL6qTC0h8fYn0Xp';
+    public $callback_url = 'http://192.168.0.15/basic/web/line/callback';
+
     public function behaviors()
     {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index','create','show','all'],
+                'only' => ['index11','index','create','show','all'],
                 'rules' => [
                     [
-                        'actions' => ['index','create','show','all'],
+                        // 'actions' => ['index','create','show','all'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -119,6 +126,7 @@ class LineController extends Controller
     
     }
 
+    /*
     public function notify_message($message)
     {
         
@@ -144,7 +152,7 @@ class LineController extends Controller
         
         return $res;
     
-    }
+    }*/
 
     public function send_notify_message($line_api, $access_token, $message_data){
         $headers = array('Method: POST', 'Content-type: multipart/form-data', 'Authorization: Bearer '.$access_token );
@@ -169,15 +177,31 @@ class LineController extends Controller
      return $return_array;
      }
 
-     public function actionLine_index()
+     
+    public function actionLine_index()
     {
         $model = Line::find()->orderBy([
             'name'=>SORT_ASC,
             // 'id' => SORT_DESC,
             ])->all();
                 
+            // $client_id = '4FLzeUXbqtIa5moAG1wtel';
+            $api_url = 'https://notify-bot.line.me/oauth/authorize?';
+            // $callback_url = 'http://192.168.0.15/basic/web/line/callback';
+    
+            $query = [
+                'response_type' => 'code',
+                'client_id' => $this->client_id,
+                'redirect_uri' => $this->callback_url,
+                'scope' => 'notify',
+                'state' => 'MyApp'
+            ];
+            
+            $result = $api_url . http_build_query($query);    
+            
         return $this->render('line_index',[
             'models' => $model,
+            'result' => $result
         ]);
 
     }
@@ -194,12 +218,13 @@ class LineController extends Controller
      
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
              
+            // $model->name = 'name';
             $model->name = $_POST['Line']['name'];
             $model->status = $_POST['Line']['status'];
 
             if($model->save()){                          
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');                
-                return $this->redirect(['line_index']);
+                return $this->redirect(['line_index','name'=>$model->name]);
             }   
         }
 
@@ -256,6 +281,139 @@ class LineController extends Controller
         }        
 
         return $this->redirect(['line_index']);
+    }
+
+    public function actionIndex11()
+    {
+        $client_id = '4FLzeUXbqtIa5moAG1wtel';
+        $api_url = 'https://notify-bot.line.me/oauth/authorize?';
+        $callback_url = 'http://192.168.0.15/basic/web/line/callback';
+
+        $query = [
+            'response_type' => 'code',
+            'client_id' => $client_id,
+            'redirect_uri' => $callback_url,
+            'scope' => 'notify',
+            'state' => 'Cletter'
+        ];
+        
+        $result = $api_url . http_build_query($query);
+
+        return $this->render('index11',[
+            'result' => $result
+        ]);
+    }
+
+    public function actionCallback()
+    {
+        if(!empty($_GET['error'])){
+            Yii::$app->session->setFlash('warning', 'ไม่สามารถตั้งค่าได้'.$_GET['error']);
+            return $this->redirect('line_index');
+            
+        }
+        // $client_id = '4FLzeUXbqtIa5moAG1wtel';
+        // $client_secret = 'zJyajyRcooJePqyLBzjWGJA9Zu7rRL6qTC0h8fYn0Xp';
+
+        $api_url_token = 'https://notify-bot.line.me/oauth/token';
+        // $callback_url = 'http://192.168.0.15/basic/web/line/callback';
+
+        parse_str($_SERVER['QUERY_STRING'], $queries);
+
+        //var_dump($queries);
+        $fields = [
+            'grant_type' => 'authorization_code',
+            'code' => $queries['code'],
+            'redirect_uri' => $this->callback_url,
+            'client_id' => $this->client_id,
+            'client_secret' => $this->client_secret
+        ];
+        
+        try {
+            $ch = curl_init();
+        
+            curl_setopt($ch, CURLOPT_URL, $api_url_token);
+            curl_setopt($ch, CURLOPT_POST, count($fields));
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        
+            $res = curl_exec($ch);
+            curl_close($ch);
+
+            $model = new Line();
+
+        
+            if ($res == false)
+                throw new Exception(curl_error($ch), curl_errno($ch));
+        
+            $json = json_decode($res);
+
+            if($json->status == 200){
+                $model = new Line();
+                !empty($_GET['state']) ? 
+                    $model->name = $_GET['state']
+                    : 
+                    $model->name = Yii::$app->user->identity->username;
+                $model->token =  $json->access_token;
+                $model->status = 1;
+                $model->save();
+                Yii::$app->session->setFlash('success', 'บันทึกข้อมูล สำเร็จ');
+            }
+            
+        
+            //var_dump($json);
+        } catch(Exception $e) {
+            throw new Exception($e->getMessage());
+            //var_dump($e);
+        }
+        // return $this->render('callback', [
+        //     'json' => $json
+        // ]);
+        return $this->redirect('line_index');
+    }
+
+    public function actionNotify($token)
+    {
+        $api_url = 'https://notify-api.line.me/api/notify';
+
+        $model = new Notify();
+        $json = null;
+        if($model->load(Yii::$app->request->post())){
+            $headers = [
+                'Authorization: Bearer ' . $token
+            ];
+            $fields = [
+                'message' => 'ทดสอบการส่งข้อความไปยังผู้ใช้งาน '. $model->name
+            ];
+            
+            try {
+                $ch = curl_init();
+            
+                curl_setopt($ch, CURLOPT_URL, $api_url);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                curl_setopt($ch, CURLOPT_POST, count($fields));
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            
+                $res = curl_exec($ch);
+                curl_close($ch);
+            
+                if ($res == false)
+                    throw new Exception(curl_error($ch), curl_errno($ch));
+            
+                $json = json_decode($res);
+                //$status = $json->status;
+            
+                //var_dump($status);
+            } catch (Exception $e) {
+                throw new Exception($e->getMessage);
+            }
+        }
+        return $this->render('notify', [
+            'model' => $model,
+            'json' => $json
+        ]);
     }
            
 
