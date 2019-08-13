@@ -3,7 +3,8 @@ use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 
-$this->title = 'Home';
+$this->title = 'Dashboard';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="row">
   <div class="col-md-6">

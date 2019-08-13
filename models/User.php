@@ -201,7 +201,7 @@ class User extends ActiveRecord implements IdentityInterface
  
     public function getProfile()
     {
-        return $this->hasOne(Profile::className(), ['user_id' => 'id']);
+        return $this->hasOne(Profile::className(), ['id' => 'id']);
     }
 
     public function getProfileName(){
@@ -211,7 +211,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function getProfileImg(){
         $model=$this->profile;
-        return Yii::getAlias('@web').(!empty($model->img)  ? '/uploads/user/'.$model->img : '/adminlte2/dist/img/user2-160x160.jpg');
+        return Yii::getAlias('@web').(!empty($model->img)  ? '/uploads/user/'.$model->img : '/img/nopic.png');
     }
 
     public function getProfileAddress(){

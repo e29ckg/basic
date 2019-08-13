@@ -276,7 +276,7 @@ class UserController extends Controller{
         $mdProfile = Profile::findOne(Yii::$app->user->identity->id);   
         $modelLine = Line::findOne(['name' => $mdUser->username]);
 
-        $LineHome = LineHome::findOne(1);
+        $LineHome = LineHome::findOne(2);
         $client_id = $LineHome->client_id;
         $api_url = 'https://notify-bot.line.me/oauth/authorize?';
         $callback_url = $LineHome->callback_url;
@@ -288,14 +288,29 @@ class UserController extends Controller{
             'scope' => 'notify',
             'state' => $mdUser->username
         ];
-        
+                
         $result = $api_url . http_build_query($query);
+
+        if ($LineHome->load(Yii::$app->request->post()) && $LineHome->validate()) {            
+            // $model->name = 'name';
+            $LineHome->client_id = $_POST['LineHome']['client_id'];
+            $LineHome->client_secret = $_POST['LineHome']['client_secret'];
+            $LineHome->name_ser = $_POST['LineHome']['name_ser'];
+            $LineHome->api_url = $_POST['LineHome']['api_url'];
+            $LineHome->callback_url = $_POST['LineHome']['callback_url'];
+            if($LineHome->save()){                          
+                Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');                
+                return $this->redirect(['profile']);
+            }   
+        }
         return $this->render('user_profile',[
             'mdProfile' => $mdProfile,
             'mdUser' => $mdUser,
+            'LineHome' => $LineHome,
             'model' => $modelLine,
             'result' => $result
-            ]);
+        ]);
+        
     }
 
     public function actionCallback()
@@ -306,7 +321,7 @@ class UserController extends Controller{
             
         }
 
-        $LineHome = LineHome::findOne(1);
+        $LineHome = LineHome::findOne(2);
         $client_id = $LineHome->client_id;
         $client_secret = $LineHome->client_secret;
 
@@ -401,12 +416,23 @@ class UserController extends Controller{
             
                 $json = json_decode($res);
                 //$status = $json->status;
-            
-                //var_dump($status);
+                if($json-status){
+                    Yii::$app->session->setFlash('success', 'แจ้งสำเร็จ'.$json->status);
+                }
+                //var_dump($status);                
+                return $this->redirect(['profile']);
+
             } catch (Exception $e) {
                 throw new Exception($e->getMessage);
             }
         }
+
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('line_form_send',[
+                'model' => $model,
+                'json' => $json                   
+            ]);
+        } 
         return $this->render('line_form_send', [
             'model' => $model,
             'json' => $json

@@ -73,20 +73,7 @@ class Profile extends \yii\db\ActiveRecord
         ];
     }
 
-    public function getImgSrc()
-    {
-        if (!Yii::$app->user->isGuest){
-            $model = Profile::findOne(Yii::$app->user->identity->id);   
-            return $model->img ? Yii::getAlias('@web').'/uploads/user/'.$model->img : Yii::getAlias('@web').'/adminlte2/dist/img/avatars.png';         
-        }
-        return Yii::getAlias('@web').'/img/avatars/male.png';
-    }
-    public function getFullName()    {
-            $model = Profile::findOne(Yii::$app->user->identity->id);   
-            return $model->user_id ? $model->fname.$model->name.' '.$model->sname : 'No_Name';                   
-            // return $model;                   
-        
-    }
+   
     public function getProfileActive(){
         if(isset(Yii::$app->user->identity->id)){
             $model = Profile::findOne(Yii::$app->user->identity->id);   
@@ -94,13 +81,13 @@ class Profile extends \yii\db\ActiveRecord
             return [
                 'fullname' => $model->fname.$model->name.' '.$model->sname,
                 'dep' => $model->dep,
-                'img'   => $model->img ? Yii::getAlias('@web').'/uploads/user/'.$model->img : Yii::getAlias('@web').'/adminlte2/dist/img/user2-160x160.jpg'
+                'img'   => $model->img ? Yii::getAlias('@web').'/uploads/user/'.$model->img : Yii::getAlias('@web').'/img/nopic.png'
             ]; 
         } 
         return [
             'fullname' => 'Guest',
             'dep' => '-',
-            'img'   => Yii::getAlias('@web').'/adminlte2/dist/img/user2-160x160.jpg'
+            'img'   => Yii::getAlias('@web').'/img/nopic.png'
         ];        
     }
         
