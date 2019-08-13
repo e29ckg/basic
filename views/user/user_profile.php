@@ -11,7 +11,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="row">
-  <div class="col-md-4">
+  <div class="col-md-5">
     <div class="row">  
       <div class="col-md-12">
           <div class="box box-primary">
@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
       <div class="col-md-12">
         <div class="box box-primary">
           <div class="box-header with-border">
-            <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
+            <h3 class="box-title"><?=$LineHome->name_ser?></h3>
             <div class="box-tools pull-right">
               <?=Html::a('เว็บไซต์ https://notify-bot.line.me/th/', 'https://notify-bot.line.me/th/', ['class' => 'btn btn-success','target' => '_blank'])?>
             </div>	
@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
   </div>
     
   <!-- Profile Image -->  
-  <div class="col-md-8">    
+  <div class="col-md-7">    
     <div class="box box-primary">
       <div class="box-header with-border">
         <h3 class="box-title">About Me</h3>

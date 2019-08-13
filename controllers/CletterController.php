@@ -157,7 +157,9 @@ class CletterController extends Controller
                 
                 $modelLine = Line::findOne(['name' => 'LineGroup']);        
                 if(!empty($modelLine->token) && $modelLine->status == 1){
-                    $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.';
+                    // $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.';
+                    $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.'.Yii::$app->request->hostInfo.Url::to(['cletter/show','id'=>$model->id]);
+                
                     $res = Line::notify_message($modelLine->token,$message);
                     
                     if($res['status'] == 200){
@@ -223,18 +225,20 @@ class CletterController extends Controller
             }
             $model->file = $filename;
             if($model->save()){
-                $message = Cletter::getProfileName(Yii::$app->user->identity->id) .' แก้ไข '.$model->name;
-            $modelLog = new Log();
-            $modelLog->user_id = Yii::$app->user->identity->id;
-            $modelLog->manager = 'Cletter_Update';
-            $modelLog->detail =  'แกไข '.$model->name;
-            $modelLog->create_at = date("Y-m-d H:i:s");
-            $modelLog->ip = Yii::$app->getRequest()->getUserIP();
+                $message = Yii::$app->user->identity->id .' แก้ไข '.$model->name;
+                $modelLog = new Log();
+                $modelLog->user_id = Yii::$app->user->identity->id;
+                $modelLog->manager = 'Cletter_Update';
+                $modelLog->detail =  'แกไข '.$model->name;
+                $modelLog->create_at = date("Y-m-d H:i:s");
+                $modelLog->ip = Yii::$app->getRequest()->getUserIP();
             if($modelLog->save()){
                 
                 $modelLine = Line::findOne(['name' => 'Admin']);        
                 if(!empty($modelLine->token) && $modelLine->status == 1){
-                    $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.';
+                    // $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.';
+                    $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.'.Yii::$app->request->hostInfo.Url::to(['cletter/show','id'=>$model->id]);
+                
                     $res = Line::notify_message($modelLine->token,$message);
                     
                     if($res['status'] == 200){
@@ -277,7 +281,7 @@ class CletterController extends Controller
         }
         
         if($model->delete()){
-            $message = Cletter::getProfileName(Yii::$app->user->identity->id) .' ลบ '.$model->name;
+            $message = Yii::$app->user->identity->id .' ลบ '.$model->name;
             $modelLog = new Log();
             $modelLog->user_id = Yii::$app->user->identity->id;
             $modelLog->manager = 'Cletter_delete';
@@ -290,30 +294,29 @@ class CletterController extends Controller
         return $this->redirect(['index_admin']);
     }
 
-    public function actionShow($file=null,$name=null) {
+    public function actionShow($id) {
         
-        $modelF = Cletter::findOne(['file' => $file]);   
-        $name = $modelF ? $modelF->name : $file;          
+        $modelF = Cletter::findOne($id);           
                 
         // This will need to be the path relative to the root of your app.
         $filePath = '/web/uploads/cletter';
         // Might need to change '@app' for another alias
-        $completePath = Yii::getAlias('@app'.$filePath.'/'.$file);
+        $completePath = Yii::getAlias('@app'.$filePath.'/'.$modelF->file);
         if(is_file($completePath)){
             
             $modelLog = new Log();
             $modelLog->user_id = Yii::$app->user->identity->id;
             $modelLog->manager = 'Cletter_Read';
-            $modelLog->detail =  'เปิดอ่าน '.$name;
+            $modelLog->detail =  'เปิดอ่าน '.$modelF->name;
             $modelLog->create_at = date("Y-m-d H:i:s");
             $modelLog->ip = Yii::$app->getRequest()->getUserIP();
             if($modelLog->save()){
                 $modelLine = Line::findOne(['name' => 'Admin']);        
                     if(!empty($modelLine->token) && $modelLine->status == 1){
-                        $message = Yii::$app->user->identity->username.' เปิดอ่าน '.$name.' '.date("Y-m-d H:i:s");
+                        $message = Yii::$app->user->identity->username.' เปิดอ่าน '.$modelF->name.' '.date("Y-m-d H:i:s");
                         Line::notify_message($modelLine->token,$message);                        
                     }                        
-                return Yii::$app->response->sendFile($completePath, $file, ['inline'=>true]);
+                return Yii::$app->response->sendFile($completePath, $modelF->file, ['inline'=>true]);
             }
             
         }else{
@@ -338,14 +341,15 @@ class CletterController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
+
     public function actionLine_alert($id) {
-        $model = $this->findModel($id);
-        
+        $model = $this->findModel($id);        
         if($model->name){            
             $message = $model->name .' ดูรายละเอียดเพิ่มเติมได้ที่ เว็บภายใน ';
             $modelLine = Line::findOne(['name' => 'LineGroup']);        
             if(!empty($modelLine->token) && $modelLine->status == 1){
-                $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.';
+                // $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.'.Yii::$app->request->hostInfo.Url::to(['cletter/show','id'=>$model->id]);
+                $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.'.'http://127.00.00.01'.Url::to(['cletter/show','id'=>$model->id]);
                 $res = Line::notify_message($modelLine->token,$message);
 
                 if($res['status'] == 200){
@@ -353,8 +357,7 @@ class CletterController extends Controller
                 }else{
                     Yii::$app->session->setFlash('warning', 'Line Notify ส่งไม่ได้ Error'.$res['status']);
                 }
-            } 
-                
+            }                 
         }        
         return $this->redirect(['index_admin']);        
     }
@@ -468,8 +471,7 @@ class CletterController extends Controller
                 $model->ca_name = '	คำสั่งศาลฯ';
                 $model->save();
             }
-        endforeach;
-                
+        endforeach;                
 
         return $this->redirect(['index']);
     }

@@ -279,4 +279,21 @@ class User extends ActiveRecord implements IdentityInterface
         //     'นางสาว' => 'นางสาว'
         // ];
     }
+    public function getRoleList(){
+        return [
+            '1' =>'user',
+            // '2' => 'Operator',
+            // '3' => 'Manager',
+            '9' => 'Administrator'
+        ];
+    }
+    public function getRoleName($id){
+        $role = [
+            '1' =>'user',
+            // '2' => 'Operator',
+            // '3' => 'Manager',
+            '9' => 'Administrator'
+        ];
+        return $role[$id];
+    }
 }

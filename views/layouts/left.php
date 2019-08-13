@@ -56,6 +56,7 @@ $menu_admin = [
         
         ['label' => 'ตั้งค่า', 'options' => ['class' => 'header']],
         ['label' => 'Profile', 'icon' => 'id-card-o', 'url' => ['user/profile']],
+        ['label' => 'Line', 'icon' => 'id-card-o', 'url' => ['line/line_index']],
         ['label' => 'สมาชิก', 'icon' => 'users', 'url' => '#',
             'items' => [
                 ['label' => 'จัดการสมาชิก', 'icon' => 'fa fa-user-o', 'url' => ['user/user_index']],
@@ -65,7 +66,7 @@ $menu_admin = [
                 ['label' => 'จัดการคำนำหน้าชื่อ', 'icon' => 'fa fa-user-o', 'url' => ['user/fname']],
             ],
         ],
-        ['label' => 'Line', 'icon' => 'id-card-o', 'url' => ['line/line_index']],
+        
         // ['label' => 'Login', 'url' => ['site/login']],
         
         ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],

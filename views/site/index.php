@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <!-- /.direct-chat-img -->
                 <div class="direct-chat-text">
                     <?= $model->file ?
-                        '<a href="'.Url::to(['cletter/show','file' => $model->file]).'" class="uppercase" target="_blank">'.$model->name.'</a>'
+                        '<a href="'.Url::to(['cletter/show','id' => $model->id]).'" class="uppercase" target="_blank">'.$model->name.'</a>'
                         :
                         $model->name;
                     ?>

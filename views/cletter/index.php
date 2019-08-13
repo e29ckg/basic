@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					<?php foreach ($models as $model): ?>
 					<tr>
 						<td><?=$model->id?></td>
-						<td><?= $model->file ? Html::a($model->name,['cletter/show','file' => $model->file],['target' => '_blank']) : $model->name;?></td>
+						<td><?= $model->file ? Html::a($model->name,['cletter/show','id' => $model->id],['target' => '_blank']) : $model->name;?></td>
 						<td><?=$model->ca_name?></td>
 						<td><?=$model->created_at?></td>						
 																			

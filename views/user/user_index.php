@@ -125,33 +125,35 @@ $this->params['breadcrumbs'][] = $this->title;
 											<?=Html::img($model->getProfileImg(), ['alt' => 'userPic','height'=>'42'])?>
 										</td>
 										<td>
-										<?= $model->username ?>
+											<?= $model->username ?>
 										</td>									
 										<td >
-											<?= $model->getProfileName() ?> 
-											
+											<?= $model->getProfileName() ?> 											
 											<?= Html::a('resetPassword <i class="fa fa-gear fa-lg"></i>', ['user/reset_pass', 'id' => $model->id], [
-													'class' => 'btn txt-color-greenLight btn-xs btn-default',
-													'data-confirm'=>'Are you sure to ยกเลิก this item?']) 
+												'class' => 'btn txt-color-greenLight btn-xs btn-default',
+												'data-confirm'=>'Are you sure to ยกเลิก this item?']) 
 											?>												
 										</td>																				
 										<td>
-												<?= $model->status == 0 ? '<span class="label label-danger">ระงับ</span>':'<span class="label label-primary">อนุญาต</span>';?>
-										
+											<?= $model->status == 0 ? '<span class="label label-danger">ระงับ</span>':'<span class="label label-primary">อนุญาต</span>';?>
+											<span class="label label-danger"><?= $model->getRoleName($model->role)?></span>
 										</td>
 										<td>
 											<?= Html::label('แก้ไข', 'update-profile', [
 												'class' => 'btn btn-info btn-xs act-update-profile',
 												'data-id' => $model->id]) ?>
-												<?php if($model->status == 0){
-						echo Html::a('SetActive', ['user/active', 'id' => $model->id], [
-							'class' => 'btn btn-xs btn-primary',
-							'data-confirm'=>'Are you sure this item?']);
-						}else{
-							echo Html::a('ระงับ', ['user/del', 'id' => $model->id], [
-								'class' => 'btn btn-danger btn-xs ',
-								'data-confirm'=>'Are you sure ?']);
-							}	?>
+											<?= Html::label('กำหนดสิทธิ์', 'update-role', [
+												'class' => 'btn btn-info btn-xs act-update-role',
+												'data-id' => $model->id]) ?>
+											<?php if($model->status == 0){
+												echo Html::a('SetActive', ['user/active', 'id' => $model->id], [
+													'class' => 'btn btn-xs btn-primary',
+													'data-confirm'=>'Are you sure this item?']);
+												}else{
+													echo Html::a('ระงับ', ['user/del', 'id' => $model->id], [
+														'class' => 'btn btn-danger btn-xs ',
+														'data-confirm'=>'Are you sure ?']);
+													}	?>
 											<!-- <?= Html::a('ลบ', ['user/del', 'id' => $model->id], ['class' => 'btn btn-danger btn-xs','data-confirm'=>'Are you sure to ยกเลิก this item?']) ?> -->
 											<!-- <a href="index.php?r=user/profile&id=<?=$model->id?>" class="btn btn-info btn-xs">แก้ไข </a>  -->
 											<!-- <a href="index.php?r=user/del&id=<?=$model->id?>" data-confirm="Are you sure to ยกเลิก this item?" class="btn btn-danger btn-xs"> ระงับ</a>  -->
@@ -173,7 +175,7 @@ $script = <<< JS
      
 $(document).ready(function() {
 
-	// $('#example1').DataTable()
+	$('#example1').DataTable()
 	$('#example2').DataTable({
       'paging'      : true,
       'lengthChange': false,
@@ -199,6 +201,18 @@ $(document).ready(function() {
             	$("#activity-modal").find(".modal-body").html(data);
             	$(".modal-body").html(data);
             	$(".modal-title").html("แก้ไขข้อมูล ");
+            	$("#activity-modal").modal("show");
+        	});
+    	});
+
+		var url_update_role = "update_role";
+    	$(".act-update-role").click(function(e) {            
+			var fID = $(this).data("id");
+			// alert(fID);
+        	$.get(url_update_role,{id: fID},function (data){
+            	$("#activity-modal").find(".modal-body").html(data);
+            	$(".modal-body").html(data);
+            	$(".modal-title").html("แก้ไขสิทธิ์");
             	$("#activity-modal").modal("show");
         	});
     	});

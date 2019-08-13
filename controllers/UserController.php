@@ -381,6 +381,31 @@ class UserController extends Controller{
         return $this->redirect('profile');
     }
 
+    public function actionUpdate_role($id){
+        
+        $model = User::findOne($id);              
+        
+        if ($model->load(Yii::$app->request->post())) {
+                      
+            $model->role = $_POST['User']['role'];
+            
+            if($model->save()){
+                Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
+            };          
+            return $this->redirect(['user_index']);
+        }
+        
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('user_form_update_role',[
+                    'model' => $model,                    
+            ]);
+        }        
+        return $this->render('user_form_update_role',[
+               'model' => $model,                    
+        ]);
+    }
+
+
     public function actionUser_line_send()
     {
         $modelLine = Line::findOne(['name' => Yii::$app->user->identity->username]);

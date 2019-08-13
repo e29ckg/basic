@@ -69,13 +69,6 @@ class CLetter extends \yii\db\ActiveRecord
     }
 
     
-    public function getProfileName($id)
-    {
-        $model = Profile::find()->where(['user_id' => $id])->one();
-
-        return $model->name ? $model->fname.$model->name.' '.$model->sname : $id ;
-    }
-
     public function getCaidList(){
         $model = CLetterCaid::find()->orderBy(['name'=>SORT_ASC])->all();
         return ArrayHelper::map($model,'name','name');

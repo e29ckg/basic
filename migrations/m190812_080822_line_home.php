@@ -33,8 +33,16 @@ class m190812_080822_line_home extends Migration
             'client_id' => 'xxxx',
             'client_secret' => 'xxxx',
             'name_ser' => 'webApp',
-            'api_url' => 'http://xxx',
-            'callback_url' => 'http://xxx'
+            'api_url' => 'http://127.0.0.1/basic/web/line/line_index',
+            'callback_url' => 'http://127.0.0.1/basic/web/line/callback'
+            ]);
+        $this->insert('line_home', [
+            'id' => 2,
+            'client_id' => 'xxxxxx',
+            'client_secret' => 'xxxxxx',
+            'name_ser' => 'webPK_user',
+            'api_url' => 'http://127.0.0.1/basic/web/line/line_index',
+            'callback_url' => 'http://127.0.0.1/basic/web/user/callback'
             ]);
     }
 
