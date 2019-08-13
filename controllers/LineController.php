@@ -28,9 +28,10 @@ class LineController extends Controller
      * 
      * 
      */
-    public $client_id = '4FLzeUXbqtIa5moAG1wtel';
-    public $client_secret = 'zJyajyRcooJePqyLBzjWGJA9Zu7rRL6qTC0h8fYn0Xp';
-    public $callback_url = 'http://192.168.0.15/basic/web/line/callback';
+
+    // public $client_id = '4FLzeUXbqtIa5moAG1wtel';
+    // public $client_secret = 'zJyajyRcooJePqyLBzjWGJA9Zu7rRL6qTC0h8fYn0Xp';
+    // public $callback_url = 'http://localhost/basic/web/line/callback';
 
     public function behaviors()
     {
@@ -59,18 +60,7 @@ class LineController extends Controller
      * Lists all Line models.
      * @return mixed
      */
-    public function actionIndex()
-    {
-        $model = Line::find()->orderBy([
-            'name'=>SORT_ASC,
-            // 'id' => SORT_DESC,
-            ])->limit(100)->all();
-        
-        return $this->render('line_index',[
-            'models' => $model,
-        ]);
-
-    }
+    
 
 
     /**
@@ -185,30 +175,30 @@ class LineController extends Controller
             // 'id' => SORT_DESC,
             ])->all();
         $LineGroup = Line::findOne(['name' => 'LineGroup']);      
-            // $client_id = '4FLzeUXbqtIa5moAG1wtel';
+
+            $LineHome = LineHome::findOne(1);
+            $client_id = $LineHome->client_id;
             $api_url = 'https://notify-bot.line.me/oauth/authorize?';
-            // $callback_url = 'http://192.168.0.15/basic/web/line/callback';
+            $callback_url = $LineHome->callback_url;
     
             $query = [
                 'response_type' => 'code',
-                'client_id' => $this->client_id,
-                'redirect_uri' => $this->callback_url,
+                'client_id' => $client_id,
+                'redirect_uri' => $callback_url,
                 'scope' => 'notify',
                 'state' => 'LineGroup'
             ];
             
-            $result = $api_url . http_build_query($query);    
+            $result = $api_url . http_build_query($query);                         
         
-        $modelLineHome = LineHome::findOne(1);                 
-        
-        if ($modelLineHome->load(Yii::$app->request->post()) && $modelLineHome->validate()) {            
+        if ($LineHome->load(Yii::$app->request->post()) && $LineHome->validate()) {            
             // $model->name = 'name';
-            $modelLineHome->client_id = $_POST['LineHome']['client_id'];
-            $modelLineHome->client_secret = $_POST['LineHome']['client_secret'];
-            $modelLineHome->name_ser = $_POST['LineHome']['name_ser'];
-            $modelLineHome->api_url = $_POST['LineHome']['api_url'];
-            $modelLineHome->callback_url = $_POST['LineHome']['callback_url'];
-            if($modelLineHome->save()){                          
+            $LineHome->client_id = $_POST['LineHome']['client_id'];
+            $LineHome->client_secret = $_POST['LineHome']['client_secret'];
+            $LineHome->name_ser = $_POST['LineHome']['name_ser'];
+            $LineHome->api_url = $_POST['LineHome']['api_url'];
+            $LineHome->callback_url = $_POST['LineHome']['callback_url'];
+            if($LineHome->save()){                          
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');                
                 return $this->redirect(['line_index']);
             }   
@@ -217,7 +207,7 @@ class LineController extends Controller
             
         return $this->render('line_index',[
             'LineGroup' => $LineGroup,
-            'modelLineHome' => $modelLineHome,
+            'LineHome' => $LineHome,
             'models' => $models,
             'result' => $result
         ]);
@@ -301,27 +291,7 @@ class LineController extends Controller
         return $this->redirect(['line_index']);
     }
 
-    public function actionIndex11()
-    {
-        $client_id = '4FLzeUXbqtIa5moAG1wtel';
-        $api_url = 'https://notify-bot.line.me/oauth/authorize?';
-        $callback_url = 'http://192.168.0.15/basic/web/line/callback';
-
-        $query = [
-            'response_type' => 'code',
-            'client_id' => $client_id,
-            'redirect_uri' => $callback_url,
-            'scope' => 'notify',
-            'state' => 'LineGroup'
-        ];
-        
-        $result = $api_url . http_build_query($query);
-
-        return $this->render('index11',[
-            'result' => $result
-        ]);
-    }
-
+    
     public function actionCallback()
     {
         if(!empty($_GET['error'])){
@@ -329,11 +299,13 @@ class LineController extends Controller
             return $this->redirect('line_index');
             
         }
-        // $client_id = '4FLzeUXbqtIa5moAG1wtel';
-        // $client_secret = 'zJyajyRcooJePqyLBzjWGJA9Zu7rRL6qTC0h8fYn0Xp';
+
+        $LineHome = LineHome::findOne(1);
+        $client_id = $LineHome->client_id;
+        $client_secret = $LineHome->client_secret;
 
         $api_url_token = 'https://notify-bot.line.me/oauth/token';
-        // $callback_url = 'http://192.168.0.15/basic/web/line/callback';
+        $callback_url = $LineHome->callback_url;
 
         parse_str($_SERVER['QUERY_STRING'], $queries);
 
@@ -341,9 +313,9 @@ class LineController extends Controller
         $fields = [
             'grant_type' => 'authorization_code',
             'code' => $queries['code'],
-            'redirect_uri' => $this->callback_url,
-            'client_id' => $this->client_id,
-            'client_secret' => $this->client_secret
+            'redirect_uri' => $callback_url,
+            'client_id' => $client_id,
+            'client_secret' => $client_secret
         ];
         
         try {
@@ -440,7 +412,6 @@ class LineController extends Controller
             'model' => $model,
             'json' => $json
         ]);
-    }
-           
+    }           
 
 }

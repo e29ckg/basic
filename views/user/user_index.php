@@ -112,6 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
 										<th data-class="expand">ID</th>											
 										<th data-hide="phone"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> pic</th>
 										<th >Username</th>
+										<th >ชื่อ-สกุล</th>
 										<th data-hide="phone"><i class="fa fa-fw fa-phone text-muted hidden-md hidden-sm hidden-xs"></i> Status</th>
 										<th ></th>
 									</tr>
@@ -122,6 +123,9 @@ $this->params['breadcrumbs'][] = $this->title;
 										<td class="text-center" ><?=$model->id ?></td>		
 										<td class="text-center" >
 											<?=Html::img($model->getProfileImg(), ['alt' => 'userPic','height'=>'42'])?>
+										</td>
+										<td>
+										<?= $model->username ?>
 										</td>									
 										<td >
 											<?= $model->getProfileName() ?> 

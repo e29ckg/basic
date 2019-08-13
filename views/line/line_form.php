@@ -8,12 +8,6 @@ use yii\helpers\ArrayHelper;
 
 
 ?>
-<?=  !empty($model->token) ? $model->token 
-              . ' ' 
-              . Html::a('ทดสอบการส่ง', ['user_line_send'],['class' => 'btn btn-success'])
-              .' '
-              . Html::a('ลบ', ['line_delete','id' => $model->id],['class' => 'btn btn-warning'])
-              : Html::a('ลงทะเบียน', $result, ['class' => 'btn btn-success']) ;?>
 
 <div class="box box-danger">
     <div class="box-header with-border">
@@ -37,8 +31,20 @@ use yii\helpers\ArrayHelper;
    
     <div class="box-body">
         <div class="row">
-            
-            <div class="col-md-10">
+            <div class="col-md-2">
+                <div class="form-group">
+                    <?= $form->field($model, 'name', [
+                        'inputOptions' => [
+                            'placeholder' => $model->getAttributeLabel('name'),
+                                'class'=>'form-control'
+                            ],
+                            // 'template' => '<div class="form-group"><label>{label}</label> {input}<b class="tooltip tooltip-top-right">'.$model->getAttributeLabel('date_total').'</b><em for="name" class="invalid">{error}{hint}</em></div>'
+                        ]);
+                    ?>
+                </div>
+            </div>
+
+            <div class="col-md-8">
                 <div class="form-group">
                     <?= $form->field($model, 'token', [
                         'inputOptions' => [

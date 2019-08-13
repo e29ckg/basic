@@ -25,11 +25,11 @@ $this->params['breadcrumbs'][] = $this->title;
 				</div>	
 				<div class="box-body">
 				<?php  $form = ActiveForm::begin();  ?>
-				<?=$form->field($modelLineHome, 'client_id')?>
-				<?=$form->field($modelLineHome, 'client_secret')?>
-				<?=$form->field($modelLineHome, 'name_ser')?>
-				<?=$form->field($modelLineHome, 'api_url')?>
-				<?=$form->field($modelLineHome, 'callback_url')?>
+				<?=$form->field($LineHome, 'client_id')?>
+				<?=$form->field($LineHome, 'client_secret')?>
+				<?=$form->field($LineHome, 'name_ser')?>
+				<?=$form->field($LineHome, 'api_url')?>
+				<?=$form->field($LineHome, 'callback_url')?>
 				<?=Html::submitButton('บันทึก', ['class' => 'btn btn-success'])?>
 				<?php ActiveForm::end()?>
 				</div>			
@@ -84,15 +84,14 @@ $this->params['breadcrumbs'][] = $this->title;
 										<td><?= $model->token?></td>
 										<td>
 											<a href= "#" class="btn btn-warning act-update" data-id=<?=$model->id?>><i class="fa fa-pencil-square-o"></i> แก้ไข</a>
-											<?= Html::a('<i class="fa fa-remove"></i> ลบ',['line/line_del','id' => $model->id],
+											<?= Html::a('<i class="fa fa-remove"></i> ลบ',['line/line_delete','id' => $model->id],
 													[
 														'class' => 'btn btn-danger act-update',
 														'data-confirm' => 'Are you sure to delete this item?',
 														'data-method' => 'post',
 													]);
 											?>
-										</td>
-																	
+										</td>																	
 									</tr>
 									<?php  endforeach; ?>
 								</tbody>	

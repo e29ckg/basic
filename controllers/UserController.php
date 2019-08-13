@@ -9,6 +9,7 @@ use app\models\Dep;
 use app\models\Fname;
 use app\models\Profile;
 use app\models\Line;
+use app\models\LineHome;
 use app\models\LineFormSend;
 use yii\web\UploadedFile;
 use yii\helpers\Url;
@@ -271,13 +272,14 @@ class UserController extends Controller{
     }
 
     public function actionProfile(){
-        $mdUser = User::findOne(Yii::$app->user->id);
-        $mdProfile = Profile::findOne(['user_id' => Yii::$app->user->id]);   
+        $mdUser = User::findOne(Yii::$app->user->identity->id);
+        $mdProfile = Profile::findOne(Yii::$app->user->identity->id);   
         $modelLine = Line::findOne(['name' => $mdUser->username]);
 
-        $client_id = '4FLzeUXbqtIa5moAG1wtel';
+        $LineHome = LineHome::findOne(1);
+        $client_id = $LineHome->client_id;
         $api_url = 'https://notify-bot.line.me/oauth/authorize?';
-        $callback_url = 'http://localhost/basic/web/user/callback';
+        $callback_url = $LineHome->callback_url;
 
         $query = [
             'response_type' => 'code',
@@ -303,11 +305,13 @@ class UserController extends Controller{
             return $this->redirect('profile');
             
         }
-        $client_id = '4FLzeUXbqtIa5moAG1wtel';
-        $client_secret = 'zJyajyRcooJePqyLBzjWGJA9Zu7rRL6qTC0h8fYn0Xp';
+
+        $LineHome = LineHome::findOne(1);
+        $client_id = $LineHome->client_id;
+        $client_secret = $LineHome->client_secret;
 
         $api_url_token = 'https://notify-bot.line.me/oauth/token';
-        $callback_url = 'http://localhost/basic/web/user/callback';
+        $callback_url = $LineHome->callback_url;
 
         parse_str($_SERVER['QUERY_STRING'], $queries);
 
@@ -332,8 +336,7 @@ class UserController extends Controller{
             $res = curl_exec($ch);
             curl_close($ch);
 
-            $model = new Line();
-        
+                    
             if ($res == false)
                 throw new Exception(curl_error($ch), curl_errno($ch));
         
@@ -352,7 +355,7 @@ class UserController extends Controller{
             }
             
         
-            //var_dump($json);
+           echo var_dump($json);
         } catch(Exception $e) {
             throw new Exception($e->getMessage());
             //var_dump($e);
