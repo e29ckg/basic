@@ -174,22 +174,10 @@ $this->params['breadcrumbs'][] = $this->title;
 $script = <<< JS
      
 $(document).ready(function() {
-
-	$('#example1').DataTable()
-	$('#example2').DataTable({
-      'paging'      : true,
-      'lengthChange': false,
-      'searching'   : true,
-      'ordering'    : true,
-      'info'        : true,
-      'autoWidth'   : false
-    })
-
 	
 	function init_click_handlers(){  
-		
 
-		// $('#activity-modal').on('hidden.bs.modal', function () {
+	// $('#activity-modal').on('hidden.bs.modal', function () {
  		// location.reload();
 		// });
 
@@ -294,6 +282,15 @@ $(document).ready(function() {
 	}); 
 	
 	$('#example1').DataTable()
+	$('#example2').DataTable({
+      'paging'      : true,
+      'lengthChange': false,
+      'searching'   : true,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : false
+    })
+
 	
 });
 JS;

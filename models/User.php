@@ -281,7 +281,8 @@ class User extends ActiveRecord implements IdentityInterface
     }
     public function getRoleList(){
         return [
-            '1' =>'user',
+            // '0' => '-',
+            '1' => 'user',
             // '2' => 'Operator',
             // '3' => 'Manager',
             '9' => 'Administrator'
@@ -289,6 +290,7 @@ class User extends ActiveRecord implements IdentityInterface
     }
     public function getRoleName($id){
         $role = [
+            // '0' => '-',
             '1' =>'user',
             // '2' => 'Operator',
             // '3' => 'Manager',

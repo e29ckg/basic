@@ -64,8 +64,8 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $model = CLetter::find()->orderBy([
-            'created_at'=>SORT_DESC,
-            'id' => SORT_ASC,
+            // 'created_at'=>SORT_DESC,
+            'id' => SORT_DESC,
             ])->limit(10)->all();
         
         return $this->render('index',[

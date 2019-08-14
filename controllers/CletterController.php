@@ -26,6 +26,8 @@ class CletterController extends Controller
      */
     public $line_sms ='10.37.64.01';
     public $upload ='/uploads/user/';
+    public $filePath = '/uploads/cletter/';
+    public $smsLineAlert = ' http://10.37.64.01/main/web/cletter/show/';
 
     public function behaviors()
     {
@@ -58,7 +60,7 @@ class CletterController extends Controller
     {
         $model = CLetter::find()->orderBy([
             // 'created_at'=>SORT_DESC,
-            'id' => SORT_ASC,
+            'id' => SORT_DESC,
             ])->limit(100)->all();
         
         return $this->render('index',[
@@ -69,8 +71,8 @@ class CletterController extends Controller
     public function actionIndex_admin()
     {
         $model = CLetter::find()->orderBy([
-            'created_at'=>SORT_DESC,
-            // 'id' => SORT_DESC,
+            // 'created_at'=>SORT_DESC,
+            'id' => SORT_DESC,
             ])->limit(100)->all();        
         
         return $this->render('index_admin',[
@@ -133,7 +135,7 @@ class CletterController extends Controller
             
             $f = UploadedFile::getInstance($model, 'file');
             if(!empty($f)){
-                $dir = Url::to('@webroot/uploads/cletter/');
+                $dir = Url::to('@webroot'.$this->filePath);
                 if (!is_dir($dir)) {
                     mkdir($dir, 0777, true);
                 }
@@ -158,7 +160,7 @@ class CletterController extends Controller
                 $modelLine = Line::findOne(['name' => 'LineGroup']);        
                 if(!empty($modelLine->token) && $modelLine->status == 1){
                     // $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.';
-                    $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.'.Yii::$app->request->hostInfo.Url::to(['cletter/show','id'=>$model->id]);
+                    $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.'.$this->smsLineAlert.$model->id;
                 
                     $res = Line::notify_message($modelLine->token,$message);
                     
@@ -191,6 +193,7 @@ class CletterController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
+
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -208,7 +211,7 @@ class CletterController extends Controller
 
             if(!empty($f)){
                 
-                $dir = Url::to('@webroot/uploads/cletter/');
+                $dir = Url::to('@webroot'.$this->filePath);
                 if (!is_dir($dir)) {
                     mkdir($dir, 0777, true);
                 }                
@@ -237,7 +240,7 @@ class CletterController extends Controller
                 $modelLine = Line::findOne(['name' => 'Admin']);        
                 if(!empty($modelLine->token) && $modelLine->status == 1){
                     // $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.';
-                    $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.'.Yii::$app->request->hostInfo.Url::to(['cletter/show','id'=>$model->id]);
+                    $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.'.$this->smsLineAlert.$model->id;
                 
                     $res = Line::notify_message($modelLine->token,$message);
                     
@@ -274,7 +277,7 @@ class CletterController extends Controller
     {
         $model = $this->findModel($id);
         $filename = $model->file;
-        $dir = Url::to('@webroot/uploads/cletter/');
+        $dir = Url::to('@webroot'.$this->filePath);
         
         if($filename && is_file($dir.$filename)){
             unlink($dir.$filename);// ลบ รูปเดิม;                    
@@ -299,9 +302,9 @@ class CletterController extends Controller
         $modelF = Cletter::findOne($id);           
                 
         // This will need to be the path relative to the root of your app.
-        $filePath = '/web/uploads/cletter';
+        // $filePath = '/web/uploads/cletter';
         // Might need to change '@app' for another alias
-        $completePath = Yii::getAlias('@app'.$filePath.'/'.$modelF->file);
+        $completePath = Url::to('@webroot').$this->filePath.$modelF->file;
         if(is_file($completePath)){
             
             $modelLog = new Log();
@@ -320,7 +323,7 @@ class CletterController extends Controller
             }
             
         }else{
-            Yii::$app->session->setFlash('warning', 'ไม่พบ File... ');
+            Yii::$app->session->setFlash('warning', 'ไม่พบ File... '.$completePath);
             return $this->redirect(['index']);;
         }
     }
@@ -349,7 +352,7 @@ class CletterController extends Controller
             $modelLine = Line::findOne(['name' => 'LineGroup']);        
             if(!empty($modelLine->token) && $modelLine->status == 1){
                 // $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.'.Yii::$app->request->hostInfo.Url::to(['cletter/show','id'=>$model->id]);
-                $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.'.'http://127.00.00.01'.Url::to(['cletter/show','id'=>$model->id]);
+                $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.'.$this->smsLineAlert.$model->id;
                 $res = Line::notify_message($modelLine->token,$message);
 
                 if($res['status'] == 200){

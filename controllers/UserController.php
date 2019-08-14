@@ -441,7 +441,7 @@ class UserController extends Controller{
             
                 $json = json_decode($res);
                 //$status = $json->status;
-                if($json-status){
+                if(!empty($json->status) == 200){
                     Yii::$app->session->setFlash('success', 'แจ้งสำเร็จ'.$json->status);
                 }
                 //var_dump($status);                
@@ -689,20 +689,18 @@ class UserController extends Controller{
 
     public function actionU()
     {
-        $models = Profile::find()->all();        
-
+        $models = User::find()->all();
         
         foreach ($models as $model):
-           
-                $model->id = $model->user_id ;
-                
-               $model->save() ;
-        
-         
-        endforeach;
-                
+            if($model->role == 0)
 
-        return $this->redirect(['index_admin']);
+                $model->role = 1 ;
+                
+               $model->save() ;        
+               Yii::$app->session->setFlash('success', 'อัพข้อมูลเรียบร้อย');
+        endforeach;                
+
+        return $this->redirect(['user_index']);
     }
     
 }

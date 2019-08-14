@@ -69,9 +69,7 @@ $script = <<< JS
     
 $(document).ready(function() {	
 /* BASIC ;*/	
-	$('#example1').DataTable({
-		responsive: true
-	})	        
+		        
 	function init_click_handlers(){    
 
 		var url_show = "show";				
@@ -134,6 +132,10 @@ $(document).ready(function() {
                 //   $("#myModal").modal('toggle');
         	});     
 		}); 
+
+	$('#example1').DataTable({
+		responsive: true
+	})
 		
 });
 JS;

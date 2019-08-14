@@ -136,8 +136,8 @@ $(document).ready(function() {
 		}); 
 	
 		$('#example1').DataTable({
-    "order": [[ 0, 'desc' ], [ 3, 'desc' ]]
-})	
+    		"order": [[ 0, 'desc' ], [ 3, 'desc' ]]
+		})	
 });
 JS;
 $this->registerJs($script);

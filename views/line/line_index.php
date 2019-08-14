@@ -117,7 +117,7 @@ $script = <<< JS
 $(document).ready(function() {	
 /* BASIC ;*/
 
-	$('#example1').DataTable()
+	
 
 	function init_click_handlers(){        	
 		
@@ -168,7 +168,7 @@ $(document).ready(function() {
 
 
 //load_data();
-
+	$('#example1').DataTable()
 		
 });
 JS;

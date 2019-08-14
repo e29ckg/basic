@@ -93,15 +93,7 @@ $script = <<< JS
     
 $(document).ready(function() {	
 /* BASIC ;*/	
-$('#example1').DataTable()
-$('#example2').DataTable({
-      'paging'      : true,
-      'lengthChange': false,
-      'searching'   : true,
-      'ordering'    : true,
-      'info'        : true,
-      'autoWidth'   : false
-    })
+
 
 	function init_click_handlers(){    
 
@@ -137,9 +129,7 @@ $('#example2').DataTable({
 			
 	$('#activity-modal').on('hidden.bs.modal', function () {
  		location.reload();
-	})
-
-				
+	})				
 		// var url_create = "index.php?r=bila/create";
 		var url_create_a = "bila/create_a";
     	$( "#act-create-a" ).click(function() {
@@ -163,6 +153,16 @@ $('#example2').DataTable({
                 //   $("#myModal").modal('toggle');
         	});     
 		}); 
+	
+	$('#example1').DataTable()
+	$('#example2').DataTable({
+		'paging'      : true,
+		'lengthChange': false,
+		'searching'   : true,
+		'ordering'    : true,
+		'info'        : true,
+		'autoWidth'   : false
+		})
 		
 });
 JS;
