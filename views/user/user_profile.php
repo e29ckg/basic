@@ -76,15 +76,16 @@ $this->params['breadcrumbs'][] = $this->title;
       </div>
       <div class="box-body">
         <strong><i class="fa fa-book margin-r-5"></i> Line Token :: </strong>
+           
+        <p class="text-muted">  
             <?=  !empty($model->token) ? $model->token 
               . ' ' 
-              . '<button data-id ="'.$model->token.'" class="act-line-send btn btn-danger btn-md" alt="act-line-send"><i class="fa fa-pencil-square-o "></i> ทดสอบการส่ง</button>'
+              . '<button data-id ="'.$model->token.'" class="act-line-send btn btn-primary btn-xs" alt="act-line-send"><i class="fa fa-pencil-square-o "></i> ทดสอบการส่ง</button>'
               .' '
-              . Html::a('ลบ', ['user_line_delete'],['class' => 'btn btn-warning'])
-              : Html::a('ลงทะเบียน', $result, ['class' => 'btn btn-success']) ;?>
-        <p class="text-muted">  
-               
+              . Html::a('ลบ', ['user_line_delete'],['class' => 'btn btn-danger btn-xs' ,'data-confirm'=>'Are you sure ?'])
+              : Html::a('ลงทะเบียน', $result, ['class' => 'btn btn-success']) ;?> 
         </p>
+
         <hr>
         <strong><i class="fa fa-map-marker margin-r-5"></i> Location</strong>
         <p class="text-muted"><?=$mdProfile->address?></p>

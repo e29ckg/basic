@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			<table id="example1" class="table table-striped table-bordered" width="100%">
 				<thead>
 					<tr>
-						<th data-class="expand" width="10%" align="center"> # </th>
+						<!-- <th data-class="expand" width="10%" align="center"> # </th> -->
 						<th width="10%">img</th>
 						<th data-hide="phone" width="80%">Link</th>		
 					</tr>
@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					<?php $i = 1?>                              
 					<?php foreach ($models as $model): ?>
 					<tr >
-						<td align="center"><?= $i++?></td>
+						<!-- <td align="center"><?= $i++?></td> -->
 						<td class="img-weblink" >
 							<a href="#"><img src="<?= Url::to('@web'.WebLink::getImg($model->id)) ?>" alt="Smiley face" data-id= "<?=$model->id?>" class = "act-show img"></a>
 							<br>
@@ -76,9 +76,7 @@ $script = <<< JS
     
 $(document).ready(function() {	
 /* BASIC ;*/	
-	$('#example1').DataTable({
-    	"order": [[ 0, 'desc' ]]
-	})
+	
 
 	function init_click_handlers(){    
 
@@ -125,66 +123,7 @@ $(document).ready(function() {
 	}
 
     init_click_handlers(); //first run
-			
-	// $('#activity-modal').on('hidden.bs.modal', function () {
- 	// 	location.reload();
-	// })
-
-				var responsiveHelper_dt_basic = undefined;
-				var responsiveHelper_datatable_fixed_column = undefined;
-				var responsiveHelper_datatable_col_reorder = undefined;
-				var responsiveHelper_datatable_tabletools = undefined;
-				
-				var breakpointDefinition = {
-					tablet : 1024,
-					phone : 480
-				};	
-				
-			/* COLUMN FILTER  */
-		    var otable = $('#datatable_fixed_column').DataTable({
-		    	//"bFilter": false,
-		    	//"bInfo": false,
-		    	//"bLengthChange": false
-		    	//"bAutoWidth": false,
-		    	//"bPaginate": false,
-		    	//"bStateSave": true // saves sort state using localStorage
-				"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6 'f><'col-sm-6 col-xs-12 '<'toolbar'>>r>"+
-						"t"+
-						"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-				"autoWidth" : true,
-				"preDrawCallback" : function() {
-					// Initialize the responsive datatables helper once.
-					if (!responsiveHelper_datatable_fixed_column) {
-						responsiveHelper_datatable_fixed_column = new ResponsiveDatatablesHelper($('#datatable_fixed_column'), breakpointDefinition);
-					}
-				},
-				"paging":   false,
-				"rowCallback" : function(nRow) {
-					responsiveHelper_datatable_fixed_column.createExpandIcon(nRow);
-				},
-				"drawCallback" : function(oSettings) {
-					// responsiveHelper_datatable_fixed_column.respond();
-				}		
-			
-		    });
-		    
-		    // custom toolbar
-												
-		    // $("div.toolbar").html('<div class="text-right"><button id="act-create" class="btn btn-success btn-md" alt="act-create"><i class="fa fa-plus "></i> act-create</button></div>');
-			   
-		    // Apply the filter
-		    $("#datatable_fixed_column thead th input[type=text]").on( 'keyup change', function () {
-		    	
-		        otable
-		            .column( $(this).parent().index()+':visible' )
-		            .search( this.value )
-		            .draw();
-		            
-		    } );
-
-			otable.order( [[ 0, 'asc' ], [ 2, 'asc' ]] ).draw();
-
-/* END COLUMN FILTER */  
+	
 
 		var url_create = "create";
     	$( "#act-create" ).click(function() {
@@ -197,6 +136,8 @@ $(document).ready(function() {
                 //   $("#myModal").modal('toggle');
         	});     
 		}); 
+
+		$('#example1').DataTable()
 		
 });
 JS;

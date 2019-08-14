@@ -56,7 +56,7 @@ class BilaController extends Controller
         $models = Bila::find()
             ->where(['user_id' => Yii::$app->user->id])
             ->orderBy([
-                'date_create'=>SORT_DESC,
+                // 'date_create'=>SORT_DESC,
                 'id' => SORT_DESC,
             ])->limit(100)->all();        
 

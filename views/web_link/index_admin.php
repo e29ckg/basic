@@ -11,6 +11,10 @@ use yii\helpers\Url;
 $this->title = 'Web Links';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<div class="content">
+<div class="row">
+<div class="col-md-12">
+
 <div class="box box-primary">
 	<div class="box-header with-border">
 		<h3 class="box-title"><?= Html::encode($this->title) ?></h3>
@@ -20,30 +24,27 @@ $this->params['breadcrumbs'][] = $this->title;
 	</div>	
 	<div class="box-body">
 		<div id="example" class="dataTables_wrapper form-inline dt-bootstrap">
-			<table id="example1" class="table table-striped table-bordered" width="100%">
+			<table id="example1" class="table table-striped table-bordered" >
 				<thead>
 					<tr>
-						<th data-class="expand"> # </th>
-						<th data-hide="phone,tablet">img</th>
-						<th >ชื่อ</th>
-						<th data-hide="phone,tablet">File/Url</th>
 						
-						<th style="width:120px"></th>	
+						<th >img</th>
+						<th style="width: 85">ชื่อ</th>
+						
+						<th style="width: 10px"></th>	
 					</tr>
 				</thead>
 					<tbody>  
-						<?php $i = 1?>                              
+						                             
 						<?php foreach ($models as $model): ?>
 						<tr>
-							<td><?= $model->id?></td>
+						
 							<td class="img-weblink" >
 							<a href="#" ><img src="<?= Url::to('@web'.WebLink::getImg($model->id)) ?>" alt="Smiley face" data-id= "<?=$model->id?>" class = "act-show img"></a>
 							</td>
 							<td>
-								<?= $model->name?>
-								<br><?= '<a href="'.$model->link.'" target="_blank">'.$model->link.'</a>'?>
-							</td>
-							<td>
+								<?= '<a href="'.$model->link.'" target="_blank">'.$model->name.'</a>'?>
+							
 								<?php 
 									$modelFiles = WebLinkFile::find()->where(['web_link_id'=>$model->id])->orderBy(['sort'=>SORT_ASC,'id' => SORT_ASC])->all(); 
 									echo '<ul>';
@@ -66,16 +67,16 @@ $this->params['breadcrumbs'][] = $this->title;
 									echo '</ul>';
 									// echo var_dump($modelFiles);
 								?>
-									<button class="act-create-file btn btn-success btn-xs" alt="act-create" data-id=<?=$model['id']?>><i class="fa fa-plus "></i> เพิ่มfile</button>
-									<button class="act-create-url btn btn-success btn-xs" alt="act-create-url" data-id=<?=$model['id']?>><i class="fa fa-plus "></i> เพิ่มurl</button>
+									<button class= "act-create-file btn btn-success btn-xs" alt="act-create" data-id=<?=$model['id']?>><i class="fa fa-plus "></i> เพิ่มfile</button>
+									<button class= "act-create-url btn btn-success btn-xs" alt="act-create-url" data-id=<?=$model['id']?>><i class="fa fa-plus "></i> เพิ่มurl</button>
 								
 								</td>		
 								
 								<td>
-								<a href="#" class="act-update btn btn-info btn-md" data-id=<?=$model['id']?>>แก้ไข</a> 
+								<a href="#" class="act-update btn btn-info btn-xs" data-id=<?=$model['id']?>>แก้ไข</a> 
 								<?= Html::a('<i class="fa fa-remove"></i> ลบ',['web_link/delete','id' => $model->id],
 									[
-										'class' => 'btn btn-danger btn-md',
+										'class' => 'btn btn-danger btn-xs',
 										'data-confirm' => 'Are you sure to delete this item?',
 										'data-method' => 'post',
 									]);
@@ -90,7 +91,9 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div>
 	</div>
 </div>
-
+</div>
+</div>
+</div>
 
 <?php
 
@@ -101,9 +104,7 @@ $(document).ready(function() {
 
 	init_click_handlers(); //first run
 			
-	$('#example1').DataTable({
-    "order": [[ 0, 'desc' ]]
-	})
+	
 
 	$('#activity-modal').on('hidden.bs.modal', function () {
  		location.reload();
@@ -216,6 +217,7 @@ $(document).ready(function() {
                 //   $("#myModal").modal('toggle');
         	});     
 		}); 
+		$('#example1').DataTable()
 		
 });
 JS;

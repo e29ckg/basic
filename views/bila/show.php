@@ -8,6 +8,7 @@ use yii\helpers\Url;
 /* @var $model app\models\Profile */
 /* @var $form yii\widgets\ActiveForm */
 ?>
+
 <div class="text-center">
 <a href="<?=$model->link?>" class="" target="_blank"><i class="fa fa-gear fa-sm"></i> <?=$model->name .' : '.$model->link?></a>
 								

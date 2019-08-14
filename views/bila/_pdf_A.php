@@ -36,7 +36,7 @@ function DateThai_month_full($strDate)
     }
     // echo $_SERVER['HTTP_HOST'];
     // echo $_SERVER['SERVER_ADDR'] . Url::to('$SERVER_ADDR/uploads/bila/'.$model->user_id.'/'.$model->id.'/'.$model->id.'.png');
-    // echo '<img src="' . Url::to('@webroot/uploads/bila/'.$model->user_id.'/'.$model->id.'/'.$model->id.'.png') . '" height="42" width="42" >';
+    echo '<img src="' . Url::to('@webroot/uploads/bila/'.$model->user_id.'/'.$model->id.'/'.$model->id.'.png') . '" height="42" width="42" >';
 ?>
 <link rel="stylesheet" href="<?=Url::to(['/fonts/thsarabunnew.css'])?>" />
 <div style="A_CSS_ATTRIBUTE:all;position: absolute;bottom: 20px; right: 45px;left: 45px; top: 35px;  ">

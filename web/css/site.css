@@ -86,3 +86,11 @@ td.img-weblink {
 	overflow: hidden;
 	text-align: center;
 }
+
+.text-short-100{
+    white-space: nowrap; 
+    width: 100%; 
+    /* border: 1px solid #000000; */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

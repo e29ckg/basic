@@ -41,18 +41,18 @@ $this->params['breadcrumbs'][] = $this->title;
 						<td>
 							<?= Html::a('<i class="fa fa-paper-plane-o"></i> Line',['cletter/line_alert','id' => $model->id],
 									[
-										'class' => 'btn btn-danger act-update',
+										'class' => 'btn btn-danger btn-xs act-update',
 										'data-confirm' => 'Are you sure to Line this item?'
 									]);
 							?>
-							<a href= "#" class="btn btn-warning act-update" data-id=<?=$model->id?>><i class="fa fa-pencil-square-o"></i> แก้ไข</a>
-							<!-- <a href= "#" class="btn btn-info act-view" data-id=<?=$model->id?>><i class="fa fa-eye"></i> ดู</a> -->
+							<a href= "#" class="btn btn-warning act-update btn-xs" data-id=<?=$model->id?>><i class="fa fa-pencil-square-o"></i> แก้ไข</a>
+							<!-- <a href= "#" class="btn btn-info act-view btn-xs" data-id=<?=$model->id?>><i class="fa fa-eye"></i> ดู</a> -->
 							
 								<?= Html::a('<i class="fa fa-remove"></i> ลบ',['cletter/delete','id' => $model->id],
 									[
 										'name'=>'Yii::$app->request->csrfParam',
 										'value'=>'Yii::$app->request->csrfToken',
-										'class' => 'btn btn-danger act-update',
+										'class' => 'btn btn-danger btn-xs act-update',
 										'data-confirm' => 'Are you sure to delete this item?',
 										'data-method' => 'post',
 									]);
