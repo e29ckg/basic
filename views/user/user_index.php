@@ -111,9 +111,8 @@ $this->params['breadcrumbs'][] = $this->title;
 									<tr>
 										<th data-class="expand">ID</th>											
 										<th data-hide="phone"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> pic</th>
-										<th >Username</th>
+										
 										<th >ชื่อ-สกุล</th>
-										<th data-hide="phone"><i class="fa fa-fw fa-phone text-muted hidden-md hidden-sm hidden-xs"></i> Status</th>
 										<th ></th>
 									</tr>
 								</thead>                                        
@@ -123,21 +122,18 @@ $this->params['breadcrumbs'][] = $this->title;
 										<td class="text-center" ><?=$model->id ?></td>		
 										<td class="text-center" >
 											<?=Html::img($model->getProfileImg(), ['alt' => 'userPic','height'=>'42'])?>
+											<br><?= $model->username ?>
 										</td>
-										<td>
-											<?= $model->username ?>
-										</td>									
+																		
 										<td >
-											<?= $model->getProfileName() ?> 											
-											<?= Html::a('resetPassword <i class="fa fa-gear fa-lg"></i>', ['user/reset_pass', 'id' => $model->id], [
-												'class' => 'btn txt-color-greenLight btn-xs btn-default',
-												'data-confirm'=>'Are you sure to ยกเลิก this item?']) 
-											?>												
-										</td>																				
-										<td>
+											<?= $model->getProfileName() ?> 
+											<br>	
 											<?= $model->status == 0 ? '<span class="label label-danger">ระงับ</span>':'<span class="label label-primary">อนุญาต</span>';?>
 											<span class="label label-danger"><?= $model->getRoleName($model->role)?></span>
-										</td>
+																				
+																							
+										
+											</td>
 										<td>
 											<?= Html::label('แก้ไข', 'update-profile', [
 												'class' => 'btn btn-info btn-xs act-update-profile',
@@ -145,6 +141,10 @@ $this->params['breadcrumbs'][] = $this->title;
 											<?= Html::label('กำหนดสิทธิ์', 'update-role', [
 												'class' => 'btn btn-info btn-xs act-update-role',
 												'data-id' => $model->id]) ?>
+											<?= Html::a('<i class="fa fa-gear fa-lg"></i> ResetPW', ['user/reset_pass', 'id' => $model->id], [
+												'class' => 'btn  btn-xs btn-warning',
+												'data-confirm'=>'Are you sure ?']) 
+											?>
 											<?php if($model->status == 0){
 												echo Html::a('SetActive', ['user/active', 'id' => $model->id], [
 													'class' => 'btn btn-xs btn-primary',
@@ -157,6 +157,7 @@ $this->params['breadcrumbs'][] = $this->title;
 											<!-- <?= Html::a('ลบ', ['user/del', 'id' => $model->id], ['class' => 'btn btn-danger btn-xs','data-confirm'=>'Are you sure to ยกเลิก this item?']) ?> -->
 											<!-- <a href="index.php?r=user/profile&id=<?=$model->id?>" class="btn btn-info btn-xs">แก้ไข </a>  -->
 											<!-- <a href="index.php?r=user/del&id=<?=$model->id?>" data-confirm="Are you sure to ยกเลิก this item?" class="btn btn-danger btn-xs"> ระงับ</a>  -->
+											
 										</td>
 									</tr>
 									<?php  endforeach; ?>
