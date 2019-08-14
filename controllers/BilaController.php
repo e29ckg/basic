@@ -304,24 +304,26 @@ class BilaController extends Controller
                 $model->t3 = $model->t1 + $model->t2;
                 $model->date_create = $_POST['Bila']['date_create'];
             }
+
             if($model->cat == 'ลาพักผ่อน'){
                 $model->date_begin = $_POST['Bila']['date_begin'];
                 $model->date_end = $_POST['Bila']['date_end'];
                 $model->date_total = $_POST['Bila']['date_total'];
-            if($_POST['Bila']['p1'] == ""){
-                $model->p1 = 0;
-                $model->p2 = 10;
-            }else{
-                $model->p1 = $_POST['Bila']['p1'];
-                $model->p2 = $_POST['Bila']['p1'] + 10;
-            }              
+                if($_POST['Bila']['p1'] == ""){
+                    $model->p1 = 0;
+                    $model->p2 = 10;
+                }else{
+                    $model->p1 = $_POST['Bila']['p1'];
+                    $model->p2 = $_POST['Bila']['p1'] + 10;
+                }              
                       
-            $model->address = $_POST['Bila']['address'];
-            $model->t1 = $_POST['Bila']['t1'];
-            $model->t2 = $_POST['Bila']['date_total'];
-            $model->t3 = $_POST['Bila']['t1'] + $_POST['Bila']['date_total'] ;
-            $model->date_create = $_POST['Bila']['date_create'];
-            }            
+                $model->address = $_POST['Bila']['address'];
+                $model->t1 = $_POST['Bila']['t1'];
+                $model->t2 = $_POST['Bila']['date_total'];
+                $model->t3 = $_POST['Bila']['t1'] + $_POST['Bila']['date_total'] ;
+                $model->date_create = $_POST['Bila']['date_create'];
+            } 
+
             if($model->save()){
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
                 return $this->redirect(['index']);
@@ -337,7 +339,6 @@ class BilaController extends Controller
                 'model' => $model,                    
             ]); 
         }
-
         
     }
 
@@ -437,8 +438,7 @@ class BilaController extends Controller
     public function actionFile_up($id) { 
         $modelBila = $this->findModel($id);
         $model = new BilaFileUp();
-        
-                  
+                          
         // Add This For Ajax Email Exist Validation 
         if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post()) ){
             Yii::$app->response->format = Response::FORMAT_JSON;
