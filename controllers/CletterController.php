@@ -61,7 +61,9 @@ class CletterController extends Controller
         $model = CLetter::find()->orderBy([
             // 'created_at'=>SORT_DESC,
             'id' => SORT_DESC,
-            ])->limit(100)->all();
+            ])
+            ->limit(100)
+            ->all();
         
         return $this->render('index',[
             'models' => $model,
@@ -73,7 +75,9 @@ class CletterController extends Controller
         $model = CLetter::find()->orderBy([
             // 'created_at'=>SORT_DESC,
             'id' => SORT_DESC,
-            ])->limit(100)->all();        
+            ])
+            ->limit(100)
+            ->all();        
         
         return $this->render('index_admin',[
             'models' => $model,

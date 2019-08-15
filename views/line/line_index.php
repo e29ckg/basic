@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <section class="content">
 	<div class="row">
-		<div class="col-md-4">
+		<div class="col-md-5">
 			<div class="box box-primary">
 				<div class="box-header with-border">
 					<h3 class="box-title"><?= Html::encode($this->title) ?></h3>
@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			</div>			
 		</div>
 
-		<div class="col-md-8">
+		<div class="col-md-7">
 			<div class="row">
 				<div class="col-md-12">
 					<div class="box box-primary">
@@ -50,10 +50,9 @@ $this->params['breadcrumbs'][] = $this->title;
 						Token : 
 						<?=  !empty($LineGroup->token) ? $LineGroup->token 
 									. ' ' 
-									.'<button data-id ="'.$LineGroup->token.'" class="act-line-send btn btn-danger btn-md" alt="act-line-send"><i class="fa fa-pencil-square-o "></i> ทดสอบการส่ง</button>'
-									// . Html::a('ทดสอบการส่ง', ['line_send', 'token' => $LineGroup->token,'name' => 'LineGroup'],['class' => 'btn btn-success'])
+									. Html::a('ลบ', ['line_delete','id' => $LineGroup->id],['class' => 'btn btn-danger btn-xs'])									
 									.' '
-									. Html::a('ลบ', ['line_delete','id' => $LineGroup->id],['class' => 'btn btn-warning'])
+									.'<button data-id ="'.$LineGroup->token.'" class="act-line-send btn btn-primary  btn-xs" alt="act-line-send"><i class="fa fa-pencil-square-o "></i> ทดสอบการส่ง</button>'
 									: Html::a('ลงทะเบียนไลน์กลุ่ม', $result, ['class' => 'btn btn-success']) ;
 								?>
 						</div>					
@@ -83,10 +82,10 @@ $this->params['breadcrumbs'][] = $this->title;
 										<td><?= $model->name ?></td>
 										<td><?= $model->token?></td>
 										<td>
-											<a href= "#" class="btn btn-warning act-update" data-id=<?=$model->id?>><i class="fa fa-pencil-square-o"></i> แก้ไข</a>
+											<a href= "#" class="btn btn-warning btn-xs act-update" data-id=<?=$model->id?>><i class="fa fa-pencil-square-o"></i> แก้ไข</a>
 											<?= Html::a('<i class="fa fa-remove"></i> ลบ',['line/line_delete','id' => $model->id],
 													[
-														'class' => 'btn btn-danger act-update',
+														'class' => 'btn btn-danger btn-xs act-update',
 														'data-confirm' => 'Are you sure to delete this item?',
 														'data-method' => 'post',
 													]);

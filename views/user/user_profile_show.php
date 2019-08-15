@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
                   <b>วันเกิด</b> <a class="pull-right"><?=$mdProfile->birthday?></a>
                 </li>
               </ul>
-              <a id="act-edit-profile" data-id="<?=$mdProfile->user_id?>" href="javascript:void(0);" class="btn btn-primary btn-block"><i class="fa fa-gear fa-spin fa-lg"></i> แก้ไขข้อมูล </a>
+              <a id="act-update-profile" data-id="<?=$mdProfile->user_id?>" href="javascript:void(0);" class="btn btn-primary btn-block"><i class="fa fa-gear fa-spin fa-lg"></i> แก้ไขข้อมูล </a>
                         
             </div>
             <!-- /.box-body -->
@@ -42,30 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
       </div>
     </div>
     
-    <?php if(Yii::$app->user->identity->role == 9){ ?>
-    <div class="row">
-      <div class="col-md-12">
-        <div class="box box-primary">
-          <div class="box-header with-border">
-            <h3 class="box-title"><?=$LineHome->name_ser?></h3>
-            <div class="box-tools pull-right">
-              <?=Html::a('เว็บไซต์ https://notify-bot.line.me/th/', 'https://notify-bot.line.me/th/', ['class' => 'btn btn-success','target' => '_blank'])?>
-            </div>	
-          </div>	
-          <div class="box-body">
-            <?php  $form = ActiveForm::begin();  ?>
-            <?=$form->field($LineHome, 'client_id')?>
-            <?=$form->field($LineHome, 'client_secret')?>
-            <?=$form->field($LineHome, 'name_ser')?>
-            <?=$form->field($LineHome, 'api_url')?>
-            <?=$form->field($LineHome, 'callback_url')?>
-            <?=Html::submitButton('บันทึก', ['class' => 'btn btn-success'])?>
-            <?php ActiveForm::end()?>
-          </div>			
-        </div>	
-      </div>
-    </div>  
-    <?php } ?>
+    
   </div>
     
   <!-- Profile Image -->  
@@ -78,10 +55,9 @@ $this->params['breadcrumbs'][] = $this->title;
         <strong><i class="fa fa-book margin-r-5"></i> Line Token :: </strong>
            
         <p class="text-muted">  
-            <?=  !empty($model->token) ? $model->token 
-              .' '. Html::a('ลบ', ['user_line_delete'],['class' => 'btn btn-danger btn-xs' ,'data-confirm'=>'Are you sure ?'])
-              .' <button data-id ="'.$model->token.'" class="act-line-send btn btn-primary btn-xs" alt="act-line-send"><i class="fa fa-pencil-square-o "></i> ทดสอบการส่ง</button>'
-              : Html::a('ลงทะเบียน', $result, ['class' => 'btn btn-success']) ;?> 
+            <?=  !empty($mdLine->token) ? $mdLine->token
+              .'<button data-id ="'.$mdLine->token.'" class="act-line-send btn btn-primary btn-xs" alt="act-line-send"><i class="fa fa-pencil-square-o "></i> ทดสอบการส่ง</button>'
+              : 'ยังไม่ได้ลงทะเบียน Line';?> 
         </p>
 
         <hr>
@@ -112,10 +88,10 @@ $(document).ready(function() {
  		location.reload();
 	}) 
 
-		var url_edit_profile = "edit_profile";		
-			$( "#act-edit-profile" ).click(function() {
+		var url_update_profile = "update_profile";		
+			$( "#act-update-profile" ).click(function() {
 				var fID = $(this).data("id");	
-        	$.get(url_edit_profile,{id: fID},function (data){
+        	$.get(url_update_profile,{id: fID},function (data){
                 $("#activity-modal").find(".modal-body").html(data);
                 $(".modal-body").html(data);
                 $(".modal-title").html("แก้ไข");

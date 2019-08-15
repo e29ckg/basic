@@ -381,6 +381,27 @@ class UserController extends Controller{
         return $this->redirect('profile');
     }
 
+    public function actionProfile_show($id){
+        $mdUser = User::findOne($id);
+        $mdProfile = Profile::findOne($id);   
+        $modelLine = Line::findOne(['name' => $mdUser->username]);
+
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('user_profile_show',[
+                'mdProfile' => $mdProfile,
+                'mdUser' => $mdUser,
+                'mdLine' => $modelLine,                  
+            ]);
+        } 
+        
+        return $this->render('user_profile_show',[
+            'mdProfile' => $mdProfile,
+            'mdUser' => $mdUser,
+            'mdLine' => $modelLine,
+        ]);
+        
+    }
+
     public function actionUpdate_role($id){
         
         $model = User::findOne($id);              

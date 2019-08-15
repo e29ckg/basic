@@ -21,10 +21,9 @@ $this->params['breadcrumbs'][] = $this->title;
 			<table id="example1" class="table table-striped table-bordered" width="100%">
 				<thead>
 					<tr>
-						<th data-class="expand">Id</th>
-						<th >เรื่อง</th>
-						<th data-hide="phone,tablet">ประเภท</th>
-						<th data-hide="phone,tablet">วันที่บันทึก</th>					
+						<th class="text-center">Id</th>
+						<th class="text-center">เรื่อง</th>
+						<th class="text-center"style="width:150px">ประเภท</th>			
 					</tr>
 				</thead>
 				<tbody>
@@ -32,9 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					<tr>
 						<td><?=$model->id?></td>
 						<td><?= $model->file ? Html::a($model->name,['cletter/show','id' => $model->id],['target' => '_blank']) : $model->name;?></td>
-						<td><?=$model->ca_name?></td>
-						<td><?=$model->created_at?></td>						
-																			
+						<td><?=$model->ca_name?><br><?=$model->created_at?></td>
 					</tr>
 					<?php  endforeach; ?>
 				</tbody>	
@@ -52,65 +49,23 @@ $script = <<< JS
 $(document).ready(function() {	
 /* BASIC ;*/
 
-	$('#example1').DataTable({
-		"order": [[ 0, 'desc' ], [ 3, 'desc' ]]
-	})
-
-	function init_click_handlers(){        	
-		
-		var url_update = "update";
-    	$(".act-update").click(function(e) {            
-			var fID = $(this).data("id");
-			// alert(fID);
-        	$.get(url_update,{id: fID},function (data){
-            	$("#activity-modal").find(".modal-body").html(data);
-            	$(".modal-body").html(data);
-            	$(".modal-title").html("แก้ไขข้อมูลสมาชิก");
-            	$("#activity-modal").modal("show");
-        	});
-    	});
-
-		var url_line = "line_alert";		
-    	$(".act-line").click(function(e) {			
-                var fID = $(this).data("id");				
-                $.get(url_line,{id: fID},function (data){
-                        // $("#activity-modal").find(".modal-body").html(data);
-                        // $(".modal-body").html(data);
-                        // $(".modal-title").html("ข้อมูล");
-                        // $("#activity-modal").modal("show");
-                    }
-                );
-            }); 
-
-    	var url_view = "view";		
-    	$(".act-view").click(function(e) {			
-                var fID = $(this).data("id");
-				
-                $.get(url_view,{id: fID},function (data){
-                        $("#activity-modal").find(".modal-body").html(data);
-                        $(".modal-body").html(data);
-                        $(".modal-title").html("ข้อมูล");
-                        $("#activity-modal").modal("show");
-                    }
-                );
-            });   
-    
-	}
-
-    init_click_handlers(); //first run
-			
 	
-		var url_create = "create";
-    	$( "#act-create" ).click(function() {
-        	$.get(url_create,function (data){
-                $("#activity-modal").find(".modal-body").html(data);
-                $(".modal-body").html(data);
-                $(".modal-title").html("เพิ่มข้อมูล");
-            	// $(".modal-footer").html(footer);
-                $("#activity-modal").modal("show");
-                //   $("#myModal").modal('toggle');
-        	});     
-		}); 
+		$('#example1').DataTable({
+			'ordering'    : false,
+			'lengthChange': true,
+			'paging'      : false,
+    		// "order": [[ 0, 'desc' ]]
+		})
+
+	$('#example2').DataTable({
+      'paging'      : true,
+      'lengthChange': false,
+      'searching'   : true,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : false
+    })	
+	
 	
 		
 });

@@ -25,9 +25,8 @@ $this->params['breadcrumbs'][] = $this->title;
 					<tr>
 						<th data-class="expand">Id</th>
 						<th >เรื่อง</th>
-						<th data-hide="phone,tablet">ประเภท</th>
-						<th data-hide="phone,tablet">วันที่บันทึก</th>
-						<th  style="width:300px">เครื่องมือ</th>							
+						<th style="width:150px">ประเภท</th>
+						<th style="width:150px">เครื่องมือ</th>							
 					</tr>
 				</thead>
 				<tbody>
@@ -35,13 +34,13 @@ $this->params['breadcrumbs'][] = $this->title;
 					<tr>
 						<td><?=$model->id?></td>
 						<td><?= $model->file ? Html::a($model->name,['cletter/show','id' => $model->id],['target' => '_blank']) : $model->name;?></td>
-						<td><?=$model->ca_name?></td>
-						<td><?=$model->created_at?></td>
+						<td><?=$model->ca_name?> <br> <?=$model->created_at?></td>
+						
 						
 						<td>
 							<?= Html::a('<i class="fa fa-paper-plane-o"></i> Line',['cletter/line_alert','id' => $model->id],
 									[
-										'class' => 'btn btn-danger btn-xs act-update',
+										'class' => 'btn btn-success btn-xs act-update',
 										'data-confirm' => 'Are you sure to Line this item?'
 									]);
 							?>
