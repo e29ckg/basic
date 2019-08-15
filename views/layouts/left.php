@@ -56,14 +56,14 @@ $menu_admin = [
         
         ['label' => 'ตั้งค่า', 'options' => ['class' => 'header']],
         ['label' => 'Profile', 'icon' => 'id-card-o', 'url' => ['user/profile']],
-        ['label' => 'Line', 'icon' => 'id-card-o', 'url' => ['line/line_index']],
+        ['label' => 'Line', 'icon' => ' fa fa-whatsapp', 'url' => ['line/line_index']],
         ['label' => 'สมาชิก', 'icon' => 'users', 'url' => '#',
             'items' => [
                 ['label' => 'จัดการสมาชิก', 'icon' => 'fa fa-user-o', 'url' => ['user/user_index']],
-                // ['label' => 'จัดการสมาชิก2', 'icon' => 'fa fa-user-o', 'url' => ['user/user_index2']],
-                // ['label' => 'เพิ่มสมาชิก', 'icon' => 'fa fa-user-o', 'url' => ['user/reg']],
-                ['label' => 'จัดการตำแหน่ง', 'icon' => 'fa fa-user-o', 'url' => ['user/dep']],
-                ['label' => 'จัดการคำนำหน้าชื่อ', 'icon' => 'fa fa-user-o', 'url' => ['user/fname']],
+                // ['label' => 'จัดการสมาชิก2', 'icon' => ' fa fa-user-o', 'url' => ['user/user_index2']],
+                // ['label' => 'เพิ่มสมาชิก', 'icon' => ' fa fa-user-o', 'url' => ['user/reg']],
+                ['label' => 'จัดการตำแหน่ง', 'icon' => ' fa fa-user-o', 'url' => ['user/dep']],
+                ['label' => 'จัดการคำนำหน้าชื่อ', 'icon' => ' fa fa-user-o', 'url' => ['user/fname']],
             ],
         ],
         

@@ -50,9 +50,9 @@ $this->params['breadcrumbs'][] = $this->title;
 						<?=$model->cat?>
 											
 					</td>										
-					<td>เริ่ม <?=DateThai_full($model->date_begin)?>
+					<td><?=DateThai_full($model->date_begin)?>
 					ถึง <?=DateThai_full($model->date_end)?>
-					รวมลาครั้งนี้ <?=$model->date_total?> วัน</td>
+					ลาครั้งนี้ <?=$model->date_total?> วัน</td>
 					<td>
 					<?= !empty($model->file) ? 
 						Html::a('<i class="fa fa-file-o"></i> ไฟล์เอกสาร ', ['bila/file_view','id' => $model->id], [
