@@ -73,7 +73,6 @@ class Profile extends \yii\db\ActiveRecord
         ];
     }
 
-   
     public function getProfileActive(){
         if(isset(Yii::$app->user->identity->id)){
             $model = Profile::findOne(Yii::$app->user->identity->id);   

@@ -46,6 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						<td><?=SignBossName::getStName($model->status);?></td>
 						<td>
 							<a href="#" class="act-update btn btn-info btn-xs" data-id=<?=$model['id']?>>แก้ไข</a> 
+							
 							<?= Html::a('<i class="fa fa-remove"></i> ลบ',['bila/sbn_delete','id' => $model->id],
 								[
 									'class' => 'btn btn-danger btn-xs',
@@ -116,7 +117,6 @@ $(document).ready(function() {
 	$('#activity-modal').on('hidden.bs.modal', function () {
  		location.reload();
 	})
-
 				
 
 /* END COLUMN FILTER */  

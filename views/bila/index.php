@@ -37,25 +37,22 @@ $this->params['breadcrumbs'][] = $this->title;
 			<table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
 			<thead>
 				<tr role="row">
-					<th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 20px;">#</th>
-					<th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="" style="width: 100px;">ประเภทการลา</th>
-					<th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="" style="width: 224px;">ลาตั้งแต่</th>
-					<th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="" style="width: 199px;">ถังวันที่</th>
-					<th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="" style="width: 120px;">รวมการลา(วัน)</th>
-					<th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="" style="width: 200px;"></th>
+					<th class = "text-center" style="width: 100px;">ประเภทการลา</th>
+					<th class = "text-center" style="width: 500px;">รายละเอียด</th>
+					<th style="width: 100px;"></th>
 				</tr>
 			</thead>
 			<tbody>  
 				<?php $i = 1?>                              
 				<?php foreach ($models as $model): ?>
 				<tr>
-					<td><?= $i++?></td>
-					<td class="img-weblink" >
-					<?=$model->cat?>
+					<td class="img-weblink" alt="<?=$model->id?>">
+						<?=$model->cat?>
+											
 					</td>										
-					<td><?=DateThai_full($model->date_begin)?></td>										
-					<td><?=DateThai_full($model->date_end)?></td>	
-					<td><?=$model->date_total?></td>
+					<td>เริ่ม <?=DateThai_full($model->date_begin)?>
+					ถึง <?=DateThai_full($model->date_end)?>
+					รวมลาครั้งนี้ <?=$model->date_total?> วัน</td>
 					<td>
 					<?= !empty($model->file) ? 
 						Html::a('<i class="fa fa-file-o"></i> ไฟล์เอกสาร ', ['bila/file_view','id' => $model->id], [

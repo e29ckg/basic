@@ -42,7 +42,7 @@ class BilaFileUp extends \yii\db\ActiveRecord
     {
         return [
             // [['file'], 'required'],
-            [['file'], 'file', 'extensions' => 'pdf, png, jpg', 'skipOnEmpty' => true, 'maxSize'=> 1024 * 1024 * 5],
+            [['file'], 'file', 'extensions' => 'pdf, png, jpg, jpeg', 'skipOnEmpty' => true, 'maxSize'=> 1024 * 1024 * 5],
             // [['cat', 'date_begin', 'comment','date_end', 'dateO_begin', 'dateO_end', 'due', 'address', 't2', 'po', 'bigboss', 'date_create'], 'string', 'max' => 255],
         ];
     }

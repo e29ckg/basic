@@ -68,19 +68,14 @@ class BilaController extends Controller
     public function actionAdmin()
     {
         $models = Bila::find()->orderBy([
-            'date_create'=>SORT_DESC,
+            // 'date_create'=>SORT_DESC,
             'id' => SORT_DESC,
             ])->limit(100)->all();        
         
         $countAll = Bila::getCountAll();
-        $countA = Bila::find()->where(['cat' => 'ลาป่วย'])->count();
-        $countB = Bila::find()->where(['cat' => 'ลาพักผ่อน'])->count();
 
         return $this->render('index_admin', [
             'models' => $models,
-            'countAll' => $countAll,
-            'countA' => $countA,
-            'countB' => $countB,
         ]);
     }
 

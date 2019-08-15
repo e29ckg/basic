@@ -37,62 +37,61 @@ $this->params['breadcrumbs'][] = $this->title;
               	<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">				  
 					<div class="row">
 						<div class="col-sm-12">
-							<table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+							<table id="example1" class="table table-bordered table-striped dataTable" role="grid" >
                 				<thead>
                 					<tr role="row">
-										<th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="" style="width: 50px;">#</th>
-										<th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="" style="width: 224px;">ชื่อ</th>
-										<th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="" style="width: 100px;">ประเภทการลา</th>
-										<th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="" style="width: 224px;">ลาตั้งแต่</th>
-										<th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="" style="width: 199px;">ถังวันที่</th>
-										<th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="" style="width: 120px;">รวมการลา(วัน)</th>
-										<th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="" style="width: 200px;">ไฟล์</th>
-										<th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="" style="width: 200px;"></th>
+										
+										<th style="width: 300px;">ชื่อ</th>
+										<th style="width: 224px;">ลาตั้งแต่</th>
+										<th style="width: 200px;">ไฟล์</th>
 									</tr>
                 				</thead>
                 				<tbody>  
-									<?php $i = 1?>                              
+									                          
 									<?php foreach ($models as $model): ?>
-						            <tr>
-						                <td><?= $model->id?></td>
-										<td><?=$model->getProfileName();?></td>
-										<td class="img-weblink" ><?=$model->cat?></td>										
-                                        <td><?=DateThai_full($model->date_begin)?></td>										
-                                        <td><?=DateThai_full($model->date_end)?></td>	
-										<td><?=$model->date_total?></td>
+						            <tr>						                
+										<td><?=$model->getProfileName();?> 
+											<?=$model->cat == 'ลาป่วย' ? 
+												'<span class="label label-danger">'.$model->cat.'</span>'
+											: 
+												'<span class="label label-primary">'.$model->cat.'</span>'
+											?>
+											
+											<br><?= $model->id?>
+										</td>										
+                                        <td><?=DateThai_full($model->date_begin)?>
+											ถึง <?=DateThai_full($model->date_end)?>
+											<br> ลาครั้งนี้ <?=$model->date_total?> วัน
+										</td>
 										<td>
 											<?= !empty($model->file) ? 
-											Html::a('<i class="fa fa-file-o"></i> ไฟล์เอกสาร ', ['bila/file_view','id' => $model->id], [
-												'class' => 'btn btn-xs',
+											Html::a('ไฟล์เอกสาร', ['bila/file_view','id' => $model->id], [
+												// 'class' => 'btn btn-danger btn-xs',
 												'data-id' => $model->id,
 												'target' => '_blank'
-											])										
+											]).' '	
+											.Html::a('<i class="fa fa-remove"></i> ลบไฟล์ ', ['bila/file_del','id' => $model->id], [
+												'class' => 'btn btn-danger btn-xs',
+												'data-id' => $model->id,
+												'data-confirm' => 'Are you sure to delete this item?',
+                                    			'data-method' => 'post',
+											]) 																			
 											:
 											Html::a('<i class="fa fa-print"></i> แนบไฟล์ ', '#', [
 												'class' => 'act-file-up btn btn-danger btn-xs',
 												'data-id' => $model->id,
 												// 'target' => '_blank'
-											])
-											;?>
-											<!-- <a href="#" class="act-file-up btn btn-danger btn-xs" data-id=<?=$model->id?>>แนบไฟล์</a>  -->
-										</td>					
-										<td>
-										<?= !empty($model->file) ? 
-											Html::a('<i class="fa fa-remove"></i> ลบไฟล์ ', ['bila/file_del','id' => $model->id], [
-												'class' => 'btn btn-danger btn-xs',
-												'data-id' => $model->id,
-												'data-confirm' => 'Are you sure to delete this item?',
-                                    			'data-method' => 'post',
-											]) 
-											 :
-											 Html::a('<i class="fa fa-print"></i> Print ', ['bila/print1','id' => $model->id], [
+											]).' '
+											.Html::a('<i class="fa fa-print"></i> Print ', ['bila/print1','id' => $model->id], [
 												'class' => 'btn btn-primary btn-xs',
 												'data-id' => $model->id,
 												'target' => '_blank'
-											]) . ' ' . 
-											'<a href= "#" class="btn btn-warning btn-xs act-update" data-id='.$model->id.'><i class="fa fa-wrench"></i> แก้ไข</a>';
+											]) 
+											. ' <a href= "#" class="btn btn-warning btn-xs act-update" data-id='.$model->id.'><i class="fa fa-wrench"></i> แก้ไข</a>';
 							
-											?>
+											;?>
+											<!-- <a href="#" class="act-file-up btn btn-danger btn-xs" data-id=<?=$model->id?>>แนบไฟล์</a>  -->
+																				
 											<?php
 											 	Html::a('<i class="fa fa-remove"></i> ลบ',['bila/delete','id' => $model->id],
 													[
@@ -152,7 +151,13 @@ $(document).ready(function() {
 		});
 			
 		$('#example1').DataTable({
-			"order": [[ 0, 'desc' ]]
+		// 'order' 	: false,
+		'paging'      : true,
+		'lengthChange': false,
+		'searching'   : true,
+		'ordering'    : false,
+		'info'        : true,
+		'autoWidth'   : false
 		})
 		
 });

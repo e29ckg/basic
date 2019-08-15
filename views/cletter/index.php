@@ -48,7 +48,6 @@ $script = <<< JS
      
 $(document).ready(function() {	
 /* BASIC ;*/
-
 	
 		$('#example1').DataTable({
 			'ordering'    : false,

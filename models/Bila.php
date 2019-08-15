@@ -45,7 +45,7 @@ class Bila extends \yii\db\ActiveRecord
             [['user_id',], 'integer'],
             [['p1','date_total','dateO_total', 't1'], 'number'],
             [['t3','p2'], 'safe'],
-            [['file'], 'file', 'extensions' => 'pdf, png, jpg', 'maxSize'=> 1024 * 1024 * 5],
+            [['file'], 'file', 'extensions' => 'pdf, png, jpg, jpeg', 'maxSize'=> 1024 * 1024 * 5],
             [['cat', 'date_begin', 'comment','date_end', 'dateO_begin', 'dateO_end', 'due', 'address', 't2', 'po', 'bigboss', 'date_create'], 'string', 'max' => 255],
         ];
     }

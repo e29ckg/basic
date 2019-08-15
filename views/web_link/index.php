@@ -137,7 +137,14 @@ $(document).ready(function() {
         	});     
 		}); 
 
-		$('#example1').DataTable()
+	$('#example1').DataTable({
+      'paging'      : false,
+      'lengthChange': false,
+      'searching'   : true,
+      'ordering'    : false,
+      'info'        : true,
+      'autoWidth'   : false
+    })
 		
 });
 JS;
