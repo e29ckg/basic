@@ -44,6 +44,14 @@ class m190812_080822_line_home extends Migration
             'api_url' => 'http://127.0.0.1/basic/web/line/line_index',
             'callback_url' => 'http://127.0.0.1/basic/web/user/callback'
             ]);
+            $this->insert('line_home', [
+                'id' => 3,
+                'client_id' => 'pkkjc.coj@gmail.com',
+                'client_secret' => 'AIzaSyCtp0KVVxbk9VapZoU-X4J6uaulYafzMQw',
+                'name_ser' => 'googleCalendar',
+                'api_url' => '',
+                'callback_url' => ''
+                ]);
     }
 
     /**

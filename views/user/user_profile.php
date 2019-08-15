@@ -42,30 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
       </div>
     </div>
     
-    <?php if(Yii::$app->user->identity->role == 9){ ?>
-    <div class="row">
-      <div class="col-md-12">
-        <div class="box box-primary">
-          <div class="box-header with-border">
-            <h3 class="box-title"><?=$LineHome->name_ser?></h3>
-            <div class="box-tools pull-right">
-              <?=Html::a('เว็บไซต์ https://notify-bot.line.me/th/', 'https://notify-bot.line.me/th/', ['class' => 'btn btn-success','target' => '_blank'])?>
-            </div>	
-          </div>	
-          <div class="box-body">
-            <?php  $form = ActiveForm::begin();  ?>
-            <?=$form->field($LineHome, 'client_id')?>
-            <?=$form->field($LineHome, 'client_secret')?>
-            <?=$form->field($LineHome, 'name_ser')?>
-            <?=$form->field($LineHome, 'api_url')?>
-            <?=$form->field($LineHome, 'callback_url')?>
-            <?=Html::submitButton('บันทึก', ['class' => 'btn btn-success'])?>
-            <?php ActiveForm::end()?>
-          </div>			
-        </div>	
-      </div>
-    </div>  
-    <?php } ?>
+    
   </div>
     
   <!-- Profile Image -->  

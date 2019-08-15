@@ -108,7 +108,6 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>      
     </div>    
 </div>
-
 <!-- <div class="row"> -->
   <div class="col-md-12">
     <div class="box box-primary">
@@ -151,10 +150,11 @@ $this->params['breadcrumbs'][] = $this->title;
       // THIS KEY WON'T WORK IN PRODUCTION!!!
       // To make your own Google API key, follow the directions here:
       // http://fullcalendar.io/docs/google_calendar/
-      googleCalendarApiKey: 'AIzaSyCtp0KVVxbk9VapZoU-X4J6uaulYafzMQw',
-
+      // googleCalendarApiKey: 'AIzaSyCtp0KVVxbk9VapZoU-X4J6uaulYafzMQw',
+      googleCalendarApiKey: '<?=$googleCal->client_secret?>',
       // US Holidays
-      events: 'pkkjc.coj@gmail.com',
+      // events: 'pkkjc.coj@gmail.com',
+      events: '<?=$googleCal->client_id?>',
 
       eventClick: function(arg) {
         // opens events in a popup window

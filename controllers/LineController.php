@@ -203,13 +203,16 @@ class LineController extends Controller
                 return $this->redirect(['line_index']);
             }   
         }
+
+        $LineHomeAll = LineHome::find()->all();
         
             
         return $this->render('line_index',[
             'LineGroup' => $LineGroup,
             'LineHome' => $LineHome,
             'models' => $models,
-            'result' => $result
+            'result' => $result,
+            'LineHomeAll' => $LineHomeAll
         ]);
 
     }
@@ -412,6 +415,71 @@ class LineController extends Controller
             'model' => $model,
             'json' => $json
         ]);
-    }           
+    }  
+    
+    public function actionLinehome_create(){
+        
+        $LineHome = new LineHome();
+            
+        if ($LineHome->load(Yii::$app->request->post()) && $LineHome->validate()) {
+            $LineHome->client_id = $_POST['LineHome']['client_id'];
+            $LineHome->client_secret = $_POST['LineHome']['client_secret'];
+            $LineHome->name_ser = $_POST['LineHome']['name_ser'];
+            $LineHome->api_url = $_POST['LineHome']['api_url'];
+            $LineHome->callback_url = $_POST['LineHome']['callback_url'];
+            if($LineHome->save()){                          
+                Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');                
+                return $this->redirect(['line_index']);
+            }   
+        }
+
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('line_form_linehome',[
+                    'LineHome' => $LineHome,                    
+            ]);
+        }else{
+            return $this->render('line_form_linehome',[
+                'LineHome' => $LineHome,                    
+            ]); 
+        }
+    }
+
+    public function actionLinehome_update($id){
+        
+        $LineHome = LineHome::findOne($id);
+            
+        if ($LineHome->load(Yii::$app->request->post()) && $LineHome->validate()) {
+            $LineHome->client_id = $_POST['LineHome']['client_id'];
+            $LineHome->client_secret = $_POST['LineHome']['client_secret'];
+            $LineHome->name_ser = $_POST['LineHome']['name_ser'];
+            $LineHome->api_url = $_POST['LineHome']['api_url'];
+            $LineHome->callback_url = $_POST['LineHome']['callback_url'];
+            if($LineHome->save()){                          
+                Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');                
+                return $this->redirect(['line_index']);
+            }   
+        }
+
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('line_form_linehome',[
+                    'LineHome' => $LineHome,                    
+            ]);
+        }else{
+            return $this->render('line_form_linehome',[
+                'LineHome' => $LineHome,                    
+            ]); 
+        }
+    }
+
+    public function actionLinehome_delete($id)
+    {
+        $model = Linehome::findOne($id);
+        
+        if($model->delete()){
+            Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');  
+        }        
+
+        return $this->redirect(['line_index']);
+    }
 
 }

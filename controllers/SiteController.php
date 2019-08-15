@@ -10,6 +10,7 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\CLetter;
+use app\models\LineHome;
 
 
 class SiteController extends Controller
@@ -68,8 +69,12 @@ class SiteController extends Controller
             'id' => SORT_DESC,
             ])->limit(10)->all();
         
+        $googleCal = LineHome::findOne(['name_ser' => 'googleCalendar']); 
+
         return $this->render('index',[
             'models' => $model,
+            'googleCal' => $googleCal ,
+
         ]);
 
     }

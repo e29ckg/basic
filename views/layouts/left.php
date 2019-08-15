@@ -55,8 +55,7 @@ $menu_admin = [
         ['label' => 'เบิกของ CartX', 'icon' => 'shopping-cart', 'url' => '/cartx/web'],       
         
         ['label' => 'ตั้งค่า', 'options' => ['class' => 'header']],
-        ['label' => 'Profile', 'icon' => 'id-card-o', 'url' => ['user/profile']],
-        ['label' => 'Line', 'icon' => ' fa fa-whatsapp', 'url' => ['line/line_index']],
+        ['label' => 'Profile', 'icon' => 'id-card-o', 'url' => ['user/profile']],        
         ['label' => 'สมาชิก', 'icon' => 'users', 'url' => '#',
             'items' => [
                 ['label' => 'จัดการสมาชิก', 'icon' => 'fa fa-user-o', 'url' => ['user/user_index']],
@@ -66,6 +65,7 @@ $menu_admin = [
                 ['label' => 'จัดการคำนำหน้าชื่อ', 'icon' => ' fa fa-user-o', 'url' => ['user/fname']],
             ],
         ],
+        ['label' => 'Line + ตั้งค่าพื้นฐาน', 'icon' => ' fa fa-whatsapp', 'url' => ['line/line_index']],
         
         // ['label' => 'Login', 'url' => ['site/login']],
         

@@ -291,22 +291,10 @@ class UserController extends Controller{
                 
         $result = $api_url . http_build_query($query);
 
-        if ($LineHome->load(Yii::$app->request->post()) && $LineHome->validate()) {            
-            // $model->name = 'name';
-            $LineHome->client_id = $_POST['LineHome']['client_id'];
-            $LineHome->client_secret = $_POST['LineHome']['client_secret'];
-            $LineHome->name_ser = $_POST['LineHome']['name_ser'];
-            $LineHome->api_url = $_POST['LineHome']['api_url'];
-            $LineHome->callback_url = $_POST['LineHome']['callback_url'];
-            if($LineHome->save()){                          
-                Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');                
-                return $this->redirect(['profile']);
-            }   
-        }
+        
         return $this->render('user_profile',[
             'mdProfile' => $mdProfile,
             'mdUser' => $mdUser,
-            'LineHome' => $LineHome,
             'model' => $modelLine,
             'result' => $result
         ]);
