@@ -62,6 +62,7 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'setting' => 'line/line_index',
                 'login' => 'site/login',
                 'bila' => 'bila/index',
                 '<controller:\w+>/<id:\d+>' => '<controller>/view',

@@ -295,7 +295,12 @@ class CletterController extends Controller
             $modelLog->detail =  'ลบ '.$model->name;
             $modelLog->create_at = date("Y-m-d H:i:s");
             $modelLog->ip = Yii::$app->getRequest()->getUserIP();
-            Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');            
+            Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');    
+            $modelLine = Line::findOne(['name' => 'Admin']);        
+                    if(!empty($modelLine->token) && $modelLine->status == 1){
+                        $message = Yii::$app->user->identity->username.' ลบ '.$modelF->name.' '.date("Y-m-d H:i:s");
+                        Line::notify_message($modelLine->token,$message);                        
+                    }                                
         }        
 
         return $this->redirect(['index_admin']);

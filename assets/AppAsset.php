@@ -20,8 +20,7 @@ class AppAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [ 
-        
-        // 'adminlte2/bower_components/fullcalendar/dist/fullcalendar.min.css', 
+         
         'adminlte2/bower_components/font-awesome/css/font-awesome.min.css', 
         'adminlte2/bower_components/datatables/datatables.min.css',        
         'adminlte2/dist/css/AdminLTE.min.css?v=1.1',
@@ -33,19 +32,16 @@ class AppAsset extends AssetBundle
         'css/site.css?v=1.14',     
     ];
     public $js = [
-        // 'adminlte2/bower_components/jquery/dist/jquery.min.js',
         
         'adminlte2/bower_components/datatables/datatables.min.js',
         'adminlte2/bower_components/bootstrap/dist/js/bootstrap.min.js',
         'adminlte2/bower_components/jquery-slimscroll/jquery.slimscroll.min.js',
-        'adminlte2/bower_components/fastclick/lib/fastclick.js',        
-        // 'adminlte2/bower_components/datatables.net/js/jquery.dataTables.min.js',        
+        'adminlte2/bower_components/fastclick/lib/fastclick.js',             
         'adminlte2/dist/js/adminlte.min.js',
         'adminlte2/dist/js/demo.js',
         'adminlte2/bower_components/PACE/pace.min.js',
         'adminlte2/bower_components/toastr/toastr.min.js',
         'adminlte2/bower_components/moment/moment.js',
-        // 'adminlte2/bower_components/fullcalendar/dist/fullcalendar.min.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

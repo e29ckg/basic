@@ -69,7 +69,7 @@ class SiteController extends Controller
             'id' => SORT_DESC,
             ])->limit(10)->all();
         
-        $googleCal = LineHome::findOne(['name_ser' => 'googleCalendar']); 
+        $googleCal = LineHome::findOne(['name_ser' => 'googleCal']); 
 
         return $this->render('index',[
             'models' => $model,

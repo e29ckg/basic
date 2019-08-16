@@ -44,11 +44,11 @@ $this->params['breadcrumbs'][] = $this->title;
 						<?php  echo '<a href="'.$model->link.'" target="_blank">'.$model->name.'</a>'?>
 						
 						<?php 
-								$modelFiles = $model->getWebLinkFile()->orderBy(['sort'=>SORT_ASC,'id' => SORT_ASC])->all();
+								// $modelFiles = $model->getWebLinkFile()->orderBy(['sort'=>SORT_ASC,'id' => SORT_ASC])->all();
 								// $modelFiles = WebLinkFile::find()->where(['web_link_id'=>$model->id])->orderBy(['sort'=>SORT_ASC,'id' => SORT_ASC])->all(); 
 								echo '<ul>';
-								
-								foreach ($modelFiles as $modelFile):
+								// echo var_dump($model->webLinkFile);
+								foreach ($model->webLinkFile as $modelFile):
 									// echo $modelFile->name;
 									echo '<li>';
 									if($modelFile->type =='url'){

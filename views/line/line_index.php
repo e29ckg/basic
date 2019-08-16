@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				<div class="col-md-12">
 					<div class="box box-primary">
 						<div class="box-header with-border">
-							<h3 class="box-title">Notify-Bot ?></h3>
+							<h3 class="box-title">Notify-Bot</h3>
 							<div class="box-tools pull-right">
 							<?=Html::a('เว็บไซต์ https://notify-bot.line.me/th/', 'https://notify-bot.line.me/th/', ['class' => 'btn btn-success','target' => '_blank'])?>
 							</div>	
@@ -165,7 +165,7 @@ $(document).ready(function() {
 
 	function init_click_handlers(){        	
 		
-		var url_update = "line_update";
+		var url_update = "line/line_update";
     	$(".act-update").click(function(e) {            
 			var fID = $(this).data("id");
 			// alert(fID);
@@ -177,7 +177,7 @@ $(document).ready(function() {
         	});
     	});
 
-		var url_linehome_update = "linehome_update";
+		var url_linehome_update = "line/linehome_update";
     	$(".act-update-linehome").click(function(e) {            
 			var fID = $(this).data("id");
 			// alert(fID);
@@ -189,7 +189,7 @@ $(document).ready(function() {
         	});
     	});
 
-		var url_line_send = "line_send";
+		var url_line_send = "line/line_send";
     	$(".act-line-send").click(function(e) {            
 			var fID = $(this).data("id");
 			// alert(fID);
@@ -210,7 +210,7 @@ $(document).ready(function() {
  		location.reload();
 	})
 
-		var url_create = "line_create";
+		var url_create = "line/line_create";
     	$( "#act-create" ).click(function() {
         	$.get(url_create,function (data){
                 $("#activity-modal").find(".modal-body").html(data);
@@ -221,7 +221,7 @@ $(document).ready(function() {
                 //   $("#myModal").modal('toggle');
         	});     
 		}); 
-		var url_linehome_create = "linehome_create";
+		var url_linehome_create = "line/linehome_create";
     	$( "#act-create-linehome" ).click(function() {
         	$.get(url_linehome_create,function (data){
                 $("#activity-modal").find(".modal-body").html(data);
