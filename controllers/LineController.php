@@ -367,11 +367,11 @@ class LineController extends Controller
 
     public function actionLine_send($token)
     {
-        $api_url = 'https://notify-api.line.me/api/notify';
-
+        
         $model = new LineFormSend();
         $json = null;
         if($model->load(Yii::$app->request->post())){
+            $api_url = 'https://notify-api.line.me/api/notify';
             $headers = [
                 'Authorization: Bearer ' . $token
             ];
