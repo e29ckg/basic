@@ -48,7 +48,7 @@ class m190812_080822_line_home extends Migration
                 'id' => 3,
                 'client_id' => 'pkkjc.coj@gmail.com',
                 'client_secret' => 'AIzaSyCtp0KVVxbk9VapZoU-X4J6uaulYafzMQw',
-                'name_ser' => 'googleCalendar',
+                'name_ser' => 'googleCal',
                 'api_url' => '',
                 'callback_url' => ''
                 ]);

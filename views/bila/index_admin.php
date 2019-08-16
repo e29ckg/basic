@@ -41,9 +41,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 				<thead>
                 					<tr role="row">
 										
-										<th style="width: 300px;">ชื่อ</th>
-										<th style="width: 224px;">ลาตั้งแต่</th>
-										<th style="width: 200px;">ไฟล์</th>
+										<th class="text-center" style="width: 100px;">ชื่อ</th>
+										<th class="text-center" style="width: 224px;">รายละเอียด</th>
+										<th class="text-center" style="width: 100px;">ไฟล์</th>
 									</tr>
                 				</thead>
                 				<tbody>  

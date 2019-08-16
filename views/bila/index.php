@@ -46,8 +46,9 @@ $this->params['breadcrumbs'][] = $this->title;
 				<?php $i = 1?>                              
 				<?php foreach ($models as $model): ?>
 				<tr>
-					<td class="img-weblink" alt="<?=$model->id?>">
+					<td class="text-center" alt="<?=$model->id?>">
 						<?=$model->cat?>
+						<br><?=$model->id?>
 											
 					</td>										
 					<td><?=DateThai_full($model->date_begin)?>
@@ -56,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					<td>
 					<?= !empty($model->file) ? 
 						Html::a('<i class="fa fa-file-o"></i> ไฟล์เอกสาร ', ['bila/file_view','id' => $model->id], [
-							'class' => 'btn btn-xs',
+							// 'class' => 'btn btn-xs',
 							'data-id' => $model->id,
 							'target' => '_blank'
 						])
@@ -151,7 +152,15 @@ $(document).ready(function() {
         	});     
 		}); 
 	
-	$('#example1').DataTable()
+	$('#example1').DataTable({
+		// 'order' 	: false,
+		'paging'      : true,
+		'lengthChange': false,
+		'searching'   : true,
+		'ordering'    : false,
+		'info'        : true,
+		'autoWidth'   : false
+		})
 	$('#example2').DataTable({
 		'paging'      : true,
 		'lengthChange': false,

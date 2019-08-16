@@ -1,10 +1,8 @@
 
 <?php
 
-use yii\helpers\Html;
-use yii\helpers\Url;
-use app\models\user;
-use yii\widgets\ActiveForm;
+// use yii\helpers\Html;
+// use yii\helpers\Url;
 
 $this->title = 'ข้อมูลส่วนตัว';
 $this->params['breadcrumbs'][] = $this->title;
@@ -16,24 +14,24 @@ $this->params['breadcrumbs'][] = $this->title;
       <div class="col-md-12">
           <div class="box box-primary">
             <div class="box-body box-profile">
-              <img class="profile-user-img img-responsive img-circle" src="<?= Yii::getAlias('@web').($mdProfile->img  ? '/uploads/user/'.$mdProfile->img : '/img/nopic.png'); ?>" alt="profile picture">
+              <img class="profile-user-img img-responsive img-circle" src="<?= Yii::getAlias('@web').($model->profile->img  ? '/uploads/user/'.$model->profile->img : '/img/nopic.png'); ?>" alt="profile picture">
 
-              <h3 class="profile-username text-center"><?= $mdProfile->fname.$mdProfile->name.' '.$mdProfile->sname;?> </h3>
+              <h3 class="profile-username text-center"><?= $model->profile->fname.$model->profile->name.' '.$model->profile->sname;?> </h3>
 
-              <p class="text-muted text-center"><?=$mdProfile->dep?></p>
+              <p class="text-muted text-center"><?=$model->profile->dep?></p>
 
               <ul class="list-group list-group-unbordered">
                 <li class="list-group-item">
-                  <b>Id Card</b> <a class="pull-right"><?=$mdProfile->id_card?></a>
+                  <b>Id Card</b> <a class="pull-right"><?=$model->profile->id_card?></a>
                 </li>
                 <li class="list-group-item">
-                  <b><i class="fa fa-phone"></i> Phone</b> <a href="tel:<?=$mdProfile->phone?>"class="pull-right"><?=$mdProfile->phone?></a>
+                  <b><i class="fa fa-phone"></i> Phone</b> <a href="tel:<?=$model->profile->phone?>"class="pull-right"><?=$model->profile->phone?></a>
                 </li>
                 <li class="list-group-item">
-                  <b>วันเกิด</b> <a class="pull-right"><?=$mdProfile->birthday?></a>
+                  <b>วันเกิด</b> <a class="pull-right"><?=$model->profile->birthday?></a>
                 </li>
               </ul>
-              <a id="act-update-profile" data-id="<?=$mdProfile->user_id?>" href="javascript:void(0);" class="btn btn-primary btn-block"><i class="fa fa-gear fa-spin fa-lg"></i> แก้ไขข้อมูล </a>
+              <a id="act-update-profile" data-id="<?=$model->profile->user_id?>" href="javascript:void(0);" class="btn btn-primary btn-block"><i class="fa fa-gear fa-spin fa-lg"></i> แก้ไขข้อมูล </a>
                         
             </div>
             <!-- /.box-body -->
@@ -62,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <hr>
         <strong><i class="fa fa-map-marker margin-r-5"></i> Location</strong>
-        <p class="text-muted"><?=$mdProfile->address?></p>
+        <p class="text-muted"><?=$model->profile->address?></p>
         <hr>
         <strong><i class="fa fa-pencil margin-r-5"></i> Skills</strong>
         <p>

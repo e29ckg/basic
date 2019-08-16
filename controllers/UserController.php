@@ -203,10 +203,10 @@ class UserController extends Controller{
     }
 
     public function actionUpdate_profile($id){
-        $mdProfile = Profile::findOne(['user_id'=>$id]);
-        $modelU = User::findOne($id);
+        // $model->profile = Profile::findOne(['id'=>$id]);
+        $model = User::findOne($id);
         $modelReg = new RegFormUpdate();        
-        $fileName = $mdProfile->img ;
+        $fileName = $model->profile->img ;
         if(Yii::$app->request->isAjax && $modelReg->load(Yii::$app->request->post())){
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ActiveForm::validate($modelReg) ;
@@ -224,43 +224,43 @@ class UserController extends Controller{
                 }
                 $fileName = md5($f->baseName . time()) . '.' . $f->extension;
                 if($f->saveAs($dir . $fileName)){
-                    $mdProfile->img = $fileName;
+                    $model->profile->img = $fileName;
                 }
-                // if($mdProfile->save()){
+                // if($model->profile->save()){
                 //     Yii::$app->session->setFlash('success', 'ปรับปรุงข้อมูลเรียบร้อย');
                 // };                           
             }
-            $mdProfile->img = $fileName;
-            $mdProfile->fname = $_POST['RegFormUpdate']['fname'];
-            $mdProfile->name = $_POST['RegFormUpdate']['name'];
-            $mdProfile->sname = $_POST['RegFormUpdate']['sname'];
-            $mdProfile->id_card = $_POST['RegFormUpdate']['id_card'];
-            $mdProfile->dep = $_POST['RegFormUpdate']['dep'];
-            $mdProfile->address = $_POST['RegFormUpdate']['address'];
-            $mdProfile->phone = $_POST['RegFormUpdate']['phone'];
-            $mdProfile->birthday = Yii::$app->request->post('RegFormUpdate')['birthday'];
-            $modelU->username = $_POST['RegFormUpdate']['username'];
-            $modelU->email = $_POST['RegFormUpdate']['email'];
+            $model->profile->img = $fileName;
+            $model->profile->fname = $_POST['RegFormUpdate']['fname'];
+            $model->profile->name = $_POST['RegFormUpdate']['name'];
+            $model->profile->sname = $_POST['RegFormUpdate']['sname'];
+            $model->profile->id_card = $_POST['RegFormUpdate']['id_card'];
+            $model->profile->dep = $_POST['RegFormUpdate']['dep'];
+            $model->profile->address = $_POST['RegFormUpdate']['address'];
+            $model->profile->phone = $_POST['RegFormUpdate']['phone'];
+            $model->profile->birthday = Yii::$app->request->post('RegFormUpdate')['birthday'];
+            $model->username = $_POST['RegFormUpdate']['username'];
+            $model->email = $_POST['RegFormUpdate']['email'];
             if(!(Yii::$app->request->post('RegFormUpdate')['pwd1'] == 191919)){
-                $modelU->password_hash = Yii::$app->security->generatePasswordHash(Yii::$app->request->post('RegFormUpdate')['pwd1']);
+                $model->password_hash = Yii::$app->security->generatePasswordHash(Yii::$app->request->post('RegFormUpdate')['pwd1']);
             }
-            if($mdProfile->save()&& $modelU->save()){
+            if($model->save() && $model->profile->save()){
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
             };          
             return $this->redirect(['user_index']);
         }
-        $modelReg->username = $modelU->username;
+        $modelReg->username = $model->username;
         $modelReg->pwd1 = 191919;
         $modelReg->pwd2 = 191919;
-        $modelReg->email = $modelU->email;
-        $modelReg->fname = $mdProfile->fname;
-        $modelReg->name = $mdProfile->name;
-        $modelReg->sname = $mdProfile->sname;
-        $modelReg->id_card = $mdProfile->id_card;
-        $modelReg->dep = $mdProfile->dep;
-        $modelReg->address = $mdProfile->address;
-        $modelReg->phone = $mdProfile->phone;
-        $modelReg->birthday  = $mdProfile->birthday ;
+        $modelReg->email = $model->email;
+        $modelReg->fname = $model->profile->fname;
+        $modelReg->name = $model->profile->name;
+        $modelReg->sname = $model->profile->sname;
+        $modelReg->id_card = $model->profile->id_card;
+        $modelReg->dep = $model->profile->dep;
+        $modelReg->address = $model->profile->address;
+        $modelReg->phone = $model->profile->phone;
+        $modelReg->birthday  = $model->profile->birthday ;
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('user_form_reg',[
                     'model' => $modelReg,                    
@@ -272,9 +272,8 @@ class UserController extends Controller{
     }
 
     public function actionProfile(){
-        $mdUser = User::findOne(Yii::$app->user->identity->id);
-        $mdProfile = Profile::findOne(Yii::$app->user->identity->id);   
-        $modelLine = Line::findOne(['name' => $mdUser->username]);
+        $model = Profile::findOne(Yii::$app->user->identity->id);  
+        $modelLine = Line::findOne(['name' => $model->user->username]);
 
         $LineHome = LineHome::findOne(2);
         $client_id = $LineHome->client_id;
@@ -286,16 +285,14 @@ class UserController extends Controller{
             'client_id' => $client_id,
             'redirect_uri' => $callback_url,
             'scope' => 'notify',
-            'state' => $mdUser->username
+            'state' => $model->user->username
         ];
                 
         $result = $api_url . http_build_query($query);
-
         
         return $this->render('user_profile',[
-            'mdProfile' => $mdProfile,
-            'mdUser' => $mdUser,
-            'model' => $modelLine,
+            'model' => $model,
+            'modelLine' => $modelLine,
             'result' => $result
         ]);
         
@@ -370,21 +367,19 @@ class UserController extends Controller{
     }
 
     public function actionProfile_show($id){
-        $mdUser = User::findOne($id);
-        $mdProfile = Profile::findOne($id);   
-        $modelLine = Line::findOne(['name' => $mdUser->username]);
+        $model = User::findOne($id);
+        $modelLine = Line::findOne(['name' => $model->username]);
 
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('user_profile_show',[
-                'mdProfile' => $mdProfile,
-                'mdUser' => $mdUser,
+                'model' => $model,
                 'mdLine' => $modelLine,                  
             ]);
         } 
         
         return $this->render('user_profile_show',[
-            'mdProfile' => $mdProfile,
-            'mdUser' => $mdUser,
+            'mdProfile' => $model->profile,
+            'model' => $model,
             'mdLine' => $modelLine,
         ]);
         
@@ -480,11 +475,11 @@ class UserController extends Controller{
         return $this->redirect('profile');
     }
             
-    public function actionEdit_profile($id=null){        
-        $mdProfile = Profile::findOne($id);
-        $modelU = User::findOne($id);
+    public function actionEdit_profile($id){        
+        // $model->profile = Profile::findOne($id);
+        $model = User::findOne($id);
         $modelReg = new RegFormUpdate();      
-        $fileName = $mdProfile->img ;
+        $fileName = $model->profile->img ;
         if(Yii::$app->request->isAjax && $modelReg->load(Yii::$app->request->post())){
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ActiveForm::validate($modelReg) ;
@@ -502,44 +497,44 @@ class UserController extends Controller{
                 }
                 $fileName = md5($f->baseName . time()) . '.' . $f->extension;
                 if($f->saveAs($dir . $fileName)){
-                    $mdProfile->img = $fileName;
+                    $model->profile->img = $fileName;
                 }
-                // if($mdProfile->save()){
+                // if($model->profile->save()){
                 //     Yii::$app->session->setFlash('success', 'ปรับปรุงข้อมูลเรียบร้อย');
                 // };                           
             }
-            $mdProfile->img = $fileName;
-            $mdProfile->fname = $_POST['RegFormUpdate']['fname'];
-            $mdProfile->name = $_POST['RegFormUpdate']['name'];
-            $mdProfile->sname = $_POST['RegFormUpdate']['sname'];
-            $mdProfile->id_card = $_POST['RegFormUpdate']['id_card'];
-            $mdProfile->dep = $_POST['RegFormUpdate']['dep'];
-            $mdProfile->address = $_POST['RegFormUpdate']['address'];
-            $mdProfile->phone = $_POST['RegFormUpdate']['phone'];
-            $mdProfile->birthday = Yii::$app->request->post('RegFormUpdate')['birthday'];
-            $modelU->username = $_POST['RegFormUpdate']['username'];
-            $modelU->email = $_POST['RegFormUpdate']['email'];
+            $model->profile->img = $fileName;
+            $model->profile->fname = $_POST['RegFormUpdate']['fname'];
+            $model->profile->name = $_POST['RegFormUpdate']['name'];
+            $model->profile->sname = $_POST['RegFormUpdate']['sname'];
+            $model->profile->id_card = $_POST['RegFormUpdate']['id_card'];
+            $model->profile->dep = $_POST['RegFormUpdate']['dep'];
+            $model->profile->address = $_POST['RegFormUpdate']['address'];
+            $model->profile->phone = $_POST['RegFormUpdate']['phone'];
+            $model->profile->birthday = Yii::$app->request->post('RegFormUpdate')['birthday'];
+            $model->username = $_POST['RegFormUpdate']['username'];
+            $model->email = $_POST['RegFormUpdate']['email'];
             if(!(Yii::$app->request->post('RegFormUpdate')['pwd1'] == 191919)){
-                $modelU->password_hash = Yii::$app->security->generatePasswordHash(Yii::$app->request->post('RegFormUpdate')['pwd1']);
+                $model->password_hash = Yii::$app->security->generatePasswordHash(Yii::$app->request->post('RegFormUpdate')['pwd1']);
             }
-            if($mdProfile->save()&& $modelU->save()){
+            if($model->profile->save()&& $model->save()){
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
             };          
             return $this->redirect(['profile']);
         }
          
-        $modelReg->username = $modelU->username;
+        $modelReg->username = $model->username;
         $modelReg->pwd1 = 191919;
         $modelReg->pwd2 = 191919;
-        $modelReg->email = $modelU->email;
-        $modelReg->fname = $mdProfile->fname;
-        $modelReg->name = $mdProfile->name;
-        $modelReg->sname = $mdProfile->sname;
-        $modelReg->id_card = $mdProfile->id_card;
-        $modelReg->dep = $mdProfile->dep;
-        $modelReg->address = $mdProfile->address;
-        $modelReg->phone = $mdProfile->phone;
-        $modelReg->birthday  = $mdProfile->birthday ;
+        $modelReg->email = $model->email;
+        $modelReg->fname = $model->profile->fname;
+        $modelReg->name = $model->profile->name;
+        $modelReg->sname = $model->profile->sname;
+        $modelReg->id_card = $model->profile->id_card;
+        $modelReg->dep = $model->profile->dep;
+        $modelReg->address = $model->profile->address;
+        $modelReg->phone = $model->profile->phone;
+        $modelReg->birthday  = $model->profile->birthday ;
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('user_form_reg',[
                     'model' => $modelReg,                    
@@ -552,14 +547,14 @@ class UserController extends Controller{
 
     public function actionDelete($id)
     {
-        $modelU = User::findOne($id);
+        $model = User::findOne($id);
         $modelP = Profile::findOne($id);
         $filename = $modelP->img;
         $dir = Url::to('@webroot/uploads/user/');        
         if($filename && is_file($dir.$filename)){
             unlink($dir.$filename);// ลบ รูปเดิม;                    
         }
-        if($modelU->delete() && $modelP->delete()){
+        if($model->delete() && $modelP->delete()){
             Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');
         }
         return $this->redirect(['user_dis']);

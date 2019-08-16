@@ -72,7 +72,6 @@ class BilaController extends Controller
             'id' => SORT_DESC,
             ])->limit(100)->all();        
         
-        $countAll = Bila::getCountAll();
 
         return $this->render('index_admin', [
             'models' => $models,
