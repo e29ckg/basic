@@ -376,7 +376,7 @@ class LineController extends Controller
                 'Authorization: Bearer ' . $token
             ];
             $fields = [
-                'message' => 'ทดสอบการส่งข้อความ '. $model->name
+                'message' => $model->name
             ];
             
             try {

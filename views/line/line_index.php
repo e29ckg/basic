@@ -116,16 +116,14 @@ $this->params['breadcrumbs'][] = $this->title;
 							<table id="example1" class="table table-striped table-bordered" width="100%">
 								<thead>
 									<tr>
-										<th >name</th>
-										<th>Token</th>	
+										<th >name</th>	
 										<th></th>					
 									</tr>
 								</thead>
 								<tbody>
 									<?php foreach ($models as $model): ?>
 									<tr>
-										<td><?= $model->name ?></td>
-										<td><?= $model->token?></td>
+										<td><?= $model->name ?> </td>
 										<td>
 											<a href= "#" class="btn btn-warning btn-xs act-update" data-id=<?=$model->id?>><i class="fa fa-pencil-square-o"></i> แก้ไข</a>
 											<?= Html::a('<i class="fa fa-remove"></i> ลบ',['line/line_delete','id' => $model->id],
@@ -135,6 +133,7 @@ $this->params['breadcrumbs'][] = $this->title;
 														'data-method' => 'post',
 													]);
 											?>
+											<button data-id ="<?=$model->token?>" title="<?=$model->token?>" class="act-line-send btn btn-primary  btn-xs" alt="act-line-send"><i class="fa fa-pencil-square-o "></i> ส่ง Line</button>
 										</td>																	
 									</tr>
 									<?php  endforeach; ?>
