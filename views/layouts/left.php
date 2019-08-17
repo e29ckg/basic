@@ -65,7 +65,7 @@ $menu_admin = [
                 ['label' => 'จัดการคำนำหน้าชื่อ', 'icon' => ' fa fa-user-o', 'url' => ['user/fname']],
             ],
         ],
-        ['label' => 'Line + ตั้งค่าพื้นฐาน', 'icon' => ' fa fa-whatsapp', 'url' => ['/setting']],
+        ['label' => 'Line + ตั้งค่าพื้นฐาน', 'icon' => ' fa fa-whatsapp', 'url' => ['line/line_index']],
         
         // ['label' => 'Login', 'url' => ['site/login']],
         

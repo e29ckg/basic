@@ -59,11 +59,7 @@ class SignBossName extends \yii\db\ActiveRecord
 
     public function getStName($st)
     {     
-        if($st == 1){
-            return "ใช้งาน";
-        }else{
-            return "ยกเลิก";
-        }    
-        return $st;           
+        return $st == 1 ? 'ใช้งาน' : 'ยกเลิก';
+                  
     }
 }

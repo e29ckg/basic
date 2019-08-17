@@ -5,6 +5,7 @@ use Yii;
 use app\models\Bila;
 use app\models\BilaFileUp;
 use app\models\User;
+use app\models\Line;
 use app\models\SignBossName;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -96,16 +97,25 @@ class BilaController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
+    
+
+    public function actionCreate_c()
+    {
+
+    }
+   
     public function actionCreate_a()
     {
         
         $model = new Bila();
 
+        
         //Add This For Ajax Email Exist Validation 
         if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ActiveForm::validate($model);
           } 
+
      
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
@@ -114,7 +124,7 @@ class BilaController extends Controller
                     
                 $model->id = time();
                 $model->user_id =  $_POST['Bila']['user_id'];
-                $model->cat = 'ลาป่วย';
+                $model->cat = $_POST['Bila']['cat'];
                 $model->date_begin = $_POST['Bila']['date_begin'];
                 $model->date_end = $_POST['Bila']['date_end'];
                 $model->date_total = $_POST['Bila']['date_total'];
@@ -139,7 +149,13 @@ class BilaController extends Controller
                         ->setMargin(5)
                         ->useForegroundColor(51, 153, 255);              
                     $qrCode->writeFile(Url::to('@webroot/uploads/bila/'.$model->user_id.'/'.$model->id.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
-
+                    /*---------------------ส่ง line ไปยัง Admin--------------------*/
+                    $modelLine = Line::findOne(['name' => 'admin']);
+                    if(isset($modelLine->token)){
+                        $message = $model->user_id.' '.$model->cat.' รายละเอียดเพิ่มเติม' .$sms_qr;
+                        $res = Line::notify_message($modelLine->token,$message);  
+                        $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+                    } 
                     Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
                    
                 }  
@@ -155,16 +171,18 @@ class BilaController extends Controller
             }
              
         }
+
         // $model->tel = explode(',', $model->tel);
         $model_cat = Bila::find()
             ->where(['user_id' => Yii::$app->user->id,
                 'cat'=>'ลาป่วย'
                 ])
             ->orderBy([
-                'date_create'=>SORT_DESC,
+                // 'date_create'=>SORT_DESC,
                 'id' => SORT_DESC,
             ])->one(); 
-
+        
+        
         if(!empty($model_cat)){
             $model->dateO_begin = $model_cat->date_begin;
             $model->dateO_end = $model_cat->date_end;
@@ -232,6 +250,13 @@ class BilaController extends Controller
                     ->useForegroundColor(1, 1, 1);              
                 $qrCode->writeFile(Url::to('@webroot/uploads/bila/'.$model->user_id.'/'.$model->id.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
 
+                /*---------------------ส่ง line ไปยัง Admin--------------------*/
+                $modelLine = Line::findOne(['name' => 'admin']);
+                if(isset($modelLine->token)){
+                    $message = $model->user_id.' '.$model->cat.' รายละเอียดเพิ่มเติม' .$sms_qr;
+                    $res = Line::notify_message($modelLine->token,$message);  
+                    $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+                } 
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
                 return $this->redirect(['index']);
             }   
@@ -247,7 +272,7 @@ class BilaController extends Controller
             ])->one(); 
 
             if(!empty($model_cat)){                
-                $model->p1 = $model->p1;
+                $model->p1 = $model_cat->p1;
                 $model->t1 = $model_cat->t3;
                 }else{
                     $model->p1 = null;
@@ -284,7 +309,7 @@ class BilaController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if($model->cat == 'ลาป่วย'){
+            if($model->cat == 'ลาป่วย' || $model->cat == 'ลากิจส่วนตัว' || $model->cat == 'ลาคลอดบุตร'){
                 $model->date_begin = $_POST['Bila']['date_begin'];
                 $model->date_end = $_POST['Bila']['date_end'];
                 $model->date_total = $_POST['Bila']['date_total'];
@@ -400,7 +425,7 @@ class BilaController extends Controller
     public function actionPrint1($id=null)
     {
         $model = $this->findModel($id);
-        if($model->cat =='ลาป่วย'){
+        if($model->cat == 'ลาป่วย' || $model->cat == 'ลากิจส่วนตัว' || $model->cat == 'ลาคลอดบุตร'){
             $Pdf_print = '_pdf_A';
         }else if($model->cat =='ลาพักผ่อน'){
             $Pdf_print = '_pdf_B';
@@ -417,7 +442,7 @@ class BilaController extends Controller
                 // any mpdf options you wish to set
             ],
             'methods' => [
-                // 'SetTitle' => 'Privacy Policy - Krajee.com',
+                'SetTitle' => $model->id,
                 // 'SetSubject' => 'Generating PDF files via yii2-mpdf extension has never been easy',
                 // 'SetHeader' => ['Krajee Privacy Policy||Generated On: ' . date("r")],
                 // 'SetFooter' => ['|Page {PAGENO}|'],

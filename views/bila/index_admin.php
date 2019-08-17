@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
            	<div class="box-header">
            		<h3 class="box-title"><?=$this->title?></h3>
 			</div>
-			   
+			
             <!-- /.box-header -->
             <div class="box-body">
               	<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">				  
@@ -39,8 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						<div class="col-sm-12">
 							<table id="example1" class="table table-bordered table-striped dataTable" role="grid" >
                 				<thead>
-                					<tr role="row">
-										
+                					<tr role="row">										
 										<th class="text-center" style="width: 100px;">ชื่อ</th>
 										<th class="text-center" style="width: 224px;">รายละเอียด</th>
 										<th class="text-center" style="width: 100px;">ไฟล์</th>
@@ -55,30 +54,29 @@ $this->params['breadcrumbs'][] = $this->title;
 												'<span class="label label-danger">'.$model->cat.'</span>'
 											: 
 												'<span class="label label-primary">'.$model->cat.'</span>'
-											?>
-											
+											?>											
 											<br><?= $model->id?>
 										</td>										
                                         <td><?=DateThai_full($model->date_begin)?>
 											ถึง <?=DateThai_full($model->date_end)?>
 											<br> ลาครั้งนี้ <?=$model->date_total?> วัน
 										</td>
-										<td>
+										<td class = "text-center">
 											<?= !empty($model->file) ? 
 											Html::a('ไฟล์เอกสาร', ['bila/file_view','id' => $model->id], [
-												// 'class' => 'btn btn-danger btn-xs',
+												
 												'data-id' => $model->id,
 												'target' => '_blank'
 											]).' '	
 											.Html::a('<i class="fa fa-remove"></i> ลบไฟล์ ', ['bila/file_del','id' => $model->id], [
-												'class' => 'btn btn-danger btn-xs',
+												'class' => 'btn btn-danger btn-block btn-xs',
 												'data-id' => $model->id,
 												'data-confirm' => 'Are you sure to delete this item?',
                                     			'data-method' => 'post',
 											]) 																			
 											:
 											Html::a('<i class="fa fa-print"></i> แนบไฟล์ ', '#', [
-												'class' => 'act-file-up btn btn-danger btn-xs',
+												'class' => 'act-file-up btn btn-success btn-xs',
 												'data-id' => $model->id,
 												// 'target' => '_blank'
 											]).' '
@@ -95,7 +93,7 @@ $this->params['breadcrumbs'][] = $this->title;
 											<?php
 											 	Html::a('<i class="fa fa-remove"></i> ลบ',['bila/delete','id' => $model->id],
 													[
-														'class' => 'btn btn-danger btn-xs',
+														'class' => 'btn btn-danger btn-block btn-xs',
 														'data-confirm' => 'Are you sure to delete this item?',
                                     					'data-method' => 'post',
 													]);
@@ -149,6 +147,8 @@ $(document).ready(function() {
 				}
 			);
 		});
+
+		
 			
 		$('#example1').DataTable({
 		// 'order' 	: false,

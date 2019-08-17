@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <h1><?= Html::encode($this->title) ?></h1>
 <?php
-if($model->cat == 'ลาป่วย'){
+if($model->cat == 'ลาป่วย' || $model->cat == 'ลากิจส่วนตัว' || $model->cat == 'ลาคลอดบุตร'){
     $_form = '_form_a';
 }else if($model->cat == 'ลาพักผ่อน'){
     $_form = '_form_b';

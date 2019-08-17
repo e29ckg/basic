@@ -91,8 +91,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= $model->file ?
                 '<a href="'.Url::to(['bila/file_view','id' => $model->id]).'"  target="_blank" data-id='.$model->id.'>ไฟล์เอกสาร</a>' 
                 :
-                '<a href="'.Url::to(['bila/print1','id' => $model->id]).'" class="btn btn-primary btn-xs" target="_blank" data-id='.$model->id.'>print</a>' ?>
-                     
+                ' <a href="'.Url::to(['bila/print1','id' => $model->id]).'" class="btn btn-primary btn-xs" target="_blank" data-id='.$model->id.'>print</a>' ?>
+                <?= empty($model->file) && Yii::$app->user->identity->role == 9 ? 
+                    '<button class="btn btn-success btn-xs act-file-up" data-id='.$model->id.'>แนบไฟล์</button>' 
+                    : '' ;
+                    ?>
                 </td>
             </tr>
         
@@ -103,3 +106,26 @@ $this->params['breadcrumbs'][] = $this->title;
 								</div>
 	</div>
 </div>
+
+<?php
+
+$script = <<< JS
+    
+$(document).ready(function() {	
+
+var url_file_up = "../file_up";		
+    	$(".act-file-up").click(function(e) {			
+			var fID = $(this).data("id");
+			$.get(url_file_up,{id: fID},function (data){
+					$("#activity-modal").find(".modal-body").html(data);
+					$(".modal-body").html(data);
+					$(".modal-title").html("ข้อมูล");
+					$("#activity-modal").modal("show");
+				}
+			);
+		});
+        		
+});
+JS;
+$this->registerJs($script);
+?>

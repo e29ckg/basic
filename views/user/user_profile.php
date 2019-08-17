@@ -8,7 +8,25 @@ use yii\widgets\ActiveForm;
 
 $this->title = 'ข้อมูลส่วนตัว';
 $this->params['breadcrumbs'][] = $this->title;
+
+function DateThai_full($strDate)
+	{
+        if($strDate == ''){
+            return '';
+        }
+		$strYear = date("Y",strtotime($strDate))+543;
+		$strMonth= date("n",strtotime($strDate));
+		$strDay= date("j",strtotime($strDate));
+		$strHour= date("H",strtotime($strDate));
+		$strMinute= date("i",strtotime($strDate));
+		$strSeconds= date("s",strtotime($strDate));
+		$strMonthCut = Array("","มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม",
+                            "สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม");
+		$strMonthThai=$strMonthCut[$strMonth];
+		return "$strDay $strMonthThai $strYear";
+    }
 ?>
+
 
 <div class="row">
   <div class="col-md-5">
@@ -30,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                   <b><i class="fa fa-phone"></i> Phone</b> <a href="tel:<?=$model->phone?>"class="pull-right"><?=$model->phone?></a>
                 </li>
                 <li class="list-group-item">
-                  <b>วันเกิด</b> <a class="pull-right"><?=$model->birthday?></a>
+                  <b>วันเกิด</b> <a class="pull-right"><?=DateThai_full($model->birthday);?></a>
                 </li>
               </ul>
               <a id="act-edit-profile" data-id="<?=$model->id?>" href="javascript:void(0);" class="btn btn-primary btn-block"><i class="fa fa-gear fa-spin fa-lg"></i> แก้ไขข้อมูล </a>

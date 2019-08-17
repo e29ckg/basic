@@ -38,7 +38,7 @@ class CLetter extends \yii\db\ActiveRecord
             [['created_at', 'updated_at'], 'safe'],
             [['name', 'ca_name', 'file'], 'string', 'max' => 255],
             [['name'], 'unique','message'=>'Name already exist. Please try another one.'],
-            [['file'], 'file', 'extensions' => 'pdf, png, jpg', 'maxSize'=> 1024 * 1024 * 10],
+            [['file'], 'file', 'extensions' => 'pdf, png, jpg, jpeg', 'maxSize'=> 1024 * 1024 * 10],
         ];
     }
 

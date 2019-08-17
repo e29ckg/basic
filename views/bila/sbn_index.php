@@ -25,9 +25,6 @@ $this->params['breadcrumbs'][] = $this->title;
 					<tr>
 						<th data-class="expand"> # </th>
 						<th >ชื่อ-สกุล</th>
-						<th data-hide="phone,tablet">ตำแหน่ง</th>
-						<th data-hide="phone,tablet">ตำแหน่ง(บรรทัด2)</th>
-						<th data-hide="phone,tablet">ตำแหน่ง(บรรทัด3)</th>
 						<th data-hide="phone,tablet">สถานะ</th>
 						<th style="width:120px"></th>
 						
@@ -39,11 +36,14 @@ $this->params['breadcrumbs'][] = $this->title;
 					<tr>
 						<td><?= $i++?></td>
 						
-						<td><?=$model->name?></td>
-						<td><?=$model->dep1?></td>		
-						<td><?=$model->dep2?></td>	
-						<td><?=$model->dep3?></td>	
-						<td><?=SignBossName::getStName($model->status);?></td>
+						<td><?=$model->name?>
+							<br><?=$model->dep1?>		
+							<br><?=$model->dep2?>	
+							<br><?=$model->dep3?>
+						</td>	
+						<td>
+							<?= $model->status == 1 ? '<span class="label label-primary">ใช้งาน</span>':'<span class="label label-danger">ยกเลิก</span>';?>
+						</td>
 						<td>
 							<a href="#" class="act-update btn btn-info btn-xs" data-id=<?=$model['id']?>>แก้ไข</a> 
 							

@@ -62,7 +62,7 @@ class CletterController extends Controller
             // 'created_at'=>SORT_DESC,
             'id' => SORT_DESC,
             ])
-            ->limit(100)
+            ->limit(200)
             ->all();
         
         return $this->render('index',[

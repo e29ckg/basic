@@ -71,7 +71,7 @@ class RegFormUpdate extends ActiveRecord implements IdentityInterface
             ['email', 'email'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
-            [['img'], 'file', 'extensions' => 'png, jpg', 'maxSize'=> 1024 * 1024 * 2],
+            [['img'], 'file', 'extensions' => 'png, jpg, jpeg', 'maxSize'=> 1024 * 1024 * 2],
             [['pwd1'],'required'],
             // ['pwd1', 'string', 'min' => 6],
             ['pwd2', 'compare', 'compareAttribute'=>'pwd1', 'skipOnEmpty' => false, 'message'=>"Password ไม่ตรงกัน"],

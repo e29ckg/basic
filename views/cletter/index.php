@@ -50,6 +50,7 @@ $(document).ready(function() {
 /* BASIC ;*/
 	
 		$('#example1').DataTable({
+			"pageLength": 100,
 			'ordering'    : false,
 			'lengthChange': true,
 			'paging'      : false,

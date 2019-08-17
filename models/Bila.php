@@ -78,6 +78,16 @@ class Bila extends \yii\db\ActiveRecord
             'date_create' => 'Date Create',
         ];
     }
+
+    public function getCat()
+    {        
+        return [
+            'ลาป่วย' => 'ลาป่วย',
+            'ลากิจส่วนตัว' => 'ลากิจส่วนตัว',
+            'ลาคลอดบุตร' => 'ลาคลอดบุตร',
+        ];           
+    }
+
     public function getCountAll()
     {        
         return Bila::find()->count();           

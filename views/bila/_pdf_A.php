@@ -85,7 +85,7 @@ function DateThai_month_full($strDate)
     </tr>
     <tr>
         <td colspan="1" >เรื่อง</td>
-        <td colspan="11">ขออนุญาตลาป่วย</td>
+        <td colspan="11">ขออนุญาต<?= $model->cat; ?></td>
     </tr>
     <tr>
         <td colspan="1">เรียน</td>
@@ -94,9 +94,9 @@ function DateThai_month_full($strDate)
     <tr>
         <td colspan="2" ></td>
         <td colspan="1" >ข้าพเจ้า</td>
-        <td colspan="3" class="TableLine" style="text-align:center"><?= User::getProfileNameById($model->user_id);?></td>
+        <td colspan="3" class="TableLine" style="text-align:center"><?= $model->profile->fname.$model->profile->name.' '.$model->profile->sname;?></td>
         <td colspan="1" >ตำแหน่ง</td>
-        <td colspan="5" class="TableLine" style="text-align:center"><?=User::getProfileDepById($model->user_id);?></td>
+        <td colspan="5" class="TableLine" style="text-align:center"><?= $model->profile->dep;?></td>
     </tr>
     <tr>
         <td colspan="1" >สังกัด</td>
@@ -104,17 +104,17 @@ function DateThai_month_full($strDate)
     </tr>
     <tr>
         <td colspan="2" ></td>
-        <td colspan="10" >[ X ] ลาป่วย</td>
+        <td colspan="10" >[ <?= $model->cat == 'ลาป่วย' ? 'X' : '&nbsp;'?> ] ลาป่วย</td>
     </tr>
     <tr>
         <td colspan="2" ></td>
-        <td colspan="3" >[ &nbsp; ] ลากิจส่วนตัว</td>
+        <td colspan="3" >[ <?= $model->cat == 'ลากิจส่วนตัว' ? 'X' : '&nbsp;'?> ] ลากิจส่วนตัว</td>
         <td colspan="1" >เนื่องจาก</td>
         <td colspan="6" class="TableLine" style="text-align:center"><?=$model->due;?> </td>
     </tr>
     <tr>
         <td colspan="2" ></td>
-        <td colspan="10" >[ &nbsp; ] ลาคลอดบุตร</td>
+        <td colspan="10" >[ <?= $model->cat == 'ลาคลอดบุตร' ? 'X' : '&nbsp;'?> ] ลาคลอดบุตร</td>
     </tr>
     <tr>
         <td colspan="2" >ตั้งแต่วันที่ </td>        
@@ -127,9 +127,9 @@ function DateThai_month_full($strDate)
     </tr>
     <tr>
         <td colspan="2" >ข้าพเจ้าได้ลา </td>
-        <td colspan="2" >[ X ] ลาป่วย</td>
-        <td colspan="2" >[ &nbsp; ] ลากิจส่วนตัว</td>
-        <td colspan="2" >[ &nbsp; ] ลาคลอดบุตร</td>
+        <td colspan="2" >[ <?= $model->cat == 'ลาป่วย' ? 'X' : '&nbsp;'?> ] ลาป่วย</td>
+        <td colspan="2" >[ <?= $model->cat == 'ลากิจส่วนตัว' ? 'X' : '&nbsp;'?> ] ลากิจส่วนตัว</td>
+        <td colspan="2" >[ <?= $model->cat == 'ลาคลอดบุตร' ? 'X' : '&nbsp;'?> ] ลาคลอดบุตร</td>
         <td colspan="4" >ครั้งสุดท้ายตั้งแต่</td>
     </tr>
     <tr>
@@ -188,21 +188,21 @@ function DateThai_month_full($strDate)
                 </tr>
                 <tr>
                     <td colspan="2">ลาป่วย</td>
-                    <td colspan="2" style="text-align:center"><?=$model->t1;?></td>
-                    <td colspan="2" style="text-align:center"><?=$model->t2;?></td>
-                    <td colspan="2" style="text-align:center"><?=$model->t3;?></td>
+                    <td colspan="2" style="text-align:center"><?= $model->cat == 'ลาป่วย' ? $model->t1 : '&nbsp;'?></td>
+                    <td colspan="2" style="text-align:center"><?= $model->cat == 'ลาป่วย' ? $model->t1 : '&nbsp;'?></td>
+                    <td colspan="2" style="text-align:center"><?= $model->cat == 'ลาป่วย' ? $model->t1 : '&nbsp;'?></td>
                 </tr>
                 <tr>
                     <td colspan="2">ลากิจ</td>
-                    <td colspan="2" style="text-align:center"></td>
-                    <td colspan="2" style="text-align:center"></td>
-                    <td colspan="2" style="text-align:center"></td>
+                    <td colspan="2" style="text-align:center"><?= $model->cat == 'ลากิจส่วนตัว' ? $model->t1 : '&nbsp;'?> </td>
+                    <td colspan="2" style="text-align:center"><?= $model->cat == 'ลากิจส่วนตัว' ? $model->t2 : '&nbsp;'?> </td>
+                    <td colspan="2" style="text-align:center"><?= $model->cat == 'ลากิจส่วนตัว' ? $model->t3 : '&nbsp;'?> </td>
                 </tr>
                 <tr>
                     <td colspan="2">ลาคลอดบุตร</td>
-                    <td colspan="2" style="text-align:center"></td>
-                    <td colspan="2" style="text-align:center"></td>
-                    <td colspan="2" style="text-align:center"></td>
+                    <td colspan="2" style="text-align:center"><?= $model->cat == 'ลาคลอดบุตร' ? $model->t1 : '&nbsp;'?> </td>
+                    <td colspan="2" style="text-align:center"><?= $model->cat == 'ลาคลอดบุตร' ? $model->t2 : '&nbsp;'?> </td>
+                    <td colspan="2" style="text-align:center"><?= $model->cat == 'ลาคลอดบุตร' ? $model->t3 : '&nbsp;'?> </td>
                 </tr>
             </table>
             <table class="bl_detail" width="100%" cellpadding="2" cellspacing="0">

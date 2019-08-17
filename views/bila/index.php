@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<div class="box-header with-border">
 		<h3 class="box-title"><?= Html::encode($this->title) ?></h3>
 		<div class="box-tools pull-right">
-				<button id="act-create-a" class="btn btn-danger btn-md" alt="act-create-a"><i class="fa fa-pencil-square-o "></i> เขียนใบลาป่วย </button>  
+				<button id="act-create-a" class="btn btn-danger btn-md" alt="act-create-a"><i class="fa fa-pencil-square-o "></i> เขียนใบลาป่วย ลากิจ ลาคลอด</button>  
 				<button id="act-create-b" class="btn btn-primary btn-md" alt="act-create"><i class="fa fa-pencil-square-o "></i> เขียนใบลาพักผ่อน</button>
 		</div>			
 	</div>		
@@ -48,13 +48,12 @@ $this->params['breadcrumbs'][] = $this->title;
 				<tr>
 					<td class="text-center" alt="<?=$model->id?>">
 						<?=$model->cat?>
-						<br><?=$model->id?>
-											
+						<br><?=$model->id?>											
 					</td>										
 					<td><?=DateThai_full($model->date_begin)?>
 					ถึง <?=DateThai_full($model->date_end)?>
 					ลาครั้งนี้ <?=$model->date_total?> วัน</td>
-					<td>
+					<td class="text-center"> 
 					<?= !empty($model->file) ? 
 						Html::a('<i class="fa fa-file-o"></i> ไฟล์เอกสาร ', ['bila/file_view','id' => $model->id], [
 							// 'class' => 'btn btn-xs',
@@ -81,7 +80,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				<?php  endforeach; ?>								
 			</tbody>
 		</table>
-								</div>
+		</div>
 	</div>
 </div>
 

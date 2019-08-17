@@ -14,9 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="box box-danger">
-    <div class="box-header with-border">
-        <h3 class="box-title">ใบลาป่วย</h3>
-    </div>
+    
     <?php 
         $form = ActiveForm::begin([
             'id' => 'weblink-form',
@@ -37,6 +35,26 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $form->field($model, 'date_create')->hiddenInput(['readonly' => true, 'value' => date("Y-m-d")])->label(false) ?>
     
     <div class="box-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <?php 
+                        echo $form->field($model, 'cat')->widget(Select2::classname(), [
+                            'data' => Bila::getCat(),
+                            'language' => 'th',
+                            'options' => [
+                                // 'placeholder' => ' ประเภทการลา',
+                                'class' => 'form-control',
+                            ],
+                            'pluginOptions' => [
+                            'allowClear' => true
+                            ],
+                        ]);
+                    ?> 
+                </div> 
+            </div>
+        </div>
+        <hr>
         <div class="row">
             <div class ="col-md-5">
                 <div class="form-group">			
