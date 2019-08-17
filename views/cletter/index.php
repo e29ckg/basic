@@ -53,7 +53,7 @@ $(document).ready(function() {
 			"pageLength": 100,
 			'ordering'    : false,
 			'lengthChange': true,
-			'paging'      : false,
+			'paging'      : true,
     		// "order": [[ 0, 'desc' ]]
 		})
 

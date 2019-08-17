@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			<div class="icon">
 				<i class="fa fa-user-plus"></i>
 			</div>
-			<a href="<?=Url::to(['user/user_index']);?>" class="small-box-footer">
+			<a href="<?=Url::to(['user/user_index','id' => 'active']);?>" class="small-box-footer">
 				More info <i class="fa fa-arrow-circle-right"></i>
 			</a>
 		</div>
