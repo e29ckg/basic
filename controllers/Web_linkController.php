@@ -617,5 +617,25 @@ public function actionDeletefile($id)
 
     }
 
+    public function actionSearch($q = null) {
+
+        // if (!empty($q)) {
+            $query = WebLink::find()->where(['LIKE','name', $q]);
+        // }
+                
+        $models = $query->orderBy(['id' => SORT_ASC])->all();
+                
+        if(Yii::$app->request->isAjax){
+                return $this->renderAjax('_search',[
+                    'models' => $models,
+                ]);
+        } else {
+                
+                return $this->render('index',[
+                    'models' => $models,
+                ]);
+        }
+    }
+
 
 }

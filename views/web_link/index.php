@@ -16,6 +16,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="box box-primary">
 	<div class="box-header with-border">
 		<h3 class="box-title"><?= Html::encode($this->title) ?></h3>
+		<div class="box-tools  pull-right">
+			<!-- <input type="text" placeholder="Search"/> -->
+			<!-- <input id = "search" type="text" name="table_search" class="form-control pull-right" placeholder="Search" data-cip-id="cIPJQ342845640" autofocus> -->
+		</div>
 			
 	</div>
 	<div class="box-body">
@@ -78,7 +82,22 @@ $(document).ready(function() {
 /* BASIC ;*/	
 	
 
-	function init_click_handlers(){    
+	function init_click_handlers(){  
+
+		$("#search").keyup(function () {
+		//        var that = this,
+			value = $(this).val();
+			if(value == ""){
+	  			location.reload();  
+			}
+			$.get("search",{q:value},
+				function (data)
+					{
+						$("#example").html(data);
+					}
+				);
+
+			});	
 
 		var url_show = "show";				
 			$( ".act-show" ).click(function() {
@@ -145,6 +164,8 @@ $(document).ready(function() {
       'info'        : true,
       'autoWidth'   : false
     })
+
+	
 		
 });
 JS;

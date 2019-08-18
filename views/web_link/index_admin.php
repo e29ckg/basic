@@ -19,8 +19,15 @@ $this->params['breadcrumbs'][] = $this->title;
 	<div class="box-header with-border">
 		<h3 class="box-title"><?= Html::encode($this->title) ?></h3>
 		<div class="box-tools pull-right">
+
 			<button id="act-create" class="btn btn-danger btn-md" alt="act-create"><i class="fa fa-pencil-square-o "></i> เพิ่ม</button>  
 		</div>	
+		<div class="col-sm-3">
+						<div class="search_box pull-right">
+							<!-- <input type="text" placeholder="Search"/> -->
+							<input id = "search" type="text" name="table_search" class="form-control pull-right" placeholder="Search" data-cip-id="cIPJQ342845640" autofocus>
+						</div>
+					</div>
 	</div>	
 	<div class="box-body">
 		<div id="example" class="dataTables_wrapper form-inline dt-bootstrap">
@@ -218,6 +225,21 @@ $(document).ready(function() {
         	});     
 		}); 
 		$('#example1').DataTable()
+
+		$("#search").keyup(function () {
+		//        var that = this,
+			value = $(this).val();
+			if(value == ""){
+	  			location.reload();  
+			}
+			$.get("search",{q:value},
+				function (data)
+					{
+						$("#features_items").html(data);
+					}
+				);
+
+			});	
 		
 });
 JS;
