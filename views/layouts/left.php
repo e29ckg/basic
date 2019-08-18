@@ -73,12 +73,25 @@ $menu_admin = [
                             
     ],
 ];
-    if(Yii::$app->user->isGuest){
-            echo dmstr\widgets\Menu::widget($menuG) ;
-        }elseif(Yii::$app->user->identity->role == 9 ){
+
+if(!Yii::$app->user->isGuest){
+    switch (Yii::$app->user->identity->role) {
+        case 9:
             echo dmstr\widgets\Menu::widget($menu_admin);
-        }else{
+            break;
+        // case "blue":
+        //     echo "Your favorite color is blue!";
+        //     break;
+        // case "green":
+        //     echo "Your favorite color is green!";
+        //     break;
+        default:
             echo dmstr\widgets\Menu::widget($menu) ;
     }
+}else{
+    echo dmstr\widgets\Menu::widget($menuG) ;
+}
+
+?>
 
 ?>

@@ -296,13 +296,13 @@ $(document).ready(function() {
 	}); 
 	
 	$('#example1').DataTable({
-      'paging'      : true,
-      'lengthChange': false,
-      'searching'   : true,
-      'ordering'    : false,
-      'info'        : true,
-      'autoWidth'   : false
-    })
+			"pageLength": 50,
+			'ordering'    : false,
+			'lengthChange': true,
+			'paging'      : true,
+    		// "order": [[ 0, 'desc' ]]
+		})
+		
 	$('#example2').DataTable({
       'paging'      : true,
       'lengthChange': false,

@@ -6,7 +6,7 @@ use yii\helpers\Url;
 
 
 $this->title = 'จัดการคำนำหน้าชื่อ';
-$this->params['breadcrumbs'][] = ['label' => 'จัดการสมาชิก', 'url' => ['user/index']];
+$this->params['breadcrumbs'][] = ['label' => 'จัดการสมาชิก', 'url' => ['user/user_index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -68,7 +68,14 @@ $script = <<< JS
     
 $(document).ready(function() {	
 	
-	$('#example1').DataTable()
+	$('#example1').DataTable({
+			"pageLength": 50,
+			'ordering'    : false,
+			'lengthChange': true,
+			'paging'      : true,
+    		// "order": [[ 0, 'desc' ]]
+		})
+
 	$('#example2').DataTable({
       'paging'      : true,
       'lengthChange': false,

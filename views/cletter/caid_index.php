@@ -7,6 +7,7 @@ use yii\grid\GridView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'ประเภทหนังสือ';
+$this->params['breadcrumbs'][] = ['label' => 'หนังสือเวียนทราบ', 'url' => ['cletter/index_admin']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 

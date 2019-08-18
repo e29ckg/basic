@@ -12,7 +12,6 @@ $this->title = 'Web Links';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-
 <div class="box box-primary">
 	<div class="box-header with-border">
 		<h3 class="box-title"><?= Html::encode($this->title) ?></h3>
@@ -156,14 +155,13 @@ $(document).ready(function() {
         	});     
 		}); 
 
-	$('#example1').DataTable({
-      'paging'      : false,
-      'lengthChange': false,
-      'searching'   : true,
-      'ordering'    : false,
-      'info'        : true,
-      'autoWidth'   : false
-    })
+		$('#example1').DataTable({
+			"pageLength": 100,
+			'ordering'    : false,
+			'lengthChange': true,
+			'paging'      : true,
+    		// "order": [[ 0, 'desc' ]]
+		})
 
 	
 		

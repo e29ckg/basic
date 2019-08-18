@@ -151,15 +151,12 @@ $(document).ready(function() {
 		
 			
 		$('#example1').DataTable({
-		// 'order' 	: false,
-		'paging'      : true,
-		'lengthChange': false,
-		'searching'   : true,
-		'ordering'    : false,
-		'info'        : true,
-		'autoWidth'   : false
+			"pageLength": 50,
+			'ordering'    : false,
+			'lengthChange': true,
+			'paging'      : true,
+    		// "order": [[ 0, 'desc' ]]
 		})
-		
 });
 JS;
 $this->registerJs($script);

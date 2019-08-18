@@ -224,7 +224,13 @@ $(document).ready(function() {
                 //   $("#myModal").modal('toggle');
         	});     
 		}); 
-		$('#example1').DataTable()
+		$('#example1').DataTable({
+			"pageLength": 100,
+			'ordering'    : false,
+			'lengthChange': true,
+			'paging'      : true,
+    		// "order": [[ 0, 'desc' ]]
+		})
 
 		$("#search").keyup(function () {
 		//        var that = this,
