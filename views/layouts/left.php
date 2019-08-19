@@ -50,6 +50,7 @@ $menu_admin = [
           'items' => [
             ['label' => 'เขียนใบลา', 'icon' => 'briefcase', 'url' => ['bila/index']],
             ['label' => 'ใบลาทั้งหมด', 'icon' => 'briefcase', 'url' => ['bila/admin']],
+            ['label' => 'ปฏิทิน', 'icon' => 'briefcase', 'url' => ['bila/cal']],
             ['label' => 'ผู้ลงนาม', 'icon' => 'briefcase', 'url' => ['bila/sbn_index']],
         ]], 
         ['label' => 'เบิกของ CartX', 'icon' => 'shopping-cart', 'url' => '/cartx/web'],       

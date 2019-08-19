@@ -8,6 +8,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
  
 /**
  * User model
@@ -211,7 +212,13 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function getProfileImg(){
         $model=$this->profile;
-        return Yii::getAlias('@web').(!empty($model->img)  ? '/uploads/user/'.$model->img : '/img/nopic.png');
+        $dir = Url::to('@webroot/uploads/user/');
+        
+        if(isset($model->img) && is_file($dir.$model->img)){
+            return  '/uploads/user/'.$model->img;
+        }
+        return Url::to('@web/img/nopic.png') ;
+        // return Yii::getAlias('@web').(!empty($model->img)  ? '/uploads/user/'.$model->img : '/img/nopic.png');
     }
 
     public function getProfileAddress(){

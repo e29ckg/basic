@@ -10,9 +10,7 @@ use kartik\file\FileInput;
 
 
 <div class="box box-danger">
-    <div class="box-header with-border">
-        <h3 class="box-title">ใบลาป่วย</h3>
-    </div>
+    
     <?php 
         $form = ActiveForm::begin([
             'id' => 'weblink-form',

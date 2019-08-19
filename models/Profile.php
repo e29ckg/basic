@@ -80,12 +80,19 @@ class Profile extends \yii\db\ActiveRecord
 
     public function getProfileActive(){
         if(isset(Yii::$app->user->identity->id)){
-            $model = Profile::findOne(Yii::$app->user->identity->id);   
-            // $model->img ? Yii::getAlias('@web').'/uploads/user/'.$model->img : Yii::getAlias('@web').'/adminlte2/dist/img/user2-160x160.jpg';
+            $model = Profile::findOne(Yii::$app->user->identity->id);
+            $dir = Url::to('@webroot/uploads/user/');
+        
+            if(isset($model->img) && is_file($dir.$model->img)){
+                $model->img = Url::to('@web/uploads/user/').$model->img;
+            }else{
+                $model->img = Url::to('@web/img/nopic.png'); 
+            }
+
             return [
                 'fullname' => $model->fname.$model->name.' '.$model->sname,
                 'dep' => $model->dep,
-                'img'   => $model->img ? Yii::getAlias('@web').'/uploads/user/'.$model->img : Yii::getAlias('@web').'/img/nopic.png'
+                'img'   => $model->img
             ]; 
         } 
         return [
@@ -93,6 +100,17 @@ class Profile extends \yii\db\ActiveRecord
             'dep' => '-',
             'img'   => Yii::getAlias('@web').'/img/nopic.png'
         ];        
+    }
+
+    public function getProfileImg($img){        
+        
+        $dir = Url::to('@webroot/uploads/user/');
+        
+        if(isset($img) && is_file($dir.$img)){
+            return  Url::to('@web/uploads/user/').$img;
+        }
+        return Url::to('@web/img/nopic.png') ;
+        // return Yii::getAlias('@web').(!empty($model->img)  ? '/uploads/user/'.$model->img : '/img/nopic.png');
     }
         
 }

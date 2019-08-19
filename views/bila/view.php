@@ -92,10 +92,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 '<a href="'.Url::to(['bila/file_view','id' => $model->id]).'"  target="_blank" data-id='.$model->id.'>ไฟล์เอกสาร</a>' 
                 :
                 ' <a href="'.Url::to(['bila/print1','id' => $model->id]).'" class="btn btn-primary btn-xs" target="_blank" data-id='.$model->id.'>print</a>' ?>
-                <?= empty($model->file) && Yii::$app->user->identity->role == 9 ? 
-                    '<button class="btn btn-success btn-xs act-file-up" data-id='.$model->id.'>แนบไฟล์</button>' 
-                    : '' ;
-                    ?>
+                <?php 
+                    // if(!Yii::$app->user->isGuest){
+                     if(!Yii::$app->user->isGuest && empty($model->file) && Yii::$app->user->identity->role == 9){
+                        '<button class="btn btn-success btn-xs act-file-up" data-id='.$model->id.'>แนบไฟล์</button>' ;
+                    //  } 
+                    }?>
                 </td>
             </tr>
         

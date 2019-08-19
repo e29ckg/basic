@@ -130,8 +130,8 @@ $this->params['breadcrumbs'][] = $this->title;
 										</td>
 																		
 										<td >
-											<?= $model->profile->fname.$model->profile->name.' '.$model->profile->sname ?> 												
-											<br><?=$model->profile->dep?>
+											<?= $model->getProfileName()?> 												
+											<br><?=$model->getProfileDep()?>
 											<br><span class="label label-danger"><?= $model->getRoleName($model->role)?></span>
 											<?= $model->status == 0 ? '<span class="label label-danger">ระงับ</span>':'<span class="label label-primary">อนุญาต</span>';?>
 											</td>

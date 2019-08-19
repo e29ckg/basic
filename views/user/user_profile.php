@@ -34,7 +34,7 @@ function DateThai_full($strDate)
       <div class="col-md-12">
           <div class="box box-primary">
             <div class="box-body box-profile">
-              <img class="profile-user-img img-responsive img-circle" src="<?= Yii::getAlias('@web').($model->img  ? '/uploads/user/'.$model->img : '/img/nopic.png'); ?>" alt="profile picture">
+              <img class="profile-user-img img-responsive img-circle" src="<?= $model->getProfileImg($model->img); ?>" alt="profile picture">
 
               <h3 class="profile-username text-center"><?= $model->fname.$model->name.' '.$model->sname;?> </h3>
 

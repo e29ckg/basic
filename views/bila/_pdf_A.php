@@ -47,6 +47,7 @@ function DateThai_month_full($strDate)
             <th  width="90%"><H2>แบบใบลาป่วย , ลากิจส่วนตัว , ลาคลอดบุตร</H2> </th>	
             <th  width="10%">                         
                 <img src="<?= Bila::getQr($model->id,$model->user_id);?>" height="60" width="60" >
+                <br><?=$model->id?>
             </th>		
 		</tr>
 	</thead>    

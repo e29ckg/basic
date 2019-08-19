@@ -31,7 +31,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'enableAjaxValidation' => true,
         ]);  ?>
       
-    <?= $form->field($model, 'user_id')->hiddenInput(['readonly' => true, 'value' => Yii::$app->user->identity->id])->label(false) ?>
     <?= $form->field($model, 'date_create')->hiddenInput(['readonly' => true, 'value' => date("Y-m-d")])->label(false) ?>
     
     <div class="box-body">

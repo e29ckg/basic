@@ -107,7 +107,7 @@ $(document).ready(function() {
         	});     
 		});
 
-		var url_update = "bila/update";
+		var url_update = "update";
     	$(".act-update").click(function(e) {            
 			var fID = $(this).data("id");
 			// alert(fID);
@@ -128,7 +128,7 @@ $(document).ready(function() {
  		location.reload();
 	})				
 		// var url_create = "index.php?r=bila/create";
-		var url_create_a = "bila/create_a";
+		var url_create_a = "create_a";
     	$( "#act-create-a" ).click(function() {
         	$.get(url_create_a,function (data){
                 $("#activity-modal").find(".modal-body").html(data);
@@ -139,7 +139,7 @@ $(document).ready(function() {
                 //   $("#myModal").modal('toggle');
         	});     
 		}); 
-		var url_create_b = "bila/create_b";
+		var url_create_b = "create_b";
     	$( "#act-create-b" ).click(function() {
         	$.get(url_create_b,function (data){
                 $("#activity-modal").find(".modal-body").html(data);
