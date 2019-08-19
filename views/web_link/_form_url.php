@@ -83,4 +83,4 @@ use yii\helpers\Url;
         <?php ActiveForm::end(); ?>
         </div>
     </div>
-</div>
+                         </div>

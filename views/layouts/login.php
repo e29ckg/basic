@@ -65,6 +65,6 @@ use yii\helpers\Url;
       increaseArea: '20%' /* optional */
     });
   });
-</script>
-</body>
+      </script>
+  </body>
 </html>
