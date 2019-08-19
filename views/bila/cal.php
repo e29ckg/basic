@@ -13,7 +13,7 @@ use yii\helpers\Url;
             timeZone: 'local',
           plugins: [ 'dayGrid' ],
 
-          events    : [<?=$event?>],
+          // events    : [],
                         
         });
         var event = calendar.getEventById('a') // an event object!

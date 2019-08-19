@@ -632,16 +632,18 @@ class BilaController extends Controller
     public function actionCal()
     {
         $models = Bila::find()->all();  
-        $event =[];
+        $event = [];
         foreach ($models as $model):
-            $event['id'] = $model->id ;
-            $event['title'] = $model->user_id ;
-            $event['start'] = $model->date_begin;
-            $event['end'] = $model->date_end;
+            $event = [
+                'id' => $model->id,
+                'title' => $model->user_id,
+                'start' => $model->date_begin
+            ];
+            // $event['end'] = $model->date_end;
             // $event['backgroundColor'] #f56954; //red
             // $event['borderColor']  = #f56954; //red
         endforeach;        
-        $event = json_encode($event);
+        // $event = json_encode($event);
         return $this->render('cal',[
             'event' => $event,
         ]);
