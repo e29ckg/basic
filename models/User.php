@@ -290,7 +290,7 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             // '0' => '-',
             '1' => 'user',
-            // '2' => 'Operator',
+            '2' => 'Operator',
             // '3' => 'Manager',
             '9' => 'Administrator'
         ];
@@ -299,7 +299,7 @@ class User extends ActiveRecord implements IdentityInterface
         $role = [
             // '0' => '-',
             '1' =>'user',
-            // '2' => 'Operator',
+            '2' => 'Operator',
             // '3' => 'Manager',
             '9' => 'Administrator'
         ];

@@ -28,6 +28,22 @@ $menu = [
     ],
 ];
 
+$menu_operator = [
+    'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
+    'items' => [
+        ['label' => 'Menu', 'options' => ['class' => 'header']],
+        ['label' => 'หน้าหลัก', 'icon' => 'home', 'url' => ['site/index']],
+        ['label' => 'หนังสือเวียน', 'icon' => 'bullhorn', 'url' => ['cletter/index']],
+        ['label' => 'WebLink', 'icon' => 'link', 'url' => ['web_link/index']],
+        ['label' => 'เขียนใบลา', 'icon' => 'briefcase', 'url' => ['bila/index']],
+        ['label' => 'ปฏิทินใบลา', 'icon' => 'briefcase', 'url' => ['bila/cal']],
+        ['label' => 'เบิกของ CartX', 'icon' => 'shopping-cart', 'url' => '/cartx/web'], 
+        ['label' => 'ตั้งค่า', 'options' => ['class' => 'header']],
+        ['label' => 'Profile', 'icon' => 'id-card-o', 'url' => ['user/profile']],  
+                            
+    ],
+];
+
 $menu_admin = [
     'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
     'items' => [
@@ -50,7 +66,7 @@ $menu_admin = [
           'items' => [
             ['label' => 'เขียนใบลา', 'icon' => 'briefcase', 'url' => ['bila/index']],
             ['label' => 'ใบลาทั้งหมด', 'icon' => 'briefcase', 'url' => ['bila/admin']],
-            ['label' => 'ปฏิทิน', 'icon' => 'briefcase', 'url' => ['bila/cal']],
+            ['label' => 'ปฏิทินใบลา', 'icon' => 'briefcase', 'url' => ['bila/cal']],
             ['label' => 'ผู้ลงนาม', 'icon' => 'briefcase', 'url' => ['bila/sbn_index']],
         ]], 
         ['label' => 'เบิกของ CartX', 'icon' => 'shopping-cart', 'url' => '/cartx/web'],       
@@ -80,9 +96,9 @@ if(!Yii::$app->user->isGuest){
         case 9:
             echo dmstr\widgets\Menu::widget($menu_admin);
             break;
-        // case "blue":
-        //     echo "Your favorite color is blue!";
-        //     break;
+        case 2:
+            echo dmstr\widgets\Menu::widget($menu_operator);
+            break;
         // case "green":
         //     echo "Your favorite color is green!";
         //     break;

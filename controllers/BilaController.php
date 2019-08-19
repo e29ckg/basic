@@ -634,16 +634,23 @@ class BilaController extends Controller
         $models = Bila::find()->all();  
         $event = [];
         foreach ($models as $model):
-            $event = [
+            $even = [
                 'id' => $model->id,
-                'title' => $model->user_id,
-                'start' => $model->date_begin
+                'title' => User::getProfileNameById($model->user_id).' '
+                            .$model->cat .' '.$model->date_total . ' วัน ตั้งแต่วันที่ '
+                            .Bila::DateThai_full($model->date_begin).' ถึง '
+                            .Bila::DateThai_full($model->date_end),
+                'start' => $model->date_begin,
+                'end' => $model->date_end.'T12:30:00',
+                'backgroundColor' => $model->cat == 'ลาพักผ่อน'? '' :'#f56954',
+                'borderColor' => $model->cat == 'ลาพักผ่อน'? '' :'#f56954'
             ];
             // $event['end'] = $model->date_end;
             // $event['backgroundColor'] #f56954; //red
             // $event['borderColor']  = #f56954; //red
+            $event[] = $even;
         endforeach;        
-        // $event = json_encode($event);
+        $event = json_encode($event);
         return $this->render('cal',[
             'event' => $event,
         ]);
