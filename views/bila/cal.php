@@ -51,10 +51,18 @@ use yii\helpers\Url;
 
       eventClick: function(arg) {
         // opens events in a popup window
-        alert(arg.event.title);
+        // alert(arg.event.title);
         // window.open(arg.event.url,'width=800,height=600');
-
         // arg.jsEvent.preventDefault() // don't navigate in main tab
+        // var fID = $(this).data("id");
+			// alert(fID);
+      var url_update = "view";
+        	$.get(url_update,{id: arg.event.id},function (data){
+            	$("#activity-modal").find(".modal-body").html(data);
+            	$(".modal-body").html(data);
+            	$(".modal-title").html("view");
+            	$("#activity-modal").modal("show");
+        	});
       },
 
       

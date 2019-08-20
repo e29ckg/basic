@@ -86,9 +86,16 @@ class BilaController extends Controller
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
-    {
+    {        
+        $model = $this->findModel($id);
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('view',[
+                'model' => $model,         
+            ]);
+        }
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
         ]);
     }
 
@@ -631,7 +638,10 @@ class BilaController extends Controller
 
     public function actionCal()
     {
-        $models = Bila::find()->all();  
+        $models = Bila::find()->orderBy([
+            // 'date_create'=>SORT_DESC,
+            'id' => SORT_DESC,
+            ])->limit(100)->all();  
         $event = [];
         foreach ($models as $model):
             $even = [
