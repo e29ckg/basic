@@ -18,9 +18,9 @@ $this->params['breadcrumbs'][] = $this->title;
 	<div class="box-body">
 		<div id="wra_example1" class="dataTables_wrapper form-inline dt-bootstrap">
                 
-                <h2 class="alert alert-success fade in">
+                <h2 class="alert <?= $model->cat == 'ลาป่วย' ? 'alert-danger': 'alert-success';?> fade in">
                     
-                    <?= User::getProfileNameById($model->user_id);?> 
+                    <?= $model->getProfileName();?> 
                     <sup class="badge bg-color-orange bounceIn animated"><?= $model->cat ?></sup>                    
                 </h2>
                 <!-- <h2><?= $model->cat ?></h2> -->
@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ชื่อ
                 </td>
                 <td>
-                    <?= User::getProfileNameById($model->user_id);?>
+                    <?= $model->getProfileName();?>
                 </td>
             </tr>
             <tr>
@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ตำแหน่ง
                 </td>
                 <td>
-                    <?=User::getProfileDepById($model->user_id);?>
+                    <?=$model->getProfileDep();?>
                 </td>
             </tr>
             <tr>
