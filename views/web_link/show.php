@@ -41,7 +41,7 @@ use app\models\WebLink;
     <div class="box-body">
 		<table class="table table-bordered">
 			<tbody>
-				<?php foreach ($modelFiles as $modelFile):?>
+				<?php foreach ($model->webLinkFile as $modelFile):?>
 				<tr>
 					<td><?= $modelFile->name.'.'.$modelFile->type?></td>
 					<td>
