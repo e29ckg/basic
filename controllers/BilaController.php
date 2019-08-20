@@ -4,8 +4,8 @@ namespace app\controllers;
 use Yii;
 use app\models\Bila;
 use app\models\BilaFileUp;
-use app\models\User;
-use app\models\profile;
+// use app\models\User;
+// use app\models\profile;
 use app\models\Line;
 use app\models\SignBossName;
 use yii\web\Controller;
@@ -157,7 +157,7 @@ class BilaController extends Controller
                     /*---------------------ส่ง line ไปยัง Admin--------------------*/
                     $modelLine = Line::findOne(['name' => 'admin']);
                     if(isset($modelLine->token)){
-                        $message = $model->user_id.' '.$model->cat.' รายละเอียดเพิ่มเติม' .$sms_qr;
+                        $message = $model->getProfileName().' '.$model->cat.' รายละเอียดเพิ่มเติม' .$sms_qr;
                         $res = Line::notify_message($modelLine->token,$message);  
                         $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
                     } 
@@ -200,7 +200,7 @@ class BilaController extends Controller
                 $model->t1 =  '';
             }        
 
-        $model->address = User::getProfileAddressById(Yii::$app->user->identity->id);
+        $model->address = $model_cat->getProfileAddress();
         
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('_form_a',[
@@ -258,7 +258,7 @@ class BilaController extends Controller
                 /*---------------------ส่ง line ไปยัง Admin--------------------*/
                 $modelLine = Line::findOne(['name' => 'admin']);
                 if(isset($modelLine->token)){
-                    $message = $model->user_id.' '.$model->cat.' รายละเอียดเพิ่มเติม' .$sms_qr;
+                    $message = $model->getProfileName().' '.$model->cat.' รายละเอียดเพิ่มเติม' .$sms_qr;
                     $res = Line::notify_message($modelLine->token,$message);  
                     $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
                 } 
@@ -284,7 +284,7 @@ class BilaController extends Controller
                     $model->t1 = null;
                 } 
             
-            $model->address = User::getProfileAddressById(Yii::$app->user->identity->id);
+            $model->address = $model_cat->getProfileAddress();
 
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('_form_b',[
@@ -379,6 +379,7 @@ class BilaController extends Controller
     {
         $model = $this->findModel($id);
 
+        $message = $model->getProfileName().' ลบ ใบ'.$model->cat.' เลขที่ ' .$model->id;
         $dir = Url::to('@webroot/uploads/bila/'.$model->user_id.'/'.$model->id);
         
         if($model->delete()){
@@ -392,24 +393,30 @@ class BilaController extends Controller
                 // mkdir($dir, 0777, true);
                 rmdir($dir);
             } 
+            /*---------------------ส่ง line ไปยัง Admin--------------------*/
+            $modelLine = Line::findOne(['name' => 'admin']);
+            if(isset($modelLine->token)){                
+                $res = Line::notify_message($modelLine->token,$message);  
+                $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+            } 
         }
         
         return $this->redirect(['index']);
     }
 
-    public function actionShow($id=null){
-        $mdBila = Bila::find()->where(['id' => $id])->one();
+    // public function actionShow($id=null){
+    //     $mdBila = Bila::findOne($id);
 
-        if(Yii::$app->request->isAjax){
-            return $this->renderAjax('show',[
-                    'model' => $mdBila,                    
-            ]);
-        }
+    //     if(Yii::$app->request->isAjax){
+    //         return $this->renderAjax('show',[
+    //                 'model' => $mdBila,                    
+    //         ]);
+    //     }
         
-        return $this->render('show',[
-               'model' => $mdBila,                    
-        ]);
-    }
+    //     return $this->render('show',[
+    //            'model' => $mdBila,                    
+    //     ]);
+    // }
 
     /**
      * Finds the Bila model based on its primary key value.
@@ -435,6 +442,7 @@ class BilaController extends Controller
         }else if($model->cat =='ลาพักผ่อน'){
             $Pdf_print = '_pdf_B';
         }
+        
         Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
         $pdf = new Pdf([
             'mode' => Pdf::MODE_UTF8, // leaner size using standard fonts
@@ -644,10 +652,10 @@ class BilaController extends Controller
         foreach ($models as $model):
             $even = [
                 'id' => $model->id,
-                'title' => User::getProfileNameById($model->user_id).' '
-                            .$model->cat .' '.$model->date_total . ' วัน ตั้งแต่วันที่ '
-                            .Bila::DateThai_full($model->date_begin).' ถึง '
-                            .Bila::DateThai_full($model->date_end),
+                'title' => $model->getProfileName().' '
+                           .$model->cat .' '.$model->date_total . ' วัน ตั้งแต่วันที่ '
+                           .Bila::DateThai_full($model->date_begin).' ถึง '
+                           .Bila::DateThai_full($model->date_end),
                 'start' => $model->date_begin,
                 'end' => $model->date_end.'T12:30:00',
                 'backgroundColor' => $model->cat == 'ลาพักผ่อน'? '' :'#f56954',

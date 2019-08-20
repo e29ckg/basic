@@ -1,35 +1,35 @@
 <?php
 use yii\helpers\Html;
-use app\models\User;
-use app\models\Bila;
+// use app\models\User;
+// use app\models\Bila;
 use app\models\SignBossName;
 
-function DateThai_full($strDate)
-	{
-		$strYear = date("Y",strtotime($strDate))+543;
-		$strMonth= date("n",strtotime($strDate));
-		$strDay= date("j",strtotime($strDate));
-		$strHour= date("H",strtotime($strDate));
-		$strMinute= date("i",strtotime($strDate));
-		$strSeconds= date("s",strtotime($strDate));
-		$strMonthCut = Array("","มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม",
-                            "สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม");
-		$strMonthThai=$strMonthCut[$strMonth];
-		return "$strDay $strMonthThai $strYear";
-    }
-function DateThai_month_full($strDate)
-	{
-		$strYear = date("Y",strtotime($strDate))+543;
-		$strMonth= date("n",strtotime($strDate));
-		$strDay= date("j",strtotime($strDate));
-		$strHour= date("H",strtotime($strDate));
-		$strMinute= date("i",strtotime($strDate));
-		$strSeconds= date("s",strtotime($strDate));
-		$strMonthCut = Array("","มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม",
-                            "สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม");
-		$strMonthThai=$strMonthCut[$strMonth];
-		return "$strMonthThai";
-	}
+// function DateThai_full($strDate)
+// 	{
+// 		$strYear = date("Y",strtotime($strDate))+543;
+// 		$strMonth= date("n",strtotime($strDate));
+// 		$strDay= date("j",strtotime($strDate));
+// 		$strHour= date("H",strtotime($strDate));
+// 		$strMinute= date("i",strtotime($strDate));
+// 		$strSeconds= date("s",strtotime($strDate));
+// 		$strMonthCut = Array("","มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม",
+//                             "สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม");
+// 		$strMonthThai=$strMonthCut[$strMonth];
+// 		return "$strDay $strMonthThai $strYear";
+//     }
+// function DateThai_month_full($strDate)
+// 	{
+// 		$strYear = date("Y",strtotime($strDate))+543;
+// 		$strMonth= date("n",strtotime($strDate));
+// 		$strDay= date("j",strtotime($strDate));
+// 		$strHour= date("H",strtotime($strDate));
+// 		$strMinute= date("i",strtotime($strDate));
+// 		$strSeconds= date("s",strtotime($strDate));
+// 		$strMonthCut = Array("","มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม",
+//                             "สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม");
+// 		$strMonthThai=$strMonthCut[$strMonth];
+// 		return "$strMonthThai";
+// 	}
 
 ?>
 
@@ -40,7 +40,7 @@ function DateThai_month_full($strDate)
 		<tr>
             <th  width="90%" class=""><H2>ใบลาพักผ่อน</H2> </th>	
             <th  width="10%" class="">
-                <img src="<?= Bila::getQr($model->id,$model->user_id);?>" height="60" width="60" >
+                <img src="<?= $model->getQr($model->id,$model->user_id);?>" height="60" width="60" >
             </th>				
 		</tr>
 	</thead>    
@@ -73,7 +73,7 @@ function DateThai_month_full($strDate)
         <td colspan="8" style="text-align:right">วันที่</td>
         <td colspan="1" class="TableLine" style="text-align:center"><?=(int)date_format($date_create,"j");?></td>
         <td colspan="1" style="text-align:center">เดือน</td>
-        <td colspan="2" class="TableLine" style="text-align:center"><?=DateThai_month_full($model->date_create);?></td>
+        <td colspan="2" class="TableLine" style="text-align:center"><?=$model->DateThai_month_full($model->date_create);?></td>
         <td colspan="1" style="text-align:center">พ.ศ.</td>
         <td colspan="1" class="TableLine" style="text-align:center"><?=(int)date_format($date_create,"Y")+543;?></td>
     </tr>
@@ -88,9 +88,9 @@ function DateThai_month_full($strDate)
     <tr>
         <td colspan="2" ></td>
         <td colspan="1" style="text-align:center">ข้าพเจ้า</td>
-        <td colspan="5" class="TableLine" style="text-align:center"><?= User::getProfileNameById($model->user_id);?></td>
+        <td colspan="5" class="TableLine" style="text-align:center"><?= $model->getProfileName(); ?></td>
         <td colspan="1" style="text-align:center">ตำแหน่ง</td>
-        <td colspan="5" class="TableLine" style="text-align:center"><?=User::getProfileDepById($model->user_id);?></td>
+        <td colspan="5" class="TableLine" style="text-align:center"><?= $model->getProfileDep(); ?></td>
     </tr>
     <tr>
         <td colspan="1" >สังกัด</td>
@@ -105,9 +105,9 @@ function DateThai_month_full($strDate)
     </tr>
     <tr>
         <td colspan="3" >ขอลาพักผ่อนตั้งแต่วันที่ </td>
-        <td colspan="4" class="TableLine" style="text-align:center"><?=DateThai_full($model->date_begin);?></td>
+        <td colspan="4" class="TableLine" style="text-align:center"><?=$model->DateThai_full($model->date_begin);?></td>
         <td colspan="1" style="text-align:center">ถึงวันที่</td>
-        <td colspan="3" class="TableLine" style="text-align:center"><?=DateThai_full($model->date_end);?></td>
+        <td colspan="3" class="TableLine" style="text-align:center"><?=$model->DateThai_full($model->date_end);?></td>
         <td colspan="1" style="text-align:center">มีกำหนด</td>
         <td colspan="1" class="TableLine" style="text-align:center"><?=$model->date_total;?></td>
         <td colspan="1" style="text-align:right">วัน</td>
@@ -115,10 +115,10 @@ function DateThai_month_full($strDate)
     
     <tr>
         <td colspan="4" >ระหว่างลาจะติดต่อข้าพเจ้าได้ที่</td>
-        <td colspan="10" class="TableLine" ><?=User::getProfileAddressById($model->user_id);?></td>
+        <td colspan="10" class="TableLine" ><?= $model->address;?></td>
     </tr>
     <tr>
-        <td colspan="14" class="TableLine" style="text-align:center"><?= User::getProfilePhoneById($model->user_id)?>.</td>
+        <td colspan="14" class="TableLine" style="text-align:center"><?= $model->getProfilePhone()?>.</td>
     </tr>
     <tr>
         <td colspan="14" ><?= $model->comment ? '( หมายเหตุ ' .$model->comment. ' )' : '' ;?></td>
@@ -141,7 +141,7 @@ function DateThai_month_full($strDate)
     <td colspan="10" style="text-align:center;">
         ขอแสดงความนับถือ<br><br><br>
         (ลงชื่อ)................................................................<br><br>
-        ( <?= User::getProfileNameById($model->user_id);?> )
+        ( <?= $model->getProfileName();?> )
         </td>        
     </tr>
     <tr>

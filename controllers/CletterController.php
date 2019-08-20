@@ -7,6 +7,7 @@ use app\models\CLetter;
 use app\models\CLetterCaid;
 use app\models\Log;
 use app\models\Line;
+use app\models\Profile;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -244,7 +245,7 @@ class CletterController extends Controller
                 $modelLine = Line::findOne(['name' => 'Admin']);        
                 if(!empty($modelLine->token) && $modelLine->status == 1){
                     // $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.';
-                    $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.'.$this->smsLineAlert.$model->id;
+                    $message = $model->name.' มีการปรับปรุง '.$this->smsLineAlert.$model->id;
                 
                     $res = Line::notify_message($modelLine->token,$message);
                     
@@ -296,9 +297,9 @@ class CletterController extends Controller
             $modelLog->create_at = date("Y-m-d H:i:s");
             $modelLog->ip = Yii::$app->getRequest()->getUserIP();
             Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');    
-            $modelLine = Line::findOne(['name' => 'Admin']);        
+            $modelLine = Line::findOne(['name' => 'admin']);        
                     if(!empty($modelLine->token) && $modelLine->status == 1){
-                        $message = Yii::$app->user->identity->username.' ลบ '.$modelF->name.' '.date("Y-m-d H:i:s");
+                        $message = Profile::getProfileNameById(Yii::$app->user->identity->id).' ลบ '.$model->name.' '.date("Y-m-d H:i:s");
                         Line::notify_message($modelLine->token,$message);                        
                     }                                
         }        
@@ -308,27 +309,27 @@ class CletterController extends Controller
 
     public function actionShow($id) {
         
-        $modelF = Cletter::findOne($id);           
+        $model = Cletter::findOne($id);           
                 
         // This will need to be the path relative to the root of your app.
         // $filePath = '/web/uploads/cletter';
         // Might need to change '@app' for another alias
-        $completePath = Url::to('@webroot').$this->filePath.$modelF->file;
+        $completePath = Url::to('@webroot').$this->filePath.$model->file;
         if(is_file($completePath)){
             
             $modelLog = new Log();
             $modelLog->user_id = Yii::$app->user->identity->id;
             $modelLog->manager = 'Cletter_Read';
-            $modelLog->detail =  'เปิดอ่าน '.$modelF->name;
+            $modelLog->detail =  'เปิดอ่าน '.$model->name;
             $modelLog->create_at = date("Y-m-d H:i:s");
             $modelLog->ip = Yii::$app->getRequest()->getUserIP();
             if($modelLog->save()){
-                $modelLine = Line::findOne(['name' => 'Admin']);        
+                $modelLine = Line::findOne(['name' => 'admin']);        
                     if(!empty($modelLine->token) && $modelLine->status == 1){
-                        $message = Yii::$app->user->identity->username.' เปิดอ่าน '.$modelF->name.' '.date("Y-m-d H:i:s");
+                        $message = Profile::getProfileNameById(Yii::$app->user->identity->id).' เปิดอ่าน '.$model->name.' '.date("Y-m-d H:i:s");
                         Line::notify_message($modelLine->token,$message);                        
                     }                        
-                return Yii::$app->response->sendFile($completePath, $modelF->file, ['inline'=>true]);
+                return Yii::$app->response->sendFile($completePath, $model->file, ['inline'=>true]);
             }
             
         }else{
@@ -352,7 +353,6 @@ class CletterController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
-
 
     public function actionLine_alert($id) {
         $model = $this->findModel($id);        

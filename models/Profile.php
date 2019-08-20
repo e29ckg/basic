@@ -112,5 +112,12 @@ class Profile extends \yii\db\ActiveRecord
         return Url::to('@web/img/nopic.png') ;
         // return Yii::getAlias('@web').(!empty($model->img)  ? '/uploads/user/'.$model->img : '/img/nopic.png');
     }
+
+    public function getProfileNameById($id){        
+        
+        $model = Profile::findOne($id);
+        
+        return !empty($model->id)  ? $model->fname.$model->name .' ' .$model->sname : '';
+    }
         
 }

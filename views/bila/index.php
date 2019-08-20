@@ -5,19 +5,6 @@ use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-function DateThai_full($strDate)
-	{
-		$strYear = date("Y",strtotime($strDate))+543;
-		$strMonth= date("n",strtotime($strDate));
-		$strDay= date("j",strtotime($strDate));
-		$strHour= date("H",strtotime($strDate));
-		$strMinute= date("i",strtotime($strDate));
-		$strSeconds= date("s",strtotime($strDate));
-		$strMonthCut = Array("","มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม",
-                            "สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม");
-		$strMonthThai=$strMonthCut[$strMonth];
-		return "$strDay $strMonthThai $strYear";
-    }
 
 $this->title = 'โปรแกรมใบลา';
 $this->params['breadcrumbs'][] = $this->title;
@@ -50,8 +37,8 @@ $this->params['breadcrumbs'][] = $this->title;
 						<?=$model->cat?>
 						<br><?=$model->id?>											
 					</td>										
-					<td><?=DateThai_full($model->date_begin)?>
-					ถึง <?=DateThai_full($model->date_end)?>
+					<td><?=$model->DateThai_full($model->date_begin)?>
+					ถึง <?=$model->DateThai_full($model->date_end)?>
 					ลาครั้งนี้ <?=$model->date_total?> วัน</td>
 					<td class="text-center"> 
 					<?= !empty($model->file) ? 

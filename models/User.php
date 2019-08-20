@@ -251,26 +251,26 @@ class User extends ActiveRecord implements IdentityInterface
         return User::find()->where(['status' => 10])->count();           
     }
 
-    public function getProfileNameById($id)
-    {
-        $model = Profile::findOne(['user_id' => $id]);
-        return $model->name ? $model->fname.$model->name.' '.$model->sname : '' ;
-    }
-    public function getProfileDepById($id)
-    {
-        $model = Profile::find()->where(['user_id' => $id])->one();
-        return $model->dep ? $model->dep : '' ;
-    }
+    // public function getProfileNameById($id)
+    // {
+    //     $model = Profile::findOne(['user_id' => $id]);
+    //     return $model->name ? $model->fname.$model->name.' '.$model->sname : '' ;
+    // }
+    // public function getProfileDepById($id)
+    // {
+    //     $model = Profile::find()->where(['user_id' => $id])->one();
+    //     return $model->dep ? $model->dep : '' ;
+    // }
 
-    public function getProfileAddressById($id){
-        $model = Profile::find()->where(['user_id' => $id])->one();
-        return $model->address ? $model->address : '' ;
-    }
+    // public function getProfileAddressById($id){
+    //     $model = Profile::find()->where(['user_id' => $id])->one();
+    //     return $model->address ? $model->address : '' ;
+    // }
     
-    public function getProfilePhoneById($id){
-        $model = Profile::find()->where(['user_id' => $id])->one();
-        return $model->phone ? 'โทร.'.$model->phone : '' ;
-    }
+    // public function getProfilePhoneById($id){
+    //     $model = Profile::find()->where(['user_id' => $id])->one();
+    //     return $model->phone ? 'โทร.'.$model->phone : '' ;
+    // }
 
     public function getDepList(){
         $model = Dep::find()->orderBy(['name' => SORT_ASC])->all();

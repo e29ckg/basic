@@ -1,42 +1,9 @@
 <?php
 use yii\helpers\Html;
-use app\models\User;
-use app\models\Bila;
+// use app\models\User;
+// use app\models\Bila;
 use app\models\SignBossName;
 use yii\helpers\Url;
-
-function DateThai_full($strDate)
-	{
-        if($strDate == ''){
-            return "-";
-        }
-		$strYear = date("Y",strtotime($strDate))+543;
-		$strMonth= date("n",strtotime($strDate));
-		$strDay= date("j",strtotime($strDate));
-		$strHour= date("H",strtotime($strDate));
-		$strMinute= date("i",strtotime($strDate));
-		$strSeconds= date("s",strtotime($strDate));
-		$strMonthCut = Array("","มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม",
-                            "สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม");
-		$strMonthThai=$strMonthCut[$strMonth];
-		return "$strDay $strMonthThai $strYear";
-    }
-function DateThai_month_full($strDate)
-	{
-		$strYear = date("Y",strtotime($strDate))+543;
-		$strMonth= date("n",strtotime($strDate));
-		$strDay= date("j",strtotime($strDate));
-		$strHour= date("H",strtotime($strDate));
-		$strMinute= date("i",strtotime($strDate));
-		$strSeconds= date("s",strtotime($strDate));
-		$strMonthCut = Array("","มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม",
-                            "สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม");
-		$strMonthThai=$strMonthCut[$strMonth];
-		return "$strMonthThai";
-    }
-    // echo $_SERVER['HTTP_HOST'];
-    // echo $_SERVER['SERVER_ADDR'] . Url::to('$SERVER_ADDR/uploads/bila/'.$model->user_id.'/'.$model->id.'/'.$model->id.'.png');
-    // echo '<img src="' . Url::to('@webroot/uploads/bila/'.$model->user_id.'/'.$model->id.'/'.$model->id.'.png') . '" height="42" width="42" >';
 ?>
 <link rel="stylesheet" href="<?=Url::to(['/fonts/thsarabunnew.css'])?>" />
 <div style="A_CSS_ATTRIBUTE:all;position: absolute;bottom: 20px; right: 45px;left: 45px; top: 35px;  ">
@@ -46,7 +13,7 @@ function DateThai_month_full($strDate)
 		<tr>
             <th  width="90%"><H2>แบบใบลาป่วย , ลากิจส่วนตัว , ลาคลอดบุตร</H2> </th>	
             <th  width="10%">                         
-                <img src="<?= Bila::getQr($model->id,$model->user_id);?>" height="60" width="60" >
+                <img src="<?= $model->getQr($model->id,$model->user_id);?>" height="60" width="60" >
             </th>		
 		</tr>
 	</thead>    
@@ -79,7 +46,7 @@ function DateThai_month_full($strDate)
         <td colspan="7" style="text-align:right">วันที่</td>
         <td colspan="1" class="TableLine" style="text-align:center"><?=(int)date_format($date_create,"d");?></td>
         <td colspan="1" style="text-align:center">เดือน</td>
-        <td colspan="1" class="TableLine" style="text-align:center"><?=DateThai_month_full($model->date_create);?></td>
+        <td colspan="1" class="TableLine" style="text-align:center"><?=$model->DateThai_month_full($model->date_create);?></td>
         <td colspan="1" style="text-align:center">พ.ศ.</td>
         <td colspan="1" class="TableLine" style="text-align:center"><?=(int)date_format($date_create,"Y")+543;?> </td>
     </tr>
@@ -118,9 +85,9 @@ function DateThai_month_full($strDate)
     </tr>
     <tr>
         <td colspan="2" >ตั้งแต่วันที่ </td>        
-        <td colspan="2" class="TableLine" style="text-align:center"><?=DateThai_full($model->date_begin);?> </td>
+        <td colspan="2" class="TableLine" style="text-align:center"><?=$model->DateThai_full($model->date_begin);?> </td>
         <td colspan="1" style="text-align:center">ถึงวันที่</td>
-        <td colspan="3" class="TableLine" style="text-align:center"><?=DateThai_full($model->date_end);?></td>
+        <td colspan="3" class="TableLine" style="text-align:center"><?=$model->DateThai_full($model->date_end);?></td>
         <td colspan="2" style="text-align:center">มีกำหนด</td>
         <td colspan="1" class="TableLine" style="text-align:center"><?=$model->date_total;?></td>
         <td colspan="1" style="text-align:center">วัน</td>
@@ -134,9 +101,9 @@ function DateThai_month_full($strDate)
     </tr>
     <tr>
         <td colspan="2" >ตั้งแต่วันที่ </td>
-        <td colspan="2" class="TableLine" style="text-align:center"><?=DateThai_full($model->dateO_begin);?></td>
+        <td colspan="2" class="TableLine" style="text-align:center"><?=$model->DateThai_full($model->dateO_begin);?></td>
         <td colspan="1" style="text-align:center">ถึงวันที่</td>
-        <td colspan="3" class="TableLine" style="text-align:center"><?=DateThai_full($model->dateO_end);?></td>
+        <td colspan="3" class="TableLine" style="text-align:center"><?=$model->DateThai_full($model->dateO_end);?></td>
         <td colspan="2" style="text-align:center">มีกำหนด</td>
         <td colspan="1" class="TableLine" style="text-align:center"><?=$model->dateO_total ? $model->dateO_total : '-';?></td>
         <td colspan="1" style="text-align:center">วัน</td>
@@ -146,7 +113,7 @@ function DateThai_month_full($strDate)
         <td colspan="9" class="TableLine"><?=$model->address;?> </td>
     </tr>
     <tr>
-        <td colspan="12" class="TableLine" style="text-align:center"><?= User::getProfilePhoneById($model->user_id)?>.</td>
+        <td colspan="12" class="TableLine" style="text-align:center"><?= $model->getProfilePhone()?>.</td>
     </tr>
     <tr>
         <td colspan="12" ><?= $model->comment ? '( หมายเหตุ ' .$model->comment. ' )' : '' ;?></td>
@@ -170,7 +137,7 @@ function DateThai_month_full($strDate)
         <td colspan="6" style="text-align:center">
             ขอแสดงความนับถือ<br><br><br>
             (ลงชื่อ)................................................................<br>
-            ( <?= User::getProfileNameById($model->user_id);?> )<br>
+            ( <?= $model->getProfileName();?> )<br>
         </td>
     </tr>
     
