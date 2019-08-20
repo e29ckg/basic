@@ -215,7 +215,7 @@ class User extends ActiveRecord implements IdentityInterface
         $dir = Url::to('@webroot/uploads/user/');
         
         if(isset($model->img) && is_file($dir.$model->img)){
-            return  '/uploads/user/'.$model->img;
+            return  Url::to('@web/uploads/user/').$model->img;
         }
         return Url::to('@web/img/nopic.png') ;
         // return Yii::getAlias('@web').(!empty($model->img)  ? '/uploads/user/'.$model->img : '/img/nopic.png');
