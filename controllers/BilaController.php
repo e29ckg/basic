@@ -5,6 +5,7 @@ use Yii;
 use app\models\Bila;
 use app\models\BilaFileUp;
 use app\models\User;
+use app\models\profile;
 use app\models\Line;
 use app\models\SignBossName;
 use yii\web\Controller;
@@ -88,6 +89,7 @@ class BilaController extends Controller
     public function actionView($id)
     {        
         $model = $this->findModel($id);
+                
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('view',[
                 'model' => $model,         
