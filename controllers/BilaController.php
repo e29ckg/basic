@@ -107,11 +107,6 @@ class BilaController extends Controller
      * @return mixed
      */
     
-
-    public function actionCreate_c()
-    {
-
-    }
    
     public function actionCreate_a()
     {
