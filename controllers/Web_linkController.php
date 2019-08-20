@@ -474,18 +474,15 @@ public function actionDeletefile($id)
     public function actionShow($id=null){
         // $mdWebLink = WebLink::find()->where(['id' => $id])->one();
         $mdWebLink = $this->findModel($id);
-        $modelFiles = WebLinkFile::find()->where(['web_link_id' => $id])->all();
 
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('show',[
-                    'model' => $mdWebLink, 
-                    'modelFiles' =>  $modelFiles,                    
+                    'model' => $mdWebLink,             
             ]);
         }
         
         return $this->render('show',[
-               'model' => $mdWebLink,
-               'modelFiles' =>  $modelFiles,                       
+               'model' => $mdWebLink,                    
         ]);
     }
 
