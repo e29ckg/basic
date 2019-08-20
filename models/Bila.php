@@ -41,7 +41,7 @@ class Bila extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'date_begin', 'date_end', 'date_total','t1'], 'required'],
+            [['date_begin', 'date_end', 'date_total','t1'], 'required'],
             [['user_id',], 'integer'],
             [['p1','date_total','dateO_total', 't1'], 'number'],
             [['t3','p2'], 'safe'],

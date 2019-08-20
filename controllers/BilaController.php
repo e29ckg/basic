@@ -130,7 +130,8 @@ class BilaController extends Controller
             try {
                     
                 $model->id = time();
-                $model->user_id =  $_POST['Bila']['user_id'];
+                // $model->user_id =  $_POST['Bila']['user_id'];
+                $model->user_id = Yii::$app->user->identity->id;
                 $model->cat = $_POST['Bila']['cat'];
                 $model->date_begin = $_POST['Bila']['date_begin'];
                 $model->date_end = $_POST['Bila']['date_end'];
@@ -227,7 +228,7 @@ class BilaController extends Controller
      
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->id = time();
-            $model->user_id =  $_POST['Bila']['user_id'];
+            $model->user_id =  Yii::$app->user->identity->id;
             $model->cat = 'ลาพักผ่อน';
             $model->date_begin = $_POST['Bila']['date_begin'];
             $model->date_end = $_POST['Bila']['date_end'];
