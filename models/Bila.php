@@ -88,6 +88,21 @@ class Bila extends \yii\db\ActiveRecord
         ];           
     }
 
+    public function getProfile()
+    {
+        return $this->hasOne(Profile::className(), ['id' => 'user_id']);
+    }
+
+    public function getProfileName(){
+        $model=$this->profile;
+        return $model ? $model->fname.$model->name.' '.$model->sname : '-';
+    }
+
+    public function getProfileDep(){
+        $model=$this->profile;
+        return !empty($model->dep) ? $model->dep : '-';
+    }
+
     public function getCountAll()
     {        
         return Bila::find()->count();           
@@ -150,13 +165,7 @@ class Bila extends \yii\db\ActiveRecord
 		return "$strMonthThai";
     }
 
-    public function getProfile()
-    {
-        return $this->hasOne(Profile::className(), ['id' => 'user_id']);
-    }
-    public function getProfileName(){
-        $model=$this->profile;
-        return $model ? $model->fname.$model->name.' '.$model->sname : '-';
-    }
+    
+    
 
 }
