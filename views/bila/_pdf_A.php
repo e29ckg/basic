@@ -47,7 +47,6 @@ function DateThai_month_full($strDate)
             <th  width="90%"><H2>แบบใบลาป่วย , ลากิจส่วนตัว , ลาคลอดบุตร</H2> </th>	
             <th  width="10%">                         
                 <img src="<?= Bila::getQr($model->id,$model->user_id);?>" height="60" width="60" >
-                <br><?=$model->id?>
             </th>		
 		</tr>
 	</thead>    
@@ -190,8 +189,8 @@ function DateThai_month_full($strDate)
                 <tr>
                     <td colspan="2">ลาป่วย</td>
                     <td colspan="2" style="text-align:center"><?= $model->cat == 'ลาป่วย' ? $model->t1 : '&nbsp;'?></td>
-                    <td colspan="2" style="text-align:center"><?= $model->cat == 'ลาป่วย' ? $model->t1 : '&nbsp;'?></td>
-                    <td colspan="2" style="text-align:center"><?= $model->cat == 'ลาป่วย' ? $model->t1 : '&nbsp;'?></td>
+                    <td colspan="2" style="text-align:center"><?= $model->cat == 'ลาป่วย' ? $model->t2 : '&nbsp;'?></td>
+                    <td colspan="2" style="text-align:center"><?= $model->cat == 'ลาป่วย' ? $model->t3 : '&nbsp;'?></td>
                 </tr>
                 <tr>
                     <td colspan="2">ลากิจ</td>
