@@ -108,8 +108,8 @@ class Bila extends \yii\db\ActiveRecord
         return !empty($model->phone) ? $model->phone : '-';
     }
 
-    public function getProfileAddress(){
-        $model=$this->profile;
+    public function getProfileAddressById($id){
+        $model = Profile::findOne($id);
         return !empty($model->address) ? $model->address : '-';
     }
 

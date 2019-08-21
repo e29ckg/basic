@@ -101,6 +101,21 @@ class BilaController extends Controller
         ]);
     }
 
+    public function actionView_cal($id)
+    {        
+        $model = $this->findModel($id);
+                
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('view_cal',[
+                'model' => $model,         
+            ]);
+        }
+
+        return $this->render('view_cal', [
+            'model' => $model,
+        ]);
+    }
+
     /**
      * Creates a new Bila model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -112,7 +127,6 @@ class BilaController extends Controller
     {
         
         $model = new Bila();
-
         
         //Add This For Ajax Email Exist Validation 
         if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){
@@ -200,7 +214,7 @@ class BilaController extends Controller
                 $model->t1 =  '';
             }        
 
-        $model->address = $model_cat->getProfileAddress();
+        $model->address = Bila::getProfileAddressById(Yii::$app->user->id);;
         
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('_form_a',[
@@ -267,6 +281,7 @@ class BilaController extends Controller
             }   
         }
         // $model->tel = explode(',', $model->tel);
+        // $model_profile = Bila::findOne(Yii::$app->user->id);
         $model_cat = Bila::find()
             ->where(['user_id' => Yii::$app->user->id,
                 'cat'=>'ลาพักผ่อน'
@@ -284,7 +299,7 @@ class BilaController extends Controller
                     $model->t1 = null;
                 } 
             
-            $model->address = $model_cat->getProfileAddress();
+            $model->address = Bila::getProfileAddressById(Yii::$app->user->id);
 
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('_form_b',[

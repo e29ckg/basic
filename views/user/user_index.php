@@ -179,9 +179,6 @@ $(document).ready(function() {
 	
 	function init_click_handlers(){  
 
-	// $('#activity-modal').on('hidden.bs.modal', function () {
- 		// location.reload();
-		// });
 
 		var url_update = "update_profile";
     	$(".act-update-profile").click(function(e) {            

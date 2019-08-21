@@ -38,13 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<div class ="col-md-12">		
  <!-- Default box -->
 		<div class="box box-primary">
-			<div class="box-header with-border">
-				<h3 class="box-title"><?= Html::encode($this->title) ?></h3>
-				<div class="box-tools pull-right">
-						<!-- <button id="act-create-a" class="btn btn-danger btn-md" alt="act-create-a"><i class="fa fa-plus "></i> เพิ่มใบลาป่วย </button>  
-						<button id="act-create-b" class="btn btn-primary btn-md" alt="act-create"><i class="fa fa-plus "></i> เพิ่มใบลาพักผ่อน</button> -->
-				</div>			
-			</div>
+			
 			<div class="box-body">
 				<div class="row">	
 					<!-- <div class ="col-md-1">

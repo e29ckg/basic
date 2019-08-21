@@ -378,7 +378,6 @@ class UserController extends Controller{
         } 
         
         return $this->render('user_profile_show',[
-            'mdProfile' => $model->profile,
             'model' => $model,
             'mdLine' => $modelLine,
         ]);

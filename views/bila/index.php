@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
  <!-- Default box -->
 <div class="box box-primary">
 	<div class="box-header with-border">
-		<h3 class="box-title"><?= Html::encode($this->title) ?></h3>
+		<h3 class="box-title"><?= Html::encode($this->title)?></h3>
 		<div class="box-tools pull-right">
 				<button id="act-create-a" class="btn btn-danger btn-md" alt="act-create-a"><i class="fa fa-pencil-square-o "></i> เขียนใบลาป่วย ลากิจ ลาคลอด</button>  
 				<button id="act-create-b" class="btn btn-primary btn-md" alt="act-create"><i class="fa fa-pencil-square-o "></i> เขียนใบลาพักผ่อน</button>
@@ -72,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <?php
-
+var_dump($models );
 $script = <<< JS
     
 $(document).ready(function() {	

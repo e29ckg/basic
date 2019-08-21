@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
       <div class="col-md-12">
           <div class="box box-primary">
             <div class="box-body box-profile">
-              <img class="profile-user-img img-responsive img-circle" src="<?= Yii::getAlias('@web').($model->profile->img  ? '/uploads/user/'.$model->profile->img : '/img/nopic.png'); ?>" alt="profile picture">
+              <img class="profile-user-img img-responsive img-circle" src="<?= $model->getProfileImg($model->img);  ?>" alt="profile picture">
 
               <h3 class="profile-username text-center"><?= $model->profile->fname.$model->profile->name.' '.$model->profile->sname;?> </h3>
 
