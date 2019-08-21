@@ -29,7 +29,7 @@ class AppAsset extends AssetBundle
         'adminlte2/bower_components/PACE/themes/green/pace-theme-minimal.css',         
         'adminlte2/bower_components/bootstrap/dist/css/bootstrap.min.css',
         'adminlte2/bower_components/toastr/toastr.min.css',
-        'css/site.css?v=1.14',     
+        'css/site.css?v=1.16',     
     ];
     public $js = [
         
