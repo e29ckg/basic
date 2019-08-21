@@ -72,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <?php
-var_dump($models );
+//var_dump($models );
 $script = <<< JS
     
 $(document).ready(function() {	

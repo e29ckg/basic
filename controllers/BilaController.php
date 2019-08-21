@@ -169,7 +169,7 @@ class BilaController extends Controller
                         ->useForegroundColor(51, 153, 255);              
                     $qrCode->writeFile(Url::to('@webroot/uploads/bila/'.$model->user_id.'/'.$model->id.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
                     /*---------------------ส่ง line ไปยัง Admin--------------------*/
-                    $modelLine = Line::findOne(['name' => 'admin']);
+                    $modelLine = Line::findOne(['name' => 'bila_group']);
                     if(isset($modelLine->token)){
                         $message = $model->getProfileName().' '.$model->cat.' รายละเอียดเพิ่มเติม' .$sms_qr;
                         $res = Line::notify_message($modelLine->token,$message);  
@@ -270,7 +270,7 @@ class BilaController extends Controller
                 $qrCode->writeFile(Url::to('@webroot/uploads/bila/'.$model->user_id.'/'.$model->id.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
 
                 /*---------------------ส่ง line ไปยัง Admin--------------------*/
-                $modelLine = Line::findOne(['name' => 'admin']);
+                $modelLine = Line::findOne(['name' => 'bila_group']);
                 if(isset($modelLine->token)){
                     $message = $model->getProfileName().' '.$model->cat.' รายละเอียดเพิ่มเติม' .$sms_qr;
                     $res = Line::notify_message($modelLine->token,$message);  
@@ -364,6 +364,13 @@ class BilaController extends Controller
             } 
 
             if($model->save()){
+                /*---------------------ส่ง line ไปยัง Admin--------------------*/
+                $message = $model->getProfileName().' แก้ไข ใบ'.$model->cat.' เลขที่ ' .$model->id;
+                $modelLine = Line::findOne(['name' => 'bila_group']);
+                if(isset($modelLine->token)){                
+                    $res = Line::notify_message($modelLine->token,$message);  
+                    $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+                }
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
                 return $this->redirect(['index']);
             }   
@@ -409,7 +416,7 @@ class BilaController extends Controller
                 rmdir($dir);
             } 
             /*---------------------ส่ง line ไปยัง Admin--------------------*/
-            $modelLine = Line::findOne(['name' => 'admin']);
+            $modelLine = Line::findOne(['name' => 'bila_group']);
             if(isset($modelLine->token)){                
                 $res = Line::notify_message($modelLine->token,$message);  
                 $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
@@ -419,20 +426,7 @@ class BilaController extends Controller
         return $this->redirect(['index']);
     }
 
-    // public function actionShow($id=null){
-    //     $mdBila = Bila::findOne($id);
-
-    //     if(Yii::$app->request->isAjax){
-    //         return $this->renderAjax('show',[
-    //                 'model' => $mdBila,                    
-    //         ]);
-    //     }
-        
-    //     return $this->render('show',[
-    //            'model' => $mdBila,                    
-    //     ]);
-    // }
-
+    
     /**
      * Finds the Bila model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -465,6 +459,7 @@ class BilaController extends Controller
             'content' => $this->renderPartial($Pdf_print,[
                 'model'=>$model,
             ]),
+            
             'cssFile' => 'css/pdf.css',
             'options' => [
                 // any mpdf options you wish to set

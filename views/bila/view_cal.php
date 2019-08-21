@@ -67,6 +67,16 @@ use yii\helpers\Url;
                         <?= $model->DateThai_full($model->date_end);?>
                     </td>
                 </tr>
+                <?= !empty($model->comment) ? '
+                <tr>
+                    <td class="text-right">
+                        หมายเหตุ
+                    </td>
+                    <td>
+                        '.$model->comment.'
+                    </td>
+                </tr>'
+                : '';?>
                 <tr>
                     <td class="text-right">
                         
