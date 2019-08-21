@@ -13,6 +13,8 @@ use yii\helpers\Url;
 use app\models\Profile;
 use yii\bootstrap\Modal;
 
+//Yii::$app->user->identity->id
+
 AppAsset::register($this);
 
 $profileActive = Profile::getProfileActive();
@@ -198,7 +200,7 @@ $profileActive = Profile::getProfileActive();
     <div class="pull-right hidden-xs">
       <b> Version</b> 2.4.13
     </div>
-      <small><?=Yii::$app->requestedAction->id.'#'.Yii::$app->controller->getRoute().'#'.Yii::$app->controller->id.'#'.Yii::$app->user->identity->id?> # <?php $csrf = yii::$app->request->csrfParam;?> 
+      <small><?=Yii::$app->requestedAction->id.' # '.Yii::$app->controller->getRoute().' # '.Yii::$app->controller->id.' # '?> # <?php $csrf = yii::$app->request->csrfParam;?> 
       <?php $token = yii::$app->request->csrfToken;?> <?= Yii::$app->getRequest()->getUserIP();?></small>
     <!-- <strong>Copyright &copy; 2014-2019 <a href="https://adminlte.io">AdminLTE</a>.</strong> All rights -->
     <!-- reserved. -->
