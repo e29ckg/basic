@@ -5,8 +5,9 @@
 
 
 - เปิด CMD 
-- >cd c:\xampp\htdocs\basic     
-- >yii migrate                  /***สร้างตารางข้อมูล
+- >cd c:\xampp\htdocs\basic    
+/***สร้างตารางข้อมูล
+- >yii migrate                  
 - เปิด http://127.0.0.1/basic/web
 
 เข้าระบบ admin/admin   demo/demo
