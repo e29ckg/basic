@@ -3,8 +3,8 @@
 - run apache Mysql
 - สร้างฐานข้อมูล MySql ชื่อ main (ตาม /main/config/db.php)
 - เปิด CMD 
-- >cd c:\xampp\htdocs\main
+- >cd c:\xampp\htdocs\basic
 - >yii migrate 
-- เปิด http://127.0.0.1/main/web
+- เปิด http://127.0.0.1/basic/web
 
 เข้าระบบ admin/admin   demo/demo
