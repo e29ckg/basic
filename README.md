@@ -1,7 +1,7 @@
 - ติดตั้ง xampp 
 - copy โฟล์เดอร์ main ไปไว้ที่ c:\xampp\htdocs\ 
 - run apache Mysql
-- สร้างฐานข้อมูล MySql ชื่อ main (ตาม /main/config/db.php)
+- สร้างฐานข้อมูล MySql ชื่อ main (ตาม /basic/config/db.php)
 - เปิด CMD 
 - >cd c:\xampp\htdocs\basic
 - >yii migrate 
