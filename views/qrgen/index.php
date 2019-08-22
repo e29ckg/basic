@@ -59,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= !($Qrgen == null) ? '
                 <img src="'.Url::to('@web/uploads/Qrgen/Qrgen.png').'">
                 <br>'.$model->url
-                .'<br>'.'<a href= "'. Url::to(['download']).'" class="btn btn-success btn-lg"> ดาวน์โหลด</a>'
+                .'<br><br>'.'<a href= "'. Url::to(['download']).'" class="btn btn-success btn-lg"> ดาวน์โหลด</a>'
                 : '';?>
             </div>
         </div>         
