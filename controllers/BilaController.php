@@ -214,7 +214,7 @@ class BilaController extends Controller
                 $model->t1 =  '';
             }        
 
-        $model->address = Bila::getProfileAddressById(Yii::$app->user->id);;
+        $model->address = Bila::getProfileAddressById(Yii::$app->user->id);
         
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('_form_a',[
