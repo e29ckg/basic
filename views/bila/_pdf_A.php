@@ -20,7 +20,6 @@ use yii\helpers\Url;
 		</tr>
 	</thead>    
 </table>
-
 <table class="bl_detail" width="100%" border="0" cellpadding="0" cellspacing="0">
     <!-- <tr>
         <td width="50px"></td>
