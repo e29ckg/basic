@@ -20,10 +20,12 @@ class VenCom extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    public $year;
+    
     public function rules()
     {
         return [
-            [['ven_com_num','ven_com_name','comment'],'required'],   
+            [['ven_com_num','ven_com_name','ven_month','year'],'required'],   
 
         ];
     }
@@ -36,8 +38,11 @@ class VenCom extends \yii\db\ActiveRecord
         return [            
             'id' => 'ID',
             'ven_com_num' => 'เลขที่คำสั่ง',
-            'ven_com_name' => 'ชื่อคำสั่ง(ทางการ)',
-            'comment' => 'ชื่อที่แสดงหน้าจัดเวร',        
+            'ven_time' => 'หน้าที่',
+            'ven_month' => 'เดือน',
+            'year' => 'ปี',
+            'ven_com_name' => 'ชื่อคำสั่ง',
+            'comment' => '',        
         ];
     }
 
@@ -98,9 +103,7 @@ class VenCom extends \yii\db\ActiveRecord
         }
         return  Url::to('@web/img/none.png'); 
         // return Url::to('@webroot/uploads/VenCom/'.$user_id.'/'.$id.'/'.$id.'.png');
-    }
-
-    
+    }    
     
     public function getStatusList(){
         return [
@@ -110,6 +113,7 @@ class VenCom extends \yii\db\ActiveRecord
             
         ];
     }
+
     public function getStatusName($id){
         $role = [
             '1' => 'ใช้งาน',
@@ -117,8 +121,70 @@ class VenCom extends \yii\db\ActiveRecord
         ];
         return $role[$id];
     }
+
+    public function getVen_time(){   
+        return [
+            '08:30:00' => 'ผู้พิพากษา(กลางวัน)',
+            '08:30:01' => 'ปชส.(ผอ/หัวหน้างาน)',
+            '08:30:11' => 'รับฟ้อง(กลางวัน)',
+            '08:30:22' => 'รับฟ้อง/จับ-ค้น(กลางวัน)',
+            '16:30:00' => 'ผู้พิพากษา(กลางคืน)',
+            '16:30:55' => 'จับ-ค้น(กลางคืน)',
+        ];
+    }
+
+    public function getVen_time_name($id){   
+        $role = [
+            '08:30:00' => 'ผู้พิพากษา(กลางวัน)',
+            '08:30:01' => 'ปชส.(ผอ/หัวหน้างาน)',
+            '08:30:11' => 'รับฟ้อง(กลางวัน)',
+            '08:30:22' => 'รับฟ้อง/จับ-ค้น(กลางวัน)',
+            '16:30:00' => 'ผู้พิพากษา(กลางคืน)',
+            '16:30:55' => 'จับ-ค้น(กลางคืน)',
+        ];
+        return $role[$id];
+    }
+
+    public function getVen_month()
+    {
+        return [
+            '01' => 'มกราคม',
+            '02' => 'กุมภาพันธ์',
+            '03' => 'มีนาคม',
+            '04' => 'เมษายน',
+            '05' => 'พฤษภาคม',
+            '06' => 'มิถุนายน',
+            '07' => 'กรกฎาคม',
+            '08' =>  'สิงหาคม',
+            '09' => 'กันยายน',
+            '10' => 'ตุลาคม',
+            '11' => 'พฤศจิกายน',
+            '12' => 'ธันวาคม'
+        ];
+    }
+
+    public function getVen_month_name($id)
+    {
+        $role = [
+            '01' => 'มกราคม',
+            '02' => 'กุมภาพันธ์',
+            '03' => 'มีนาคม',
+            '04' => 'เมษายน',
+            '05' => 'พฤษภาคม',
+            '06' => 'มิถุนายน',
+            '07' => 'กรกฎาคม',
+            '08' =>  'สิงหาคม',
+            '09' => 'กันยายน',
+            '10' => 'ตุลาคม',
+            '11' => 'พฤศจิกายน',
+            '12' => 'ธันวาคม'
+        ];
+        return $role[$id];
+    }
+
+}
     
     
     
 
-}
+

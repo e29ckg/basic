@@ -34,8 +34,9 @@ use yii\helpers\Url;
 
       locale: 'th',
 
-      displayEventTime: false, // don't show the time column in list view
+      defaultDate:'<?=$defaultDate?>',
 
+      displayEventTime: false, // don't show the time column in list view
        
       
       events: <?=$event?>,
@@ -79,7 +80,7 @@ use yii\helpers\Url;
 <?php// var_dump($event);?>
 <?php
 $script = <<< JS
-$(document).on('click','.fc-day',function(){
+$(document).on('click','.fc-day-top',function(){
   var url_create = "admin_create";
   var fID = $(this).attr("data-date");
   // alert(fID);
@@ -93,16 +94,16 @@ $(document).on('click','.fc-day',function(){
 
 $(document).ready(function() {	
   var url_create = "admin_create";
-    	$(".fc-day-top").click(function(e) {            
-			var fID = $(this).data("date");
-			// alert(fID);
-        	$.get(url_create,{date_id: fID},function (data){
-            	$("#activity-modal").find(".modal-body").html(data);
-            	$(".modal-body").html(data);
-            	$(".modal-title").html("แก้ไขข้อมูล");
-            	$("#activity-modal").modal("show");
-        	});
-		});
+    // 	$(".fc-day-top").click(function(e) {            
+		// 	var fID = $(this).data("date");
+		// 	// alert(fID);
+    //     	$.get(url_create,{date_id: fID},function (data){
+    //         	$("#activity-modal").find(".modal-body").html(data);
+    //         	$(".modal-body").html(data);
+    //         	$(".modal-title").html("แก้ไขข้อมูล");
+    //         	$("#activity-modal").modal("show");
+    //     	});
+		// });
 });
 JS;
 $this->registerJs($script);

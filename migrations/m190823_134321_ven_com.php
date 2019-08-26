@@ -21,6 +21,8 @@ class m190823_134321_ven_com extends Migration
         $this->createTable('ven_com', [
             'id' => $this->primaryKey(),
             'ven_com_num' => $this->string(),
+            'ven_time' => $this->string(),
+            'ven_month' => $this->string(),
             'ven_com_name' => $this->string(),
             'comment' => $this->string(),
             'file' => $this->string(),

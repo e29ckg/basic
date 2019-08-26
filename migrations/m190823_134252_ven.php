@@ -22,6 +22,7 @@ class m190823_134252_ven extends Migration
             'id' => $this->primaryKey(),
             'ven_date' => $this->date()->notNull(),
             'ven_time' => $this->string(),
+            'ven_month' => $this->string(),
             'ven_com_id' => $this->string(),
             'user_id' => $this->string(),
             'file' => $this->string(),

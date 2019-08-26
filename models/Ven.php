@@ -55,41 +55,12 @@ class Ven extends \yii\db\ActiveRecord
         $model=$this->profile;
         return $model ? $model->fname.$model->name.' '.$model->sname : '-';
     }
-
-    public function getProfileDep(){
-        $model=$this->profile;
-        return !empty($model->dep) ? $model->dep : '-';
-    }
-
-    public function getProfilePhone(){
-        $model=$this->profile;
-        return !empty($model->phone) ? $model->phone : '-';
-    }
-
-    public function getProfileAddressById($id){
-        $model = Profile::findOne($id);
-        return !empty($model->address) ? $model->address : '-';
-    }
-
-    
-    public function getCountAll()
-    {        
-        return Ven::find()->count();           
-    }
-
-    public function getCountA()
-    {        
-        return Ven::find()->where(['cat' => 'ลาป่วย'])->count();           
-    }
-    
-    public function getCountB()
-    {        
-        return Ven::find()->where(['cat' => 'ลาพักผ่อน'])->count();           
-    }
-
+       
     public function getVenComList(){
         $model = VenCom::find()->where(['status' => '1'])->orderBy(['id' => SORT_DESC ])->all();
-        return ArrayHelper::map($model,'id','comment');
+        return ArrayHelper::map($model,'id',function($model){
+            return $model->ven_com_name.' '.$model->getVen_time_name($model->ven_time);
+        });
     }
 
     public function getUserList(){
@@ -110,22 +81,96 @@ class Ven extends \yii\db\ActiveRecord
         });        
     }
 
-    public function getVen2($models){
-        
+    public function getVen2($models)
+    {      
         return ArrayHelper::map($models,'id',function($model){
             return Ven::DateThai_full($model->ven_date).' ' .$model->getProfileName().'('.$model->id.')' ;
         });        
+    }    
+
+    public function getVenForChange($ven_com_id)
+    {        
+        $modelVC = VenCom::findOne($ven_com_id);
+        $strDate = (string)date("Y-m-d") ;
+        if($modelVC->ven_time == '08:30:11' || $modelVC->ven_time == '08:30:22'){
+            $models = Ven::find()->where([
+                'user_id' => Yii::$app->user->identity->id,
+                'ven_month' => $modelVC->ven_month,
+                'ven_time' => '08:30:11',
+                'status' => 1,
+                ])
+                ->orWhere([
+                    'user_id' => Yii::$app->user->identity->id,
+                'ven_month' => $modelVC->ven_month,
+                'ven_time' => '08:30:22',
+                'status' => 1
+                ])
+                ->andWhere("ven_date >= '$strDate'")
+                ->all();
+        }else{
+            $models = Ven::find()->where([
+                'user_id' => Yii::$app->user->identity->id,
+                'ven_com_id' => $ven_com_id,
+                'status' => 1,
+                ])
+                ->andWhere("ven_date >= '$strDate'")
+                ->all();
+        }
+        return ArrayHelper::map($models,'id',function($model){
+            return Ven::DateThai_full($model->ven_date).' ' .$model->getProfileName().'('.$model->id.')' ;
+        });         
     }
-    
+
+    public function getCheck_user($id)              //เช้คการชน
+    { 
+        $model = Ven::findOne($id);
+        
+        if($model->ven_time == '16:30:55'){   
+            $dB = date('Y-m-d', strtotime('-1 day', strtotime($model->ven_date)));          ///
+            return Ven::find()
+                ->where(['ven_date' => $dB,
+                'ven_time' => '08:30:01',
+                'ven_time' => '08:30:11',
+                'ven_time' => '08:30:22'
+                ])
+                // ->count() ;
+                ->all() ;
+        }
+
+    }
+
 
     public function getCountVen($ven_com_id)
     {        
-        $strDate = date("Y-m-d") ;
-        return Ven::find()->where([
-            'user_id' => Yii::$app->user->identity->id,
-            'ven_com_id' => $ven_com_id,
-            'status' => 1
-            ])->andWhere('ven_date > '.$strDate)->count();           
+        $modelVC = VenCom::findOne($ven_com_id);
+        $strDate = (string)date("Y-m-d") ;
+        
+    
+        if($modelVC->ven_time == '08:30:11' || $modelVC->ven_time == '08:30:22'){
+            return Ven::find()->where([
+                'user_id' => Yii::$app->user->identity->id,
+                'ven_month' => $modelVC->ven_month,
+                'ven_time' => '08:30:11',
+                'status' => 1,
+                ])
+                ->orWhere([
+                    'user_id' => Yii::$app->user->identity->id,
+                'ven_month' => $modelVC->ven_month,
+                'ven_time' => '08:30:22',
+                'status' => 1
+                ])
+                ->andWhere("ven_date >= '$strDate'")
+                ->count(); 
+        }else{
+            return Ven::find()->where([
+                'user_id' => Yii::$app->user->identity->id,
+                'ven_com_id' => $ven_com_id,
+                'status' => 1,
+                ])
+                ->andWhere("ven_date >= '$strDate'")
+                ->count(); 
+            }
+            // ->count();           
     }
 
     public function DateThai_full($strDate)
@@ -167,6 +212,7 @@ class Ven extends \yii\db\ActiveRecord
             
         ];
     }
+
     public function getStatusName($id){
         $role = [
             '1' => 'ใช้งาน',

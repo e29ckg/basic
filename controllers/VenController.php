@@ -71,14 +71,23 @@ class VenController extends Controller
         $i = 1 ;
         $event = [];
         foreach ($models as $model):
+            if($model->status == 2){
+                $backgroundColor = 'orange';  
+            }elseif($model->ven_time == '16:30:55'){
+                $backgroundColor = 'blue';
+            }elseif($model->ven_time == '08:30:01'){
+                $backgroundColor = '#FF6347';
+            }else{
+                $backgroundColor = 'green';
+            }
             $even = [
                 'id' => $model->id,
                 'title' => $model->getProfileName(),
-                // 'title' => $model->ven_date,
-                'start' => $model->ven_date,
+                // 'title' => $model->ven_date.' '.$model->ven_time,
+                'start' => $model->ven_date.' '.$model->ven_time,
                 'textColor' => $model->user_id == Yii::$app->user->identity->id ? 'yellow' :'',
                 // 'end' => $model->date_end.'T12:30:00',
-                'backgroundColor' => $model->status == 1 ? '' :'#f56954',
+                'backgroundColor' => $backgroundColor,
                 'borderColor' => $model->status == 1 ? '' :'#f56954'
             ];
             $event[] = $even;
@@ -97,7 +106,7 @@ class VenController extends Controller
 
         return $this->renderAjax('ven_show',[
             'model' => $model,
-            'countVen' => Ven::getCountVen($model->ven_com_id),
+            'countVen' => Ven::getVenForChange($model->ven_com_id),
         ]);
     }
 
@@ -127,6 +136,8 @@ class VenController extends Controller
                 $modelV->id = $id;
                 $modelV->ven_date = $modelV1->ven_date;  
                 $modelV->ven_com_id = $modelV1->ven_com_id;
+                $modelV->ven_time = $modelV1->ven_time;
+                $modelV->ven_month = $modelV1->ven_month;
                 $modelV->user_id = $modelV2->user_id;
                 $modelV->status = 3;
                 $modelV->ref1 = $modelV1->ref1;
@@ -138,6 +149,8 @@ class VenController extends Controller
                 $modelV->id = $id + 1;
                 $modelV->ven_date =  $modelV2->ven_date;  
                 $modelV->ven_com_id = $modelV2->ven_com_id;
+                $modelV->ven_time = $modelV2->ven_time;
+                $modelV->ven_month = $modelV2->ven_month;
                 $modelV->user_id = $modelV1->user_id;
                 $modelV->status = 3 ;
                 $modelV->ref1 = $modelV2->ref2;
@@ -149,6 +162,8 @@ class VenController extends Controller
                 $model->ven_id2_old = $_POST['VenChange']['ven_id2'];
                 $model->ven_id1 = $id;
                 $model->ven_id2 = $id + 1;
+                $model->user_id1 = $modelV1->user_id;
+                $model->user_id2 = $modelV2->user_id;
                 $model->s_po = $_POST['VenChange']['s_po'];
                 $model->s_bb = $_POST['VenChange']['s_bb'];
                 $model->status = 3;
@@ -169,7 +184,7 @@ class VenController extends Controller
         }
 
         $ven_id2 = Ven::findOne($id);
-        $ven_id1 = Ven::getVen1($ven_id2->ven_com_id);        
+        $ven_id1 = Ven::getVenForChange($ven_id2->ven_com_id);        
         
         return $this->renderAjax('_ven_change',[
             'model' => $model,
@@ -188,23 +203,34 @@ class VenController extends Controller
             ])->limit(100)->all();  
         $event = [];
         foreach ($models as $model):
+            if($model->status == 2){
+                $backgroundColor = 'red';  
+            }elseif($model->ven_time == '16:30:55'){
+                $backgroundColor = 'blue';
+            }elseif($model->ven_time == '08:30:01'){
+                $backgroundColor = '#FF6347';
+            }else{
+                $backgroundColor = 'green';
+            }
             $even = [
                 'id' => $model->id,
-                'title' => $model->profile->fname.$model->profile->name.' '.$model->profile->sname,
-                'start' => $model->ven_date,
+                'title' => $model->getProfileName(),
+                // 'title' => $model->ven_date.' '.$model->ven_time,
+                'start' => $model->ven_date.' '.$model->ven_time,
+                'textColor' => $model->user_id == Yii::$app->user->identity->id ? 'yellow' :'',
                 // 'end' => $model->date_end.'T12:30:00',
-                // 'backgroundColor' => $model->cat == 'ลาพักผ่อน'? '' :'#f56954',
-                // 'borderColor' => $model->cat == 'ลาพักผ่อน'? '' :'#f56954'
+                'backgroundColor' => $backgroundColor,
+                'borderColor' => $model->status == 1 ? '' :'#f56954'
             ];
-            // $event['end'] = $model->date_end;
-            // $event['backgroundColor'] #f56954; //red
-            // $event['borderColor']  = #f56954; //red
             $event[] = $even;
         endforeach;        
         $event = json_encode($event);
 
+        $modelVC = VenCom::find()->orderBy(['create_at' => SORT_DESC])->one();
+
         return $this->render('admin_index',[
             'event' => $event,
+            'defaultDate' => isset($modelVC->ven_month) ? $modelVC->ven_month : date("Y-m-d"),
         ]);
     }
 
@@ -221,22 +247,25 @@ class VenController extends Controller
             $transaction = Yii::$app->db->beginTransaction();
             try {
 
+                $modelVC = VenCom::findOne($_POST['Ven']['ven_com_id']); 
+
                 $model->id = time();
                 $model->ven_date = $_POST['Ven']['ven_date'];
-                $model->ven_com_id = $_POST['Ven']['ven_com_id'];
-                $model->user_id = $_POST['Ven']['user_id'];
-
-                $modelVC = VenCom::findOne($_POST['Ven']['ven_com_id']);
-
+                $model->ven_com_id = $modelVC->id;
+                $model->user_id = $_POST['Ven']['user_id'];               
+                $model->ven_time = $modelVC->ven_time;
+                $model->ven_month = $modelVC->ven_month;
                 $model->file = $modelVC->file;
                 $model->ref1 = $modelVC->ref;
                 $model->ref2 = Yii::$app->security->generateRandomString();
                 $model->status = 1;                
-                $model->comment = $_POST['Ven']['comment'];
+                $model->comment = '';
                 $model->create_at = date("Y-m-d H:i:s"); 
+
                 if($model->save()){                                       
                     Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');                   
                 }  
+
                 $transaction->commit();
                 return $this->redirect(['admin_index']);
                 
@@ -272,12 +301,19 @@ class VenController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $transaction = Yii::$app->db->beginTransaction();
             try {
-                
+
+                $modelVC = VenCom::findOne($_POST['Ven']['ven_com_id']); 
+
                 $model->ven_date = $_POST['Ven']['ven_date'];
-                $model->ven_com_id = $_POST['Ven']['ven_com_id'];
-                $model->user_id = $_POST['Ven']['user_id'];                
-                $model->comment = $_POST['Ven']['comment'];
-                $model->create_at = date("Y-m-d H:i:s"); 
+                $model->ven_com_id = $modelVC->id;
+                $model->user_id = $_POST['Ven']['user_id'];               
+                $model->ven_time = $modelVC->ven_time;
+                $model->ven_month = $modelVC->ven_month;
+                $model->file = $modelVC->file;
+                $model->status = 1;                
+                $model->comment = '';
+                $model->create_at = date("Y-m-d H:i:s");  
+
                 if($model->save()){
                                        
                     Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
@@ -320,8 +356,9 @@ class VenController extends Controller
     public function actionCom_index()
     {
         $models = VenCom::find()->orderBy([
-            // 'date_create'=>SORT_DESC,
-            'id' => SORT_DESC,
+            'ven_month' => SORT_DESC,
+            'ven_time' => SORT_ASC,
+            // 'id' => SORT_DESC,
             ])->limit(100)->all();  
         
         return $this->render('com_index',[
@@ -353,11 +390,14 @@ class VenController extends Controller
                         $model->file = $fileName;
                     }                    
                 }                   
-                $model->ven_com_num = $_POST['VenCom']['ven_com_num'];
-                $model->ven_com_name = $_POST['VenCom']['ven_com_name'];
-                $model->comment = $_POST['VenCom']['comment'];
+                // $model->ven_com_num = $_POST['VenCom']['ven_com_num'];
+                // $model->ven_com_name = $_POST['VenCom']['ven_com_name'];
+                $model->ven_month = $_POST['VenCom']['year'].'-'.$_POST['VenCom']['ven_month'];
+                $model->ven_time = $_POST['VenCom']['ven_time'];
                 $model->status = 1;
                 $model->ref = Yii::$app->security->generateRandomString();
+                $model->create_at = date("Y-m-d H:i:s");  
+
                 if($model->save()){    
                     Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');                   
                 }  
@@ -416,11 +456,12 @@ class VenController extends Controller
                     
                 }   
                 
-                $model->ven_com_num = $_POST['VenCom']['ven_com_num'];
-                $model->ven_com_name = $_POST['VenCom']['ven_com_name'];
-                $model->comment = $_POST['VenCom']['comment'];
-                $model->status = $_POST['VenCom']['status'];
-                $model->create_at = $_POST['VenCom']['create_at'];
+                // $model->ven_com_num = $_POST['VenCom']['ven_com_num'];
+                // $model->ven_com_name = $_POST['VenCom']['ven_com_name'];
+                $model->ven_month = $_POST['VenCom']['year'].'-'.$_POST['VenCom']['ven_month'];
+                $model->ven_time = $_POST['VenCom']['ven_time'];
+                $model->status = 1;
+                $model->create_at = date("Y-m-d H:i:s");  
                 if($model->save()){                                       
                     Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');                   
                 }  
@@ -453,23 +494,28 @@ class VenController extends Controller
         // } 
      
         // if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-        //     $transaction = Yii::$app->db->beginTransaction();
-        //     try {
-                 if($model->status == 1){
-                    $model->status = 4;
-                 } else{                 
-                    $model->status = 1;
-                 }              
-                $model->save();                                    
-                Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');                   
-                echo $model->status;
-        //         $transaction->commit();
-        //         // return $this->redirect(['com_index']);
+            // $transaction = Yii::$app->db->beginTransaction();
+            // try {
+                //  if($model->status == 1){
+                    $model->comment = 'ง';
+                //  } else{                 
+                    // $model->status = 1;
+                //  } 
+
+                if($model->save()){
+                    Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'.$model->status);                   
                 
-        //     } catch (\Exception $e) {
-        //         $transaction->rollBack();
-        //         throw $e;
-        //     }           
+                }   
+                $model->save();
+                Yii::$app->session->setFlash('success', $model->id);                                    
+                // echo $model->status;
+                // $transaction->commit();
+                // return $this->redirect(['com_index']);
+                
+            // } catch (\Exception $e) {
+            //     $transaction->rollBack();
+            //     throw $e;
+            // }           
         // }
             // return $this->redirect(['com_index']);
         

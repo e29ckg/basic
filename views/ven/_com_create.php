@@ -31,11 +31,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'enableAjaxValidation' => true,
         ]);  ?>
       
-    <?= $form->field($model, 'create_at')->hiddenInput(['readonly' => true, 'value' => date("Y-m-d")])->label(false) ?>
-    
-    <div class="box-body">
+     <div class="box-body">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-4">
                 <div class="form-group">
                     <?php 
                         echo $form->field($model, 'ven_com_num', [
@@ -47,7 +45,59 @@ $this->params['breadcrumbs'][] = $this->title;
                     ?> 
                 </div> 
             </div>
-        
+            <div class="col-md-4">
+                <div class="form-group">                   
+                    <?= $form->field($model, 'ven_month')->widget(Select2::classname(), [
+                            // 'data' => [
+                            //     date("m") => date("m"),
+                            //     date("m") + 1 => date("m") + 1,
+                            // ],
+                            'data' => $model::getVen_month(),
+                            'language' => 'th',
+                            'options' => [
+                                'class'=>'form-control',
+                                'placeholder' => $model->getAttributeLabel('ven_month')],
+                            'pluginOptions' => [
+                                'allowClear' => true
+                            ],
+                        ]);
+                    ?>
+                </div>
+            </div>  
+            <div class="col-md-4">
+                <div class="form-group">                   
+                    <?= $form->field($model, 'year')->widget(Select2::classname(), [
+                            'data' => [
+                                date("Y") => date("Y"),
+                                date("Y") + 1 => date("Y") + 1,
+                            ],
+                            'language' => 'th',
+                            'options' => [
+                                'class'=>'form-control',
+                                // 'placeholder' => $model->getAttributeLabel('year')
+                            ],
+                            'pluginOptions' => [
+                                'allowClear' => true
+                            ],
+                        ]);
+                    ?>
+                </div>
+            </div>      
+            <div class="col-md-12">
+                <div class="form-group">                   
+                    <?= $form->field($model, 'ven_time')->widget(Select2::classname(), [
+                            'data' => $model::getVen_time(),
+                            'language' => 'th',
+                            'options' => [
+                                'class'=>'form-control',
+                                'placeholder' => $model->getAttributeLabel('ven_time')],
+                            'pluginOptions' => [
+                                'allowClear' => true
+                            ],
+                        ]);
+                    ?>
+                </div>
+            </div>      
             <div class ="col-md-12">
                 <div class="form-group">			
                 <?= $form->field($model, 'ven_com_name', [
@@ -59,35 +109,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ?>
                 </div>
             </div>
-            
-            <div class="col-md-12">
-                <div class="form-group">
-                    <?= $form->field($model, 'comment', [
-                        'inputOptions' => [
-                            'placeholder' => $model->getAttributeLabel('comment'),
-                                'class'=>'form-control'
-                            ],
-                        ]);
-                    ?>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="form-group">
-                   
-                    <?= $form->field($model, 'status')->widget(Select2::classname(), [
-                            'data' => $model::getStatusList(),
-                            'language' => 'th',
-                            'options' => [
-                                'class'=>'form-control',
-                                'placeholder' => $model->getAttributeLabel('status')],
-                            'pluginOptions' => [
-                                'allowClear' => true
-                            ],
-                        ]);
-                    ?>
-                </div>
-            </div>
-       
+                               
             <div class="col-md-12">
                 <div class="form-group">
                     <?= $form->field($model, 'file')->widget(FileInput::classname(), [

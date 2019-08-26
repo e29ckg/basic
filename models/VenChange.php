@@ -93,10 +93,6 @@ class VenChange extends \yii\db\ActiveRecord
         return !empty($model->address) ? $model->address : '-';
     }
 
-       
-
-    
-
     public function getSignList(){
         $model = SignBossName::find()->where(['status' => '1'])->orderBy('id')->all();
         return ArrayHelper::map($model,'id','name');

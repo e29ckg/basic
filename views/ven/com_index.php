@@ -33,7 +33,6 @@ $this->params['breadcrumbs'][] = $this->title;
 										<th class="text-center" >id</th>
 										<th class="text-center" >เลขที่คำสั่ง</th>
 										<th class="text-center" >ชื่อคำสั่ง</th>
-										<th class="text-center" >หมายเหตุ</th>
 										<th class="text-center" >status</th>
 										<th></th>
 									</tr>
@@ -43,9 +42,8 @@ $this->params['breadcrumbs'][] = $this->title;
 									<?php foreach ($models as $model): ?>
 						            <tr>						                
 										<td><?=$model->id;?></td>	
-										<td><?=$model->ven_com_num;?></td>									
-                                        <td><?=$model->ven_com_name;?></td>
-										<td><?=$model->comment;?><br><?=$model->file;?></td>
+										<td><?=$model->ven_com_num;?><br>เดือน <?=$model->ven_month;?></</td>									
+                                        <td><?=$model->ven_com_name;?><br><?=$model->getVen_time_name($model->ven_time);?></td>
 										<td class = "text-center">
 												<?=$model->status == 1 ?
 												 '<a class="label label-primary act-update-status" data-id ="'.$model->id.'" >ใช้งาน</a>' 

@@ -24,6 +24,8 @@ class m190823_134314_ven_change extends Migration
             'ven_id2' => $this->integer(),
             'ven_id1_old' => $this->integer(),
             'ven_id2_old' => $this->integer(),
+            'user_id1' => $this->integer(),
+            'user_id2' => $this->integer(),
             's_po' => $this->integer(),
             's_bb' => $this->integer(),
             'file' => $this->string(),
