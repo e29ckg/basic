@@ -8,8 +8,7 @@ use kartik\select2\Select2;
 use kartik\date\DatePicker;
 use yii\helpers\ArrayHelper;
 
-$this->title = 'เขียนใบลาป่วย';
-$this->params['breadcrumbs'][] = ['label' => 'โปรแกรมใบลา', 'url' => ['index']];
+$this->title = 'สร้าง QrCode';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="col-md-2">
@@ -65,5 +64,4 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>         
     </div>
     <?php ActiveForm::end(); ?>
-</div>
 </div>
