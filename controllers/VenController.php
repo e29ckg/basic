@@ -66,7 +66,7 @@ class VenController extends Controller
             ->orWhere(['status' => 2 ])
             ->orderBy([
             // 'date_create'=>SORT_DESC,
-            'id' => SORT_DESC,
+            'ven_date' => SORT_DESC,
             ])->limit(100)->all(); 
         $i = 1 ;
         $event = [];
@@ -74,7 +74,8 @@ class VenController extends Controller
             $even = [
                 'id' => $model->id,
                 'title' => $model->getProfileName(),
-                'start' => $model->ven_date.'T12:30:00',
+                // 'title' => $model->ven_date,
+                'start' => $model->ven_date,
                 'textColor' => $model->user_id == Yii::$app->user->identity->id ? 'yellow' :'',
                 // 'end' => $model->date_end.'T12:30:00',
                 'backgroundColor' => $model->status == 1 ? '' :'#f56954',
@@ -282,6 +283,7 @@ class VenController extends Controller
                     Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
                    
                 }  
+
                 $transaction->commit();
                 return $this->redirect(['admin_index']);
                 

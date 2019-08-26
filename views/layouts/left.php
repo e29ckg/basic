@@ -24,6 +24,7 @@ $menu = [
         ['label' => 'เขียนใบลา', 'icon' => 'briefcase', 'url' => ['bila/index']],
         ['label' => 'ปฏิทินใบลา', 'icon' => 'briefcase', 'url' => ['bila/cal']],
         ['label' => 'ตารางเวร', 'icon' => 'fa fa-user-o', 'url' => ['/ven/index']],
+        ['label' => 'ใบเปลี่ยนเวร', 'icon' => 'fa fa-user-o', 'url' => ['/ven/change_index']],
         ['label' => 'สร้าง  QrCode', 'icon' => ' fa-qrcode', 'url' => ['qrgen/index']], 
         ['label' => 'เบิกของ CartX', 'icon' => 'shopping-cart', 'url' => '/cartx/web'], 
         ['label' => 'ตั้งค่า', 'options' => ['class' => 'header']],

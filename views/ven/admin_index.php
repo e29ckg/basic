@@ -36,6 +36,7 @@ use yii\helpers\Url;
 
       displayEventTime: false, // don't show the time column in list view
 
+       
       
       events: <?=$event?>,
     // {
@@ -65,14 +66,7 @@ use yii\helpers\Url;
         	});
       },
 
-      // eventClick: function(info) {
-      //   // alert('Event: ' + info.event.title);
-      //   // alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-      //   // alert('View: ' + info.view.type);
-
-      //   // // change the border color just for fun
-      //   // info.el.style.borderColor = 'red';
-      // }
+      
 
       
     });
@@ -81,10 +75,22 @@ use yii\helpers\Url;
   });
 
 </script>
-
+<?=date("Y-m-d")?>
 <?php// var_dump($event);?>
 <?php
 $script = <<< JS
+$(document).on('click','.fc-day',function(){
+  var url_create = "admin_create";
+  var fID = $(this).attr("data-date");
+  // alert(fID);
+  $.get(url_create,{date_id: fID},function (data){
+            	$("#activity-modal").find(".modal-body").html(data);
+            	$(".modal-body").html(data);
+            	$(".modal-title").html("แก้ไขข้อมูล");
+            	$("#activity-modal").modal("show");
+        	});
+});
+
 $(document).ready(function() {	
   var url_create = "admin_create";
     	$(".fc-day-top").click(function(e) {            

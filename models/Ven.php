@@ -120,11 +120,12 @@ class Ven extends \yii\db\ActiveRecord
 
     public function getCountVen($ven_com_id)
     {        
+        $strDate = date("Y-m-d") ;
         return Ven::find()->where([
             'user_id' => Yii::$app->user->identity->id,
             'ven_com_id' => $ven_com_id,
             'status' => 1
-            ])->count();           
+            ])->andWhere('ven_date > '.$strDate)->count();           
     }
 
     public function DateThai_full($strDate)
