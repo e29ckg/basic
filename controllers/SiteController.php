@@ -11,6 +11,8 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\CLetter;
 use app\models\LineHome;
+use app\models\Line;
+use app\models\User;
 
 
 class SiteController extends Controller
@@ -89,11 +91,20 @@ class SiteController extends Controller
         $this->layout = 'login';
         
         if (!Yii::$app->user->isGuest) {
+
             return $this->goHome();
         }
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+
+            $modelUser = User::findOne(Yii::$app->user->identity->id);
+            $message = $modelUser->getProfileName().' เข้าสู่ระบบ ด้วย IP '.Yii::$app->getRequest()->getUserIP();
+            $modelLine = Line::findOne(['name' => $modelUser->username]);
+            if(isset($modelLine->token)){                
+                $res = Line::notify_message($modelLine->token,$message);  
+                $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+            } 
             Yii::$app->session->setFlash('success','เข้าสู่ระบบเรียบร้อย');
             return $this->goBack();
         }
