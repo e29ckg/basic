@@ -204,8 +204,7 @@ class LineController extends Controller
             }   
         }
 
-        $LineHomeAll = LineHome::find()->all();
-        
+        $LineHomeAll = LineHome::find()->all();        
             
         return $this->render('line_index',[
             'LineGroup' => $LineGroup,
@@ -214,7 +213,6 @@ class LineController extends Controller
             'result' => $result,
             'LineHomeAll' => $LineHomeAll
         ]);
-
     }
 
     public function actionLine_create(){
@@ -299,8 +297,7 @@ class LineController extends Controller
     {
         if(!empty($_GET['error'])){
             Yii::$app->session->setFlash('warning', 'ไม่สามารถตั้งค่าได้'.$_GET['error']);
-            return $this->redirect('line_index');
-            
+            return $this->redirect('line_index');            
         }
 
         $LineHome = LineHome::findOne(1);
@@ -481,5 +478,7 @@ class LineController extends Controller
 
         return $this->redirect(['line_index']);
     }
+
+    
 
 }

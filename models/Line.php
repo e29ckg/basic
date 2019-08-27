@@ -48,6 +48,17 @@ class Line extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['username' => 'name']);
+    }
+
+    public function getProfileName(){
+        $model=$this->user;
+        return $model ? $model->profile->fname.$model->profile->name.' '.$model->profile->sname : '-';
+    }
+
+
     public function notify_message($token,$message){
         $mms =  trim($message);
         date_default_timezone_set("Asia/Bangkok");

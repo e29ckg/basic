@@ -123,7 +123,7 @@ $this->params['breadcrumbs'][] = $this->title;
 								<tbody>
 									<?php foreach ($models as $model): ?>
 									<tr>
-										<td><?= $model->name ?> </td>
+										<td><?= $model->name.' ' .$model->getProfileName() ?> </td>
 										<td>
 											<a href= "#" class="btn btn-warning btn-xs act-update" data-id=<?=$model->id?>><i class="fa fa-pencil-square-o"></i> แก้ไข</a>
 											<?= Html::a('<i class="fa fa-remove"></i> ลบ',['line/line_delete','id' => $model->id],

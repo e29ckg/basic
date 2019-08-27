@@ -53,7 +53,8 @@ class Ven extends \yii\db\ActiveRecord
 
     public function getProfileName(){
         $model=$this->profile;
-        return $model ? $model->fname.$model->name.' '.$model->sname : '-';
+        return $model ? $model->name: '-';
+        // return $model ? $model->fname.$model->name.' '.$model->sname : '-';
     }
        
     public function getVenComList(){
@@ -126,7 +127,8 @@ class Ven extends \yii\db\ActiveRecord
         $model = Ven::findOne($id);
         
         if($model->ven_time == '16:30:55'){   
-            $dB = date('Y-m-d', strtotime('-1 day', strtotime($model->ven_date)));          ///
+            $dB = date('Y-m-d', strtotime('-1 day', strtotime($model->ven_date)));
+                     ///
             return Ven::find()
                 ->where(['ven_date' => $dB,
                 'ven_time' => '08:30:01',

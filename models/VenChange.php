@@ -23,7 +23,7 @@ class VenChange extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ven_id1'],'required'],   
+            [['ven_id1','ven_id2'],'required'],   
 
         ];
     }

@@ -682,4 +682,32 @@ class BilaController extends Controller
         ]);
     }
 
+    public function actionLine_send_daily()
+    {
+        $strDate = (string)date("Y-m-d") ;
+
+        $models = Bila::find()
+            ->where(['date_begin' => $strDate])
+            ->orWhere(['date_end' => $strDate])
+            ->all();
+
+        $sms = '';
+
+        foreach ($models as $model):        
+            $sms .= $model->profile->name .'->';
+            $sms .= $model->cat;
+            $sms .= "\n";
+        endforeach;  
+        
+        $modelLine = Line::findOne(['name' => 'bila_admin']);     //bila_admin 
+        if(isset($modelLine->token)){                
+            $res = Line::notify_message($modelLine->token,$sms);  
+            $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') : Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+        }
+
+        Yii::$app->session->setFlash('success', 'เรียบร้อย'.$sms );             
+
+        return $this->render('test',['id' => $sms]);
+    }
+
 }
