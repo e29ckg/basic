@@ -98,6 +98,11 @@ class Bila extends \yii\db\ActiveRecord
         return $model ? $model->fname.$model->name.' '.$model->sname : '-';
     }
 
+    public function getProfileNameCal(){
+        $model=$this->profile;
+        return $model ? $model->name : '';
+    }
+
     public function getProfileDep(){
         $model=$this->profile;
         return !empty($model->dep) ? $model->dep : '-';
@@ -113,6 +118,12 @@ class Bila extends \yii\db\ActiveRecord
         return !empty($model->address) ? $model->address : '-';
     }
 
+    public function getProfileList(){
+        $model = Profile::find()->where(['status' => '10'])->orderBy('name')->all();
+        return ArrayHelper::map($model,'id',function($model){
+            return $model->fname.$model->name.' '.$model->sname;
+        });
+    }
     
     public function getCountAll()
     {        
@@ -128,8 +139,6 @@ class Bila extends \yii\db\ActiveRecord
     {        
         return Bila::find()->where(['cat' => 'ลาพักผ่อน'])->count();           
     }
-
-    
 
     public function getSignList(){
         $model = SignBossName::find()->where(['status' => '1'])->orderBy('id')->all();

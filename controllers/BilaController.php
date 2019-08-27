@@ -26,9 +26,9 @@ use yii\db\Connection;
  */
 class BilaController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
+    public $line_sms ='http://10.37.64.01';
+    public $filePath = '/uploads/bila/';
+
     public function behaviors()
     {
         return [
@@ -134,7 +134,6 @@ class BilaController extends Controller
             return ActiveForm::validate($model);
           } 
 
-     
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
             $transaction = Yii::$app->db->beginTransaction();
@@ -157,26 +156,26 @@ class BilaController extends Controller
                 $model->t3 = $_POST['Bila']['date_total'] + $_POST['Bila']['t1'];
                 $model->date_create = $_POST['Bila']['date_create'];
                 if($model->save()){
-                    $dir = Url::to('@webroot/uploads/bila/'.$model->user_id.'/'.$model->id.'/');
+                    $dir = Url::to('@webroot'.$this->filePath.$model->user_id.'/'.$model->id.'/');
                     if (!is_dir($dir)) {
                         mkdir($dir, 0777, true);
                     } 
 
-                    $sms_qr = 'http://'.$_SERVER['HTTP_HOST'].'/bila.php?ref='.$model->id;
+                    $sms_qr = isset($this->line_sms) ? $this->line_sms : Yii::$app->getRequest()->hostInfo ;
+                    $sms_qr .= '/bila.php?ref='.$model->id;
                     $qrCode = (new QrCode($sms_qr))
                         ->setSize(250)
                         ->setMargin(5)
                         ->useForegroundColor(51, 153, 255);              
-                    $qrCode->writeFile(Url::to('@webroot/uploads/bila/'.$model->user_id.'/'.$model->id.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
+                    $qrCode->writeFile(Url::to('@webroot'.$this->filePath.$model->user_id.'/'.$model->id.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
                     /*---------------------ส่ง line ไปยัง Admin--------------------*/
-                    $modelLine = Line::findOne(['name' => 'bila_group']);
+                    $modelLine = Line::findOne(['name' => 'bila_admin']);
                     if(isset($modelLine->token)){
-                        $message = $model->getProfileName().' '.$model->cat.' รายละเอียดเพิ่มเติม' .$sms_qr;
+                        $message = $model->getProfileName().'->'.$model->cat."\n".' รายละเอียดเพิ่มเติม' ."\n".$sms_qr;
                         $res = Line::notify_message($modelLine->token,$message);  
                         $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
                     } 
-                    Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
-                   
+                    Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');                   
                 }  
                 $transaction->commit();
                 return $this->redirect(['index']);
@@ -191,16 +190,15 @@ class BilaController extends Controller
              
         }
 
-        // $model->tel = explode(',', $model->tel);
         $model_cat = Bila::find()
-            ->where(['user_id' => Yii::$app->user->id,
+            ->where([
+                'user_id' => Yii::$app->user->id,
                 'cat'=>'ลาป่วย'
                 ])
             ->orderBy([
                 // 'date_create'=>SORT_DESC,
                 'id' => SORT_DESC,
-            ])->one(); 
-        
+            ])->one();         
         
         if(!empty($model_cat)){
             $model->dateO_begin = $model_cat->date_begin;
@@ -257,22 +255,22 @@ class BilaController extends Controller
             $model->t3 = $_POST['Bila']['t1'] + $_POST['Bila']['date_total'] ;
             $model->date_create = $_POST['Bila']['date_create'];
             if($model->save()){
-                $dir = Url::to('@webroot/uploads/bila/'.$model->user_id.'/'.$model->id.'/');
+                $dir = Url::to('@webroot'.$this->filePath.$model->user_id.'/'.$model->id.'/');
                 if (!is_dir($dir)) {
                     mkdir($dir, 0777, true);
                 } 
 
-                $sms_qr = 'http://'.$_SERVER['HTTP_HOST'].'/bila.php?ref='.$model->id;
+                $sms_qr = isset($this->line_sms) ? $this->line_sms : Yii::$app->getRequest()->hostInfo ;
                 $qrCode = (new QrCode($sms_qr))
                     ->setSize(250)
                     ->setMargin(5)
                     ->useForegroundColor(1, 1, 1);              
-                $qrCode->writeFile(Url::to('@webroot/uploads/bila/'.$model->user_id.'/'.$model->id.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
+                $qrCode->writeFile(Url::to('@webroot'.$this->filePath.$model->user_id.'/'.$model->id.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
 
                 /*---------------------ส่ง line ไปยัง Admin--------------------*/
-                $modelLine = Line::findOne(['name' => 'bila_group']);
+                $modelLine = Line::findOne(['name' => 'bila_admin']);
                 if(isset($modelLine->token)){
-                    $message = $model->getProfileName().' '.$model->cat.' รายละเอียดเพิ่มเติม' .$sms_qr;
+                    $message = $model->getProfileName()."\n".$model->cat."\n".' รายละเอียดเพิ่มเติม' .$sms_qr;
                     $res = Line::notify_message($modelLine->token,$message);  
                     $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
                 } 
@@ -362,16 +360,28 @@ class BilaController extends Controller
                 $model->t3 = $_POST['Bila']['t1'] + $_POST['Bila']['date_total'] ;
                 $model->date_create = $_POST['Bila']['date_create'];
             } 
+            if($model->cat == 'ไปราชการ'){
 
+                $model->user_id = $_POST['Bila']['user_id'];
+                $model->date_begin = $_POST['Bila']['date_begin'];
+                $model->date_end = $_POST['Bila']['date_end'];
+                $model->date_total = $_POST['Bila']['date_total'];
+                $model->cat = 'ไปราชการ';
+                $model->date_create = date("Y-m-d H:i:s");
+    
+            }
             if($model->save()){
                 /*---------------------ส่ง line ไปยัง Admin--------------------*/
-                $message = $model->getProfileName().' แก้ไข ใบ'.$model->cat.' เลขที่ ' .$model->id;
-                $modelLine = Line::findOne(['name' => 'bila_group']);
+                $message = $model->getProfileName()."\n".' แก้ไข ใบ'.$model->cat."\n".'เลขที่ ' .$model->id;
+                $modelLine = Line::findOne(['name' => 'bila_admin']);
                 if(isset($modelLine->token)){                
                     $res = Line::notify_message($modelLine->token,$message);  
                     $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
                 }
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
+                if ($model->cat == 'ไปราชการ'){
+                    return $this->redirect(['admin']);
+                }
                 return $this->redirect(['index']);
             }   
         }
@@ -401,8 +411,8 @@ class BilaController extends Controller
     {
         $model = $this->findModel($id);
 
-        $message = $model->getProfileName().' ลบ ใบ'.$model->cat.' เลขที่ ' .$model->id;
-        $dir = Url::to('@webroot/uploads/bila/'.$model->user_id.'/'.$model->id);
+        $message = $model->getProfileName().' ลบ ใบ'.$model->cat.'"\n"เลขที่ ' .$model->id;
+        $dir = Url::to('@webroot'.$this->filePath.$model->user_id.'/'.$model->id);
         
         if($model->delete()){
             if(is_file($dir.'/'.$model->id.'.png')){
@@ -416,13 +426,12 @@ class BilaController extends Controller
                 rmdir($dir);
             } 
             /*---------------------ส่ง line ไปยัง Admin--------------------*/
-            $modelLine = Line::findOne(['name' => 'bila_group']);
+            $modelLine = Line::findOne(['name' => 'bila_admin']);
             if(isset($modelLine->token)){                
                 $res = Line::notify_message($modelLine->token,$message);  
                 $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
             } 
-        }
-        
+        }        
         return $this->redirect(['index']);
     }
 
@@ -491,7 +500,7 @@ class BilaController extends Controller
             $f = UploadedFile::getInstance($model, 'file');
             
             if(!empty($f)){                
-                $dir = Url::to('@webroot/uploads/bila/'.$modelBila->user_id.'/'.$modelBila->id.'/');
+                $dir = Url::to('@webroot'.$this->filePath.$modelBila->user_id.'/'.$modelBila->id.'/');
                 if (!is_dir($dir)) {
                     mkdir($dir, 0777, true);
                 }
@@ -525,7 +534,7 @@ class BilaController extends Controller
         $model = Bila::findOne($id);   
         
         // This will need to be the path relative to the root of your app.
-        $filePath = Url::to('@webroot/uploads/bila/'.$model->user_id.'/'.$model->id.'/'.$model->file);
+        $filePath = Url::to('@webroot'.$this->filePath.$model->user_id.'/'.$model->id.'/'.$model->file);
         // Might need to change '@app' for another alias
         // $completePath = Yii::getAlias('@app'.$filePath.'/'.$file);
         if(is_file($filePath)){
@@ -542,7 +551,7 @@ class BilaController extends Controller
     
         $model = Bila::findOne($id);   
 
-        $filePath = Url::to('@webroot/uploads/bila/'.$model->user_id.'/'.$model->id.'/'.$model->file);       
+        $filePath = Url::to('@webroot'.$this->filePath.$model->user_id.'/'.$model->id.'/'.$model->file);       
         if(is_file($filePath)){
             unlink($filePath);// ลบ ไฟล์;   
             Yii::$app->session->setFlash('success', 'ลบไฟล์เรียบร้อย');
@@ -586,10 +595,10 @@ class BilaController extends Controller
           } 
      
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {            
-            $model->name = $_POST['SignBossName']['name'];
-            $model->dep1 = $_POST['SignBossName']['dep1'];
-            $model->dep2 = $_POST['SignBossName']['dep2'];
-            $model->dep3 = $_POST['SignBossName']['dep3'];
+            // $model->name = $_POST['SignBossName']['name'];
+            // $model->dep1 = $_POST['SignBossName']['dep1'];
+            // $model->dep2 = $_POST['SignBossName']['dep2'];
+            // $model->dep3 = $_POST['SignBossName']['dep3'];
             $model->status = $_POST['SignBossName']['status'];
             $model->date_create = date("Y-m-d H:i:s");
             if($model->save()){
@@ -620,10 +629,10 @@ class BilaController extends Controller
           }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $model->name = $_POST['SignBossName']['name'];
-            $model->dep1 = $_POST['SignBossName']['dep1'];
-            $model->dep2 = $_POST['SignBossName']['dep2'];
-            $model->dep3 = $_POST['SignBossName']['dep3'];
+            // $model->name = $_POST['SignBossName']['name'];
+            // $model->dep1 = $_POST['SignBossName']['dep1'];
+            // $model->dep2 = $_POST['SignBossName']['dep2'];
+            // $model->dep3 = $_POST['SignBossName']['dep3'];
             $model->status = $_POST['SignBossName']['status'];
             $model->date_create = date("Y-m-d H:i:s");
             if($model->save()){
@@ -660,20 +669,22 @@ class BilaController extends Controller
             ])->limit(100)->all();  
         $event = [];
         foreach ($models as $model):
+            if($model->cat == 'ลาพักผ่อน'){
+                $backgroundColor = 'blue';
+            }elseif($model->cat == 'ไปราชการ'){
+                $backgroundColor = 'orange';
+            }else{
+                $backgroundColor = 'red';
+            }
+            
             $even = [
                 'id' => $model->id,
-                'title' => $model->getProfileName().' '
-                           .$model->cat .' '.$model->date_total . ' วัน ตั้งแต่วันที่ '
-                           .Bila::DateThai_full($model->date_begin).' ถึง '
-                           .Bila::DateThai_full($model->date_end),
+                'title' => $model->getProfileNameCal().' '.$model->cat,
                 'start' => $model->date_begin,
                 'end' => $model->date_end.'T12:30:00',
-                'backgroundColor' => $model->cat == 'ลาพักผ่อน'? '' :'#f56954',
-                'borderColor' => $model->cat == 'ลาพักผ่อน'? '' :'#f56954'
+                'backgroundColor' => $backgroundColor,
+                'borderColor' => $backgroundColor,
             ];
-            // $event['end'] = $model->date_end;
-            // $event['backgroundColor'] #f56954; //red
-            // $event['borderColor']  = #f56954; //red
             $event[] = $even;
         endforeach;        
         $event = json_encode($event);
@@ -687,11 +698,12 @@ class BilaController extends Controller
         $strDate = (string)date("Y-m-d") ;
 
         $models = Bila::find()
-            ->where(['date_begin' => $strDate])
-            ->orWhere(['date_end' => $strDate])
+            ->where("date_begin <= '$strDate'")
+            ->andWhere("date_end >= '$strDate'")
             ->all();
 
-        $sms = '';
+        $sms = $strDate;
+        $sms .= "\n";
 
         foreach ($models as $model):        
             $sms .= $model->profile->name .'->';
@@ -708,6 +720,42 @@ class BilaController extends Controller
         Yii::$app->session->setFlash('success', 'เรียบร้อย'.$sms );             
 
         return $this->render('test',['id' => $sms]);
+    }
+
+    //date("Y-m-d")
+    //governor
+    public function actionGovernor_create()
+    {
+        $model = new Bila();
+
+        //Add This For Ajax Email Exist Validation 
+        if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        } 
+     
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {            
+            $model->user_id = $_POST['Bila']['user_id'];
+            $model->date_begin = $_POST['Bila']['date_begin'];
+            $model->date_end = $_POST['Bila']['date_end'];
+            $model->date_total = $_POST['Bila']['date_total'];
+            $model->cat = 'ไปราชการ';
+            $model->date_create = date("Y-m-d H:i:s");
+            if($model->save()){
+                Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
+                return $this->redirect(['admin']);
+            }   
+        }
+        
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('_form_governor',[
+                    'model' => $model,                    
+            ]);
+        }else{
+            return $this->render('_form_governor',[
+                'model' => $model,                    
+            ]); 
+        }
     }
 
 }

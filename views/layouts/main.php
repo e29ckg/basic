@@ -195,10 +195,10 @@ $profileActive = Profile::getProfileActive();
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-
+  
   <footer class="main-footer">
     <div class="pull-right hidden-xs">
-      <b> Version</b> 2.4.13
+      <?=Yii::$app->getRequest()->hostInfo;?><b> Version</b> 2.4.13 
     </div>
       <small><?=Yii::$app->requestedAction->id.' # '.Yii::$app->controller->getRoute().' # '.Yii::$app->controller->id.' # '?> # <?php $csrf = yii::$app->request->csrfParam;?> 
       <?php $token = yii::$app->request->csrfToken;?> <?= Yii::$app->getRequest()->getUserIP();?></small>

@@ -14,8 +14,8 @@ $this->params['breadcrumbs'][] = $this->title;
 	<div class="box-header with-border">
 		<h3 class="box-title"><?= Html::encode($this->title)?></h3>
 		<div class="box-tools pull-right">
-				<button id="act-create-a" class="btn btn-danger btn-md" alt="act-create-a"><i class="fa fa-pencil-square-o "></i> เขียนใบลาป่วย ลากิจ ลาคลอด</button>  
-				<button id="act-create-b" class="btn btn-primary btn-md" alt="act-create"><i class="fa fa-pencil-square-o "></i> เขียนใบลาพักผ่อน</button>
+			<button id="act-create-a" class="btn btn-danger btn-md" alt="act-create-a"><i class="fa fa-pencil-square-o "></i> เขียนใบลาป่วย ลากิจ ลาคลอด</button>  
+			<button id="act-create-b" class="btn btn-primary btn-md" alt="act-create"><i class="fa fa-pencil-square-o "></i> เขียนใบลาพักผ่อน</button>
 		</div>			
 	</div>		
 	<div class="box-body">
@@ -137,7 +137,7 @@ $(document).ready(function() {
                 //   $("#myModal").modal('toggle');
         	});     
 		}); 
-	
+		
 	$('#example1').DataTable({
 		// 'order' 	: false,
 		'paging'      : true,

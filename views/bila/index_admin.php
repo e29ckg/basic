@@ -16,7 +16,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-xs-12">
        	<div class="box">
            	<div class="box-header">
-           		<h3 class="box-title"><?=$this->title?></h3>
+				   <h3 class="box-title"><?=$this->title?></h3>
+				   <div class="box-tools pull-right">
+				   		<button id="act-create-go" class="btn btn-info btn-md" alt="act-create-go"><i class="fa fa-pencil-square-o "></i> ไปราชการ </button>  
+				   </div> 				   
 			</div>
 			
             <!-- /.box-header -->
@@ -37,11 +40,9 @@ $this->params['breadcrumbs'][] = $this->title;
 									<?php foreach ($models as $model): ?>
 						            <tr>						                
 										<td><?=$model->getProfileName();?> 
-											<?=$model->cat == 'ลาป่วย' ? 
-												'<span class="label label-danger">'.$model->cat.'</span>'
-											: 
-												'<span class="label label-primary">'.$model->cat.'</span>'
-											?>											
+											<?=$model->cat == 'ไปราชการ' ? '<span class="label label-info">'.$model->cat.'</span>' : '';?>
+											<?=$model->cat == 'ลาป่วย' || $model->cat == 'ลากิจส่วนตัว' || $model->cat == 'ลาคลอดบุตร' ? '<span class="label label-danger">'.$model->cat.'</span>' : '' ; ?>
+											<?=$model->cat == 'ลาพักผ่อน' ? '<span class="label label-primary">'.$model->cat.'</span>' : '' ;?>											
 											<br><?= $model->id?>
 										</td>										
                                         <td><?=$model->DateThai_full($model->date_begin)?>
@@ -135,7 +136,17 @@ $(document).ready(function() {
 			);
 		});
 
-		
+		var url_create_go = "governor_create";
+    	$( "#act-create-go" ).click(function() {
+        	$.get(url_create_go,function (data){
+                $("#activity-modal").find(".modal-body").html(data);
+                $(".modal-body").html(data);
+                $(".modal-title").html("เพิ่มข้อมูล");
+            	// $(".modal-footer").html(footer);
+                $("#activity-modal").modal("show");
+                //   $("#myModal").modal('toggle');
+        	});     
+		}); 
 			
 		$('#example1').DataTable({
 			"pageLength": 50,
