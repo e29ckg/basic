@@ -1,4 +1,5 @@
 ติดตั้ง xampp //https://www.apachefriends.org/download.html
+
 ติดตั้ง composer //https://getcomposer.org/download/
 
 - copy โฟล์เดอร์ main ไปไว้ที่ c:\xampp\htdocs\ 
@@ -10,7 +11,9 @@
 - เปิด CMD 
 
 >cd c:\xampp\htdocs\basic   
+
 >composer install
+
 >yii migrate             
 
 - เปิด http://127.0.0.1/basic/web
