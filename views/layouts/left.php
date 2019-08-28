@@ -1,4 +1,5 @@
 <?php 
+
 $menuG = [
     'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
     'items' => [
@@ -41,14 +42,13 @@ $menu_operator = [
         ['label' => 'หนังสือเวียน', 'icon' => 'bullhorn', 'url' => ['cletter/index']],
         ['label' => 'WebLink', 'icon' => 'link', 'url' => ['web_link/index']],
         ['label' => 'เขียนใบลา', 'icon' => 'briefcase', 'url' => ['bila/index']],
+        ['label' => 'ใบลาทั้งหมด', 'icon' => 'briefcase', 'url' => ['bila/admin']],
         ['label' => 'ปฏิทินใบลา', 'icon' => 'briefcase', 'url' => ['bila/cal']],
         ['label' => 'ตารางเวร', 'icon' => 'fa fa-user-o', 'url' => ['/ven/index']],
         ['label' => 'สร้าง  QrCode', 'icon' => ' fa-qrcode', 'url' => ['qrgen/index']], 
-
         ['label' => 'เบิกของ CartX', 'icon' => 'shopping-cart', 'url' => '/cartx/web'], 
         ['label' => 'ตั้งค่า', 'options' => ['class' => 'header']],
-        ['label' => 'Profile', 'icon' => 'id-card-o', 'url' => ['user/profile']],  
-                            
+        ['label' => 'Profile', 'icon' => 'id-card-o', 'url' => ['user/profile']],                              
     ],
 ];
 
@@ -102,8 +102,7 @@ $menu_admin = [
                 ['label' => 'จัดการคำนำหน้าชื่อ', 'icon' => ' fa fa-user-o', 'url' => ['user/fname']],
             ],
         ],
-        
-        
+                
         // ['label' => 'Login', 'url' => ['site/login']],
         
         ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
@@ -128,7 +127,5 @@ if(!Yii::$app->user->isGuest){
 }else{
     echo dmstr\widgets\Menu::widget($menuG) ;
 }
-
-?>
 
 ?>
