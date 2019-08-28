@@ -710,7 +710,7 @@ class BilaController extends Controller
             $sms .= $model->cat;
             $sms .= "\n";
         endforeach;  
-        
+        $sms .= '-------------';
         $modelLine = Line::findOne(['name' => 'bila_admin']);     //bila_admin 
         if(isset($modelLine->token)){                
             $res = Line::notify_message($modelLine->token,$sms);  
