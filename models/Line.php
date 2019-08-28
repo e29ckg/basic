@@ -55,7 +55,7 @@ class Line extends \yii\db\ActiveRecord
 
     public function getProfileName(){
         $model=$this->user;
-        return $model ? $model->profile->fname.$model->profile->name.' '.$model->profile->sname : '-';
+        return $model ? $model->profile->fname.$model->profile->name.' '.$model->profile->sname : null ;
     }
 
 
