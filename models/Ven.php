@@ -53,6 +53,12 @@ class Ven extends \yii\db\ActiveRecord
 
     public function getProfileName(){
         $model=$this->profile;
+        // return $model ? $model->name: '-';
+        return $model ? $model->fname.$model->name.' '.$model->sname : '-';
+    }
+
+    public function getProfileNameCal(){
+        $model=$this->profile;
         return $model ? $model->name: '-';
         // return $model ? $model->fname.$model->name.' '.$model->sname : '-';
     }
@@ -206,22 +212,5 @@ class Ven extends \yii\db\ActiveRecord
 		return "$strMonthThai";
     }
 
-    public function getStatusList(){
-        return [
-            
-            '1' => 'ใช้งาน',
-            '4' => 'ไม่ใช้งาน',
-            
-        ];
-    }
-
-    public function getStatusName($id){
-        $role = [
-            '1' => 'ใช้งาน',
-            '4' => 'ไม่ใช้งาน',
-        ];
-        return $role[$id];
-    }
     
-
 }

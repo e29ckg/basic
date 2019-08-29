@@ -111,19 +111,15 @@ class VenChange extends \yii\db\ActiveRecord
     
     public function getStatusList(){
         return [
-            
-            '1' => 'ใช้งาน',
-            '4' => 'ไม่ใช้งาน',
-            
+            '1' => '',
+            '2' => 'รออนุมัติเปลี่ยน',
+            '3' => 'เปลี่ยนมาแล้ว',
+            '4' => 'รอรับอนุมัติเปลี่ยน',
+            '5' => 'อนุมัติการแปลี่ยนแล้ว',
+            '6' => 'เรียบร้อย'
+                        
         ];
-    }
-    public function getStatusName($id){
-        $role = [
-            '1' => 'ใช้งาน',
-            '4' => 'ไม่ใช้งาน',
-        ];
-        return $role[$id];
-    }
+    }    
 
     public function DateThai_full($strDate)
 	{

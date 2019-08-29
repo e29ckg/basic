@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Url;
+use app\models\VenChange;
 ?>
 
 <div class="box box-primary">			
@@ -48,7 +49,7 @@ use yii\helpers\Url;
                         สถานะ
                     </td>
                     <td>
-                        <?= $model->status ;?>
+                        <?= VenChange::getStatusList()[$model->status] ;?>
                     </td>
                 </tr>
                 <tr>
@@ -75,10 +76,10 @@ use yii\helpers\Url;
                         
                     </td>
                     <td>
-                        <?= $countVen > 0 && !(Yii::$app->user->identity->id == $model->user_id) && $model->status == 1 && $model->ven_date  >  date("Y-m-d")?
+                        <?= $countVen > 0 && !(Yii::$app->user->identity->id == $model->user_id) && $model->status == 1 && $model->ven_date  >  date("Y-m-d") && $model->getCountVen($model->ven_com_id) > 0 ?
                             '<a class="btn btn-primary btn-xs act-ven-change" data-id="'.$model->id.'">ขอเปลี่ยน</a>'
                             : '';?>                        
-                        <?= Yii::$app->user->identity->id == $model->user_id && $model->status == 1 && $model->ven_date  >  date("Y-m-d") ? 
+                        <?= Yii::$app->user->identity->id == $model->user_id && $model->status == 1 && $model->ven_date  >  date("Y-m-d")  ? 
                             '<a class="btn btn-primary btn-xs" target="_blank" data-id='.$model->id.'>ยกให้</a>'
                             :'';?>
                     </td>
@@ -91,12 +92,12 @@ use yii\helpers\Url;
 echo var_dump($model->getCheck_user($model->id));
 echo '<br>'.$model->ven_date ;
 echo '<br>'.date('Y-m-d', strtotime('-1 day', strtotime($model->ven_date)));
-echo '<br>'.var_dump($model->getVenForChange($model->ven_com_id)); 
+echo '<br><br>'.var_dump($model->getVenForChange($model->ven_com_id)); 
     // foreach (model->getCheck_user($model->id) as $countV):
     //     echo $countV->id.' '. $countV->ven_date.'<br>';
     // endforeach;
     ?>
-<?= 'จำนวนเวรที่สามารถเปลี่ยนได้ '.$model->getCountVen($model->ven_com_id).' : '.date("Y-m-d").' status : '. $model->status .' '?>
+<?= '<br>'.'จำนวนเวรที่สามารถเปลี่ยนได้ '.$model->getCountVen($model->ven_com_id).' : '.date("Y-m-d").' status : '. $model->status .' '?>
 <?=$model->ven_date . ' > '. date("Y-m-d")?>
 <?php
 

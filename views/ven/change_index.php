@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
 											.'<br>'.$model->ven2->getProfileName()
 											.'<br>('.$model->ven_id2.')';?></td>
 										<td><?=$model->comment;?><br><?=$model->file;?></td>
-										<td><?=$model->status;?></td>
+										<td><?=$model->getStatusList()[$model->status];?></td>
 										<td class = "text-center">
 											
 											<?= !empty($model->file) ? 

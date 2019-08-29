@@ -64,6 +64,7 @@ class VenController extends Controller
     {
         $models = Ven::find()->where(['status' => 1 ])
             ->orWhere(['status' => 2 ])
+            ->orWhere(['status' => 3 ])
             ->orderBy([
             // 'date_create'=>SORT_DESC,
             'ven_date' => SORT_DESC,
@@ -82,7 +83,7 @@ class VenController extends Controller
             }
             $even = [
                 'id' => $model->id,
-                'title' => $model->getProfileName(),
+                'title' => $model->getProfileNameCal().' '.VenChange::getStatusList()[$model->status],
                 // 'title' => $model->ven_date.' '.$model->ven_time,
                 'start' => $model->ven_date.' '.$model->ven_time,
                 'textColor' => $model->user_id == Yii::$app->user->identity->id ? 'yellow' :'',
@@ -139,7 +140,7 @@ class VenController extends Controller
                 $modelV->ven_time = $modelV1->ven_time;
                 $modelV->ven_month = $modelV1->ven_month;
                 $modelV->user_id = $modelV2->user_id;
-                $modelV->status = 3;
+                $modelV->status = 4;
                 $modelV->ref1 = $modelV1->ref1;
                 $modelV->ref2 = Yii::$app->security->generateRandomString();
                 $modelV->create_at = date("Y-m-d H:i:s");   
@@ -152,7 +153,7 @@ class VenController extends Controller
                 $modelV->ven_time = $modelV2->ven_time;
                 $modelV->ven_month = $modelV2->ven_month;
                 $modelV->user_id = $modelV1->user_id;
-                $modelV->status = 3 ;
+                $modelV->status = 4 ;
                 $modelV->ref1 = $modelV2->ref2;
                 $modelV->ref2 = Yii::$app->security->generateRandomString();                
                 $modelV->create_at = date("Y-m-d H:i:s"); 
@@ -166,7 +167,7 @@ class VenController extends Controller
                 $model->user_id2 = $modelV2->user_id;
                 $model->s_po = $_POST['VenChange']['s_po'];
                 $model->s_bb = $_POST['VenChange']['s_bb'];
-                $model->status = 3;
+                $model->status = 2;
                 $model->ref1 = $modelV1->ref2;    
                 $model->ref2 = $modelV2->ref2;                
                 $model->comment = null;
@@ -597,6 +598,7 @@ class VenController extends Controller
     }
 
     public function actionChange_upfile($id) { 
+
         $model = VenChange::findOne($id);
                           
         // Add This For Ajax Email Exist Validation 
@@ -621,25 +623,25 @@ class VenController extends Controller
                     $transaction = Yii::$app->db->beginTransaction();
                     try {
                         
-                        $model->status = 5;
+                        $model->status = 6;
                         $model->save();
 
                         $modelV1 = Ven::findOne($model->ven_id1);
                         $modelV1->file = $fileName;
-                        $modelV1->status = 1;
+                        $modelV1->status = 3;
                         $modelV1->save();
 
                         $modelV1 = Ven::findOne($model->ven_id2);
                         $modelV1->file = $fileName;
-                        $modelV1->status = 1;
+                        $modelV1->status = 3;
                         $modelV1->save();
 
                         $modelV3 = Ven::findOne($model->ven_id1_old);
-                        $modelV3->status = 4;
+                        $modelV3->status = 5;
                         $modelV3->save();
 
                         $modelV4 = Ven::findOne($model->ven_id2_old);
-                        $modelV4->status = 4;
+                        $modelV4->status = 5;
                         $modelV4->save();
                                                                     
                         Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
@@ -686,17 +688,24 @@ class VenController extends Controller
             try {
                 $modelV = Ven::findOne($model->ven_id1);
                 $modelV->file = null;
-                $modelV->status = 3;
+                $modelV->status = 4;
                 $modelV->save();
 
                 $modelV = Ven::findOne($model->ven_id2);
                 $modelV->file = null;
-                $modelV->status = 3;
+                $modelV->status = 4;
+                $modelV->save();
+
+                $modelV = Ven::findOne($model->ven_id1);
+                $modelV->status = 2;
+                $modelV->save();
+
+                $modelV = Ven::findOne($model->ven_id2);
+                $modelV->status = 2;
                 $modelV->save();
  
-
                 $model->file = null;
-                $model->status = 3;
+                $model->status = 2;
                 $model->save();
                 
                 Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');  
