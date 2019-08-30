@@ -171,7 +171,8 @@ class BilaController extends Controller
                     /*---------------------ส่ง line ไปยัง Admin--------------------*/
                     $modelLine = Line::findOne(['name' => 'bila_admin']);
                     if(isset($modelLine->token)){
-                        $message = $model->getProfileName().'->'.$model->cat."\n".' รายละเอียดเพิ่มเติม' ."\n".$sms_qr;
+                        $message = $model->getProfileName().'->'.$model->cat.'('.$model->date_total.')';
+                        $message .= "\n".$model->date_begin."\n".' รายละเอียดเพิ่มเติม' ."\n".$sms_qr;
                         $res = Line::notify_message($modelLine->token,$message);  
                         $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
                     } 
@@ -270,7 +271,8 @@ class BilaController extends Controller
                 /*---------------------ส่ง line ไปยัง Admin--------------------*/
                 $modelLine = Line::findOne(['name' => 'bila_admin']);
                 if(isset($modelLine->token)){
-                    $message = $model->getProfileName()."\n".$model->cat."\n".' รายละเอียดเพิ่มเติม' .$sms_qr;
+                    $message = $model->getProfileName().'->'.$model->cat.'('.$model->date_total.')';
+                    $message .= "\n".$model->date_begin."\n".' รายละเอียดเพิ่มเติม' ."\n".$sms_qr;
                     $res = Line::notify_message($modelLine->token,$message);  
                     $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
                 } 
@@ -372,7 +374,7 @@ class BilaController extends Controller
             }
             if($model->save()){
                 /*---------------------ส่ง line ไปยัง Admin--------------------*/
-                $message = $model->getProfileName()."\n".' แก้ไข ใบ'.$model->cat."\n".'เลขที่ ' .$model->id;
+                $message = $model->getProfileName().' แก้ไข ใบ'.$model->cat."\n".'เลขที่ ' .$model->id;
                 $modelLine = Line::findOne(['name' => 'bila_admin']);
                 if(isset($modelLine->token)){                
                     $res = Line::notify_message($modelLine->token,$message);  
@@ -411,7 +413,7 @@ class BilaController extends Controller
     {
         $model = $this->findModel($id);
 
-        $message = $model->getProfileName().' ลบ ใบ'.$model->cat.'"\n"เลขที่ ' .$model->id;
+        $message = $model->getProfileName().' ลบ ใบ'.$model->cat."\n".'เลขที่ ' .$model->id;
         $dir = Url::to('@webroot'.$this->filePath.$model->user_id.'/'.$model->id);
         
         if($model->delete()){
@@ -707,10 +709,13 @@ class BilaController extends Controller
 
         foreach ($models as $model):        
             $sms .= $model->profile->name .'->';
-            $sms .= $model->cat;
+            $sms .= $model->cat.'('.$model->date_total.')';
+            $model->comment ? $sms .= "\n".$model->comment : '' ;
+            $sms .= "\n";
+            $sms .= '-------------';
             $sms .= "\n";
         endforeach;  
-        $sms .= '-------------';
+        
         $modelLine = Line::findOne(['name' => 'bila_admin']);     //bila_admin 
         if(isset($modelLine->token)){                
             $res = Line::notify_message($modelLine->token,$sms);  
