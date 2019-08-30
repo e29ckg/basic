@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
       
      <div class="box-body">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="form-group">
                     <?php 
                         echo $form->field($model, 'ven_com_num', [
@@ -45,7 +45,19 @@ $this->params['breadcrumbs'][] = $this->title;
                     ?> 
                 </div> 
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <?php 
+                        echo $form->field($model, 'ven_com_date', [
+                            'inputOptions' => [
+                                'placeholder' => $model->getAttributeLabel('ven_com_date'),
+                                    'class'=>'form-control'
+                                ],
+                            ]);
+                    ?> 
+                </div> 
+            </div>
+            <div class="col-md-3">
                 <div class="form-group">                   
                     <?= $form->field($model, 'ven_month')->widget(Select2::classname(), [
                             // 'data' => [
@@ -64,7 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ?>
                 </div>
             </div>  
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="form-group">                   
                     <?= $form->field($model, 'year')->widget(Select2::classname(), [
                             'data' => [
@@ -83,7 +95,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ?>
                 </div>
             </div>      
-            <div class="col-md-12">
+            <div class="col-md-4">
                 <div class="form-group">                   
                     <?= $form->field($model, 'ven_time')->widget(Select2::classname(), [
                             'data' => $model::getVen_time(),
@@ -98,17 +110,39 @@ $this->params['breadcrumbs'][] = $this->title;
                     ?>
                 </div>
             </div>      
-            <div class ="col-md-12">
+            <div class ="col-md-4">
                 <div class="form-group">			
-                <?= $form->field($model, 'ven_com_name', [
-                        'inputOptions' => [
-                            'placeholder' => $model->getAttributeLabel('ven_com_name'),
-                                'class'=>'form-control'
+                <?= $form->field($model, 'ven_com_name')->widget(Select2::classname(), [
+                            'data' => $model::getAven(),
+                            'language' => 'th',
+                            'options' => [
+                                'class'=>'form-control',
+                                'placeholder' => $model->getAttributeLabel('ven_com_name')],
+                            'pluginOptions' => [
+                                'allowClear' => true
                             ],
                         ]);
                     ?>
                 </div>
             </div>
+            <div class="col-md-4">
+                <div class="form-group">                   
+                    <?= $form->field($model, 'status')->widget(Select2::classname(), [
+                            'data' => [
+                                '1' => 'ใช้งาน',
+                                '7' => 'ไม่ใช้งาน',
+                            ],
+                            'language' => 'th',
+                            'options' => [
+                                'class'=>'form-control',
+                            ],
+                            'pluginOptions' => [
+                                'allowClear' => true
+                            ],
+                        ]);
+                    ?>
+                </div>
+            </div> 
                                
             <div class="col-md-12">
                 <div class="form-group">
@@ -122,6 +156,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>										
             </div>
         </div>
+            
 
         
         <div class="text-right">             
