@@ -360,9 +360,9 @@ class VenController extends Controller
     public function actionCom_index()
     {
         $models = VenCom::find()->orderBy([
-            'ven_month' => SORT_DESC,
-            'ven_time' => SORT_ASC,
-            // 'id' => SORT_DESC,
+            // 'ven_month' => SORT_DESC,
+            // 'ven_time' => SORT_ASC,
+            'create_at' => SORT_DESC,
             ])->limit(100)->all();  
         
         return $this->render('com_index',[
@@ -466,7 +466,7 @@ class VenController extends Controller
                 $model->ven_month = $_POST['VenCom']['year'].'-'.$_POST['VenCom']['ven_month'];
                 $model->ven_time = $_POST['VenCom']['ven_time'];
                 $model->ven_com_date = $_POST['VenCom']['ven_com_date'];
-                $model->status = 1;
+                $model->status = $_POST['VenCom']['status'];
                 $model->ref = Yii::$app->security->generateRandomString();
                 $model->create_at = date("Y-m-d H:i:s");
                 if($model->save()){                                       
@@ -491,18 +491,6 @@ class VenController extends Controller
         ]);
     }
 
-    public function actionCom_update_status($id)
-    {
-        $model = VenCom::findOne($id);  
-        $model->status = 7;
-
-            if($model->save()){
-                Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'.$model->status);                   
-            
-            }   
-                
-        
-    }
 
     public function actionCom_del($id)
     {

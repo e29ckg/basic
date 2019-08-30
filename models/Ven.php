@@ -66,7 +66,7 @@ class Ven extends \yii\db\ActiveRecord
     public function getVenComList(){
         $model = VenCom::find()->where(['status' => '1'])->orderBy(['id' => SORT_DESC ])->all();
         return ArrayHelper::map($model,'id',function($model){
-            return $model->ven_com_name.' '.$model->getVen_time_name($model->ven_time);
+            return $model->ven_com_name.' '.$model->getVen_time()[$model->ven_time];
         });
     }
 

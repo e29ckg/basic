@@ -41,7 +41,7 @@ class VenCom extends \yii\db\ActiveRecord
             'ven_com_date' => 'ลงวันที่',
             'ven_time' => 'หน้าที่',
             'ven_com_name' => 'ชื่อเวร',
-            'ven_month' => 'ประจำเดือน',
+            'ven_month' => 'อยู่เวรเดือน',
             'year' => 'ปี',            
             'comment' => '',        
         ];

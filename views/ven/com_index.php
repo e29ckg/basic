@@ -95,21 +95,6 @@ $(document).ready(function() {
             	$("#activity-modal").modal("show");
         	});
 		}); 
-
-		// function init_click_handlers(){ 
-			var url_update_status = "com_update_status";
-			$(".act-update-status").click(function(e) {            
-			var fID = $(this).data("id");
-			// alert(fID);
-        	$.get(url_update_status,{id: fID},function (data){
-						// $("#content").html(data);
-						// $(".act-update-status").data("fID").html(data);
-						location.reload();	
-        			});
-		});
-    	  
-		
-		// }
 		
 		var url_create = "com_create";
     	$( "#act-create" ).click(function() {
@@ -121,8 +106,7 @@ $(document).ready(function() {
                 $("#activity-modal").modal("show");
                 //   $("#myModal").modal('toggle');
         	});     
-		}); 
-		
+		}); 		
 			
 		$('#example1').DataTable({
 			"pageLength": 50,
