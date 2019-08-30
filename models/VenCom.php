@@ -38,15 +38,14 @@ class VenCom extends \yii\db\ActiveRecord
         return [            
             'id' => 'ID',
             'ven_com_num' => 'เลขที่คำสั่ง',
+            'ven_com_date' => 'ลงวันที่',
             'ven_time' => 'หน้าที่',
-            'ven_month' => 'เดือน',
-            'year' => 'ปี',
-            'ven_com_name' => 'ชื่อคำสั่ง',
+            'ven_com_name' => 'ชื่อเวร',
+            'ven_month' => 'ประจำเดือน',
+            'year' => 'ปี',            
             'comment' => '',        
         ];
     }
-
-    
 
     public function getProfile()
     {
@@ -106,21 +105,11 @@ class VenCom extends \yii\db\ActiveRecord
     }    
     
     public function getStatusList(){
-        return [
-            
+        return [            
             '1' => 'ใช้งาน',
-            '4' => 'ไม่ใช้งาน',
-            
+            '7' => 'ไม่ใช้งาน',            
         ];
-    }
-
-    public function getStatusName($id){
-        $role = [
-            '1' => 'ใช้งาน',
-            '4' => 'ไม่ใช้งาน',
-        ];
-        return $role[$id];
-    }
+    }    
 
     public function getVen_time(){   
         return [
@@ -131,18 +120,6 @@ class VenCom extends \yii\db\ActiveRecord
             '16:30:00' => 'ผู้พิพากษา(กลางคืน)',
             '16:30:55' => 'จับ-ค้น(กลางคืน)',
         ];
-    }
-
-    public function getVen_time_name($id){   
-        $role = [
-            '08:30:00' => 'ผู้พิพากษา(กลางวัน)',
-            '08:30:01' => 'ปชส.(ผอ/หัวหน้างาน)',
-            '08:30:11' => 'รับฟ้อง(กลางวัน)',
-            '08:30:22' => 'รับฟ้อง/จับ-ค้น(กลางวัน)',
-            '16:30:00' => 'ผู้พิพากษา(กลางคืน)',
-            '16:30:55' => 'จับ-ค้น(กลางคืน)',
-        ];
-        return $role[$id];
     }
 
     public function getVen_month()
@@ -163,24 +140,15 @@ class VenCom extends \yii\db\ActiveRecord
         ];
     }
 
-    public function getVen_month_name($id)
-    {
-        $role = [
-            '01' => 'มกราคม',
-            '02' => 'กุมภาพันธ์',
-            '03' => 'มีนาคม',
-            '04' => 'เมษายน',
-            '05' => 'พฤษภาคม',
-            '06' => 'มิถุนายน',
-            '07' => 'กรกฎาคม',
-            '08' =>  'สิงหาคม',
-            '09' => 'กันยายน',
-            '10' => 'ตุลาคม',
-            '11' => 'พฤศจิกายน',
-            '12' => 'ธันวาคม'
+    public function getAven(){   
+        return [
+            'ฟื้นฟู/แขวง/หมายจับ-ค้น' => 'ฟื้นฟู/แขวง/หมายจับ-ค้น',
+            'ฟื้นฟู/แขวง' => 'ฟื้นฟู/แขวง',
+            'หมายจับ-ค้น/รักษาการณ์' => 'หมายจับ-ค้น/รักษาการณ์',
+            'หมายจับ-ค้น' => 'หมายจับ-ค้น',
         ];
-        return $role[$id];
     }
+    
 
 }
     
