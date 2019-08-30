@@ -198,7 +198,10 @@ class VenController extends Controller
 
     public function actionAdmin_index()
     {
-        $models = Ven::find()->orderBy([
+        $models = Ven::find()
+            ->where(['status' => 1 ])
+            ->orWhere(['status' => 2 ])
+            ->orWhere(['status' => 3 ])->orderBy([
             // 'date_create'=>SORT_DESC,
             'id' => SORT_DESC,
             ])->limit(100)->all();  
@@ -215,7 +218,7 @@ class VenController extends Controller
             }
             $even = [
                 'id' => $model->id,
-                'title' => $model->getProfileName(),
+                'title' => $model->getProfileNameCal().' '.VenChange::getStatusList()[$model->status],
                 // 'title' => $model->ven_date.' '.$model->ven_time,
                 'start' => $model->ven_date.' '.$model->ven_time,
                 'textColor' => $model->user_id == Yii::$app->user->identity->id ? 'yellow' :'',
@@ -488,37 +491,13 @@ class VenController extends Controller
     public function actionCom_update_status($id)
     {
         $model = VenCom::findOne($id);  
+        $model->status = 7;
 
-        // if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){
-        //     Yii::$app->response->format = Response::FORMAT_JSON;
-        //     return ActiveForm::validate($model);
-        // } 
-     
-        // if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            // $transaction = Yii::$app->db->beginTransaction();
-            // try {
-                //  if($model->status == 1){
-                    $model->comment = '';
-                //  } else{                 
-                    // $model->status = 1;
-                //  } 
-
-                if($model->save()){
-                    Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'.$model->status);                   
+            if($model->save()){
+                Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'.$model->status);                   
+            
+            }   
                 
-                }   
-                $model->save();
-                Yii::$app->session->setFlash('success', $model->id);                                    
-                // echo $model->status;
-                // $transaction->commit();
-                // return $this->redirect(['com_index']);
-                
-            // } catch (\Exception $e) {
-            //     $transaction->rollBack();
-            //     throw $e;
-            // }           
-        // }
-            // return $this->redirect(['com_index']);
         
     }
 
