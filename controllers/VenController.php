@@ -398,6 +398,7 @@ class VenController extends Controller
                 // $model->ven_com_name = $_POST['VenCom']['ven_com_name'];
                 $model->ven_month = $_POST['VenCom']['year'].'-'.$_POST['VenCom']['ven_month'];
                 $model->ven_time = $_POST['VenCom']['ven_time'];
+                $model->ven_com_date = $_POST['VenCom']['ven_com_date'];
                 $model->status = 1;
                 $model->ref = Yii::$app->security->generateRandomString();
                 $model->create_at = date("Y-m-d H:i:s");  
@@ -464,8 +465,10 @@ class VenController extends Controller
                 // $model->ven_com_name = $_POST['VenCom']['ven_com_name'];
                 $model->ven_month = $_POST['VenCom']['year'].'-'.$_POST['VenCom']['ven_month'];
                 $model->ven_time = $_POST['VenCom']['ven_time'];
+                $model->ven_com_date = $_POST['VenCom']['ven_com_date'];
                 $model->status = 1;
-                $model->create_at = date("Y-m-d H:i:s");  
+                $model->ref = Yii::$app->security->generateRandomString();
+                $model->create_at = date("Y-m-d H:i:s");
                 if($model->save()){                                       
                     Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');                   
                 }  
