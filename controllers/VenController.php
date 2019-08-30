@@ -126,9 +126,9 @@ class VenController extends Controller
                 $modelV1 = Ven::findOne($_POST['VenChange']['ven_id1']);
                 $modelV2 = Ven::findOne($_POST['VenChange']['ven_id2']);
                                                 
-                $modelV1->status = 2; 
+                $modelV1->status = 4; 
                 $modelV1->save();   
-                $modelV2->status = 2;
+                $modelV2->status = 4;
                 $modelV2->save();
 
                 $id = (int)time();
@@ -140,7 +140,7 @@ class VenController extends Controller
                 $modelV->ven_time = $modelV1->ven_time;
                 $modelV->ven_month = $modelV1->ven_month;
                 $modelV->user_id = $modelV2->user_id;
-                $modelV->status = 4;
+                $modelV->status = 2;
                 $modelV->ref1 = $modelV1->ref1;
                 $modelV->ref2 = Yii::$app->security->generateRandomString();
                 $modelV->create_at = date("Y-m-d H:i:s");   
@@ -153,7 +153,7 @@ class VenController extends Controller
                 $modelV->ven_time = $modelV2->ven_time;
                 $modelV->ven_month = $modelV2->ven_month;
                 $modelV->user_id = $modelV1->user_id;
-                $modelV->status = 4 ;
+                $modelV->status = 2 ;
                 $modelV->ref1 = $modelV2->ref2;
                 $modelV->ref2 = Yii::$app->security->generateRandomString();                
                 $modelV->create_at = date("Y-m-d H:i:s"); 
@@ -498,7 +498,7 @@ class VenController extends Controller
             // $transaction = Yii::$app->db->beginTransaction();
             // try {
                 //  if($model->status == 1){
-                    $model->comment = 'ง';
+                    $model->comment = '';
                 //  } else{                 
                     // $model->status = 1;
                 //  } 
@@ -623,7 +623,7 @@ class VenController extends Controller
                     $transaction = Yii::$app->db->beginTransaction();
                     try {
                         
-                        $model->status = 6;
+                        $model->status = 5;
                         $model->save();
 
                         $modelV1 = Ven::findOne($model->ven_id1);
@@ -653,8 +653,6 @@ class VenController extends Controller
                         $transaction->rollBack();
                         throw $e;
                     } 
-                   
-                
 
             }else{
                 Yii::$app->session->setFlash('warning', 'ไม่ได้บันทึกข้อมูล');
