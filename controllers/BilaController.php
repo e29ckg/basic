@@ -262,6 +262,7 @@ class BilaController extends Controller
                 } 
 
                 $sms_qr = isset($this->line_sms) ? $this->line_sms : Yii::$app->getRequest()->hostInfo ;
+                $sms_qr .= '/bila.php?ref='.$model->id;
                 $qrCode = (new QrCode($sms_qr))
                     ->setSize(250)
                     ->setMargin(5)
@@ -328,7 +329,7 @@ class BilaController extends Controller
             return ActiveForm::validate($model);
         }
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if($model->cat == 'ลาป่วย' || $model->cat == 'ลากิจส่วนตัว' || $model->cat == 'ลาคลอดบุตร'){
                 $model->date_begin = $_POST['Bila']['date_begin'];
                 $model->date_end = $_POST['Bila']['date_end'];
