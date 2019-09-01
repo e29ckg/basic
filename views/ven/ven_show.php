@@ -81,10 +81,10 @@ use app\models\VenChange;
                         
                     </td>
                     <td>
-                        <?= $countVen > 0 && !(Yii::$app->user->identity->id == $model->user_id) && $model->status == 1 && $model->ven_date  >  date("Y-m-d") && $model->getCountVen($model->ven_com_id) > 0 ?
+                        <?= $model->getVenForChangeCount($model->id) > 0 && $model->getCheck($model->id) ?
                             '<a class="btn btn-primary btn-xs act-ven-change" data-id="'.$model->id.'">ขอเปลี่ยน</a>'
                             : '';?>                        
-                        <?= Yii::$app->user->identity->id == $model->user_id && $model->ven_date  >  date("Y-m-d")  ? 
+                        <?= Yii::$app->user->identity->id == $model->user_id && $model->ven_date  >  date("Y-m-d") && $model->status <> 2 ? 
                             '<a class="btn btn-primary btn-xs" target="_blank" data-id='.$model->id.'>ยกให้</a>'
                             :'';?>
                     </td>
@@ -114,16 +114,8 @@ use app\models\VenChange;
 		</div>
 	</div>
 </div>
-<?php
-// echo var_dump($model->getCheck_user($model->id));
-echo '<br>'.$model->ven_date ;
-echo '<br>'.date('Y-m-d', strtotime('-1 day', strtotime($model->ven_date)));
-echo '<br><br>'.var_dump($model->getVenForChange($model->ven_com_id)); 
-    
-    ?>
-<?= '<br>'.'จำนวนเวรที่สามารถเปลี่ยนได้ '.$model->getCountVen($model->ven_com_id).' : '.date("Y-m-d").' status : '. $model->status .' '?>
-<?=$model->ven_date . ' > '. date("Y-m-d")?>
-<br><?=var_dump($check);?>
+
+<br>เปลี่ยน :  <?=$model->getCheck($model->id) ? 'ได้' : 'ไม่ได้';?> , จำนวนเวรที่เหลือ : <?= $model->getVenForChangeCount($model->id) >= 1 ? $model->getVenForChangeCount($model->id) : '';?>
 
 <?php
 

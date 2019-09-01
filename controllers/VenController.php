@@ -112,14 +112,9 @@ class VenController extends Controller
             ->andWhere('id <> :id', [':id' => $model->id])
             ->orderBy(['id' => SORT_DESC])->all();
 
-        // Ven::getCountVen($model->ven_com_id);
-        // Ven::getCheck($model->id);
-
         return $this->renderAjax('ven_show',[
             'model' => $model,
             'modelDs' => $modelDs,
-            'check' => Ven::getCheck($model->id),
-            'countVen' => Ven::getVenForChange($model->ven_com_id),
         ]);
     }
 
@@ -213,7 +208,7 @@ class VenController extends Controller
         }
 
         $ven_id2 = Ven::findOne($id);
-        $ven_id1 = Ven::getVenForChange($ven_id2->ven_com_id);        
+        $ven_id1 = Ven::getVenForChangeAll($id);        
         
         return $this->renderAjax('_ven_change',[
             'model' => $model,
