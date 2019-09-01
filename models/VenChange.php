@@ -60,8 +60,7 @@ class VenChange extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Ven::className(), ['id' => 'ven_id1']);
     }
-
-    
+   
 
     public function getVen1_old()
     {

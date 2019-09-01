@@ -33,7 +33,6 @@ $this->params['breadcrumbs'][] = $this->title;
 										<th class="text-center" >id</th>
 										<th class="text-center" >เลขที่คำสั่ง</th>
 										<th class="text-center" >ชื่อคำสั่ง</th>
-										<th class="text-center" >หมายเหตุ</th>
 										<th class="text-center" >status</th>
 										<th></th>
 									</tr>
@@ -47,16 +46,18 @@ $this->params['breadcrumbs'][] = $this->title;
 											.'<br>'.$model->ven1->getProfileName()
 											.'<br>('.$model->ven_id1.')';?>
 										</td>									
-										<td><?=$model->DateThai_full($model->ven2->ven_date)
-											.'<br>'.$model->ven2->getProfileName()
-											.'<br>('.$model->ven_id2.')';?></td>
-										<td><?=$model->comment;?><br><?=$model->file;?></td>
+										<td>
+											<?= isset($model->ven_id2) ?
+												$model->DateThai_full($model->ven2->ven_date)
+												.'<br>'.$model->ven2->getProfileName()
+												.'<br>('.$model->ven_id2.')'
+												: '' ;
+											?></td>
 										<td><?=$model->getStatusList()[$model->status];?></td>
 										<td class = "text-center">
 											
 											<?= !empty($model->file) ? 
-												Html::a('ไฟล์เอกสาร', ['ven/change_file_view','id' => $model->id], [
-													
+												Html::a('ไฟล์เอกสาร', ['ven/change_file_view','id' => $model->id], [													
 													'data-id' => $model->id,
 													'target' => '_blank'
 												]).' '	
@@ -80,8 +81,9 @@ $this->params['breadcrumbs'][] = $this->title;
 												.' ' .Html::a('<i class="fa fa-remove"></i> ยกเลิก ', ['ven/change_del', 'id' => $model->id], [
 													'class' => 'btn btn-danger btn-xs',
 													'data-confirm' => 'Are you sure?',
-													'data-method' => 'post',
-											]) ?>
+													'data-method' => 'post',]) 
+													
+													; ?>
 										</td>
 									</tr>
 									<?php  endforeach; ?>								

@@ -59,7 +59,11 @@ class VenController extends Controller
         ];
     }
 
-   
+   public function actionTest()
+   {
+       return $this->render('test');
+   }
+    
     public function actionIndex()
     {
         $models = Ven::find()->where(['status' => 1 ])
@@ -103,13 +107,36 @@ class VenController extends Controller
     {
         $model = Ven::findOne($id);
         
-        Ven::getCountVen($model->ven_com_id);
+        $modelDs = Ven::find()
+            ->where(['ref1'=>$model->ref1]) 
+            ->andWhere('id <> :id', [':id' => $model->id])
+            ->orderBy(['id' => SORT_DESC])->all();
+
+        // Ven::getCountVen($model->ven_com_id);
+        // Ven::getCheck($model->id);
 
         return $this->renderAjax('ven_show',[
             'model' => $model,
+            'modelDs' => $modelDs,
+            'check' => Ven::getCheck($model->id),
             'countVen' => Ven::getVenForChange($model->ven_com_id),
         ]);
     }
+
+    public function actionVen_user_index()
+    {
+        $models = Ven::find()->where([
+                'user_id' => Yii::$app->user->identity->id,
+            ])
+            ->orderBy([
+                'ven_date' => SORT_ASC
+            ])->all();
+        
+        return $this->render('ven_user_index',[
+            'models' => $models,
+        ]);
+    }
+
 
     public function actionVen_change($id)
     {
@@ -132,6 +159,7 @@ class VenController extends Controller
                 $modelV2->save();
 
                 $id = (int)time();
+                $ref_vc = Yii::$app->security->generateRandomString();
 
                 $modelV = new Ven();
                 $modelV->id = $id;
@@ -142,7 +170,7 @@ class VenController extends Controller
                 $modelV->user_id = $modelV2->user_id;
                 $modelV->status = 2;
                 $modelV->ref1 = $modelV1->ref1;
-                $modelV->ref2 = Yii::$app->security->generateRandomString();
+                $modelV->ref2 = $ref_vc;
                 $modelV->create_at = date("Y-m-d H:i:s");   
                 $modelV->save();
 
@@ -154,8 +182,8 @@ class VenController extends Controller
                 $modelV->ven_month = $modelV2->ven_month;
                 $modelV->user_id = $modelV1->user_id;
                 $modelV->status = 2 ;
-                $modelV->ref1 = $modelV2->ref2;
-                $modelV->ref2 = Yii::$app->security->generateRandomString();                
+                $modelV->ref1 = $modelV2->ref1;
+                $modelV->ref2 = $ref_vc;                
                 $modelV->create_at = date("Y-m-d H:i:s"); 
                 $modelV->save(); 
 
@@ -168,15 +196,15 @@ class VenController extends Controller
                 $model->s_po = $_POST['VenChange']['s_po'];
                 $model->s_bb = $_POST['VenChange']['s_bb'];
                 $model->status = 2;
-                $model->ref1 = $modelV1->ref2;    
-                $model->ref2 = $modelV2->ref2;                
+                $model->ref1 = $ref_vc;    
+                $model->ref2 = null;                
                 $model->comment = null;
                 $model->create_at = date("Y-m-d H:i:s");
                 $model->save();
 
                 $transaction->commit();
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'); 
-                return $this->redirect(['change_index']);
+                return $this->redirect(['change_user_index']);
                 
             } catch (\Exception $e) {
                 $transaction->rollBack();
@@ -260,8 +288,8 @@ class VenController extends Controller
                 $model->ven_time = $modelVC->ven_time;
                 $model->ven_month = $modelVC->ven_month;
                 $model->file = $modelVC->file;
-                $model->ref1 = $modelVC->ref;
-                $model->ref2 = Yii::$app->security->generateRandomString();
+                $model->ref1 = Yii::$app->security->generateRandomString();
+                $model->ref2 = $modelVC->ref;
                 $model->status = 1;                
                 $model->comment = '';
                 $model->create_at = date("Y-m-d H:i:s"); 
@@ -362,7 +390,7 @@ class VenController extends Controller
         $models = VenCom::find()->orderBy([
             // 'ven_month' => SORT_DESC,
             // 'ven_time' => SORT_ASC,
-            'create_at' => SORT_DESC,
+            'id' => SORT_DESC,
             ])->limit(100)->all();  
         
         return $this->render('com_index',[
@@ -396,7 +424,7 @@ class VenController extends Controller
                 }                   
                 // $model->ven_com_num = $_POST['VenCom']['ven_com_num'];
                 // $model->ven_com_name = $_POST['VenCom']['ven_com_name'];
-                $model->ven_month = $_POST['VenCom']['year'].'-'.$_POST['VenCom']['ven_month'];
+                $model->ven_month = $_POST['VenCom']['ven_month'];
                 $model->ven_time = $_POST['VenCom']['ven_time'];
                 $model->ven_com_date = $_POST['VenCom']['ven_com_date'];
                 $model->status = 1;
@@ -463,7 +491,7 @@ class VenController extends Controller
                 
                 // $model->ven_com_num = $_POST['VenCom']['ven_com_num'];
                 // $model->ven_com_name = $_POST['VenCom']['ven_com_name'];
-                $model->ven_month = $_POST['VenCom']['year'].'-'.$_POST['VenCom']['ven_month'];
+                $model->ven_month = $_POST['VenCom']['ven_month'];
                 $model->ven_time = $_POST['VenCom']['ven_time'];
                 $model->ven_com_date = $_POST['VenCom']['ven_com_date'];
                 $model->status = $_POST['VenCom']['status'];
@@ -515,6 +543,26 @@ class VenController extends Controller
     public function actionChange_index()
     {
         $models = VenChange::find()->orderBy([
+            // 'date_create'=>SORT_DESC,
+            'id' => SORT_DESC,
+            ])->limit(50)->all();  
+
+        // foreach ($models as $model):
+            
+        // endforeach;        
+
+        return $this->render('change_index',[
+            'models' => $models,
+        ]);
+    }
+
+    public function actionChange_user_index()
+    {
+        $models = VenChange::find()
+            ->where([
+                'user_id1' => Yii::$app->user->identity->id,
+            ])
+            ->orderBy([
             // 'date_create'=>SORT_DESC,
             'id' => SORT_DESC,
             ])->limit(50)->all();  

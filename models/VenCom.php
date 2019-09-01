@@ -25,7 +25,7 @@ class VenCom extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ven_com_num','ven_com_name','ven_month','year'],'required'],   
+            [['ven_com_num','ven_com_name','ven_month'],'required'],   
 
         ];
     }
@@ -125,18 +125,16 @@ class VenCom extends \yii\db\ActiveRecord
     public function getVen_month()
     {
         return [
-            '01' => 'มกราคม',
-            '02' => 'กุมภาพันธ์',
-            '03' => 'มีนาคม',
-            '04' => 'เมษายน',
-            '05' => 'พฤษภาคม',
-            '06' => 'มิถุนายน',
-            '07' => 'กรกฎาคม',
-            '08' =>  'สิงหาคม',
-            '09' => 'กันยายน',
-            '10' => 'ตุลาคม',
-            '11' => 'พฤศจิกายน',
-            '12' => 'ธันวาคม'
+            date("Y-m", strtotime("-2 month")) =>  VenCom::DateThai_full(date("Y-m", strtotime("-2 month"))),
+            date("Y-m", strtotime("-1 month")) =>  VenCom::dateThai_full(date("Y-m", strtotime("-1 month"))),
+            date("Y-m") => VenCom::DateThai_full(date("Y-m")),
+            date("Y-m", strtotime("+1")) =>  VenCom::DateThai_full(date("Y-m", strtotime("+1"))),
+            date("Y-m", strtotime("+1 month")) =>  VenCom::DateThai_full(date("Y-m", strtotime("+1 month"))),
+            date("Y-m", strtotime("+2 month")) =>  VenCom::DateThai_full(date("Y-m", strtotime("+2 month"))),
+            date("Y-m", strtotime("+3 month")) =>  VenCom::DateThai_full(date("Y-m", strtotime("+3 month"))),
+            date("Y-m", strtotime("+4 month")) =>  VenCom::DateThai_full(date("Y-m", strtotime("+4 month"))),
+            date("Y-m", strtotime("+5 month")) =>  VenCom::DateThai_full(date("Y-m", strtotime("+5 month"))),
+           
         ];
     }
 
@@ -147,6 +145,23 @@ class VenCom extends \yii\db\ActiveRecord
             'หมายจับ-ค้น/รักษาการณ์' => 'หมายจับ-ค้น/รักษาการณ์',
             'หมายจับ-ค้น' => 'หมายจับ-ค้น',
         ];
+    }
+
+    public function DateThai_full($strDate)
+	{
+        if($strDate == ''){
+            return "-";
+        }
+		$strYear = date("Y",strtotime($strDate))+543;
+		$strMonth= date("n",strtotime($strDate));
+		$strDay= date("j",strtotime($strDate));
+		$strHour= date("H",strtotime($strDate));
+		$strMinute= date("i",strtotime($strDate));
+		$strSeconds= date("s",strtotime($strDate));
+		$strMonthCut = Array("","มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม",
+                            "สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม");
+		$strMonthThai=$strMonthCut[$strMonth];
+		return "$strMonthThai $strYear";
     }
     
 

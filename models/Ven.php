@@ -128,24 +128,7 @@ class Ven extends \yii\db\ActiveRecord
         });         
     }
 
-    public function getCheck_user($id)              //เช้คการชน
-    { 
-        $model = Ven::findOne($id);
-        
-        if($model->ven_time == '16:30:55'){   
-            $dB = date('Y-m-d', strtotime('-1 day', strtotime($model->ven_date)));
-                     ///
-            return Ven::find()
-                ->where(['ven_date' => $dB,
-                'ven_time' => '08:30:01',
-                'ven_time' => '08:30:11',
-                'ven_time' => '08:30:22'
-                ])
-                // ->count() ;
-                ->all() ;
-        }
-
-    }
+    
 
 
     public function getCountVen($ven_com_id)
@@ -210,6 +193,48 @@ class Ven extends \yii\db\ActiveRecord
                             "สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม");
 		$strMonthThai=$strMonthCut[$strMonth];
 		return "$strMonthThai";
+    }
+
+    public function getCheck($id)              //เช้คการชน
+    { 
+        $model = Ven::findOne($id);
+        
+        if($model->ven_time == '16:30:55'){   
+            $dB = date('Y-m-d', strtotime($model->ven_date));
+            $dB1 = date('Y-m-d', strtotime('+1 day', strtotime($model->ven_date)));
+
+            $modelVO = Ven::find()
+            ->where([
+                'ven_date' => [$dB,$dB1],
+                'ven_time' => ['08:30:01','08:30:11','08:30:22'],
+                'status' => [1, 2, 3,],
+                // 'status' => 1,
+                'user_id' => Yii::$app->user->identity->id,
+            ])->count();
+            return  $modelVO ? $modelVO : null ;        ///            
+        }
+
+        if($model->ven_time == '08:30:01' || $model->ven_time == '08:30:11' || $model->ven_time == '08:30:22'){   
+            $dB = date('Y-m-d', strtotime($model->ven_date));
+            $dB1 = date('Y-m-d', strtotime('-1 day', strtotime($model->ven_date)));
+
+            $modelVO = Ven::find()
+            ->where([
+                'ven_date' => [$dB],
+                'ven_time' => ['08:30:01','08:30:11','08:30:22'],
+                'status' => [1, 2, 3,],
+                // 'status' => 1,
+                'user_id' => Yii::$app->user->identity->id,
+            ])->orWhere([
+                'ven_date' => $dB1,
+                'ven_time' => ['16:30:55'],
+                'status' => [1,2,3],
+                'user_id' => 23,
+                ])
+            ->count();
+            return  $modelVO ? $modelVO : null ;        ///            
+        }
+
     }
 
     

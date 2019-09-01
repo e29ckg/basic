@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						            <tr>						                
 										<td><?=$model->id?></td>	
 										<td><?=$model->ven_com_num. ' '. $model->ven_com_date;?><br>เดือน <?=$model->ven_month;?></</td>									
-                                        <td><?=$model->ven_com_name;?><br><?=$model->getVen_time()[$model->ven_time];?></td>
+                                        <td><?=$model->getVen_time()[$model->ven_time];?><br><?=$model->ven_com_name;?></td>
 										<td class = "text-center">
 												<?=$model->status == 1 ?
 												 '<a class="label label-primary act-update-status" data-id ="'.$model->id.'" >ใช้งาน</a>' 

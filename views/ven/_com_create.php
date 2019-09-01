@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 // use yii\helpers\Url;
 use kartik\select2\Select2;
-// use kartik\date\DatePicker;
+use kartik\date\DatePicker;
 use yii\helpers\ArrayHelper;
 use kartik\file\FileInput;
 
@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
       
      <div class="box-body">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="form-group">
                     <?php 
                         echo $form->field($model, 'ven_com_num', [
@@ -45,48 +45,34 @@ $this->params['breadcrumbs'][] = $this->title;
                     ?> 
                 </div> 
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="form-group">
-                    <?php 
-                        echo $form->field($model, 'ven_com_date', [
-                            'inputOptions' => [
-                                'placeholder' => $model->getAttributeLabel('ven_com_date'),
-                                    'class'=>'form-control'
-                                ],
-                            ]);
-                    ?> 
+                    
+                    <?= $form->field($model, 'ven_com_date')->widget(DatePicker::classname(), [
+                            'options' => [
+                                'class'=>'form-control',
+                                'placeholder' => 'วันที่',
+                                'value' => $model->ven_com_date ? $model->ven_com_date : '',
+                            ],
+                            'pluginOptions' => [
+                                'autoclose'=>true,
+                                'format' => 'yyyy-mm-dd'
+                            ]]);
+                    ?>
+                
                 </div> 
             </div>
-            <div class="col-md-3">
+            <!-- $model->DateThai_full(date("Y-m", strtotime("+1"))); -->
+            <!-- date('Y-m-d', strtotime('-1 day', strtotime($model->ven_date))) -->
+            <div class="col-md-4">
                 <div class="form-group">                   
                     <?= $form->field($model, 'ven_month')->widget(Select2::classname(), [
-                            // 'data' => [
-                            //     date("m") => date("m"),
-                            //     date("m") + 1 => date("m") + 1,
-                            // ],
                             'data' => $model::getVen_month(),
                             'language' => 'th',
                             'options' => [
+                                'value' => $model->ven_month ? $model->ven_month : date("Y-m"),
                                 'class'=>'form-control',
-                                'placeholder' => $model->getAttributeLabel('ven_month')],
-                            'pluginOptions' => [
-                                'allowClear' => true
-                            ],
-                        ]);
-                    ?>
-                </div>
-            </div>  
-            <div class="col-md-3">
-                <div class="form-group">                   
-                    <?= $form->field($model, 'year')->widget(Select2::classname(), [
-                            'data' => [
-                                date("Y") => date("Y"),
-                                date("Y") + 1 => date("Y") + 1,
-                            ],
-                            'language' => 'th',
-                            'options' => [
-                                'class'=>'form-control',
-                                // 'placeholder' => $model->getAttributeLabel('year')
+                                'placeholder' => $model->getAttributeLabel('ven_month')
                             ],
                             'pluginOptions' => [
                                 'allowClear' => true
@@ -94,7 +80,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]);
                     ?>
                 </div>
-            </div>      
+            </div>
+        </div>
+        <div class="row">
             <div class="col-md-4">
                 <div class="form-group">                   
                     <?= $form->field($model, 'ven_time')->widget(Select2::classname(), [

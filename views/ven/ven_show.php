@@ -1,15 +1,19 @@
 <?php
 use yii\helpers\Url;
+use app\models\VenCom;
 use app\models\VenChange;
 ?>
 
-<div class="box box-primary">			
+<div class="box box-primary">	
+    		
 	<div class="box-body">
 		<div id="wra_example1" class="dataTables_wrapper form-inline dt-bootstrap">                
-            <h2 class="alert alert-success fade in">
+           <h2 class="alert alert-success fade in">
                 <?= $model->getProfileName();?> 
-                    <sup class="badge bg-color-orange bounceIn animated"><?= $model->id ?></sup>                    
-            </h2>
+                    <sup class="badge bg-color-danger bounceIn animated"><?= VenChange::getStatusList()[$model->status]  ?></sup>                    
+                   <br>
+                    <span><?= $model->DateThai_full($model->ven_date);?></span>
+            </h2> 
 
             <table class="table table-bordered table-condensed">
                 <tr>
@@ -33,7 +37,8 @@ use app\models\VenChange;
                         คำสั่ง
                     </td>
                     <td>
-                        <?=$model->venCom->ven_com_num;?>
+                        <?=$model->venCom->ven_com_num.' ลงวันที่ '.$model->DateThai_full($model->venCom->ven_com_date)?>
+                        <br><?= VenCom::getVen_time()[$model->ven_time];?>
                     </td>
                 </tr>
                 <tr>
@@ -54,7 +59,7 @@ use app\models\VenChange;
                 </tr>
                 <tr>
                     <td class="text-right">
-                    <?= $model->ven_month;?>
+                        <?= $model->ven_month;?>
                     </td>
                     <td>
                         <?= $model->ven_time;?>
@@ -79,26 +84,47 @@ use app\models\VenChange;
                         <?= $countVen > 0 && !(Yii::$app->user->identity->id == $model->user_id) && $model->status == 1 && $model->ven_date  >  date("Y-m-d") && $model->getCountVen($model->ven_com_id) > 0 ?
                             '<a class="btn btn-primary btn-xs act-ven-change" data-id="'.$model->id.'">ขอเปลี่ยน</a>'
                             : '';?>                        
-                        <?= Yii::$app->user->identity->id == $model->user_id && $model->status == 1 && $model->ven_date  >  date("Y-m-d")  ? 
+                        <?= Yii::$app->user->identity->id == $model->user_id && $model->ven_date  >  date("Y-m-d")  ? 
                             '<a class="btn btn-primary btn-xs" target="_blank" data-id='.$model->id.'>ยกให้</a>'
                             :'';?>
                     </td>
                 </tr>       
-            </table>        
+            </table> 
+            <hr>
+            <table id="example1" class="table table-bordered table-striped dataTable" role="grid" >
+                				
+                <tbody>  
+                                                
+                    <?php foreach ($modelDs as $modeld): ?>
+                    <tr>						                
+                        <td><?=$modeld->id?></td>	
+                        <td><?=$modeld->DateThai_full($modeld->ven_date)?></</td>									
+                        <td> <?=$modeld->getProfileName()?> <?= VenCom::getVen_time()[$modeld->ven_time];?></td>
+                        <td class = "text-center">
+                            <?=$modeld->status == 2 || $modeld->status == 4 ?
+                                '<a href="'.Url::to(['change_index']).'" class="label label-danger">'.VenChange::getStatusList()[$modeld->status].'</a>' 
+                                :
+                                '<a href="'.Url::to(['change_index']).'" class="label label-primary" >'.VenChange::getStatusList()[$modeld->status].'</a>' ;?>				        
+                        </td>
+                        
+                    </tr>
+                    <?php  endforeach; ?>								
+                </tbody>
+            </table>       
 		</div>
 	</div>
 </div>
 <?php
-echo var_dump($model->getCheck_user($model->id));
+// echo var_dump($model->getCheck_user($model->id));
 echo '<br>'.$model->ven_date ;
 echo '<br>'.date('Y-m-d', strtotime('-1 day', strtotime($model->ven_date)));
 echo '<br><br>'.var_dump($model->getVenForChange($model->ven_com_id)); 
-    // foreach (model->getCheck_user($model->id) as $countV):
-    //     echo $countV->id.' '. $countV->ven_date.'<br>';
-    // endforeach;
+    
     ?>
 <?= '<br>'.'จำนวนเวรที่สามารถเปลี่ยนได้ '.$model->getCountVen($model->ven_com_id).' : '.date("Y-m-d").' status : '. $model->status .' '?>
 <?=$model->ven_date . ' > '. date("Y-m-d")?>
+<br><?=var_dump($check);?>
+
 <?php
 
 $script = <<< JS
