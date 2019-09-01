@@ -23,7 +23,7 @@ class Ven extends \yii\db\ActiveRecord
     {
         return [
             [['user_id','ven_date','ven_com_id'],'required'],             
-
+            [['ven_date'], 'validateVen_date'],
         ];
     }
 
@@ -39,6 +39,97 @@ class Ven extends \yii\db\ActiveRecord
             'user_id' => 'ผู้อยู่เวร',
             'comment' => 'หมายเหตุ',            
         ];
+    }
+
+    public function validateVen_date()
+    {
+        $model = VenCom::findOne($this->ven_com_id);
+
+        if($model->ven_time == '08:30:01' || $model->ven_time == '08:30:11' || $model->ven_time == '08:30:22'){   
+            $dB = date('Y-m-d', strtotime($this->ven_date));
+            $dB1 = date('Y-m-d', strtotime('-1 day', strtotime($this->ven_date)));
+
+            $modelVO = Ven::find()
+                ->where([
+                    'ven_date' => [$dB,$dB1],
+                    'ven_time' => '16:30:55',
+                    'status' => 1,
+                    'user_id' => $this->user_id,
+                ])->orWhere([
+                    'ven_date' => [$dB],
+                    'ven_time' => ['08:30:01','08:30:11','08:30:22'],
+                    'status' => 1,
+                    'user_id' => $this->user_id,
+                ])->count();
+            if($modelVO >= 1){
+                $this->addError('ven_date', 'เบิกไม่ได้นะ');
+            }               
+        }
+        if($model->ven_time == '08:30:00'){   
+            $dB = date('Y-m-d', strtotime($this->ven_date));
+            $dB1 = date('Y-m-d', strtotime('-1 day', strtotime($this->ven_date)));
+
+            $modelVO = Ven::find()
+                ->where([
+                    'ven_date' => [$dB,$dB1],
+                    'ven_time' => '16:30:00',
+                    'status' => 1,
+                    'user_id' => $this->user_id,
+                ])->orWhere([
+                    'ven_date' => [$dB],
+                    'ven_time' => ['08:30:00'],
+                    'status' => 1,
+                    'user_id' => $this->user_id,
+                ])->count();
+            if($modelVO >= 1){
+                $this->addError('ven_date', 'เบิกไม่ได้นะ');
+            }               
+        }
+        if($model->ven_time == '16:30:55'){   
+            $dB = date('Y-m-d', strtotime($this->ven_date));
+            $dB1 = date('Y-m-d', strtotime('+1 day', strtotime($this->ven_date)));
+
+            $modelVO = Ven::find()
+            ->where([
+                'ven_date' => [$dB,$dB1],
+                'ven_time' => ['08:30:01','08:30:11','08:30:22'],
+                'status' => [1, 2, 3,],
+                // 'status' => 1,
+                'user_id' => $this->user_id,
+            ])->orWhere([
+                'ven_date' => [$dB],
+                'ven_time' => ['16:30:55'],
+                'status' => [1, 2, 3,],
+                // 'status' => 1,
+                'user_id' => $this->user_id,
+            ])->count();   
+            if($modelVO >= 1){
+                $this->addError('ven_date', 'เบิกไม่ได้นะ');
+            }
+        }
+        if($model->ven_time == '16:30:00'){   
+            $dB = date('Y-m-d', strtotime($this->ven_date));
+            $dB1 = date('Y-m-d', strtotime('+1 day', strtotime($this->ven_date)));
+
+            $modelVO = Ven::find()
+            ->where([
+                'ven_date' => [$dB,$dB1],
+                'ven_time' => ['08:30:00'],
+                'status' => [1, 2, 3,],
+                // 'status' => 1,
+                'user_id' => $this->user_id,
+            ])->orWhere([
+                'ven_date' => [$dB],
+                'ven_time' => ['16:30:00'],
+                'status' => [1, 2, 3,],
+                // 'status' => 1,
+                'user_id' => $this->user_id,
+            ])->count();   
+            if($modelVO >= 1){
+                $this->addError('ven_date', 'เบิกไม่ได้นะ');
+            }
+        }
+        
     }
 
     public function getVenCom()
@@ -162,6 +253,7 @@ class Ven extends \yii\db\ActiveRecord
                 return  $modelVO ? $modelVO : null ; //จำนวนเวรที่สามารถเปลียนได้
         } 
 
+       
         if($model->ven_time == '16:30:55'){
             $modelVO = Ven::find()->where([
                 'user_id' => Yii::$app->user->identity->id,
@@ -173,8 +265,20 @@ class Ven extends \yii\db\ActiveRecord
                 // ->count();             
                 return  $modelVO ? $modelVO : null ; //จำนวนเวรที่สามารถเปลียนได้
         }
-        
+                
         if($model->ven_time == '08:30:01'){
+            $modelVO = Ven::find()->where([
+                'user_id' => Yii::$app->user->identity->id,
+                'ven_month' => $model->ven_month,
+                'ven_time' => $model->ven_time,
+                'status' => 1,
+                ])                
+                ->andWhere("ven_date >= $dB");
+                // ->count();             
+                return  $modelVO ? $modelVO : null ; //จำนวนเวรที่สามารถเปลียนได้
+        }
+
+        if($model->ven_time == '08:30:00'){
             $modelVO = Ven::find()->where([
                 'user_id' => Yii::$app->user->identity->id,
                 'ven_month' => $model->ven_month,
@@ -227,6 +331,27 @@ class Ven extends \yii\db\ActiveRecord
             return  $modelVO ? false : true ;        ///   true  สามารเปลี่ยนได้          
         }
 
+        if($model->ven_time == '16:30:00'){   
+            $dB = date('Y-m-d', strtotime($model->ven_date));
+            $dB1 = date('Y-m-d', strtotime('+1 day', strtotime($model->ven_date)));
+
+            $modelVO = Ven::find()
+            ->where([
+                'ven_date' => [$dB,$dB1],
+                'ven_time' => ['08:30:00'],
+                'status' => [1, 2, 3,],
+                // 'status' => 1,
+                'user_id' => Yii::$app->user->identity->id,
+            ])
+            ->orWhere([
+                'ven_date' => [$dB],
+                'ven_time' => '16:30:00',
+                'status' => [1, 2, 3,],
+                'user_id' => Yii::$app->user->identity->id,
+            ])->count();
+            return  $modelVO ? false : true ;        ///   true  สามารเปลี่ยนได้          
+        }
+
         if($model->ven_time == '08:30:01' || $model->ven_time == '08:30:11' || $model->ven_time == '08:30:22'){   
             $dB = date('Y-m-d', strtotime($model->ven_date));
             $dB1 = date('Y-m-d', strtotime('-1 day', strtotime($model->ven_date)));
@@ -248,7 +373,26 @@ class Ven extends \yii\db\ActiveRecord
             return  $modelVO ? false : true ;        ///                
         }
 
-        
+        if($model->ven_time == '08:30:00'){   
+            $dB = date('Y-m-d', strtotime($model->ven_date));
+            $dB1 = date('Y-m-d', strtotime('-1 day', strtotime($model->ven_date)));
+
+            $modelVO = Ven::find()
+            ->where([
+                'ven_date' => [$dB],
+                'ven_time' => ['08:30:00'],
+                'status' => [1, 2, 3,],
+                // 'status' => 1,
+                'user_id' => Yii::$app->user->identity->id,
+            ])->orWhere([
+                'ven_date' => [$dB,$dB1],
+                'ven_time' => ['16:30:00'],
+                'status' => [1,2,3],
+                'user_id' => Yii::$app->user->identity->id,
+                ])
+            ->count();
+            return  $modelVO ? false : true ;        ///                
+        }
 
     }
 

@@ -368,6 +368,15 @@ class VenController extends Controller
         ]);
     }
 
+    public function actionAdmin_ven_view($id)
+    {
+        $model = Ven::findOne($id);        
+           
+        return $this->renderAjax('admin_ven_view',[
+            'model' => $model,
+        ]);
+    }
+
     public function actionAdmin_del($id)
     {
         $model = Ven::findOne($id);        
@@ -518,18 +527,26 @@ class VenController extends Controller
     public function actionCom_del($id)
     {
         $model = VenCom::findOne($id);
-        $filename = $model->file;
-        $dir = Url::to('@webroot'.$this->filePath);
-        
-        if($filename && is_file($dir.$filename)){
-            unlink($dir.$filename);// ลบ รูปเดิม;                    
-        }
-        if($model->delete()){
+        $modelV = Ven::findOne(['ven_com_id' => $model->id]);
+        if(empty($modelV->id)){
+            $filename = $model->file;
+            $dir = Url::to('@webroot'.$this->filePath);
             
-            Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');    
-                                          
-        }   
-        return $this->redirect(['com_index']);
+            if($filename && is_file($dir.$filename)){
+                unlink($dir.$filename);// ลบ รูปเดิม;                    
+            }
+            if($model->delete()){
+                
+                Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');    
+                return $this->redirect(['com_index']);                          
+            }   
+           
+        }
+
+    Yii::$app->session->setFlash('danger', 'ไม่สามารถลบได้');    
+            
+    return $this->redirect(['com_index']);
+        
     }
 
 

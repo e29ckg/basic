@@ -25,7 +25,7 @@ class VenCom extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ven_com_num','ven_com_name','ven_month'],'required'],   
+            [['ven_com_num','ven_com_name','ven_month','ven_com_date','ven_time'],'required'],   
 
         ];
     }

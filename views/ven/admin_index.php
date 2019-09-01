@@ -58,7 +58,7 @@ use yii\helpers\Url;
         // arg.jsEvent.preventDefault() // don't navigate in main tab
         // var fID = $(this).data("id");
 			// alert(fID);
-      var url_update = "admin_update";
+      var url_update = "admin_ven_view";
         	$.get(url_update,{id: arg.event.id},function (data){
             	$("#activity-modal").find(".modal-body").html(data);
             	$(".modal-body").html(data);

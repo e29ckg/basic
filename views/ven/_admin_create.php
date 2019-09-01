@@ -102,18 +102,8 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>       
         
         <div class="text-center">             
-            <?= Yii::$app->requestedAction->id == 'admin_create' ? Html::submitButton('Save', ['class' => 'btn btn-primary btn-lg']) : '' ;?>
-            <?= Yii::$app->requestedAction->id == 'admin_update' && $model->status == 1 ?
-                Html::submitButton('Save', ['class' => 'btn btn-primary btn-lg']) 
-                .' '.Html::a(' <i class="fa fa-remove"></i> ลบ',['ven/admin_del','id' => $model->id],
-                        [
-                            'class' => 'btn btn-danger btn-lg',
-                            'data-confirm' => 'Are you sure to delete this item?',
-                            'data-method' => 'post',
-                        ])
-                :
-                '';
-                ?>
+            <?= Html::submitButton('Save', ['class' => 'btn btn-primary btn-lg btn-block']) ?>
+                            
         </div>
         <?php Yii::$app->requestedAction->id?>
         
