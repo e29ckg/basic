@@ -6,7 +6,7 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 
-class Ven extends \yii\db\ActiveRecord
+class VenAdminCreate extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -22,8 +22,8 @@ class Ven extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            // [['user_id','ven_date','ven_com_id'],'required'],             
-            // [['ven_date'], 'validateVen_date'],
+            [['user_id','ven_date','ven_com_id'],'required'],             
+            [['ven_date'], 'validateVen_date'],
         ];
     }
 

@@ -5,7 +5,7 @@ use Yii;
 use app\models\Ven;
 use app\models\VenCom;
 use app\models\VenChange;
-// use app\models\User;
+use app\models\VenAdminCreate;
 // use app\models\profile;
 // use app\models\Line;
 use app\models\SignBossName;
@@ -144,7 +144,7 @@ class VenController extends Controller
         
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $transaction = Yii::$app->db->beginTransaction();
-            try {                
+            try {              
                 $modelV1 = Ven::findOne($_POST['VenChange']['ven_id1']);
                 $modelV2 = Ven::findOne($_POST['VenChange']['ven_id2']);
                                                 
@@ -157,7 +157,7 @@ class VenController extends Controller
                 $ref_vc = Yii::$app->security->generateRandomString();
 
                 $modelV = new Ven();
-                $modelV->id = $id;
+                $modelV->id = $id ;
                 $modelV->ven_date = $modelV1->ven_date;  
                 $modelV->ven_com_id = $modelV1->ven_com_id;
                 $modelV->ven_time = $modelV1->ven_time;
@@ -169,18 +169,18 @@ class VenController extends Controller
                 $modelV->create_at = date("Y-m-d H:i:s");   
                 $modelV->save();
 
-                $modelV = new Ven();
-                $modelV->id = $id + 1;
-                $modelV->ven_date =  $modelV2->ven_date;  
-                $modelV->ven_com_id = $modelV2->ven_com_id;
-                $modelV->ven_time = $modelV2->ven_time;
-                $modelV->ven_month = $modelV2->ven_month;
-                $modelV->user_id = $modelV1->user_id;
-                $modelV->status = 2 ;
-                $modelV->ref1 = $modelV2->ref1;
-                $modelV->ref2 = $ref_vc;                
-                $modelV->create_at = date("Y-m-d H:i:s"); 
-                $modelV->save(); 
+                $modelVv = new Ven();
+                $modelVv->id = $id + 1;
+                $modelVv->ven_date =  $modelV2->ven_date;  
+                $modelVv->ven_com_id = $modelV2->ven_com_id;
+                $modelVv->ven_time = $modelV2->ven_time;
+                $modelVv->ven_month = $modelV2->ven_month;
+                $modelVv->user_id = $modelV1->user_id;
+                $modelVv->status = 2 ;
+                $modelVv->ref1 = $modelV2->ref1;
+                $modelVv->ref2 = $ref_vc;                
+                $modelVv->create_at = date("Y-m-d H:i:s"); 
+                $modelVv->save(); 
 
                 $model->ven_id1_old = $_POST['VenChange']['ven_id1'];
                 $model->ven_id2_old = $_POST['VenChange']['ven_id2'];
@@ -196,15 +196,15 @@ class VenController extends Controller
                 $model->comment = null;
                 $model->create_at = date("Y-m-d H:i:s");
                 $model->save();
-
+                
                 $transaction->commit();
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'); 
-                return $this->redirect(['change_user_index']);
                 
             } catch (\Exception $e) {
                 $transaction->rollBack();
                 throw $e;
-            }             
+            } 
+            return $this->redirect(['change_user_index']);            
         }
 
         $ven_id2 = Ven::findOne($id);
@@ -263,7 +263,7 @@ class VenController extends Controller
 
     public function actionAdmin_create($date_id)
     {
-        $model = new Ven();  
+        $model = new VenAdminCreate();  
         
         if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){
             Yii::$app->response->format = Response::FORMAT_JSON;
