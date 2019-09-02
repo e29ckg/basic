@@ -7,7 +7,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 /*
  */
-class VenChange extends \yii\db\ActiveRecord
+class VenChangeUpFile extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -23,7 +23,7 @@ class VenChange extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ven_id1','ven_id2'],'required'],   
+            // [['ven_id1','ven_id2'],'required'],   
 
         ];
     }

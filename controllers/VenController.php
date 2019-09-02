@@ -6,8 +6,8 @@ use app\models\Ven;
 use app\models\VenCom;
 use app\models\VenChange;
 use app\models\VenAdminCreate;
-// use app\models\profile;
-// use app\models\Line;
+use app\models\VenTransfer;
+use app\models\VenChangeUpFile;
 use app\models\SignBossName;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -177,6 +177,7 @@ class VenController extends Controller
                 $modelVv->create_at = date("Y-m-d H:i:s"); 
                 $modelVv->save(); 
 
+                $model->id = $id;
                 $model->ven_id1_old = $_POST['VenChange']['ven_id1'];
                 $model->ven_id2_old = $_POST['VenChange']['ven_id2'];
                 $model->ven_id1 = $id;
@@ -214,6 +215,73 @@ class VenController extends Controller
             'model' => $model,
             'ven_id2' => [$ven_id2->id => Ven::dateThai_full($ven_id2->ven_date).' '.$ven_id2->getProfileName().'('.$ven_id2->id.')'],
             'ven_id1' => $ven_id1,
+        ]);
+    }
+
+    public function actionVen_transfer($id)
+    {
+        $model = new VenTransfer();
+
+        if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        } 
+        
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $transaction = Yii::$app->db->beginTransaction();
+            try {              
+                $modelV1 = Ven::findOne($_POST['VenTransfer']['ven_id1']);
+                $modelV1->status = 6; 
+                $modelV1->save();
+                
+                $id = (int)time();
+                $ref_vc = Yii::$app->security->generateRandomString();
+
+                $modelV = new Ven();
+                $modelV->id = $id ;
+                $modelV->ven_date = $modelV1->ven_date;  
+                $modelV->ven_com_id = $modelV1->ven_com_id;
+                $modelV->ven_time = $modelV1->ven_time;
+                $modelV->ven_month = $modelV1->ven_month;
+                $modelV->user_id = $_POST['VenTransfer']['user_id2'];
+                $modelV->status = 2;
+                $modelV->ref1 = $modelV1->ref1;
+                $modelV->ref2 = $ref_vc;
+                $modelV->create_at = date("Y-m-d H:i:s");   
+                $modelV->save();
+
+                $model->ven_id1_old = $_POST['VenTransfer']['ven_id1'];
+                $model->ven_id2_old = null;
+                $model->ven_id1 = $id;
+                $model->ven_id2 = null;
+                $model->user_id1 = $modelV1->user_id;
+                $model->user_id2 = $_POST['VenTransfer']['user_id2'];
+                $model->s_po = $_POST['VenTransfer']['s_po'];
+                $model->s_bb = $_POST['VenTransfer']['s_bb'];
+                $model->status = 6;
+                $model->ref1 = $ref_vc;    
+                $model->ref2 = null;                
+                $model->comment = null;
+                $model->create_at = date("Y-m-d H:i:s");
+                $model->save();
+                
+                $transaction->commit();                
+                Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'); 
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            } 
+            
+            return $this->redirect(['change_user_index']);            
+        }
+
+        $ven_id1 = Ven::findOne($id);
+        // $ven_id2 = Ven::getVenForChangeAll($id);        
+        
+        return $this->renderAjax('_ven_transfer',[
+            'model' => $model,
+            'ven_id1' => [$ven_id1->id => Ven::dateThai_full($ven_id1->ven_date).' '.$ven_id1->getProfileName().'('.$ven_id1->id.')'],
+            // 'ven_id1' => $ven_id1,
         ]);
     }
 
@@ -274,12 +342,12 @@ class VenController extends Controller
             $transaction = Yii::$app->db->beginTransaction();
             try {
 
-                $modelVC = VenCom::findOne($_POST['Ven']['ven_com_id']); 
+                $modelVC = VenCom::findOne($_POST['VenAdminCreate']['ven_com_id']); 
 
                 $model->id = time();
-                $model->ven_date = $_POST['Ven']['ven_date'];
+                $model->ven_date = $_POST['VenAdminCreate']['ven_date'];
                 $model->ven_com_id = $modelVC->id;
-                $model->user_id = $_POST['Ven']['user_id'];               
+                $model->user_id = $_POST['VenAdminCreate']['user_id'];               
                 $model->ven_time = $modelVC->ven_time;
                 $model->ven_month = $modelVC->ven_month;
                 $model->file = $modelVC->file;
@@ -559,7 +627,7 @@ class VenController extends Controller
         $models = VenChange::find()->orderBy([
             // 'date_create'=>SORT_DESC,
             'id' => SORT_DESC,
-            ])->limit(50)->all();  
+            ])->limit(100)->all();  
 
         // foreach ($models as $model):
             
@@ -606,16 +674,20 @@ class VenController extends Controller
                 $modelV = Ven::findOne($model->ven_id1);
                 $modelV->delete();
 
-                $modelV = Ven::findOne($model->ven_id2);
-                $modelV->delete();
+                if(!empty($model->ven_id2)){
+                    $modelV = Ven::findOne($model->ven_id2);
+                    $modelV->delete();
+                }                
 
                 $modelV = Ven::findOne($model->ven_id1_old);
                 $modelV->status = 1;
                 $modelV->save();
 
-                $modelV = Ven::findOne($model->ven_id2_old);
-                $modelV->status = 1;
-                $modelV->save(); 
+                if(!empty($model->ven_id2_old)){
+                    $modelV = Ven::findOne($model->ven_id2_old);
+                    $modelV->status = 1;
+                    $modelV->save();
+                }
 
                 $model->delete();
                 
@@ -631,7 +703,7 @@ class VenController extends Controller
 
     public function actionChange_upfile($id) { 
 
-        $model = VenChange::findOne($id);
+        $model = VenChangeUpFile::findOne($id);
                           
         // Add This For Ajax Email Exist Validation 
         if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post()) ){
@@ -663,18 +735,22 @@ class VenController extends Controller
                         $modelV1->status = 3;
                         $modelV1->save();
 
-                        $modelV1 = Ven::findOne($model->ven_id2);
-                        $modelV1->file = $fileName;
-                        $modelV1->status = 3;
-                        $modelV1->save();
+                        if(!($model->ven_id2 == null)){
+                            $modelV1 = Ven::findOne($model->ven_id2);
+                            $modelV1->file = $fileName;
+                            $modelV1->status = 3;
+                            $modelV1->save();
+                        }                        
 
                         $modelV3 = Ven::findOne($model->ven_id1_old);
                         $modelV3->status = 5;
                         $modelV3->save();
 
-                        $modelV4 = Ven::findOne($model->ven_id2_old);
-                        $modelV4->status = 5;
-                        $modelV4->save();
+                        if(!($model->ven_id2_old == null)){
+                            $modelV4 = Ven::findOne($model->ven_id2_old);
+                            $modelV4->status = 5;
+                            $modelV4->save();
+                        }
                                                                     
                         Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
                                                   
@@ -705,7 +781,7 @@ class VenController extends Controller
 
     public function actionChange_del_file($id)
     {
-        $model = VenChange::findOne($id);  
+        $model = VenChangeUpFile::findOne($id);  
         
         $filename = $model->file;
         $dir = Url::to('@webroot'.$this->filePath);
@@ -721,19 +797,23 @@ class VenController extends Controller
                 $modelV->status = 4;
                 $modelV->save();
 
-                $modelV = Ven::findOne($model->ven_id2);
-                $modelV->file = null;
-                $modelV->status = 4;
-                $modelV->save();
+                if(!($model->ven_id2 == null)){
+                    $modelV = Ven::findOne($model->ven_id2);
+                    $modelV->file = null;
+                    $modelV->status = 4;
+                    $modelV->save();
+                }                
 
                 $modelV = Ven::findOne($model->ven_id1);
                 $modelV->status = 2;
                 $modelV->save();
 
-                $modelV = Ven::findOne($model->ven_id2);
-                $modelV->status = 2;
-                $modelV->save();
- 
+                if(!($model->ven_id2_old == null)){
+                    $modelV = Ven::findOne($model->ven_id2);
+                    $modelV->status = 2;
+                    $modelV->save();
+                }
+
                 $model->file = null;
                 $model->status = 2;
                 $model->save();
@@ -759,6 +839,40 @@ class VenController extends Controller
             Yii::$app->session->setFlash('warning', 'ไม่พบ File... '.$completePath);            
         }
         return $this->redirect(['change_index']);
+    }
+
+    public function actionPrint($id=null)
+    {
+        $model = VenChange::findOne($id);
+        // if($model->cat == 'ลาป่วย' || $model->cat == 'ลากิจส่วนตัว' || $model->cat == 'ลาคลอดบุตร'){
+            $Pdf_print = '_pdf_A';
+        // }else if($model->cat =='ลาพักผ่อน'){
+        //     $Pdf_print = '_pdf_B';
+        // }
+        
+        Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+        $pdf = new Pdf([
+            'mode' => Pdf::MODE_UTF8, // leaner size using standard fonts
+            'destination' => Pdf::DEST_BROWSER,
+            'content' => $this->renderPartial($Pdf_print,[
+                'model'=>$model,
+            ]),
+            
+            'cssFile' => 'css/pdf.css',
+            'options' => [
+                // any mpdf options you wish to set
+            ],
+            'methods' => [
+                'SetTitle' => $model->id,
+                // 'SetSubject' => 'Generating PDF files via yii2-mpdf extension has never been easy',
+                // 'SetHeader' => ['Krajee Privacy Policy||Generated On: ' . date("r")],
+                // 'SetFooter' => ['|Page {PAGENO}|'],
+                // 'SetAuthor' => 'Kartik Visweswaran',
+                // 'SetCreator' => 'Kartik Visweswaran',
+                // 'SetKeywords' => 'Krajee, Yii2, Export, PDF, MPDF, Output, Privacy, Policy, yii2-mpdf',
+            ]
+        ]);
+        return $pdf->render();
     }
 
 }

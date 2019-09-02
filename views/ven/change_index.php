@@ -42,20 +42,22 @@ $this->params['breadcrumbs'][] = $this->title;
 									<?php foreach ($models as $model): ?>
 						            <tr>						                
 										<td><?=$model->id;?></td>	
-										<td><?= isset($model->ven_id2) ? 
+										<td><?= isset($model->ven_id1) ? 
 											$model->DateThai_full($model->ven1['ven_date'])
 											.'<br>'.$model->ven1->getProfileName()
 											.'<br>('.$model->ven_id1.')'
-											: '';?>
+											: '-';?>
 										</td>									
 										<td>
 											<?= isset($model->ven_id2) ?
 												$model->DateThai_full($model->ven2->ven_date)
 												.'<br>'.$model->ven2->getProfileName()
 												.'<br>('.$model->ven_id2.')'
-												: '' ;
+												: '-' ;
 											?></td>
-										<td><?=$model->getStatusList()[$model->status];?></td>
+										<td><?=$model->getStatusList()[$model->status];?>
+											<br>สร้างโดย <?=$model->getProfileName()?>
+										</td>
 										<td class = "text-center">
 											
 											<?= !empty($model->file) ? 

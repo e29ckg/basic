@@ -50,12 +50,14 @@ use app\models\VenChange;
                     </td>
                 </tr>
                 <tr>
-                    <td class="text-right">
+                    <?= $model->status == 2 ?
+                    '<td class="text-right">
                         สถานะ
                     </td>
                     <td>
-                        <?= VenChange::getStatusList()[$model->status] ;?>
-                    </td>
+                        <label class="label label-warning">'.VenChange::getStatusList()[$model->status].'</label>
+                    </td>':'';
+                    ?>
                 </tr>
                 <tr>
                     <td class="text-right">
@@ -81,11 +83,11 @@ use app\models\VenChange;
                         
                     </td>
                     <td>
-                        <?= $model->getVenForChangeCount($model->id) > 0 && $model->getCheck($model->id) ?
+                        <?= $model->getVenForChangeCount($model->id) > 0 && $model->getCheck($model->id) && $model->status == 1?
                             '<a class="btn btn-primary btn-xs act-ven-change" data-id="'.$model->id.'">ขอเปลี่ยน</a>'
                             : '';?>                        
                         <?= Yii::$app->user->identity->id == $model->user_id && $model->ven_date  >  date("Y-m-d") && $model->status <> 2 ? 
-                            '<a class="btn btn-primary btn-xs" target="_blank" data-id='.$model->id.'>ยกให้</a>'
+                            '<a class="btn btn-primary btn-xs act-ven-transfer" target="_blank" data-id='.$model->id.'>ยกให้</a>'
                             :'';?>
                     </td>
                 </tr>       
@@ -101,10 +103,10 @@ use app\models\VenChange;
                         <td><?=$modeld->DateThai_full($modeld->ven_date)?></</td>									
                         <td> <?=$modeld->getProfileName()?> <?= VenCom::getVen_time()[$modeld->ven_time];?></td>
                         <td class = "text-center">
-                            <?=$modeld->status == 2 || $modeld->status == 4 ?
-                                '<a href="'.Url::to(['change_index']).'" class="label label-danger">'.VenChange::getStatusList()[$modeld->status].'</a>' 
+                            <?=$modeld->status == 2 || $modeld->status == 4 || $modeld->status == 6 ?
+                                '<label class="label label-danger">'.VenChange::getStatusList()[$modeld->status].'</label>' 
                                 :
-                                '<a href="'.Url::to(['change_index']).'" class="label label-primary" >'.VenChange::getStatusList()[$modeld->status].'</a>' ;?>				        
+                                '<label class="label label-primary" >'.VenChange::getStatusList()[$modeld->status].'</label>' ;?>				        
                         </td>
                         
                     </tr>
@@ -134,7 +136,31 @@ $(document).ready(function() {
 				}
 			);
 		});
+    });
+    // $(document).ready(function() {	  
+    //     var url_transfer = "ven_transfer';		
+    	// $(".act-ven-transfer").click(function(e) {			
+		// 	var fID = $(this).data("id");
+		// 	$.get(url_transfer,{id: fID},function (data){
+		// 			$("#activity-modal").find(".modal-body").html(data);
+		// 			$(".modal-body").html(data);
+		// 			$(".modal-title").html("ยกเวร");
+		// 			$("#activity-modal").modal("show");
+		// 		}
+		// 	);
+		// });
         		
+// });
+$(document).on('click','.act-ven-transfer',function(){
+  var url_trn = "ven_transfer";
+  var fID = $(this).attr("data-id");
+//   alert(fID);
+  $.get(url_trn,{id: fID},function (data){
+            	$("#activity-modal").find(".modal-body").html(data);
+            	$(".modal-body").html(data);
+            	$(".modal-title").html("ยกเวร");
+            	$("#activity-modal").modal("show");
+        	});
 });
 JS;
 $this->registerJs($script);
