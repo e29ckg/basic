@@ -147,12 +147,7 @@ class VenController extends Controller
             try {              
                 $modelV1 = Ven::findOne($_POST['VenChange']['ven_id1']);
                 $modelV2 = Ven::findOne($_POST['VenChange']['ven_id2']);
-                                                
-                $modelV1->status = 4; 
-                $modelV1->save();   
-                $modelV2->status = 4;
-                $modelV2->save();
-
+                
                 $id = (int)time();
                 $ref_vc = Yii::$app->security->generateRandomString();
 
@@ -196,14 +191,19 @@ class VenController extends Controller
                 $model->comment = null;
                 $model->create_at = date("Y-m-d H:i:s");
                 $model->save();
+
+                $modelV1->status = 4; 
+                $modelV1->save();   
+                $modelV2->status = 4;
+                $modelV2->save();
                 
-                $transaction->commit();
+                $transaction->commit();                
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'); 
-                
             } catch (\Exception $e) {
                 $transaction->rollBack();
                 throw $e;
             } 
+            
             return $this->redirect(['change_user_index']);            
         }
 
@@ -294,12 +294,14 @@ class VenController extends Controller
                 }  
 
                 $transaction->commit();
-                return $this->redirect(['admin_index']);
+               
                 
             } catch (\Exception $e) {
                 $transaction->rollBack();
                 throw $e;
-            }             
+            }   
+            
+            return $this->redirect(['admin_index']);
         }
         
         if(Yii::$app->request->isAjax){
