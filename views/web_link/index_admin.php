@@ -22,12 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 			<button id="act-create" class="btn btn-danger btn-md" alt="act-create"><i class="fa fa-pencil-square-o "></i> เพิ่ม</button>  
 		</div>	
-		<div class="col-sm-3">
-						<div class="search_box pull-right">
-							<!-- <input type="text" placeholder="Search"/> -->
-							<input id = "search" type="text" name="table_search" class="form-control pull-right" placeholder="Search" data-cip-id="cIPJQ342845640" autofocus>
-						</div>
-					</div>
+		
 	</div>	
 	<div class="box-body">
 		<div id="example" class="dataTables_wrapper form-inline dt-bootstrap">
@@ -197,17 +192,7 @@ $(document).ready(function() {
             	$("#activity-modal").modal("show");
         	});
     	});
-    	var url_view = "index.php?r=ppss/view";		
-    	$(".act-view").click(function(e) {			
-                var fID = $(this).data("id");
-                $.get(url_view,{id: fID},function (data){
-                        $("#activity-modal").find(".modal-body").html(data);
-                        $(".modal-body").html(data);
-                        $(".modal-title").html("ข้อมูล");
-                        $("#activity-modal").modal("show");
-                    }
-                );
-            });   
+    	
     
 	}
 
@@ -232,20 +217,6 @@ $(document).ready(function() {
     		// "order": [[ 0, 'desc' ]]
 		})
 
-		$("#search").keyup(function () {
-		//        var that = this,
-			value = $(this).val();
-			if(value == ""){
-	  			location.reload();  
-			}
-			$.get("search",{q:value},
-				function (data)
-					{
-						$("#features_items").html(data);
-					}
-				);
-
-			});	
 		
 });
 JS;
