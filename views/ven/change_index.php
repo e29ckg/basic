@@ -42,9 +42,11 @@ $this->params['breadcrumbs'][] = $this->title;
 									<?php foreach ($models as $model): ?>
 						            <tr>						                
 										<td><?=$model->id;?></td>	
-										<td><?= $model->DateThai_full($model->ven1['ven_date'])
+										<td><?= isset($model->ven_id2) ? 
+											$model->DateThai_full($model->ven1['ven_date'])
 											.'<br>'.$model->ven1->getProfileName()
-											.'<br>('.$model->ven_id1.')';?>
+											.'<br>('.$model->ven_id1.')'
+											: '';?>
 										</td>									
 										<td>
 											<?= isset($model->ven_id2) ?
