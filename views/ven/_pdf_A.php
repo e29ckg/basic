@@ -2,11 +2,11 @@
 use yii\helpers\Html;
 // use app\models\User;
 // use app\models\Bila;
-use app\models\SignBossName;
+// use app\models\SignBossName;
 use yii\helpers\Url;
 ?>
 <link rel="stylesheet" href="<?=Url::to(['/fonts/thsarabunnew.css'])?>" />
-<div style="A_CSS_ATTRIBUTE:all;position: absolute;bottom: 20px; right: 45px;left: 45px; top: 80px;  ">
+<div style="A_CSS_ATTRIBUTE:all;position: absolute;bottom: 20px; right: 45px;left: 45px; top: 50px;  ">
 <!-- <div class="text-center"><H3> </H3></div> -->
 
 <table class=" thsarabunnew" width="100%" border="0" cellpadding="1" cellspacing="0">
@@ -17,14 +17,13 @@ use yii\helpers\Url;
             </th>
             <th ><H2>ใบขอเปลี่ยนเวร</H2> </th>	
             <th  width="10%">    
-                <img src="<?=$model->id?>" height="60" width="60" >
+                <img src="<?= $model->getQr($model->id,$model->user_id1);?>" height="60" width="60" >
                 <div style="font-size: 9px; "><?=$model->id?></div>
             </th>		
         </tr>
         
 	</thead>    
 </table>
-<br>
 <table class="bl_detail thsarabunnew" width="100%" border="0" cellpadding="1" cellspacing="0">
     <tbody>
         <tr>
@@ -45,10 +44,18 @@ use yii\helpers\Url;
 		</tr>
             
         <tr>
-            <td colspan="5"></td>	
-            <td colspan="5">วันที่ <?=$model->DateThai_full($model->create_at)?></td>
+            <td colspan="4"></td>	
+            <td colspan="1" style="text-align:right">วันที่</td>	
+            <td colspan="1" class="TableLine" style="text-align:center"><?=date("j",strtotime($model->create_at));?></td>	
+            <td colspan="1" style="text-align:center">เดือน</td>
+            <td colspan="1" class="TableLine" style="text-align:center"><?=$model->DateThai_month_full($model->create_at)?></td>
+            <td colspan="1" style="text-align:center">พ.ศ.</td>
+            <td colspan="1" class="TableLine" style="text-align:center"><?=date("Y",strtotime($model->create_at))+543;?></td>
 		</tr>
-  
+        <tr>
+            <td></td>	
+            
+        </tr>
         <tr>
             <td colspan="1">เรื่อง</td>	
             <td colspan="9">ขอเปลี่ยนเวร</td>
@@ -80,16 +87,18 @@ use yii\helpers\Url;
 		</tr>
         <tr>
             <td>เนื่องจาก</td>	
-            <td colspan="9" class="TableLine"><?=$model->comment?></td>
+            <td class="TableLine"></td>
+            <td colspan="8" class="TableLine"><?=$model->comment?></td>
 		</tr>
         <tr>
-            <td colspan="2">จึงขอเปลี่ยนเวรกับ </td>	
-            <td colspan="8" class="TableLine" style="text-align:center"><?=$model->getProfileName2()?></td>
+            <td colspan="2">จึงขอเปลี่ยนเวรกับ </td>
+            <td colspan="5" class="TableLine" style="text-align:center"><?=$model->getProfileName2()?></td>
+            <td colspan="5" class="TableLine"></td>
 		</tr>
         <tr>
             <td colspan="6" >เป็นผู้ปฏิบัติหน้าที่แทน และข้าพเจ้าจะมาปฏิบัติหน้าที่แทนในวันที่ </td>	
             <td colspan="4" class="TableLine" style="text-align:center">
-                <?=$model->ven_id2_old ? $model->DateThai_full($model->ven2_old->getVenComDate()) :'';?></td>            
+                <?=$model->ven_id2_old ? $model->DateThai_full($model->ven2_old->getVenComDate()) :'-';?></td>            
 		</tr>
         <tr>
             <td colspan="6" ></td>	
@@ -138,27 +147,37 @@ use yii\helpers\Url;
 		</tr>
     
         <tr>
-            <td colspan="5" style="text-align:center">ทราบ</td>
-            <td colspan="5" style="text-align:center">[ ] เห็นควรอนุญาต </td>
+            <td colspan="1"></td>
+            <td colspan="3" style="text-align:center">ทราบ</td>
+            <td colspan="2"></td>            
+            <td colspan="3" style="text-align:center">[ / ] เห็นควรอนุญาต </td>
+            <td colspan="1"></td>
 		</tr>
         <tr>
-            <td colspan="5" class="TableLine" style="text-align:center"></td>	
-            <td colspan="5" class="TableLine" style="text-align:center"></td>
+            <td colspan="1"></td>
+            <td colspan="3" class="TableLine" style="text-align:center"></td>
+            <td colspan="2"></td>            
+            <td colspan="3" class="TableLine" style="text-align:center"></td>
+            <td colspan="1"></td>
+		</tr>
+        
+        <tr>
+            <td colspan="1"></td>
+            <td colspan="3" style="text-align:center"><?= $model->s_bb ? '('.$model->getS_SS($model->s_bb)->name.')' : '';?></td>
+            <td colspan="2"></td>            
+            <td colspan="3" style="text-align:center"><?= $model->s_po ? '('.$model->getS_SS($model->s_po)->name.')' : '';?></td>
+            <td colspan="1"></td>
 		</tr>
         <tr>
-            <td colspan="5" style="text-align:center">(ชื่อหัวหน้า)</td>	
-            <td colspan="5" style="text-align:center">ชื่อ ผอ.</td>
+            <td colspan="5" style="text-align:center"><?= $model->s_bb ? $model->getS_SS($model->s_bb)->dep1 : '';?></td>	
+            <td colspan="5" style="text-align:center"><?= $model->s_po ? $model->getS_SS($model->s_po)->dep1 : '';?></td>	
 		</tr>
         <tr>
-            <td colspan="5" style="text-align:center">ตำแหน่ง</td>	
-            <td colspan="5" style="text-align:center">ตำแหน่ง</td>	
-		</tr>
-        <tr>
-            <td colspan="5" style="text-align:center">ตำแหน่ง1</td>	
-            <td colspan="5" style="text-align:center">ตำแหน่ง1</td>	
+            <td colspan="5" style="text-align:center"><?= $model->s_bb ? $model->getS_SS($model->s_bb)->dep2 : '';?></td>	
+            <td colspan="5" style="text-align:center"><?= $model->s_po ? $model->getS_SS($model->s_po)->dep2 : '';?></td>	
 		</tr><tr>
-            <td colspan="5" style="text-align:center">ตำแหน่ง2</td>	
-            <td colspan="5" style="text-align:center">ตำแหน่ง2</td>	
+            <td colspan="5" style="text-align:center"><?= $model->s_bb ? $model->getS_SS($model->s_bb)->dep3 : '';?></td>	
+            <td colspan="5" style="text-align:center"><?= $model->s_po ? $model->getS_SS($model->s_po)->dep3 : '';?></td>	
 		</tr>
     </tbody>
 	  

@@ -46,6 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
 											$model->DateThai_full($model->ven1['ven_date'])
 											.'<br>'.$model->ven1->getProfileName()
 											.'<br>('.$model->ven_id1.')'
+											.'<br>'.$model->getStatusList()[$model->status]
 											: '-';?>
 										</td>									
 										<td>
@@ -53,10 +54,16 @@ $this->params['breadcrumbs'][] = $this->title;
 												$model->DateThai_full($model->ven2->ven_date)
 												.'<br>'.$model->ven2->getProfileName()
 												.'<br>('.$model->ven_id2.')'
+												.'<br>'.$model->getStatusList()[$model->status]
 												: '-' ;
 											?></td>
-										<td><?=$model->getStatusList()[$model->status];?>
+										<td>
+											เนื่องจาก : <?=$model->comment?>
+											<br>ผอ. : <?= $model->s_po ? $model->getS_SS($model->s_po)->name : '';?>
+											<br>หัวหน้า : <?= $model->s_bb ? $model->getS_SS($model->s_bb)->name : '';?>
 											<br>สร้างโดย <?=$model->getProfileName()?>
+											<br>
+											<button class="btn btn-warning btn-xs btn-block act-update " alt="act-update" data-id="<?=$model->id?>">แก้ไข</button>
 										</td>
 										<td class = "text-center">
 											
@@ -72,16 +79,17 @@ $this->params['breadcrumbs'][] = $this->title;
 													'data-method' => 'post',
 												]) 																			
 												:
-												Html::a('<i class="fa fa-print"></i> แนบไฟล์ ', '#', [
+												Html::a('<i class="fa fa-print"></i> Print ', ['ven/print','id' => $model->id], [
+													'class' => 'btn btn-primary btn-xs',
+													'data-id' => $model->id,
+													'target' => '_blank'
+												])
+												.' '.Html::a('<i class="fa fa-print"></i> แนบไฟล์ ', '#', [
 													'class' => 'act-change-upfile btn btn-success btn-xs',
 													'data-id' => $model->id,
 													// 'target' => '_blank'
 												]).' '
-												.Html::a('<i class="fa fa-print"></i> Print ', ['ven/print','id' => $model->id], [
-													'class' => 'btn btn-primary btn-xs',
-													'data-id' => $model->id,
-													'target' => '_blank'
-												]) 
+												 
 												.' ' .Html::a('<i class="fa fa-remove"></i> ยกเลิก ', ['ven/change_del_user', 'id' => $model->id], [
 													'class' => 'btn btn-danger btn-xs',
 													'data-confirm' => 'Are you sure?',
@@ -114,7 +122,7 @@ $(document).ready(function() {
  		location.reload();
 	})
 
-	var url_update = "com_update";
+	var url_update = "ven_change_update";
     	$(".act-update").click(function(e) {            
 			var fID = $(this).data("id");
 			// alert(fID);

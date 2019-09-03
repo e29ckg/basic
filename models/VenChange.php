@@ -77,6 +77,16 @@ class VenChange extends \yii\db\ActiveRecord
         return $this->hasOne(Ven::className(), ['id' => 'ven_id2_old']);
     }
 
+    public function getSBN1()
+    {
+        return $this->hasOne(SignBossName::className(), ['id' => 's_po','status' => 1]);
+    }
+
+    public function getSBN2()
+    {
+        return $this->hasOne(SignBossName::className(), ['id' => 's_bb','status' => 1]);
+    }
+
     public function getProfileName(){
         $model=$this->profile;
         return $model ? $model->fname.$model->name.' '.$model->sname : '-';
@@ -87,12 +97,22 @@ class VenChange extends \yii\db\ActiveRecord
         return $model ? $model->fname.$model->name.' '.$model->sname : '-';
     } 
 
-    public function getProfileDep(){
-        $model=$this->ven1;
-        return !empty($model->dep) ? $model->dep : '-';
+    public function getS_SS($id){
+        $model = SignBossName::findOne($id);
+        return  $model ? $model : '-';
+         
     }
 
-    
+    public function getS_bb(){
+        $model=$this->sBN2;
+        return [
+            'name' => $model->name,
+            'dep1' => $model->dep1,
+            'dep2' => $model->dep2,
+            'dep3' => $model->dep3,
+        ];
+    }
+
 
     public function getSignList(){
         $model = SignBossName::find()->where(['status' => '1'])->orderBy('id')->all();
@@ -149,5 +169,21 @@ class VenChange extends \yii\db\ActiveRecord
             '16:30:55' => '16.30 น. ถึง 8.30 น.',
         ];
     }
+
+    public function DateThai_month_full($strDate)
+	{
+		$strYear = date("Y",strtotime($strDate))+543;
+		$strMonth= date("n",strtotime($strDate));
+		$strDay= date("j",strtotime($strDate));
+		$strHour= date("H",strtotime($strDate));
+		$strMinute= date("i",strtotime($strDate));
+		$strSeconds= date("s",strtotime($strDate));
+		$strMonthCut = Array("","มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม",
+                            "สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม");
+		$strMonthThai=$strMonthCut[$strMonth];
+		return "$strMonthThai";
+    }
+
+    
 
 }

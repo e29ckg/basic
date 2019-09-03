@@ -9,6 +9,7 @@ use app\models\VenAdminCreate;
 use app\models\VenTransfer;
 use app\models\VenChangeUpFile;
 use app\models\SignBossName;
+use app\models\Line;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -32,7 +33,6 @@ class VenController extends Controller
      */
 
     public $line_sms ='10.37.64.01';
-    public $upload ='/uploads/ven/';
     public $filePath = '/uploads/ven/';
     // public $smsLineAlert = ' http://10.37.64.01/main/web/cletter/show/';
 
@@ -87,7 +87,7 @@ class VenController extends Controller
             }
             $even = [
                 'id' => $model->id,
-                'title' => $model->getProfileNameCal().' '.VenChange::getStatusList()[$model->status],
+                'title' => $model->profile->name.' '.VenChange::getStatusList()[$model->status],
                 // 'title' => $model->ven_date.' '.$model->ven_time,
                 'start' => $model->ven_date.' '.$model->ven_time,
                 'textColor' => $model->user_id == Yii::$app->user->identity->id ? 'yellow' :'',
@@ -198,7 +198,29 @@ class VenController extends Controller
                 $modelV2->status = 4;
                 $modelV2->save();
                 
-                $transaction->commit();                
+                $transaction->commit();   
+                
+                $dir = Url::to('@webroot'.$this->filePath.$model->user_id1.'/');
+                    if (!is_dir($dir)) {
+                        mkdir($dir, 0777, true);
+                    } 
+                $sms_qr = isset($this->line_sms) ? $this->line_sms : Yii::$app->getRequest()->hostInfo ;
+                $sms_qr .= '/ven.php?ref='.$model->id;
+                $qrCode = (new QrCode($sms_qr))
+                    ->setSize(250)
+                    ->setMargin(5)
+                    ->useForegroundColor(1, 1, 1);              
+                $qrCode->writeFile(Url::to('@webroot'.$this->filePath.$model->user_id1.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
+                /*---------------------ส่ง line ไปยัง Admin--------------------*/
+                $modelLine = Line::findOne(['name' => 'admin']);
+                if(isset($modelLine->token)){
+                    $message = $model->profile->name;
+                    $message .= isset($model->ven_id2) ? 'เปลี่ยนเวร' : 'ยกเวร';
+                    $message .= "\n".' รายละเอียดเพิ่มเติม' ."\n".$sms_qr;
+                    $res = Line::notify_message($modelLine->token,$message);  
+                    $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+                } 
+
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'); 
             } catch (\Exception $e) {
                 $transaction->rollBack();
@@ -213,7 +235,7 @@ class VenController extends Controller
         
         return $this->renderAjax('_ven_change',[
             'model' => $model,
-            'ven_id2' => [$ven_id2->id => Ven::dateThai_full($ven_id2->ven_date).' '.$ven_id2->getProfileName().'('.$ven_id2->id.')'],
+            'ven_id2' => [$ven_id2->id => Ven::dateThai_full($ven_id2->ven_date).' '.$ven_id2->profile->name.'('.$ven_id2->id.')'],
             'ven_id1' => $ven_id1,
         ]);
     }
@@ -266,7 +288,29 @@ class VenController extends Controller
                 $model->create_at = date("Y-m-d H:i:s");
                 $model->save();
                 
-                $transaction->commit();                
+                $transaction->commit();      
+                
+                $dir = Url::to('@webroot'.$this->filePath.$model->user_id1.'/');
+                    if (!is_dir($dir)) {
+                        mkdir($dir, 0777, true);
+                    } 
+                $sms_qr = isset($this->line_sms) ? $this->line_sms : Yii::$app->getRequest()->hostInfo ;
+                $sms_qr .= '/ven.php?ref='.$model->id;
+                $qrCode = (new QrCode($sms_qr))
+                    ->setSize(250)
+                    ->setMargin(5)
+                    ->useForegroundColor(1, 1, 1);              
+                $qrCode->writeFile(Url::to('@webroot'.$this->filePath.$model->user_id1.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
+                /*---------------------ส่ง line ไปยัง Admin--------------------*/
+                $modelLine = Line::findOne(['name' => 'admin']);
+                if(isset($modelLine->token)){
+                    $message = $model->profile->name;
+                    $message .= $model->ven_id2 ? 'เปลี่ยนเวร' : 'ยกเวร';
+                    $message .= "\n".' รายละเอียดเพิ่มเติม' ."\n".$sms_qr;
+                    $res = Line::notify_message($modelLine->token,$message);  
+                    $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+                } 
+
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'); 
             } catch (\Exception $e) {
                 $transaction->rollBack();
@@ -281,8 +325,76 @@ class VenController extends Controller
         
         return $this->renderAjax('_ven_transfer',[
             'model' => $model,
-            'ven_id1' => [$ven_id1->id => Ven::dateThai_full($ven_id1->ven_date).' '.$ven_id1->getProfileName().'('.$ven_id1->id.')'],
+            'ven_id1' => [$ven_id1->id => Ven::dateThai_full($ven_id1->ven_date).' '.$ven_id1->profile->name.'('.$ven_id1->id.')'],
             // 'ven_id1' => $ven_id1,
+        ]);
+    }
+
+    public function actionVen_change_update($id)
+    {
+        $model = VenChange::findOne($id);
+
+        if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        } 
+        
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $transaction = Yii::$app->db->beginTransaction();
+            try {              
+                              
+                // $model->ven_id1_old = $_POST['VenChange']['ven_id1'];
+                // $model->ven_id2_old = $_POST['VenChange']['ven_id2'];
+                // $model->ven_id1 = $id;
+                // $model->ven_id2 = $id + 1;
+                // $model->user_id1 = $modelV1->user_id;
+                // $model->user_id2 = $modelV2->user_id;
+                $model->s_po = $_POST['VenChange']['s_po'];
+                $model->s_bb = $_POST['VenChange']['s_bb'];
+                // $model->status = 2;
+                // $model->ref1 = $ref_vc;    
+                // $model->ref2 = null;                
+                $model->comment = $_POST['VenChange']['comment'];
+                $model->create_at = date("Y-m-d H:i:s");
+                $model->save();
+
+                
+                $transaction->commit();   
+                
+                $dir = Url::to('@webroot'.$this->filePath.$model->user_id1.'/');
+                    if (!is_dir($dir)) {
+                        mkdir($dir, 0777, true);
+                    } 
+                $sms_qr = isset($this->line_sms) ? $this->line_sms : Yii::$app->getRequest()->hostInfo ;
+                $sms_qr .= '/ven.php?ref='.$model->id;
+                $qrCode = (new QrCode($sms_qr))
+                    ->setSize(250)
+                    ->setMargin(5)
+                    ->useForegroundColor(1, 1, 1);              
+                $qrCode->writeFile(Url::to('@webroot'.$this->filePath.$model->user_id1.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
+                /*---------------------ส่ง line ไปยัง Admin--------------------*/
+                $modelLine = Line::findOne(['name' => 'admin']);
+                if(isset($modelLine->token)){
+                    $message = $model->profile->name.' แก้ไข ';
+                    $message .= isset($model->ven_id2) ? 'เปลี่ยนเวร' : 'ยกเวร';
+                    $message .= "\n".' รายละเอียดเพิ่มเติม' ."\n".$sms_qr;
+                    $res = Line::notify_message($modelLine->token,$message);  
+                    $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+                } 
+
+                Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'); 
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            } 
+            
+            return $this->redirect(['change_user_index']);            
+        }
+
+              
+        
+        return $this->renderAjax('_ven_change_update',[
+            'model' => $model,
         ]);
     }
 
@@ -310,7 +422,7 @@ class VenController extends Controller
             }
             $even = [
                 'id' => $model->id,
-                'title' => $model->getProfileNameCal().' '.VenChange::getStatusList()[$model->status],
+                'title' => $model->profile->name.' '.VenChange::getStatusList()[$model->status],
                 // 'title' => $model->ven_date.' '.$model->ven_time,
                 'start' => $model->ven_date.' '.$model->ven_time,
                 'textColor' => $model->user_id == Yii::$app->user->identity->id ? 'yellow' :'',
@@ -664,10 +776,16 @@ class VenController extends Controller
         $model = VenChange::findOne($id);  
         
         $filename = $model->file;
-        $dir = Url::to('@webroot'.$this->filePath);
+        // $dir = Url::to('@webroot'.$this->filePath.$model->user_id1);
+        $dir = Url::to('@webroot'.$this->filePath.$model->user_id1.'/');
         
-        if($filename && is_file($dir.$filename)){
-            unlink($dir.$filename);// ลบ รูปเดิม;                    
+        if(is_file($dir.$model->id.'.png')){
+            unlink($dir.$model->id.'.png');// ลบ รูปเดิม;                    
+        }
+         
+        if($filename && is_file($dir.'/'.$filename)){
+            unlink($dir.'/'.$filename);// ลบ รูปเดิม;   
+                           
         }
 
         $transaction = Yii::$app->db->beginTransaction();
@@ -705,10 +823,12 @@ class VenController extends Controller
         $model = VenChange::findOne($id);  
         
         $filename = $model->file;
-        $dir = Url::to('@webroot'.$this->filePath);
-        
-        if($filename && is_file($dir.$filename)){
-            unlink($dir.$filename);// ลบ รูปเดิม;                    
+        $dir = Url::to('@webroot'.$this->filePath.$model->user_id1);
+        if(is_file($dir.'/'.$model->id.'.png')){
+            unlink($dir.'/'.$model->id.'.png');                
+        }
+        if($filename && is_file($dir.'/'.$filename)){
+            unlink($dir.'/'.$filename);// ลบ รูปเดิม;                    
         }
 
         $transaction = Yii::$app->db->beginTransaction();
@@ -728,8 +848,26 @@ class VenController extends Controller
                     $modelV->status = 1;
                     $modelV->save();
                 }
-
-                $model->delete();
+        
+                if($model->delete()){
+                    $dir = Url::to('@webroot'.$this->filePath.$model->user_id);
+                    if(is_file($dir.'/'.$model->id.'.png')){
+                        unlink($dir.'/'.$model->id.'.png');// ลบ รูปเดิม;   
+                    } 
+                    if(is_file($dir.'/'.$model->file.'.png')){
+                        unlink($dir.'/'.$model->file);// ลบ ไฟล์  
+                    }
+                    if (is_dir($dir)) {
+                        // mkdir($dir, 0777, true);
+                        rmdir($dir);
+                    } 
+                    /*---------------------ส่ง line ไปยัง Admin--------------------*/
+                    $modelLine = Line::findOne(['name' => 'bila_admin']);
+                    if(isset($modelLine->token)){                
+                        $res = Line::notify_message($modelLine->token,$message);  
+                        $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+                    } 
+                }     
                 
                 Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');  
                                 
@@ -754,13 +892,14 @@ class VenController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()){ 
             $f = UploadedFile::getInstance($model, 'file');
             
-            if(!empty($f)){                
-                $dir = Url::to('@webroot'.$this->filePath);
+            if(!empty($f)){  
+                $dir = Url::to('@webroot'.$this->filePath.$model->user_id1);              
+                // $dir = Url::to('@webroot'.$this->filePath);
                 if (!is_dir($dir)) {
                     mkdir($dir, 0777, true);
                 }
                 $fileName = md5($f->baseName . time()) . '.' . $f->extension;
-                if($f->saveAs($dir . $fileName)){
+                if($f->saveAs($dir .'/'. $fileName)){
                     $model->file = $fileName;
                 }               
 
@@ -824,7 +963,8 @@ class VenController extends Controller
         $model = VenChangeUpFile::findOne($id);  
         
         $filename = $model->file;
-        $dir = Url::to('@webroot'.$this->filePath);
+        // $dir = Url::to('@webroot'.$this->filePath);
+        $dir = Url::to('@webroot'.$this->filePath.$model->user_id1.'/');
         
         if($filename && is_file($dir.$filename)){
             unlink($dir.$filename);// ลบ รูปเดิม;                    
@@ -859,7 +999,8 @@ class VenController extends Controller
                 $model->save();
                 
                 Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');  
-                                
+
+                                                
                 $transaction->commit();
             } catch (\Exception $e) {
                 $transaction->rollBack();
@@ -872,7 +1013,8 @@ class VenController extends Controller
     {
         $model = VenChange::findOne($id);           
         
-        $completePath = Url::to('@webroot').$this->filePath.$model->file;
+        // $completePath = Url::to('@webroot').$this->filePath.$model->file;
+        $completePath  = Url::to('@webroot'.$this->filePath.$model->user_id1.'/'.$model->file);
         if(is_file($completePath)){
             return Yii::$app->response->sendFile($completePath, $model->file, ['inline'=>true]);                        
         }else{

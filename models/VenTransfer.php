@@ -50,7 +50,7 @@ class VenTransfer extends \yii\db\ActiveRecord
 
     public function getProfile()
     {
-        return $this->hasOne(Profile::className(), ['id' => 'user_id']);
+        return $this->hasOne(Profile::className(), ['id' => 'user_id1']);
     }
 
     

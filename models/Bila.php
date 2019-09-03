@@ -185,7 +185,4 @@ class Bila extends \yii\db\ActiveRecord
 		return "$strMonthThai";
     }
 
-    
-    
-
 }
