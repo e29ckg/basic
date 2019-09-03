@@ -189,7 +189,7 @@ class VenController extends Controller
                 $model->status = 2;
                 $model->ref1 = $ref_vc;    
                 $model->ref2 = null;                
-                $model->comment = null;
+                $model->comment = $_POST['VenChange']['comment'];
                 $model->create_at = date("Y-m-d H:i:s");
                 $model->save();
 
@@ -250,6 +250,7 @@ class VenController extends Controller
                 $modelV->create_at = date("Y-m-d H:i:s");   
                 $modelV->save();
 
+                $model->id = $id;
                 $model->ven_id1_old = $_POST['VenTransfer']['ven_id1'];
                 $model->ven_id2_old = null;
                 $model->ven_id1 = $id;
@@ -261,7 +262,7 @@ class VenController extends Controller
                 $model->status = 6;
                 $model->ref1 = $ref_vc;    
                 $model->ref2 = null;                
-                $model->comment = null;
+                $model->comment = $_POST['VenTransfer']['comment'];
                 $model->create_at = date("Y-m-d H:i:s");
                 $model->save();
                 
@@ -658,6 +659,47 @@ class VenController extends Controller
         ]);
     }
 
+    public function actionChange_del_user($id)
+    {
+        $model = VenChange::findOne($id);  
+        
+        $filename = $model->file;
+        $dir = Url::to('@webroot'.$this->filePath);
+        
+        if($filename && is_file($dir.$filename)){
+            unlink($dir.$filename);// ลบ รูปเดิม;                    
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+            try {
+                Ven::findOne($model->ven_id1)->delete();
+
+                if(!empty($model->ven_id2)){
+                    Ven::findOne($model->ven_id2)->delete();
+                }                
+
+                $modelV = Ven::findOne($model->ven_id1_old);
+                $modelV->status = 1;
+                $modelV->save();
+
+                if(!empty($model->ven_id2_old)){
+                    $modelV = Ven::findOne($model->ven_id2_old);
+                    $modelV->status = 1;
+                    $modelV->save();
+                }
+
+                $model->delete();
+                
+                Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');  
+                                
+                $transaction->commit();
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            }
+        return $this->redirect(['change_user_index']);
+    }
+
     public function actionChange_del($id)
     {
         $model = VenChange::findOne($id);  
@@ -671,12 +713,10 @@ class VenController extends Controller
 
         $transaction = Yii::$app->db->beginTransaction();
             try {
-                $modelV = Ven::findOne($model->ven_id1);
-                $modelV->delete();
+                Ven::findOne($model->ven_id1)->delete();
 
                 if(!empty($model->ven_id2)){
-                    $modelV = Ven::findOne($model->ven_id2);
-                    $modelV->delete();
+                    Ven::findOne($model->ven_id2)->delete();
                 }                
 
                 $modelV = Ven::findOne($model->ven_id1_old);

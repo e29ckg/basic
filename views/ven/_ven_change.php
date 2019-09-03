@@ -68,6 +68,17 @@ $this->params['breadcrumbs'][] = $this->title;
                     ?>
                 </div>
             </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <?= $form->field($model, 'comment', [
+                        'inputOptions' => [
+                            'placeholder' => $model->getAttributeLabel('comment'),
+                                'class'=>'form-control'
+                            ],
+                        ]);
+                    ?>
+                </div>
+            </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <?=  $form->field($model, 's_po')->widget(Select2::classname(), [

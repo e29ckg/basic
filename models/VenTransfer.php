@@ -42,7 +42,7 @@ class VenTransfer extends \yii\db\ActiveRecord
             'user_id2' => 'ผู้รับโอน',
             's_po' => 'ผู้อำนวยการลงนาม',
             's_bb' => 'ผู้พิพากษาหัวหน้าฯลงนาม',   
-            'comment' => 'หมายเหตุ',      
+            'comment' => 'เนื่องจาก',      
         ];
     }
 

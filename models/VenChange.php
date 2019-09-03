@@ -40,7 +40,7 @@ class VenChange extends \yii\db\ActiveRecord
             'ven_id2_old' => 'เวรที่2',
             's_po' => 'ผู้อำนวยการลงนาม',
             's_bb' => 'ผู้พิพากษาหัวหน้าฯลงนาม',   
-            'comment' => 'หมายเหตุ',      
+            'comment' => 'เนื่องจาก',      
         ];
     }
 
@@ -51,6 +51,10 @@ class VenChange extends \yii\db\ActiveRecord
         return $this->hasOne(Profile::className(), ['id' => 'user_id1']);
     }
     
+    public function getProfile2()
+    {
+        return $this->hasOne(Profile::className(), ['id' => 'user_id2']);
+    }
 
     public function getVen2()
     {
@@ -78,21 +82,17 @@ class VenChange extends \yii\db\ActiveRecord
         return $model ? $model->fname.$model->name.' '.$model->sname : '-';
     }
 
-    
+    public function getProfileName2(){
+        $model=$this->profile2;
+        return $model ? $model->fname.$model->name.' '.$model->sname : '-';
+    } 
+
     public function getProfileDep(){
-        $model=$this->profile;
+        $model=$this->ven1;
         return !empty($model->dep) ? $model->dep : '-';
     }
 
-    public function getProfilePhone(){
-        $model=$this->profile;
-        return !empty($model->phone) ? $model->phone : '-';
-    }
-
-    public function getProfileAddressById($id){
-        $model = Profile::findOne($id);
-        return !empty($model->address) ? $model->address : '-';
-    }
+    
 
     public function getSignList(){
         $model = SignBossName::find()->where(['status' => '1'])->orderBy('id')->all();
@@ -139,6 +139,15 @@ class VenChange extends \yii\db\ActiveRecord
 		return "$strDay $strMonthThai $strYear";
     }
     
-    
+    public function getVen_time(){   
+        return [
+            '08:30:00' => '8.30 น. ถึง 16.30 น.',
+            '08:30:01' => '8.30 น. ถึง 16.30 น.',
+            '08:30:11' => '8.30 น. ถึง 16.30 น.',
+            '08:30:22' => '8.30 น. ถึง 16.30 น.',
+            '16:30:00' => '16.30 น. ถึง 8.30 น.',
+            '16:30:55' => '16.30 น. ถึง 8.30 น.',
+        ];
+    }
 
 }

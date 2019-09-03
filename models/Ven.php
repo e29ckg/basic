@@ -153,7 +153,22 @@ class Ven extends \yii\db\ActiveRecord
         return $model ? $model->name: '-';
         // return $model ? $model->fname.$model->name.' '.$model->sname : '-';
     }
-       
+
+    public function getVenComNum(){
+        $model = $this->venCom;
+        return $model ? $model->ven_com_num : '-';
+    }
+
+    public function getVenComDate(){
+        $model = $this->venCom;
+        return $model ? $model->ven_com_date : '-';
+    }
+ 
+    public function getVenComName(){
+        $model = $this->venCom;
+        return $model ? $model->ven_com_name : '-';
+    }
+
     public function getVenComList(){
         $model = VenCom::find()->where(['status' => '1'])->orderBy(['id' => SORT_DESC ])->all();
         return ArrayHelper::map($model,'id',function($model){
@@ -393,8 +408,9 @@ class Ven extends \yii\db\ActiveRecord
             ->count();
             return  $modelVO ? false : true ;        ///                
         }
-
     }
+
+    
 
     
 }

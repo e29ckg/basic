@@ -82,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
 													'data-id' => $model->id,
 													'target' => '_blank'
 												]) 
-												.' ' .Html::a('<i class="fa fa-remove"></i> ยกเลิก ', ['ven/change_del', 'id' => $model->id], [
+												.' ' .Html::a('<i class="fa fa-remove"></i> ยกเลิก ', ['ven/change_del_user', 'id' => $model->id], [
 													'class' => 'btn btn-danger btn-xs',
 													'data-confirm' => 'Are you sure?',
 													'data-method' => 'post',]) 
