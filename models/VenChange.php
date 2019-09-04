@@ -120,9 +120,9 @@ class VenChange extends \yii\db\ActiveRecord
     }
 
     public function getQr($id,$user_id){
-        $source = Url::to('@webroot/uploads/VenChange/'.$user_id.'/'.$id.'/'.$id.'.png');
+        $source = Url::to('@webroot/uploads/ven/'.$user_id.'/'.$id.'.png');
         if(is_file($source)){
-            return Url::to('@web/uploads/VenChange/'.$user_id.'/'.$id.'/'.$id.'.png');
+            return Url::to('@web/uploads/ven/'.$user_id.'/'.$id.'.png');
         }
         return  Url::to('@web/img/none.png'); 
         // return Url::to('@webroot/uploads/VenChange/'.$user_id.'/'.$id.'/'.$id.'.png');
