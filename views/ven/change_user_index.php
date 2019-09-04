@@ -18,8 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
            	<div class="box-header">
            		<h3 class="box-title"><?=$this->title?></h3>
 				   <div class="box-tools pull-right">
-				<button id="act-create" class="btn btn-danger btn-md" alt="act-create"><i class="fa fa-pencil-square-o "></i> เพิ่ม เปลี่ยน</button>  
-				<button id="act-create-f" class="btn btn-danger btn-md" alt="act-create"><i class="fa fa-pencil-square-o "></i> เพิ่ม ยก</button>  
+				<!-- <button id="act-create" class="btn btn-danger btn-md" alt="act-create"><i class="fa fa-pencil-square-o "></i> เพิ่ม</button>   -->
 				</div>	
 			</div>
 			
@@ -63,9 +62,8 @@ $this->params['breadcrumbs'][] = $this->title;
 											<br>ผอ. : <?= $model->s_po ? $model->getS_SS($model->s_po)->name : '';?>
 											<br>หัวหน้า : <?= $model->s_bb ? $model->getS_SS($model->s_bb)->name : '';?>
 											<br>สร้างโดย <?=$model->getProfileName()?>
-											<?= empty($model->file) ? 
-											'<br><button class="btn btn-warning btn-xs btn-block act-update " alt="act-update" data-id="<?=$model->id?>">แก้ไข</button>'
-											:'';?>
+											<br>
+											<button class="btn btn-warning btn-xs btn-block act-update " alt="act-update" data-id="<?=$model->id?>">แก้ไข</button>
 										</td>
 										<td class = "text-center">
 											
@@ -136,28 +134,7 @@ $(document).ready(function() {
         	});
 		}); 
 
-		var url_create = "ven_admin_change";
-    	$( "#act-create" ).click(function() {
-        	$.get(url_create,function (data){
-                $("#activity-modal").find(".modal-body").html(data);
-                $(".modal-body").html(data);
-                $(".modal-title").html("เพิ่มข้อมูล");
-            	// $(".modal-footer").html(footer);
-                $("#activity-modal").modal("show");
-                //   $("#myModal").modal('toggle');
-        	});     
-		});
-		var url_create_f = "ven_admin_transfer";
-    	$( "#act-create-f" ).click(function() {
-        	$.get(url_create_f,function (data){
-                $("#activity-modal").find(".modal-body").html(data);
-                $(".modal-body").html(data);
-                $(".modal-title").html("เพิ่มข้อมูล");
-            	// $(".modal-footer").html(footer);
-                $("#activity-modal").modal("show");
-                //   $("#myModal").modal('toggle');
-        	});     
-		});  
+		
     	  
 		
 		// }

@@ -30,6 +30,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'enableAjaxValidation' => true,
         ]);  ?>
+    <?= $form->field($model, 'ven_id1')->hiddenInput()->label(false) ?>
+    <?= $form->field($model, 'ven_id2')->hiddenInput()->label(false) ?>
       
     <div class="box-body">
         <div class="row">

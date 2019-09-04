@@ -32,7 +32,7 @@ class VenController extends Controller
      * {@inheritdoc}
      */
 
-    public $line_sms ='10.37.64.01';
+    public $line_sms ='http://10.37.64.01';
     public $filePath = '/uploads/ven/';
     // public $smsLineAlert = ' http://10.37.64.01/main/web/cletter/show/';
 
@@ -132,6 +132,20 @@ class VenController extends Controller
         ]);
     }
 
+    public function actionVen_file_view($id)
+    {
+        $model = Ven::findOne($id);           
+        
+        // $completePath = Url::to('@webroot').$this->filePath.$model->file;
+        $completePath  = Url::to('@webroot'.$this->filePath.'/'.$model->file);
+        if(is_file($completePath)){
+            return Yii::$app->response->sendFile($completePath, $model->file, ['inline'=>true]);                        
+        }else{
+            Yii::$app->session->setFlash('warning', 'ไม่พบ File... '.$completePath);            
+        }
+        return $this->redirect(['ven_index']);
+    }
+
 
     public function actionVen_change($id)
     {
@@ -200,7 +214,7 @@ class VenController extends Controller
                 
                 $transaction->commit();   
                 
-                $dir = Url::to('@webroot'.$this->filePath.$model->user_id1.'/');
+                $dir = Url::to('@webroot'.$this->filePath.'/');
                     if (!is_dir($dir)) {
                         mkdir($dir, 0777, true);
                     } 
@@ -210,7 +224,7 @@ class VenController extends Controller
                     ->setSize(250)
                     ->setMargin(5)
                     ->useForegroundColor(1, 1, 1);              
-                $qrCode->writeFile(Url::to('@webroot'.$this->filePath.$model->user_id1.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
+                $qrCode->writeFile(Url::to('@webroot'.$this->filePath.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
                 /*---------------------ส่ง line ไปยัง Admin--------------------*/
                 $modelLine = Line::findOne(['name' => 'admin']);
                 if(isset($modelLine->token)){
@@ -290,7 +304,7 @@ class VenController extends Controller
                 
                 $transaction->commit();      
                 
-                $dir = Url::to('@webroot'.$this->filePath.$model->user_id1.'/');
+                $dir = Url::to('@webroot'.$this->filePath.'/');
                     if (!is_dir($dir)) {
                         mkdir($dir, 0777, true);
                     } 
@@ -300,7 +314,7 @@ class VenController extends Controller
                     ->setSize(250)
                     ->setMargin(5)
                     ->useForegroundColor(1, 1, 1);              
-                $qrCode->writeFile(Url::to('@webroot'.$this->filePath.$model->user_id1.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
+                $qrCode->writeFile(Url::to('@webroot'.$this->filePath.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
                 /*---------------------ส่ง line ไปยัง Admin--------------------*/
                 $modelLine = Line::findOne(['name' => 'admin']);
                 if(isset($modelLine->token)){
@@ -326,6 +340,201 @@ class VenController extends Controller
         return $this->renderAjax('_ven_transfer',[
             'model' => $model,
             'ven_id1' => [$ven_id1->id => Ven::dateThai_full($ven_id1->ven_date).' '.$ven_id1->profile->name.'('.$ven_id1->id.')'],
+            // 'ven_id1' => $ven_id1,
+        ]);
+    }
+
+    public function actionVen_admin_change()
+    {
+        $model = new VenChange();
+
+        if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        } 
+        
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $transaction = Yii::$app->db->beginTransaction();
+            try {              
+                $modelV1 = Ven::findOne($_POST['VenChange']['ven_id1']);
+                $modelV2 = Ven::findOne($_POST['VenChange']['ven_id2']);
+                
+                $id = (int)time();
+                $ref_vc = Yii::$app->security->generateRandomString();
+
+                $modelV = new Ven();
+                $modelV->id = $id ;
+                $modelV->ven_date = $modelV1->ven_date;  
+                $modelV->ven_com_id = $modelV1->ven_com_id;
+                $modelV->ven_time = $modelV1->ven_time;
+                $modelV->ven_month = $modelV1->ven_month;
+                $modelV->user_id = $modelV2->user_id;
+                $modelV->status = 2;
+                $modelV->ref1 = $modelV1->ref1;
+                $modelV->ref2 = $ref_vc;
+                $modelV->create_at = date("Y-m-d H:i:s");   
+                $modelV->save();
+
+                $modelVv = new Ven();
+                $modelVv->id = $id + 1;
+                $modelVv->ven_date =  $modelV2->ven_date;  
+                $modelVv->ven_com_id = $modelV2->ven_com_id;
+                $modelVv->ven_time = $modelV2->ven_time;
+                $modelVv->ven_month = $modelV2->ven_month;
+                $modelVv->user_id = $modelV1->user_id;
+                $modelVv->status = 2 ;
+                $modelVv->ref1 = $modelV2->ref1;
+                $modelVv->ref2 = $ref_vc;                
+                $modelVv->create_at = date("Y-m-d H:i:s"); 
+                $modelVv->save(); 
+
+                $model->id = $id;
+                $model->ven_id1_old = $_POST['VenChange']['ven_id1'];
+                $model->ven_id2_old = $_POST['VenChange']['ven_id2'];
+                $model->ven_id1 = $id;
+                $model->ven_id2 = $id + 1;
+                $model->user_id1 = $modelV1->user_id;
+                $model->user_id2 = $modelV2->user_id;
+                $model->s_po = $_POST['VenChange']['s_po'];
+                $model->s_bb = $_POST['VenChange']['s_bb'];
+                $model->status = 2;
+                $model->ref1 = $ref_vc;    
+                $model->ref2 = null;                
+                $model->comment = $_POST['VenChange']['comment'];
+                $model->create_at = date("Y-m-d H:i:s");
+                $model->save();
+
+                $modelV1->status = 4; 
+                $modelV1->save();   
+                $modelV2->status = 4;
+                $modelV2->save();
+                
+                $transaction->commit();   
+                
+                $dir = Url::to('@webroot'.$this->filePath.'/');
+                    if (!is_dir($dir)) {
+                        mkdir($dir, 0777, true);
+                    } 
+                $sms_qr = isset($this->line_sms) ? $this->line_sms : Yii::$app->getRequest()->hostInfo ;
+                $sms_qr .= '/ven.php?ref='.$model->id;
+                $qrCode = (new QrCode($sms_qr))
+                    ->setSize(250)
+                    ->setMargin(5)
+                    ->useForegroundColor(1, 1, 1);              
+                $qrCode->writeFile(Url::to('@webroot'.$this->filePath.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
+                /*---------------------ส่ง line ไปยัง Admin--------------------*/
+                $modelLine = Line::findOne(['name' => 'admin']);
+                if(isset($modelLine->token)){
+                    $message = $model->profile->name;
+                    $message .= isset($model->ven_id2) ? 'เปลี่ยนเวร' : 'ยกเวร';
+                    $message .= "\n".' รายละเอียดเพิ่มเติม' ."\n".$sms_qr;
+                    $res = Line::notify_message($modelLine->token,$message);  
+                    $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+                } 
+
+                Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'); 
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            } 
+            
+            return $this->redirect(['change_index']);            
+        }
+        
+        return $this->renderAjax('_ven_change',[
+            'model' => $model,
+            'ven_id2' => Ven::getVen_all(),
+            'ven_id1' => Ven::getVen_all(),
+        ]);
+    }
+
+    public function actionVen_admin_transfer()
+    {
+        $model = new VenTransfer();
+
+        if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        } 
+        
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $transaction = Yii::$app->db->beginTransaction();
+            try {              
+                $modelV1 = Ven::findOne($_POST['VenTransfer']['ven_id1']);
+                $modelV1->status = 6; 
+                $modelV1->save();
+                
+                $id = (int)time();
+                $ref_vc = Yii::$app->security->generateRandomString();
+
+                $modelV = new Ven();
+                $modelV->id = $id ;
+                $modelV->ven_date = $modelV1->ven_date;  
+                $modelV->ven_com_id = $modelV1->ven_com_id;
+                $modelV->ven_time = $modelV1->ven_time;
+                $modelV->ven_month = $modelV1->ven_month;
+                $modelV->user_id = $_POST['VenTransfer']['user_id2'];
+                $modelV->status = 2;
+                $modelV->ref1 = $modelV1->ref1;
+                $modelV->ref2 = $ref_vc;
+                $modelV->create_at = date("Y-m-d H:i:s");   
+                $modelV->save();
+
+                $model->id = $id;
+                $model->ven_id1_old = $_POST['VenTransfer']['ven_id1'];
+                $model->ven_id2_old = null;
+                $model->ven_id1 = $id;
+                $model->ven_id2 = null;
+                $model->user_id1 = $modelV1->user_id;
+                $model->user_id2 = $_POST['VenTransfer']['user_id2'];
+                $model->s_po = $_POST['VenTransfer']['s_po'];
+                $model->s_bb = $_POST['VenTransfer']['s_bb'];
+                $model->status = 6;
+                $model->ref1 = $ref_vc;    
+                $model->ref2 = null;                
+                $model->comment = $_POST['VenTransfer']['comment'];
+                $model->create_at = date("Y-m-d H:i:s");
+                $model->save();
+                
+                $transaction->commit();      
+                
+                $dir = Url::to('@webroot'.$this->filePath.'/');
+                    if (!is_dir($dir)) {
+                        mkdir($dir, 0777, true);
+                    } 
+                $sms_qr = isset($this->line_sms) ? $this->line_sms : Yii::$app->getRequest()->hostInfo ;
+                $sms_qr .= '/ven.php?ref='.$model->id;
+                $qrCode = (new QrCode($sms_qr))
+                    ->setSize(250)
+                    ->setMargin(5)
+                    ->useForegroundColor(1, 1, 1);              
+                $qrCode->writeFile(Url::to('@webroot'.$this->filePath.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
+                /*---------------------ส่ง line ไปยัง Admin--------------------*/
+                $modelLine = Line::findOne(['name' => 'admin']);
+                if(isset($modelLine->token)){
+                    $message = $model->profile->name;
+                    $message .= $model->ven_id2 ? 'เปลี่ยนเวร' : 'ยกเวร';
+                    $message .= "\n".' รายละเอียดเพิ่มเติม' ."\n".$sms_qr;
+                    $res = Line::notify_message($modelLine->token,$message);  
+                    $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+                } 
+
+                Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'); 
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            } 
+            
+            return $this->redirect(['change_user_index']);            
+        }
+
+        // $ven_id1 = Ven::findOne($id);
+        // $ven_id2 = Ven::getVenForChangeAll($id);        
+        
+        return $this->renderAjax('_ven_transfer',[
+            'model' => $model,
+            'ven_id1' => Ven::getVen_all(),
+            // [$ven_id1->id => Ven::dateThai_full($ven_id1->ven_date).' '.$ven_id1->profile->name.'('.$ven_id1->id.')'],
             // 'ven_id1' => $ven_id1,
         ]);
     }
@@ -361,7 +570,7 @@ class VenController extends Controller
                 
                 $transaction->commit();   
                 
-                $dir = Url::to('@webroot'.$this->filePath.$model->user_id1.'/');
+                $dir = Url::to('@webroot'.$this->filePath.'/');
                     if (!is_dir($dir)) {
                         mkdir($dir, 0777, true);
                     } 
@@ -371,7 +580,7 @@ class VenController extends Controller
                     ->setSize(250)
                     ->setMargin(5)
                     ->useForegroundColor(1, 1, 1);              
-                $qrCode->writeFile(Url::to('@webroot'.$this->filePath.$model->user_id1.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
+                $qrCode->writeFile(Url::to('@webroot'.$this->filePath.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
                 /*---------------------ส่ง line ไปยัง Admin--------------------*/
                 $modelLine = Line::findOne(['name' => 'admin']);
                 if(isset($modelLine->token)){
@@ -389,9 +598,7 @@ class VenController extends Controller
             } 
             
             return $this->redirect(['change_user_index']);            
-        }
-
-              
+        }     
         
         return $this->renderAjax('_ven_change_update',[
             'model' => $model,
@@ -766,7 +973,7 @@ class VenController extends Controller
             
         // endforeach;        
 
-        return $this->render('change_index',[
+        return $this->render('change_user_index',[
             'models' => $models,
         ]);
     }
@@ -777,10 +984,10 @@ class VenController extends Controller
         
         $filename = $model->file;
         // $dir = Url::to('@webroot'.$this->filePath.$model->user_id1);
-        $dir = Url::to('@webroot'.$this->filePath.$model->user_id1.'/');
+        $dir = Url::to('@webroot'.$this->filePath);
         
-        if(is_file($dir.$model->id.'.png')){
-            unlink($dir.$model->id.'.png');// ลบ รูปเดิม;                    
+        if(is_file($dir.'/'.$model->id.'.png')){
+            unlink($dir.'/'.$model->id.'.png');// ลบ รูปเดิม;                    
         }
          
         if($filename && is_file($dir.'/'.$filename)){
@@ -823,7 +1030,7 @@ class VenController extends Controller
         $model = VenChange::findOne($id);  
         
         $filename = $model->file;
-        $dir = Url::to('@webroot'.$this->filePath.$model->user_id1);
+        $dir = Url::to('@webroot'.$this->filePath);
         if(is_file($dir.'/'.$model->id.'.png')){
             unlink($dir.'/'.$model->id.'.png');                
         }
@@ -850,7 +1057,7 @@ class VenController extends Controller
                 }
         
                 if($model->delete()){
-                    $dir = Url::to('@webroot'.$this->filePath.$model->user_id);
+                    $dir = Url::to('@webroot'.$this->filePath);
                     if(is_file($dir.'/'.$model->id.'.png')){
                         unlink($dir.'/'.$model->id.'.png');// ลบ รูปเดิม;   
                     } 
@@ -893,15 +1100,28 @@ class VenController extends Controller
             $f = UploadedFile::getInstance($model, 'file');
             
             if(!empty($f)){  
-                $dir = Url::to('@webroot'.$this->filePath.$model->user_id1);              
+                $fileName = md5($f->baseName . time()) . '.' . $f->extension;
+                $dir = Url::to('@webroot'.$this->filePath );
                 // $dir = Url::to('@webroot'.$this->filePath);
                 if (!is_dir($dir)) {
                     mkdir($dir, 0777, true);
                 }
-                $fileName = md5($f->baseName . time()) . '.' . $f->extension;
+                
                 if($f->saveAs($dir .'/'. $fileName)){
                     $model->file = $fileName;
-                }               
+                } 
+
+                if(!($model->ven_id2 == null)){
+                    $dir = Url::to('@webroot'.$this->filePath);              
+                    // $dir = Url::to('@webroot'.$this->filePath);
+                    if (!is_dir($dir)) {
+                        mkdir($dir, 0777, true);
+                    }
+                    if($f->saveAs($dir .'/'. $fileName)){
+                        $model->file = $fileName;
+                    }
+                }  
+                             
 
                     $transaction = Yii::$app->db->beginTransaction();
                     try {
@@ -934,7 +1154,7 @@ class VenController extends Controller
                         Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
                                                   
                         $transaction->commit();
-                        return $this->redirect(['change_index']);
+                        return $this->redirect(['change_user_index']);
                         
                     } catch (\Exception $e) {
                         $transaction->rollBack();
@@ -943,7 +1163,7 @@ class VenController extends Controller
 
             }else{
                 Yii::$app->session->setFlash('warning', 'ไม่ได้บันทึกข้อมูล');
-                return $this->redirect(['change_index']);
+                return $this->redirect(['change_user_index']);
             }
         }
         // $model->file = $model->file;
@@ -964,10 +1184,10 @@ class VenController extends Controller
         
         $filename = $model->file;
         // $dir = Url::to('@webroot'.$this->filePath);
-        $dir = Url::to('@webroot'.$this->filePath.$model->user_id1.'/');
+        $dir = Url::to('@webroot'.$this->filePath);
         
-        if($filename && is_file($dir.$filename)){
-            unlink($dir.$filename);// ลบ รูปเดิม;                    
+        if($filename && is_file($dir.'/'.$filename)){
+            unlink($dir.'/'.$filename);// ลบ รูปเดิม;                    
         }
         
         $transaction = Yii::$app->db->beginTransaction();
@@ -1006,15 +1226,17 @@ class VenController extends Controller
                 $transaction->rollBack();
                 throw $e;
             }
-        return $this->redirect(['change_index']);
+        return $this->redirect(['change_user_index']);
     }
+
+    
 
     public function actionChange_file_view($id)
     {
         $model = VenChange::findOne($id);           
         
         // $completePath = Url::to('@webroot').$this->filePath.$model->file;
-        $completePath  = Url::to('@webroot'.$this->filePath.$model->user_id1.'/'.$model->file);
+        $completePath  = Url::to('@webroot'.$this->filePath.'/'.$model->file);
         if(is_file($completePath)){
             return Yii::$app->response->sendFile($completePath, $model->file, ['inline'=>true]);                        
         }else{
@@ -1026,11 +1248,7 @@ class VenController extends Controller
     public function actionPrint($id=null)
     {
         $model = VenChange::findOne($id);
-        // if($model->cat == 'ลาป่วย' || $model->cat == 'ลากิจส่วนตัว' || $model->cat == 'ลาคลอดบุตร'){
             $Pdf_print = '_pdf_A';
-        // }else if($model->cat =='ลาพักผ่อน'){
-        //     $Pdf_print = '_pdf_B';
-        // }
         
         Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
         $pdf = new Pdf([

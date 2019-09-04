@@ -23,7 +23,7 @@ class VenChange extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ven_id1','ven_id2'],'required'],   
+            // [['ven_id1','ven_id2'],'required'],   
 
         ];
     }
@@ -119,10 +119,10 @@ class VenChange extends \yii\db\ActiveRecord
         return ArrayHelper::map($model,'id','name');
     }
 
-    public function getQr($id,$user_id){
-        $source = Url::to('@webroot/uploads/ven/'.$user_id.'/'.$id.'.png');
+    public function getQr($id){
+        $source = Url::to('@webroot/uploads/ven/'.$id.'.png');
         if(is_file($source)){
-            return Url::to('@web/uploads/ven/'.$user_id.'/'.$id.'.png');
+            return Url::to('@web/uploads/ven/'.$id.'.png');
         }
         return  Url::to('@web/img/none.png'); 
         // return Url::to('@webroot/uploads/VenChange/'.$user_id.'/'.$id.'/'.$id.'.png');

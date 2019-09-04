@@ -96,9 +96,9 @@ class VenCom extends \yii\db\ActiveRecord
     }
 
     public function getQr($id,$user_id){
-        $source = Url::to('@webroot/uploads/VenCom/'.$user_id.'/'.$id.'/'.$id.'.png');
+        $source = Url::to('@webroot/uploads/VenCom/'.$user_id.'/'.$id.'.png');
         if(is_file($source)){
-            return Url::to('@web/uploads/VenCom/'.$user_id.'/'.$id.'/'.$id.'.png');
+            return Url::to('@web/uploads/VenCom/'.$user_id.'/'.$id.'.png');
         }
         return  Url::to('@web/img/none.png'); 
         // return Url::to('@webroot/uploads/VenCom/'.$user_id.'/'.$id.'/'.$id.'.png');

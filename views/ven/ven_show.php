@@ -74,7 +74,7 @@ use app\models\VenChange;
                         ไฟล์
                     </td>
                     <td>
-                        '.$model->file.'
+                        <a href="'.Url::to(['ven/ven_file_view','id' => $model->id]).'" target="_blank">'.$model->file.'</a> 
                     </td>
                 </tr>'
                 : '';?>

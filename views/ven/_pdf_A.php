@@ -98,7 +98,7 @@ use yii\helpers\Url;
         <tr>
             <td colspan="6" >เป็นผู้ปฏิบัติหน้าที่แทน และข้าพเจ้าจะมาปฏิบัติหน้าที่แทนในวันที่ </td>	
             <td colspan="4" class="TableLine" style="text-align:center">
-                <?=$model->ven_id2_old ? $model->DateThai_full($model->ven2_old->getVenComDate()) :'-';?></td>            
+                <?=$model->ven_id2_old ? $model->DateThai_full($model->ven2_old->ven_date) :'-';?></td>            
 		</tr>
         <tr>
             <td colspan="6" ></td>	
