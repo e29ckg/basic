@@ -876,7 +876,7 @@ class VenController extends Controller
                 $transaction->rollBack();
                 throw $e;
             }
-        return $this->redirect(['change_index']);
+        return $this->redirect(['change_user_index']);
     }
 
     public function actionChange_upfile($id) { 
