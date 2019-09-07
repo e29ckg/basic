@@ -455,40 +455,6 @@ class BilaController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
     
-    public function actionPrint1($id=null)
-    {
-        $model = $this->findModel($id);
-        if($model->cat == 'ลาป่วย' || $model->cat == 'ลากิจส่วนตัว' || $model->cat == 'ลาคลอดบุตร'){
-            $Pdf_print = '_pdf_A';
-        }else if($model->cat =='ลาพักผ่อน'){
-            $Pdf_print = '_pdf_B';
-        }
-        
-        Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
-        $pdf = new Pdf([
-            'mode' => Pdf::MODE_UTF8, // leaner size using standard fonts
-            'destination' => Pdf::DEST_BROWSER,
-            'content' => $this->renderPartial($Pdf_print,[
-                'model'=>$model,
-            ]),
-            
-            'cssFile' => 'css/pdf.css',
-            'options' => [
-                // any mpdf options you wish to set
-            ],
-            'methods' => [
-                'SetTitle' => $model->id,
-                // 'SetSubject' => 'Generating PDF files via yii2-mpdf extension has never been easy',
-                // 'SetHeader' => ['Krajee Privacy Policy||Generated On: ' . date("r")],
-                // 'SetFooter' => ['|Page {PAGENO}|'],
-                // 'SetAuthor' => 'Kartik Visweswaran',
-                // 'SetCreator' => 'Kartik Visweswaran',
-                // 'SetKeywords' => 'Krajee, Yii2, Export, PDF, MPDF, Output, Privacy, Policy, yii2-mpdf',
-            ]
-        ]);
-        return $pdf->render();
-    }
-
     public function actionFile_up($id) { 
         $modelBila = $this->findModel($id);
         $model = new BilaFileUp();
@@ -682,7 +648,7 @@ class BilaController extends Controller
             
             $even = [
                 'id' => $model->id,
-                'title' => $model->getProfileNameCal().' '.$model->cat,
+                'title' => $model->getProfileNameCal().' '.$model->cat.'('.$model->date_total.')',
                 'start' => $model->date_begin,
                 'end' => $model->date_end.'T12:30:00',
                 'backgroundColor' => $backgroundColor,
@@ -762,6 +728,55 @@ class BilaController extends Controller
                 'model' => $model,                    
             ]); 
         }
+    }
+
+    public function actionPrint1($id=null)
+    {
+        $model = $this->findModel($id);
+        if($model->cat == 'ลาป่วย' || $model->cat == 'ลากิจส่วนตัว' || $model->cat == 'ลาคลอดบุตร'){
+            $Pdf_print = '_pdf_A';
+        }else if($model->cat =='ลาพักผ่อน'){
+            $Pdf_print = '_pdf_B';
+        }
+        
+        Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+        $pdf = new Pdf([
+            'mode' => Pdf::MODE_UTF8, // leaner size using standard fonts
+            'destination' => Pdf::DEST_BROWSER,
+            'content' => $this->renderPartial($Pdf_print,[
+                'model'=>$model,
+            ]),
+            
+            'cssFile' => 'css/pdf.css',
+            'options' => [
+                // any mpdf options you wish to set
+            ],
+            'methods' => [
+                'SetTitle' => $model->id,
+                // 'SetSubject' => 'Generating PDF files via yii2-mpdf extension has never been easy',
+                // 'SetHeader' => ['Krajee Privacy Policy||Generated On: ' . date("r")],
+                // 'SetFooter' => ['|Page {PAGENO}|'],
+                // 'SetAuthor' => 'Kartik Visweswaran',
+                // 'SetCreator' => 'Kartik Visweswaran',
+                // 'SetKeywords' => 'Krajee, Yii2, Export, PDF, MPDF, Output, Privacy, Policy, yii2-mpdf',
+            ]
+        ]);
+
+        return $pdf->render();
+        
+        // $stylesheet = file_get_contents(Url::to('@webroot/css/pdf.css'));
+        // $mpdf = new \Mpdf\Mpdf();
+        // $mpdf->WriteHTML($stylesheet,\Mpdf\HTMLParserMode::HEADER_CSS);
+        // // $mpdf->SetImportUse();
+        // $mpdf->SetDocTemplate(Url::to('@webroot/pdfTemplate/33.pdf'),true);
+
+        // $html = '<div>Hello world! ทดส่อบ</div>';
+        
+        // // $mpdf->AddPage();
+        // $html .= '<b>Hello world! ทดส่อบ</b>';
+        // $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
+        // $mpdf->Output();
+
     }
 
 }

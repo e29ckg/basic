@@ -1,8 +1,11 @@
+html,
 body{
-    font-family: "Garuda";
-    /* font-family: "Noto Sans Thai UI", sans-serif; */
-    font-size: 10pt;
+    /* font-family: "Garuda";
+    font-size: 10pt; */
+    font-family: "thsarabun";
+    font-size: 16pt;
 }
+
 
 .table_bordered{
     border: 1px solid #000;

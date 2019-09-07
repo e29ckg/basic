@@ -5,11 +5,11 @@ use yii\helpers\Html;
 use app\models\SignBossName;
 use yii\helpers\Url;
 ?>
-<link rel="stylesheet" href="<?=Url::to(['/fonts/thsarabunnew.css'])?>" />
+<!-- <link rel="stylesheet" href="<?=Url::to(['/fonts/thsarabunnew.css'])?>" /> -->
 <div style="A_CSS_ATTRIBUTE:all;position: absolute;bottom: 20px; right: 45px;left: 45px; top: 35px;  ">
 <!-- <div class="text-center"><H3> </H3></div> -->
 
-<table class="table_bordered thsarabunnew" width="100%" border="1" cellpadding="1" cellspacing="0">
+<table class="table_bordered " width="100%" border="1" cellpadding="1" cellspacing="0">
     <thead>
 		<tr>
             <th  width="90%"><H2>แบบใบลาป่วย , ลากิจส่วนตัว , ลาคลอดบุตร</H2> </th>	
@@ -21,30 +21,30 @@ use yii\helpers\Url;
 	</thead>    
 </table>
 <table class="bl_detail" width="100%" border="0" cellpadding="0" cellspacing="0">
-    <!-- <tr>
-        <td width="50px"></td>
-        <td width="50px"></td>
-        <td width="50px"></td>
-        <td width="50px"></td>
-        <td width="50px"></td>
-        <td width="50px"></td>
-        <td width="50px"></td>
-        <td width="50px"></td>
-        <td width="50px"></td>
-        <td width="50px"></td>
-        <td width="50px"></td>
-        <td width="50px"></td>
-    </tr> -->
     <tr>
-        <td colspan="1" width="50px"></td>
-        <td colspan="11" style="text-align:right">สำนักงานประจำศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์</td>
+        <td width="5%"></td>
+        <td width="4%"></td>
+        <td width="7%"></td>
+        <td width="3%"></td>
+        <td width="6%"></td>
+        <td width="10%"></td>
+        <td width="10%"></td>
+        <td width="10%"></td>
+        <td width="10%"></td>
+        <td width="10%"></td>
+        <td width="10%"></td>
+        <td width="10%"></td>
+    </tr>
+    <tr>
+        <!-- <td colspan="1"></td> -->
+        <td colspan="15" style="text-align:right">สำนักงานประจำศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์</td>
     </tr>
     <?php
         $date_create=date_create($model->date_create); 
         //echo date_format($date_create,"Y/m/d H:i:s");
     ?>
     <tr>        
-        <td colspan="7" style="text-align:right">วันที่</td>
+        <td colspan="9" style="text-align:right">วันที่</td>
         <td colspan="1" class="TableLine" style="text-align:center"><?=(int)date_format($date_create,"d");?></td>
         <td colspan="1" style="text-align:center">เดือน</td>
         <td colspan="1" class="TableLine" style="text-align:center"><?=$model->DateThai_month_full($model->date_create);?></td>
@@ -53,45 +53,45 @@ use yii\helpers\Url;
     </tr>
     <tr>
         <td colspan="1" >เรื่อง</td>
-        <td colspan="11">ขออนุญาต<?= $model->cat; ?></td>
+        <td colspan="13">ขออนุญาต<?= $model->cat; ?></td>
     </tr>
     <tr>
         <td colspan="1">เรียน</td>
-        <td colspan="11">ผู้อำนวยการสำนักงานประจำศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์</td>
+        <td colspan="13">ผู้อำนวยการสำนักงานประจำศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์</td>
     </tr>
     <tr>
         <td colspan="2" ></td>
         <td colspan="1" >ข้าพเจ้า</td>
-        <td colspan="3" class="TableLine" style="text-align:center"><?= $model->profile->fname.$model->profile->name.' '.$model->profile->sname;?></td>
-        <td colspan="1" >ตำแหน่ง</td>
-        <td colspan="5" class="TableLine" style="text-align:center"><?= $model->profile->dep;?></td>
+        <td colspan="4" class="TableLine" style="text-align:center"><?= $model->profile->fname.$model->profile->name.' '.$model->profile->sname;?></td>
+        <td colspan="1" style="text-align:center">ตำแหน่ง</td>
+        <td colspan="6" class="TableLine" style="text-align:center"><?= $model->profile->dep;?></td>
     </tr>
     <tr>
         <td colspan="1" >สังกัด</td>
-        <td colspan="11" class="TableLine">สำนักงานประจำศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์</td>
+        <td colspan="14" class="TableLine">สำนักงานประจำศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์</td>
     </tr>
     <tr>
-        <td colspan="2" ></td>
-        <td colspan="10" >[ <?= $model->cat == 'ลาป่วย' ? 'X' : '&nbsp;'?> ] ลาป่วย</td>
+        <td colspan="3" ></td>
+        <td colspan="12" >[ <?= $model->cat == 'ลาป่วย' ? 'X' : '&nbsp;'?> ] ลาป่วย</td>
     </tr>
     <tr>
-        <td colspan="2" ></td>
+        <td colspan="3" ></td>
         <td colspan="3" >[ <?= $model->cat == 'ลากิจส่วนตัว' ? 'X' : '&nbsp;'?> ] ลากิจส่วนตัว</td>
         <td colspan="1" >เนื่องจาก</td>
-        <td colspan="6" class="TableLine" style="text-align:center"><?=$model->due;?> </td>
+        <td colspan="5" class="TableLine" style="text-align:center"><?=$model->due;?> </td>
     </tr>
     <tr>
-        <td colspan="2" ></td>
+        <td colspan="3" ></td>
         <td colspan="10" >[ <?= $model->cat == 'ลาคลอดบุตร' ? 'X' : '&nbsp;'?> ] ลาคลอดบุตร</td>
     </tr>
     <tr>
         <td colspan="2" >ตั้งแต่วันที่ </td>        
-        <td colspan="2" class="TableLine" style="text-align:center"><?=$model->DateThai_full($model->date_begin);?> </td>
+        <td colspan="3" class="TableLine" style="text-align:center"><?=$model->DateThai_full($model->date_begin);?> </td>
         <td colspan="1" style="text-align:center">ถึงวันที่</td>
         <td colspan="3" class="TableLine" style="text-align:center"><?=$model->DateThai_full($model->date_end);?></td>
         <td colspan="2" style="text-align:center">มีกำหนด</td>
         <td colspan="1" class="TableLine" style="text-align:center"><?=$model->date_total;?></td>
-        <td colspan="1" style="text-align:center">วัน</td>
+        <td colspan="4" style="text-align:center">วัน</td>
     </tr>
     <tr>
         <td colspan="2" >ข้าพเจ้าได้ลา </td>
@@ -102,7 +102,7 @@ use yii\helpers\Url;
     </tr>
     <tr>
         <td colspan="2" >ตั้งแต่วันที่ </td>
-        <td colspan="2" class="TableLine" style="text-align:center"><?=$model->DateThai_full($model->dateO_begin);?></td>
+        <td colspan="3" class="TableLine" style="text-align:center"><?=$model->DateThai_full($model->dateO_begin);?></td>
         <td colspan="1" style="text-align:center">ถึงวันที่</td>
         <td colspan="3" class="TableLine" style="text-align:center"><?=$model->DateThai_full($model->dateO_end);?></td>
         <td colspan="2" style="text-align:center">มีกำหนด</td>
@@ -110,7 +110,7 @@ use yii\helpers\Url;
         <td colspan="1" style="text-align:center">วัน</td>
     </tr>
     <tr>
-        <td colspan="3" >ระหว่างนี้ติดต่อข้าพเจ้าได้ที่</td>
+        <td colspan="4" >ระหว่างนี้ติดต่อข้าพเจ้าได้ที่</td>
         <td colspan="9" class="TableLine"><?=$model->address;?> </td>
     </tr>
     <tr>
@@ -123,7 +123,7 @@ use yii\helpers\Url;
     </tr>
   
     <tr>
-        <td colspan="6" style="text-align:center">
+        <td colspan="7" style="text-align:center">
         - ทราบ<br><br><br>
             (ลงชื่อ)................................................................
             <?php 
@@ -134,7 +134,8 @@ use yii\helpers\Url;
                         echo '';
                     }
                     ?>
-        </td>        
+        </td> 
+        <td></td>       
         <td colspan="6" style="text-align:center">
             ขอแสดงความนับถือ<br><br><br>
             (ลงชื่อ)................................................................<br>
@@ -143,7 +144,7 @@ use yii\helpers\Url;
     </tr>
     
     <tr>
-        <td colspan="6">             
+        <td colspan="7">             
             <table class="table_bordered" width="100%" border="0" cellpadding="2" cellspacing="0">
                 <tr>
                     <td colspan="8" style="text-align:center">สถิติการลาในปีงบประมาณนี้</td>
@@ -206,6 +207,7 @@ use yii\helpers\Url;
                 </tr>
             </table>
         </td>
+        <td></td> 
         <td colspan="6">
             <table class="table_bordered" width="100%" border="0" cellpadding="2" cellspacing="0">
                 <tr>
