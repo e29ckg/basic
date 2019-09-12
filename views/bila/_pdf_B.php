@@ -41,7 +41,7 @@ use app\models\SignBossName;
             <th  width="90%" class=""><H2>ใบลาพักผ่อน</H2> </th>	
             <th  width="10%" class="">
                 <img src="<?= $model->getQr($model->id,$model->user_id);?>" height="60" width="60" >
-                <div style="font-size: 9px; "><?=$model->id?></div>
+                <div style="font-size: 12px; "><?=$model->running?></div>
             </th>				
 		</tr>
 	</thead>    

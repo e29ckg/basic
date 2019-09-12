@@ -21,6 +21,7 @@ class m190423_040403_bila extends Migration
         $this->createTable('bila', [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer(11)->notNull(),
+            'running' => $this->string(),
             'cat' => $this->string(),
             'p1' => $this->string(),
             'p2' => $this->string(),

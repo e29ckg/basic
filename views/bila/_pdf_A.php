@@ -15,21 +15,21 @@ use yii\helpers\Url;
             <th  width="90%"><H2>แบบใบลาป่วย , ลากิจส่วนตัว , ลาคลอดบุตร</H2> </th>	
             <th  width="10%">                  
                 <img src="<?= $model->getQr($model->id,$model->user_id);?>" height="60" width="60" >
-                <div style="font-size: 9px; "><?=$model->id?></div>
+                <div style="font-size: 11px; "><?=$model->running?></div>
             </th>		
 		</tr>
 	</thead>    
 </table>
 <table class="bl_detail" width="100%" border="0" cellpadding="0" cellspacing="0">
     <tr>
-        <td width="5%"></td>
+        <td width="7%"></td>
         <td width="4%"></td>
         <td width="7%"></td>
         <td width="3%"></td>
         <td width="6%"></td>
         <td width="10%"></td>
         <td width="10%"></td>
-        <td width="10%"></td>
+        <td width="8%"></td>
         <td width="10%"></td>
         <td width="10%"></td>
         <td width="10%"></td>
@@ -44,7 +44,7 @@ use yii\helpers\Url;
         //echo date_format($date_create,"Y/m/d H:i:s");
     ?>
     <tr>        
-        <td colspan="9" style="text-align:right">วันที่</td>
+        <td colspan="8" style="text-align:right">วันที่</td>
         <td colspan="1" class="TableLine" style="text-align:center"><?=(int)date_format($date_create,"d");?></td>
         <td colspan="1" style="text-align:center">เดือน</td>
         <td colspan="1" class="TableLine" style="text-align:center"><?=$model->DateThai_month_full($model->date_create);?></td>
@@ -86,32 +86,32 @@ use yii\helpers\Url;
     </tr>
     <tr>
         <td colspan="2" >ตั้งแต่วันที่ </td>        
-        <td colspan="3" class="TableLine" style="text-align:center"><?=$model->DateThai_full($model->date_begin);?> </td>
+        <td colspan="4" class="TableLine" style="text-align:center"><?=$model->DateThai_full($model->date_begin);?> </td>
         <td colspan="1" style="text-align:center">ถึงวันที่</td>
         <td colspan="3" class="TableLine" style="text-align:center"><?=$model->DateThai_full($model->date_end);?></td>
-        <td colspan="2" style="text-align:center">มีกำหนด</td>
+        <td colspan="1" style="text-align:center">มีกำหนด</td>
         <td colspan="1" class="TableLine" style="text-align:center"><?=$model->date_total;?></td>
-        <td colspan="4" style="text-align:center">วัน</td>
+        <td colspan="1" style="text-align:center">วัน</td>
     </tr>
     <tr>
         <td colspan="2" >ข้าพเจ้าได้ลา </td>
-        <td colspan="2" >[ <?= $model->cat == 'ลาป่วย' ? 'X' : '&nbsp;'?> ] ลาป่วย</td>
+        <td colspan="3" >[ <?= $model->cat == 'ลาป่วย' ? 'X' : '&nbsp;'?> ] ลาป่วย</td>
         <td colspan="2" >[ <?= $model->cat == 'ลากิจส่วนตัว' ? 'X' : '&nbsp;'?> ] ลากิจส่วนตัว</td>
         <td colspan="2" >[ <?= $model->cat == 'ลาคลอดบุตร' ? 'X' : '&nbsp;'?> ] ลาคลอดบุตร</td>
         <td colspan="4" >ครั้งสุดท้ายตั้งแต่</td>
     </tr>
     <tr>
         <td colspan="2" >ตั้งแต่วันที่ </td>
-        <td colspan="3" class="TableLine" style="text-align:center"><?=$model->DateThai_full($model->dateO_begin);?></td>
+        <td colspan="4" class="TableLine" style="text-align:center"><?=$model->DateThai_full($model->dateO_begin);?></td>
         <td colspan="1" style="text-align:center">ถึงวันที่</td>
         <td colspan="3" class="TableLine" style="text-align:center"><?=$model->DateThai_full($model->dateO_end);?></td>
-        <td colspan="2" style="text-align:center">มีกำหนด</td>
+        <td colspan="1" style="text-align:center">มีกำหนด</td>
         <td colspan="1" class="TableLine" style="text-align:center"><?=$model->dateO_total ? $model->dateO_total : '-';?></td>
         <td colspan="1" style="text-align:center">วัน</td>
     </tr>
     <tr>
-        <td colspan="4" >ระหว่างนี้ติดต่อข้าพเจ้าได้ที่</td>
-        <td colspan="9" class="TableLine"><?=$model->address;?> </td>
+        <td colspan="5" >ระหว่างนี้ติดต่อข้าพเจ้าได้ที่</td>
+        <td colspan="8" class="TableLine"><?=$model->address;?> </td>
     </tr>
     <tr>
         <td colspan="12" class="TableLine" style="text-align:center"><?= $model->getProfilePhone()?>.</td>
