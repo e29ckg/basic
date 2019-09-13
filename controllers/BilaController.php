@@ -137,22 +137,12 @@ class BilaController extends Controller
 
             $transaction = Yii::$app->db->beginTransaction();
             try {
-                $year = date('Y') + 543;
-                $model_run = Running::findOne(['name' => 'bila','y' => $year]);        
-                if(empty($model_run)){
-                    $model_run = new Running();
-                    $model_run->name = 'bila';
-                    $model_run->y = $year;
-                    $model_run->r = date('y') + 43 . '000';
-                    $model_run->save();
-                } 
-                $model_run->r = $model_run->r + 1;
-
+               
                 $model->id = time();
                 // $model->user_id =  $_POST['Bila']['user_id'];
                 $model->user_id = Yii::$app->user->identity->id;
                 $model->cat = $_POST['Bila']['cat'];
-                $model->running  = $model_run->r;
+                $model->running  = Running::getRunNumber('bila');
                 $model->date_begin = $_POST['Bila']['date_begin'];
                 $model->date_end = $_POST['Bila']['date_end'];
                 $model->date_total = $_POST['Bila']['date_total'];
@@ -167,7 +157,6 @@ class BilaController extends Controller
                 $model->date_create = $_POST['Bila']['date_create'];
                 if($model->save()){
                     
-                    $model_run->save();
 
                     $dir = Url::to('@webroot'.$this->filePath.$model->user_id.'/'.$model->id.'/');
                     if (!is_dir($dir)) {
@@ -250,20 +239,10 @@ class BilaController extends Controller
           } 
      
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $year = date('Y') + 543;
-            $model_run = Running::findOne(['name' => 'bila','y' => $year]);        
-            if(empty($model_run)){
-                $model_run = new Running();
-                $model_run->name = 'bila';
-                $model_run->y = $year;
-                $model_run->r = date('y') + 43 . '000';
-                $model_run->save();
-            } 
-            $model_run->r =$model_run->r + 1;
-
+            
             $model->id = time();
             $model->user_id =  Yii::$app->user->identity->id;
-            $model->running  = $model_run->r;
+            $model->running  = Running::getRunNumber('bila');
             $model->cat = 'ลาพักผ่อน';
             $model->date_begin = $_POST['Bila']['date_begin'];
             $model->date_end = $_POST['Bila']['date_end'];
@@ -282,8 +261,6 @@ class BilaController extends Controller
             $model->date_create = $_POST['Bila']['date_create'];
             if($model->save()){
                
-                $model_run->save();
-
                 $dir = Url::to('@webroot'.$this->filePath.$model->user_id.'/'.$model->id.'/');
                 if (!is_dir($dir)) {
                     mkdir($dir, 0777, true);

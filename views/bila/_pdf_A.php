@@ -15,7 +15,7 @@ use yii\helpers\Url;
             <th  width="90%"><H2>แบบใบลาป่วย , ลากิจส่วนตัว , ลาคลอดบุตร</H2> </th>	
             <th  width="10%">                  
                 <img src="<?= $model->getQr($model->id,$model->user_id);?>" height="60" width="60" >
-                <div style="font-size: 11px; "><?=$model->running?></div>
+                <div style="font-size: 11px; "><?=isset($model->running) ? $model->running : $model->id?></div>
             </th>		
 		</tr>
 	</thead>    
@@ -27,8 +27,8 @@ use yii\helpers\Url;
         <td width="7%"></td>
         <td width="3%"></td>
         <td width="6%"></td>
-        <td width="10%"></td>
-        <td width="10%"></td>
+        <td width="9%"></td>
+        <td width="9%"></td>
         <td width="8%"></td>
         <td width="10%"></td>
         <td width="10%"></td>

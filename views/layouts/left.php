@@ -119,6 +119,7 @@ $menu_admin = [
                 ['label' => 'จัดการคำนำหน้าชื่อ', 'icon' => ' fa fa-user-o', 'url' => ['user/fname']],
             ],
         ],
+        ['label' => 'RunningNumber', 'icon' => ' fa fa-whatsapp', 'url' => ['running/index']],   
                 
         // ['label' => 'Login', 'url' => ['site/login']],
         

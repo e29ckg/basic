@@ -18,7 +18,7 @@ use yii\helpers\Url;
             <th ><H2>ใบขอเปลี่ยนเวร</H2> </th>	
             <th  width="10%">    
                 <img src="<?= $model->getQr($model->id,$model->user_id1);?>" height="60" width="60" >
-                <div style="font-size: 9px; "><?=$model->id?></div>
+                <div style="font-size: 9px; "><?=$model->id ? $model->id : $model->id?></div>
             </th>		
         </tr>
         
