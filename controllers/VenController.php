@@ -298,13 +298,19 @@ class VenController extends Controller
                 $model->status = 6;
                 $model->ref1 = $ref_vc;    
                 $model->ref2 = null;                
-                // $model->comment = $_POST['VenTransfer']['comment'];
+                $model->comment = $_POST['VenTransfer']['comment'];
                 $model->create_at = date("Y-m-d H:i:s");
                 $model->save();
                 
                 $transaction->commit();      
                 
-                $dir = Url::to('@webroot'.$this->filePath.'/');
+                
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            } 
+
+            $dir = Url::to('@webroot'.$this->filePath.'/');
                     if (!is_dir($dir)) {
                         mkdir($dir, 0777, true);
                     } 
@@ -326,11 +332,6 @@ class VenController extends Controller
                 } 
 
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'); 
-            } catch (\Exception $e) {
-                $transaction->rollBack();
-                throw $e;
-            } 
-            
             return $this->redirect(['change_user_index']);            
         }
 
@@ -1005,8 +1006,11 @@ class VenController extends Controller
                 }                
 
                 $modelV = Ven::findOne($model->ven_id1_old);
-                $modelV->status = 1;
-                $modelV->save();
+                if(!empty($modelV)){
+                    $modelV->status = 1;
+                    $modelV->save();
+                } 
+                
 
                 if(!empty($model->ven_id2_old)){
                     $modelV = Ven::findOne($model->ven_id2_old);

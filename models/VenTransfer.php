@@ -24,7 +24,7 @@ class VenTransfer extends \yii\db\ActiveRecord
     {
         return [
             [['ven_id1','user_id2'],'required'],   
-            [['user_id2'], 'validateUser_id2'],
+            // [['user_id2'], 'validateUser_id2'],
         ];
     }
 
@@ -49,7 +49,7 @@ class VenTransfer extends \yii\db\ActiveRecord
     public function validateUser_id2()
     {
         
-        // $this->addError('user_id2', $this->user_id2);
+        // $this->addError('user_id2', $this->ven_id1);
         $model = Ven::findOne($this->ven_id1);
 
         if($model->ven_time == '08:30:01' || $model->ven_time == '08:30:11' || $model->ven_time == '08:30:22'){   
@@ -60,12 +60,12 @@ class VenTransfer extends \yii\db\ActiveRecord
                 ->where([
                     'ven_date' => [$dB,$dB1],
                     'ven_time' => '16:30:55',
-                    'status' => [1, 2, 3,],
+                    'status' => [1, 2, 3],
                     'user_id' => $this->user_id2,
                 ])->orWhere([
                     'ven_date' => [$dB],
                     'ven_time' => ['08:30:01','08:30:11','08:30:22'],
-                    'status' => [1, 2, 3,],
+                    'status' => [1, 2, 3],
                     'user_id' => $this->user_id2,
                 ])->count();
             if($modelVO >= 1){
@@ -81,12 +81,12 @@ class VenTransfer extends \yii\db\ActiveRecord
                 ->where([
                     'ven_date' => [$dB,$dB1],
                     'ven_time' => '16:30:00',
-                    'status' => [1, 2, 3,],
+                    'status' => [1, 2, 3],
                     'user_id' => $this->user_id2,
                 ])->orWhere([
                     'ven_date' => [$dB],
                     'ven_time' => ['08:30:00'],
-                    'status' => [1, 2, 3,],
+                    'status' => [1, 2, 3],
                     'user_id' => $this->user_id2,
                 ])->count();
             if($modelVO >= 1){
@@ -126,13 +126,13 @@ class VenTransfer extends \yii\db\ActiveRecord
             ->where([
                 'ven_date' => [$dB,$dB1],
                 'ven_time' => ['08:30:00'],
-                'status' => [1, 2, 3,],
+                'status' => [1, 2, 3],
                 // 'status' => 1,
                 'user_id' => $this->user_id2,
             ])->orWhere([
                 'ven_date' => [$dB],
                 'ven_time' => ['16:30:00'],
-                'status' => [1, 2, 3,],
+                'status' => [1, 2, 3],
                 // 'status' => 1,
                 'user_id' => $this->user_id2,
             ])->count();   
