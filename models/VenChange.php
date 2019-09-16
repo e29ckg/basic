@@ -180,7 +180,6 @@ class VenChange extends \yii\db\ActiveRecord
 		$strMonthThai=$strMonthCut[$strMonth];
 		return "$strMonthThai";
     }
-
     
 
 }
