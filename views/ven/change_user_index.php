@@ -63,7 +63,9 @@ $this->params['breadcrumbs'][] = $this->title;
 											<br>หัวหน้า : <?= $model->s_bb ? $model->getS_SS($model->s_bb)->name : '';?>
 											<br>สร้างโดย <?=$model->getProfileName()?>
 											<br>
-											<button class="btn btn-warning btn-xs btn-block act-update " alt="act-update" data-id="<?=$model->id?>">แก้ไข</button>
+											<?= empty($model->file) ? 
+											'<br><button class="btn btn-warning btn-xs btn-block act-update " alt="act-update" data-id="'.$model->id.'">แก้ไข</button>'
+											:'';?>
 										</td>
 										<td class = "text-center">
 											

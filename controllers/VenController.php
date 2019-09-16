@@ -286,7 +286,7 @@ class VenController extends Controller
                 $modelV->create_at = date("Y-m-d H:i:s");   
                 $modelV->save();
 
-                $model->id = $id;
+                $model->id = $id ;
                 $model->ven_id1_old = $_POST['VenTransfer']['ven_id1'];
                 $model->ven_id2_old = null;
                 $model->ven_id1 = $id;
@@ -298,7 +298,7 @@ class VenController extends Controller
                 $model->status = 6;
                 $model->ref1 = $ref_vc;    
                 $model->ref2 = null;                
-                $model->comment = $_POST['VenTransfer']['comment'];
+                // $model->comment = $_POST['VenTransfer']['comment'];
                 $model->create_at = date("Y-m-d H:i:s");
                 $model->save();
                 
@@ -335,7 +335,7 @@ class VenController extends Controller
         }
 
         $ven_id1 = Ven::findOne($id);
-        // $ven_id2 = Ven::getVenForChangeAll($id);        
+        // $ven_id2 = Ven::getVenForChangeAll($id); 
         
         return $this->renderAjax('_ven_transfer',[
             'model' => $model,
@@ -610,9 +610,10 @@ class VenController extends Controller
     public function actionAdmin_index()
     {
         $models = Ven::find()
-            ->where(['status' => 1 ])
-            ->orWhere(['status' => 2 ])
-            ->orWhere(['status' => 3 ])->orderBy([
+            // ->where(['status' => 1 ])
+            // ->orWhere(['status' => 2 ])
+            // ->orWhere(['status' => 3 ])
+            ->orderBy([
             // 'date_create'=>SORT_DESC,
             'id' => SORT_DESC,
             ])->limit(100)->all();  

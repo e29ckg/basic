@@ -24,7 +24,7 @@ class VenTransfer extends \yii\db\ActiveRecord
     {
         return [
             [['ven_id1','user_id2'],'required'],   
-
+            [['user_id2'], 'validateUser_id2'],
         ];
     }
 
@@ -46,7 +46,103 @@ class VenTransfer extends \yii\db\ActiveRecord
         ];
     }
 
-    
+    public function validateUser_id2()
+    {
+        
+        // $this->addError('user_id2', $this->user_id2);
+        $model = Ven::findOne($this->ven_id1);
+
+        if($model->ven_time == '08:30:01' || $model->ven_time == '08:30:11' || $model->ven_time == '08:30:22'){   
+            $dB = date('Y-m-d', strtotime($model->ven_date));
+            $dB1 = date('Y-m-d', strtotime('-1 day', strtotime($model->ven_date)));
+
+            $modelVO = Ven::find()
+                ->where([
+                    'ven_date' => [$dB,$dB1],
+                    'ven_time' => '16:30:55',
+                    'status' => [1, 2, 3,],
+                    'user_id' => $this->user_id2,
+                ])->orWhere([
+                    'ven_date' => [$dB],
+                    'ven_time' => ['08:30:01','08:30:11','08:30:22'],
+                    'status' => [1, 2, 3,],
+                    'user_id' => $this->user_id2,
+                ])->count();
+            if($modelVO >= 1){
+                $this->addError('user_id2', 'เบิกไม่ได้นะ');
+            }               
+        }
+
+        if($model->ven_time == '08:30:00'){   
+            $dB = date('Y-m-d', strtotime($model->ven_date));
+            $dB1 = date('Y-m-d', strtotime('-1 day', strtotime($model->ven_date)));
+
+            $modelVO = Ven::find()
+                ->where([
+                    'ven_date' => [$dB,$dB1],
+                    'ven_time' => '16:30:00',
+                    'status' => [1, 2, 3,],
+                    'user_id' => $this->user_id2,
+                ])->orWhere([
+                    'ven_date' => [$dB],
+                    'ven_time' => ['08:30:00'],
+                    'status' => [1, 2, 3,],
+                    'user_id' => $this->user_id2,
+                ])->count();
+            if($modelVO >= 1){
+                $this->addError('user_id2', 'เบิกไม่ได้นะ');
+            }               
+        }
+
+        if($model->ven_time == '16:30:55'){   
+            
+            $dB = date('Y-m-d', strtotime($model->ven_date));
+            $dB1 = date('Y-m-d', strtotime('+1 day', strtotime($model->ven_date)));
+
+            $modelVO = Ven::find()
+            ->where([
+                'ven_date' => [$dB,$dB1],
+                'ven_time' => ['08:30:01','08:30:11','08:30:22'],
+                'status' => [1, 2, 3,],
+                // 'status' => 1,
+                'user_id' => $this->user_id2,
+            ])->orWhere([
+                'ven_date' => [$dB],
+                'ven_time' => ['16:30:55'],
+                'status' => [1, 2, 3,],
+                // 'status' => 1,
+                'user_id' => $this->user_id2,
+            ])->count();   
+            if($modelVO >= 1){
+                $this->addError('user_id2', 'เบิกไม่ได้นะ');
+            }
+        }
+
+        if($model->ven_time == '16:30:00'){   
+            $dB = date('Y-m-d', strtotime($model->ven_date));
+            $dB1 = date('Y-m-d', strtotime('+1 day', strtotime($model->ven_date)));
+
+            $modelVO = Ven::find()
+            ->where([
+                'ven_date' => [$dB,$dB1],
+                'ven_time' => ['08:30:00'],
+                'status' => [1, 2, 3,],
+                // 'status' => 1,
+                'user_id' => $this->user_id2,
+            ])->orWhere([
+                'ven_date' => [$dB],
+                'ven_time' => ['16:30:00'],
+                'status' => [1, 2, 3,],
+                // 'status' => 1,
+                'user_id' => $this->user_id2,
+            ])->count();   
+            if($modelVO >= 1){
+                $this->addError('user_id2', 'เบิกไม่ได้นะ');
+            }
+        }
+        
+    }
+
 
     public function getProfile()
     {
@@ -60,6 +156,7 @@ class VenTransfer extends \yii\db\ActiveRecord
     }
 
     public function getUserList(){
+
         $models = Profile::find()->where(['status' => '10'])->orderBy(['name' => SORT_ASC ])->all();
         return ArrayHelper::map($models,'id',function($model){
             return $model->fname.$model->name.' '.$model->sname;
