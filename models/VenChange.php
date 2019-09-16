@@ -42,9 +42,7 @@ class VenChange extends \yii\db\ActiveRecord
             's_bb' => 'ผู้พิพากษาหัวหน้าฯลงนาม',   
             'comment' => 'เนื่องจาก',      
         ];
-    }
-
-    
+    }    
 
     public function getProfile()
     {
@@ -127,8 +125,7 @@ class VenChange extends \yii\db\ActiveRecord
         return  Url::to('@web/img/none.png'); 
         // return Url::to('@webroot/uploads/VenChange/'.$user_id.'/'.$id.'/'.$id.'.png');
     }
-
-    
+ 
     
     public function getStatusList(){
         return [
