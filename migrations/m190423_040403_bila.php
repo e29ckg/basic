@@ -41,6 +41,7 @@ class m190423_040403_bila extends Migration
             'po' => $this->string(),
             'bigboss' => $this->string(),
             'date_create' => $this->string(),
+            'status' => $this->string(),
         ], $tableOptions);
 
         // $this->insert('bila', [

@@ -185,4 +185,12 @@ class Bila extends \yii\db\ActiveRecord
 		return "$strMonthThai";
     }
 
+    public function getStatus()
+    {
+        return [
+            '1' => 'ปกติ',
+            '4' => 'ยกเลิก'        
+        ];
+    }
+
 }

@@ -155,6 +155,7 @@ class BilaController extends Controller
                 $model->t2 = $_POST['Bila']['date_total'];
                 $model->t3 = $_POST['Bila']['date_total'] + $_POST['Bila']['t1'];
                 $model->date_create = $_POST['Bila']['date_create'];
+                $model->status = 1;
                 if($model->save()){
                     
 
@@ -174,7 +175,7 @@ class BilaController extends Controller
                     $modelLine = Line::findOne(['name' => 'bila_admin']);
                     if(isset($modelLine->token)){
                         $message = $model->getProfileName().'->'.$model->cat.'('.$model->date_total.')';
-                        $message .= "\n".$model->date_begin."\n".' รายละเอียดเพิ่มเติม' ."\n".$sms_qr;
+                        $message .= $model->date_begin."\n".'ใบลาเลขที่ '.$model->running.' รายละเอียดเพิ่มเติม' ."\n".$sms_qr;
                         $res = Line::notify_message($modelLine->token,$message);  
                         $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
                     } 
@@ -259,6 +260,7 @@ class BilaController extends Controller
             $model->t2 = $_POST['Bila']['date_total'];
             $model->t3 = $_POST['Bila']['t1'] + $_POST['Bila']['date_total'] ;
             $model->date_create = $_POST['Bila']['date_create'];
+            $model->status = 1;
             if($model->save()){
                
                 $dir = Url::to('@webroot'.$this->filePath.$model->user_id.'/'.$model->id.'/');
@@ -278,7 +280,7 @@ class BilaController extends Controller
                 $modelLine = Line::findOne(['name' => 'bila_admin']);
                 if(isset($modelLine->token)){
                     $message = $model->getProfileName().'->'.$model->cat.'('.$model->date_total.')';
-                    $message .= "\n".$model->date_begin."\n".' รายละเอียดเพิ่มเติม' ."\n".$sms_qr;
+                    $message .= $model->date_begin."\n".'ใบลาเลขที่ '.$model->running.' รายละเอียดเพิ่มเติม' ."\n".$sms_qr;
                     $res = Line::notify_message($modelLine->token,$message);  
                     $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
                 } 
@@ -286,8 +288,7 @@ class BilaController extends Controller
                 return $this->redirect(['index']);
             }   
         }
-        // $model->tel = explode(',', $model->tel);
-        // $model_profile = Bila::findOne(Yii::$app->user->id);
+
         $model_cat = Bila::find()
             ->where(['user_id' => Yii::$app->user->id,
                 'cat'=>'ลาพักผ่อน'
@@ -380,7 +381,7 @@ class BilaController extends Controller
             }
             if($model->save()){
                 /*---------------------ส่ง line ไปยัง Admin--------------------*/
-                $message = $model->getProfileName().' แก้ไข ใบ'.$model->cat."\n".'เลขที่ ' .$model->id;
+                $message = $model->getProfileName().' แก้ไข ใบ'.$model->cat."\n".'เลขที่ ' .$model->running;
                 $modelLine = Line::findOne(['name' => 'bila_admin']);
                 if(isset($modelLine->token)){                
                     $res = Line::notify_message($modelLine->token,$message);  
@@ -418,28 +419,38 @@ class BilaController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
+        $model->status = 4;    
 
-        $message = $model->getProfileName().' ลบ ใบ'.$model->cat."\n".'เลขที่ ' .$model->id;
-        $dir = Url::to('@webroot'.$this->filePath.$model->user_id.'/'.$model->id);
-        
-        if($model->delete()){
-            if(is_file($dir.'/'.$model->id.'.png')){
-                unlink($dir.'/'.$model->id.'.png');// ลบ รูปเดิม;   
-            } 
-            if(is_file($dir.'/'.$model->id.'.png')){
-                unlink($dir.'/'.$model->file);// ลบ ไฟล์  
-            }
-            if (is_dir($dir)) {
-                // mkdir($dir, 0777, true);
-                rmdir($dir);
-            } 
-            /*---------------------ส่ง line ไปยัง Admin--------------------*/
+        $message = $model->getProfileName().' ยกเลิก ใบ'.$model->cat."\n".'เลขที่ ' .$model->id;
+
+        if($model->save()){
             $modelLine = Line::findOne(['name' => 'bila_admin']);
             if(isset($modelLine->token)){                
                 $res = Line::notify_message($modelLine->token,$message);  
                 $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
             } 
-        }        
+        }
+
+        // $dir = Url::to('@webroot'.$this->filePath.$model->user_id.'/'.$model->id);
+        
+        // if($model->delete()){
+        //     if(is_file($dir.'/'.$model->id.'.png')){
+        //         unlink($dir.'/'.$model->id.'.png');// ลบ รูปเดิม;   
+        //     } 
+        //     if(is_file($dir.'/'.$model->id.'.png')){
+        //         unlink($dir.'/'.$model->file);// ลบ ไฟล์  
+        //     }
+        //     if (is_dir($dir)) {
+        //         // mkdir($dir, 0777, true);
+        //         rmdir($dir);
+        //     } 
+        //     /*---------------------ส่ง line ไปยัง Admin--------------------*/
+        //     $modelLine = Line::findOne(['name' => 'bila_admin']);
+        //     if(isset($modelLine->token)){                
+        //         $res = Line::notify_message($modelLine->token,$message);  
+        //         $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+        //     } 
+        // }        
         return $this->redirect(['index']);
     }
 
@@ -660,6 +671,7 @@ class BilaController extends Controller
                 'borderColor' => $backgroundColor,
             ];
             $event[] = $even;
+
         endforeach;        
         $event = json_encode($event);
         return $this->render('cal',[
@@ -674,6 +686,7 @@ class BilaController extends Controller
         $models = Bila::find()
             ->where("date_begin <= '$strDate'")
             ->andWhere("date_end >= '$strDate'")
+            ->andWhere("status <> 4")
             ->all();
 
         $sms = $strDate;
@@ -782,6 +795,21 @@ class BilaController extends Controller
         // $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
         // $mpdf->Output();
 
+    }
+
+    public function actionUp_status()
+    {
+        $models = Bila::find()->all();
+        foreach ($models as $model) :    
+            if (empty($model->status)){
+                $model->status = 1;
+                $model->save();
+                
+            }
+            echo $model->id.'->'.$model->status.'<br>';
+
+        endforeach;
+        return 'ok';
     }
 
 }

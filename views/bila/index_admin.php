@@ -39,15 +39,17 @@ $this->params['breadcrumbs'][] = $this->title;
 									                          
 									<?php foreach ($models as $model): ?>
 						            <tr>						                
-										<td><?=$model->getProfileName();?> 
+										<td>
+											<?=$model->getProfileName();?> 
 											<?=$model->cat == 'ไปราชการ' ? '<span class="label label-info">'.$model->cat.'</span>' : '';?>
 											<?=$model->cat == 'ลาป่วย' || $model->cat == 'ลากิจส่วนตัว' || $model->cat == 'ลาคลอดบุตร' ? '<span class="label label-danger">'.$model->cat.'</span>' : '' ; ?>
 											<?=$model->cat == 'ลาพักผ่อน' ? '<span class="label label-primary">'.$model->cat.'</span>' : '' ;?>											
-											<br><?= $model->id?>
+											<br><?= isset($model->running) ? $model->running : $model->id;?>
 										</td>										
                                         <td><?=$model->DateThai_full($model->date_begin)?>
 											ถึง <?=$model->DateThai_full($model->date_end)?>
 											<br> ลาครั้งนี้ <?=$model->date_total?> วัน
+											<?= $model->status == 4 ? '<span class="label label-danger">ยกเลิกการลา</span>' : '' ;?>
 										</td>
 										<td class = "text-center">
 											<?= !empty($model->file) ? 
@@ -78,10 +80,10 @@ $this->params['breadcrumbs'][] = $this->title;
 											;?>
 											<!-- <a href="#" class="act-file-up btn btn-danger btn-xs" data-id=<?=$model->id?>>แนบไฟล์</a>  -->
 																				
-											<?php
+											<?=
 											 	Html::a('<i class="fa fa-remove"></i> ลบ',['bila/delete','id' => $model->id],
 													[
-														'class' => 'btn btn-danger btn-block btn-xs',
+														'class' => 'btn btn-danger btn-xs',
 														'data-confirm' => 'Are you sure to delete this item?',
                                     					'data-method' => 'post',
 													]);

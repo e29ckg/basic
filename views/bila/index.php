@@ -35,11 +35,14 @@ $this->params['breadcrumbs'][] = $this->title;
 				<tr>
 					<td class="text-center" alt="<?=$model->id?>">
 						<?=$model->cat?>
-						<br><?=$model->id?>											
+						<br><?= isset($model->running) ? $model->running : $model->id;?>
 					</td>										
-					<td><?=$model->DateThai_full($model->date_begin)?>
-					ถึง <?=$model->DateThai_full($model->date_end)?>
-					ลาครั้งนี้ <?=$model->date_total?> วัน</td>
+					<td>
+						<?=$model->DateThai_full($model->date_begin)?>
+						ถึง <?=$model->DateThai_full($model->date_end)?>
+						ลาครั้งนี้ <?=$model->date_total?> วัน
+						<?= $model->status == 4 ? '<span class="label label-danger">ยกเลิกการลา</span>' : '' ;?>
+					</td>
 					<td class="text-center"> 
 					<?= !empty($model->file) ? 
 						Html::a('<i class="fa fa-file-o"></i> ไฟล์เอกสาร ', ['bila/file_view','id' => $model->id], [
@@ -57,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
 							'class' => 'act-update btn btn-warning btn-xs',
 							'data-id' => $model->id,
 						]). ' '.
-						 Html::a('<i class="fa fa-remove"></i> ลบ ', ['bila/delete', 'id' => $model->id], [
+						 Html::a('<i class="fa fa-remove"></i> ยกเลิกการลา ', ['bila/delete', 'id' => $model->id], [
 							'class' => 'btn btn-danger btn-xs',
 							'data-confirm' => 'Are you sure?',
 							'data-method' => 'post',
