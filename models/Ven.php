@@ -132,6 +132,11 @@ class Ven extends \yii\db\ActiveRecord
         
     }
 
+    public function getVenChange()
+    {
+        return $this->hasOne(VenChange::className(), ['ref1' => 'ref2']);
+    }
+
     public function getVenCom()
     {
         return $this->hasOne(VenCom::className(), ['id' => 'ven_com_id']);

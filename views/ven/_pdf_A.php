@@ -73,9 +73,17 @@ use yii\helpers\Url;
 		</tr>
         <tr>
             <td>ลงวันที่</td>	
-            <td colspan="3" class="TableLine" style="text-align:center"><?=$model->DateThai_full($model->ven1_old->getVenComDate());?></td>
-            <td style="text-align:center">ให้</td>	
-            <td colspan="5" class="TableLine" style="text-align:center"><?=$model->getProfileName()?></td>
+            <td class="TableLine"></td>
+            <td colspan="9" class="TableLine" >
+                <?=$model->DateThai_full($model->ven1_old->getVenComDate());?>
+                <?= $model_old ?>
+                <?= isset($model_old->id) ? 'และใบเปลี่ยนเวรเลขที่ '.$model_old->id .' ลงวันที่ '.$model_old->create_at: 'id' ;?>
+            </td>
+        </tr>
+        <tr>
+            <td >ให้</td>	
+            <td colspan="8" class="TableLine" style="text-align:center"><?=$model->getProfileName()?></td>
+            <td class="TableLine"></td>
 		</tr>
         <tr>
             <td>อยู่เวร</td>	
@@ -191,5 +199,4 @@ use yii\helpers\Url;
 </table>
 </div>
 <div>
-
 </div>

@@ -68,7 +68,7 @@ class VenController extends Controller
     {
         $models = Ven::find()->where(['status' => 1 ])
             ->orWhere(['status' => 2 ])
-            ->orWhere(['status' => 3 ])
+            // ->orWhere(['status' => 3 ])
             ->orderBy([
             // 'date_create'=>SORT_DESC,
             'ven_date' => SORT_DESC,
@@ -344,6 +344,212 @@ class VenController extends Controller
             // 'ven_id1' => $ven_id1,
         ]);
     }
+
+    public function actionChange_upfile($id) { 
+
+        $model = VenChangeUpFile::findOne($id);
+                          
+        // Add This For Ajax Email Exist Validation 
+        if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post()) ){
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model) ;
+        } 
+        
+        if ($model->load(Yii::$app->request->post()) && $model->validate()){ 
+            $f = UploadedFile::getInstance($model, 'file');
+            
+            if(!empty($f)){  
+                $fileName = md5($f->baseName . time()) . '.' . $f->extension;
+                $dir = Url::to('@webroot'.$this->filePath );
+                // $dir = Url::to('@webroot'.$this->filePath);
+                if (!is_dir($dir)) {
+                    mkdir($dir, 0777, true);
+                }
+                
+                if($f->saveAs($dir .'/'. $fileName)){
+                    $model->file = $fileName;
+                } 
+
+                if(!($model->ven_id2 == null)){
+                    $dir = Url::to('@webroot'.$this->filePath);              
+                    // $dir = Url::to('@webroot'.$this->filePath);
+                    if (!is_dir($dir)) {
+                        mkdir($dir, 0777, true);
+                    }
+                    if($f->saveAs($dir .'/'. $fileName)){
+                        $model->file = $fileName;
+                    }
+                }  
+                             
+
+                    $transaction = Yii::$app->db->beginTransaction();
+                    try {
+                        
+                        $model->status = 5;
+                        $model->save();
+
+                        $modelV1 = Ven::findOne($model->ven_id1);
+                        $modelV1->file = $fileName;
+                        $modelV1->status = 1;
+                        $modelV1->save();
+
+                        if(!($model->ven_id2 == null)){
+                            $modelV1 = Ven::findOne($model->ven_id2);
+                            $modelV1->file = $fileName;
+                            $modelV1->status = 1;
+                            $modelV1->save();
+                        }                        
+
+                        $modelV3 = Ven::findOne($model->ven_id1_old);
+                        $modelV3->status = 5;
+                        $modelV3->save();
+
+                        if(!($model->ven_id2_old == null)){
+                            $modelV4 = Ven::findOne($model->ven_id2_old);
+                            $modelV4->status = 5;
+                            $modelV4->save();
+                        }
+                                                                    
+                        Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
+                                                  
+                        $transaction->commit();
+                        return $this->redirect(['change_user_index']);
+                        
+                    } catch (\Exception $e) {
+                        $transaction->rollBack();
+                        throw $e;
+                    } 
+
+            }else{
+                Yii::$app->session->setFlash('warning', 'ไม่ได้บันทึกข้อมูล');
+                return $this->redirect(['change_user_index']);
+            }
+        }
+        // $model->file = $model->file;
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('_change_upfile',[
+                'model' => $model,               
+            ]);
+        }
+
+        return $this->render('_change_upfile',[
+            'model' => $model,                     
+        ]);
+    }
+
+    public function actionChange_del_file($id)
+    {
+        $model = VenChangeUpFile::findOne($id);  
+        
+        $filename = $model->file;
+        // $dir = Url::to('@webroot'.$this->filePath);
+        $dir = Url::to('@webroot'.$this->filePath);
+        
+        if($filename && is_file($dir.'/'.$filename)){
+            unlink($dir.'/'.$filename);// ลบ รูปเดิม;                    
+        }
+        
+        $transaction = Yii::$app->db->beginTransaction();
+            try {
+                $modelV = Ven::findOne($model->ven_id1);
+                $modelV->file = null;
+                $modelV->status = 2;
+                $modelV->save();
+
+                if(!($model->ven_id2 == null)){
+                    $modelV = Ven::findOne($model->ven_id2);
+                    $modelV->file = null;
+                    $modelV->status = 2;
+                    $modelV->save();
+                }                
+
+                $modelV = Ven::findOne($model->ven_id1_old);
+                $modelV->status = 4;
+                $modelV->save();
+
+                if(!($model->ven_id2_old == null)){
+                    $modelV = Ven::findOne($model->ven_id2_old);
+                    $modelV->status = 4;
+                    $modelV->save();
+                }
+
+                $model->file = null;
+                $model->status = 2;
+                $model->save();
+                
+                Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');  
+                                                
+                $transaction->commit();
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            }
+        return $this->redirect(['change_user_index']);
+    }
+
+    public function actionChange_del($id)
+    {
+        $model = VenChange::findOne($id);  
+        
+        $filename = $model->file;
+        $dir = Url::to('@webroot'.$this->filePath);
+        if(is_file($dir.'/'.$model->id.'.png')){
+            unlink($dir.'/'.$model->id.'.png');                
+        }
+        if($filename && is_file($dir.'/'.$filename)){
+            unlink($dir.'/'.$filename);// ลบ รูปเดิม;                    
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+            try {
+                Ven::findOne($model->ven_id1)->delete();
+
+                if(!empty($model->ven_id2)){
+                    Ven::findOne($model->ven_id2)->delete();
+                }                
+
+                $modelV = Ven::findOne($model->ven_id1_old);
+                $modelV->status = 1;
+                $modelV->save();
+
+                if(!empty($model->ven_id2_old)){
+                    $modelV = Ven::findOne($model->ven_id2_old);
+                    $modelV->status = 1;
+                    $modelV->save();
+                }
+        
+                if($model->delete()){
+                    $dir = Url::to('@webroot'.$this->filePath);
+                    if(is_file($dir.'/'.$model->id.'.png')){
+                        unlink($dir.'/'.$model->id.'.png');// ลบ รูปเดิม;   
+                    } 
+                    if(is_file($dir.'/'.$model->file.'.png')){
+                        unlink($dir.'/'.$model->file);// ลบ ไฟล์  
+                    }
+                    if (is_dir($dir)) {
+                        // mkdir($dir, 0777, true);
+                        rmdir($dir);
+                    } 
+                    /*---------------------ส่ง line ไปยัง Admin--------------------*/
+                    $modelLine = Line::findOne(['name' => 'bila_admin']);
+                    if(isset($modelLine->token)){                
+                        $res = Line::notify_message($modelLine->token,$message);  
+                        $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+                    } 
+                }     
+                
+                Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');  
+                                
+                $transaction->commit();
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            }
+        return $this->redirect(['change_user_index']);
+    }
+
+
+/*------------------------------------------------------------------------------------------------*/
 
     public function actionVen_admin_change()
     {
@@ -1012,8 +1218,7 @@ class VenController extends Controller
                 if(!empty($modelV)){
                     $modelV->status = 1;
                     $modelV->save();
-                } 
-                
+                }                 
 
                 if(!empty($model->ven_id2_old)){
                     $modelV = Ven::findOne($model->ven_id2_old);
@@ -1033,210 +1238,8 @@ class VenController extends Controller
         return $this->redirect(['change_user_index']);
     }
 
-    public function actionChange_del($id)
-    {
-        $model = VenChange::findOne($id);  
-        
-        $filename = $model->file;
-        $dir = Url::to('@webroot'.$this->filePath);
-        if(is_file($dir.'/'.$model->id.'.png')){
-            unlink($dir.'/'.$model->id.'.png');                
-        }
-        if($filename && is_file($dir.'/'.$filename)){
-            unlink($dir.'/'.$filename);// ลบ รูปเดิม;                    
-        }
-
-        $transaction = Yii::$app->db->beginTransaction();
-            try {
-                Ven::findOne($model->ven_id1)->delete();
-
-                if(!empty($model->ven_id2)){
-                    Ven::findOne($model->ven_id2)->delete();
-                }                
-
-                $modelV = Ven::findOne($model->ven_id1_old);
-                $modelV->status = 1;
-                $modelV->save();
-
-                if(!empty($model->ven_id2_old)){
-                    $modelV = Ven::findOne($model->ven_id2_old);
-                    $modelV->status = 1;
-                    $modelV->save();
-                }
-        
-                if($model->delete()){
-                    $dir = Url::to('@webroot'.$this->filePath);
-                    if(is_file($dir.'/'.$model->id.'.png')){
-                        unlink($dir.'/'.$model->id.'.png');// ลบ รูปเดิม;   
-                    } 
-                    if(is_file($dir.'/'.$model->file.'.png')){
-                        unlink($dir.'/'.$model->file);// ลบ ไฟล์  
-                    }
-                    if (is_dir($dir)) {
-                        // mkdir($dir, 0777, true);
-                        rmdir($dir);
-                    } 
-                    /*---------------------ส่ง line ไปยัง Admin--------------------*/
-                    $modelLine = Line::findOne(['name' => 'bila_admin']);
-                    if(isset($modelLine->token)){                
-                        $res = Line::notify_message($modelLine->token,$message);  
-                        $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
-                    } 
-                }     
-                
-                Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');  
-                                
-                $transaction->commit();
-            } catch (\Exception $e) {
-                $transaction->rollBack();
-                throw $e;
-            }
-        return $this->redirect(['change_user_index']);
-    }
-
-    public function actionChange_upfile($id) { 
-
-        $model = VenChangeUpFile::findOne($id);
-                          
-        // Add This For Ajax Email Exist Validation 
-        if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post()) ){
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ActiveForm::validate($model) ;
-        } 
-        
-        if ($model->load(Yii::$app->request->post()) && $model->validate()){ 
-            $f = UploadedFile::getInstance($model, 'file');
-            
-            if(!empty($f)){  
-                $fileName = md5($f->baseName . time()) . '.' . $f->extension;
-                $dir = Url::to('@webroot'.$this->filePath );
-                // $dir = Url::to('@webroot'.$this->filePath);
-                if (!is_dir($dir)) {
-                    mkdir($dir, 0777, true);
-                }
-                
-                if($f->saveAs($dir .'/'. $fileName)){
-                    $model->file = $fileName;
-                } 
-
-                if(!($model->ven_id2 == null)){
-                    $dir = Url::to('@webroot'.$this->filePath);              
-                    // $dir = Url::to('@webroot'.$this->filePath);
-                    if (!is_dir($dir)) {
-                        mkdir($dir, 0777, true);
-                    }
-                    if($f->saveAs($dir .'/'. $fileName)){
-                        $model->file = $fileName;
-                    }
-                }  
-                             
-
-                    $transaction = Yii::$app->db->beginTransaction();
-                    try {
-                        
-                        $model->status = 5;
-                        $model->save();
-
-                        $modelV1 = Ven::findOne($model->ven_id1);
-                        $modelV1->file = $fileName;
-                        $modelV1->status = 3;
-                        $modelV1->save();
-
-                        if(!($model->ven_id2 == null)){
-                            $modelV1 = Ven::findOne($model->ven_id2);
-                            $modelV1->file = $fileName;
-                            $modelV1->status = 3;
-                            $modelV1->save();
-                        }                        
-
-                        $modelV3 = Ven::findOne($model->ven_id1_old);
-                        $modelV3->status = 5;
-                        $modelV3->save();
-
-                        if(!($model->ven_id2_old == null)){
-                            $modelV4 = Ven::findOne($model->ven_id2_old);
-                            $modelV4->status = 5;
-                            $modelV4->save();
-                        }
-                                                                    
-                        Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
-                                                  
-                        $transaction->commit();
-                        return $this->redirect(['change_user_index']);
-                        
-                    } catch (\Exception $e) {
-                        $transaction->rollBack();
-                        throw $e;
-                    } 
-
-            }else{
-                Yii::$app->session->setFlash('warning', 'ไม่ได้บันทึกข้อมูล');
-                return $this->redirect(['change_user_index']);
-            }
-        }
-        // $model->file = $model->file;
-        if(Yii::$app->request->isAjax){
-            return $this->renderAjax('_change_upfile',[
-                'model' => $model,               
-            ]);
-        }
-
-        return $this->render('_change_upfile',[
-            'model' => $model,                     
-        ]);
-    }
-
-    public function actionChange_del_file($id)
-    {
-        $model = VenChangeUpFile::findOne($id);  
-        
-        $filename = $model->file;
-        // $dir = Url::to('@webroot'.$this->filePath);
-        $dir = Url::to('@webroot'.$this->filePath);
-        
-        if($filename && is_file($dir.'/'.$filename)){
-            unlink($dir.'/'.$filename);// ลบ รูปเดิม;                    
-        }
-        
-        $transaction = Yii::$app->db->beginTransaction();
-            try {
-                $modelV = Ven::findOne($model->ven_id1);
-                $modelV->file = null;
-                $modelV->status = 2;
-                $modelV->save();
-
-                if(!($model->ven_id2 == null)){
-                    $modelV = Ven::findOne($model->ven_id2);
-                    $modelV->file = null;
-                    $modelV->status = 2;
-                    $modelV->save();
-                }                
-
-                $modelV = Ven::findOne($model->ven_id1_old);
-                $modelV->status = 4;
-                $modelV->save();
-
-                if(!($model->ven_id2_old == null)){
-                    $modelV = Ven::findOne($model->ven_id2_old);
-                    $modelV->status = 4;
-                    $modelV->save();
-                }
-
-                $model->file = null;
-                $model->status = 2;
-                $model->save();
-                
-                Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');  
-
-                                                
-                $transaction->commit();
-            } catch (\Exception $e) {
-                $transaction->rollBack();
-                throw $e;
-            }
-        return $this->redirect(['change_user_index']);
-    }
-
+    
+    
     
 
     public function actionChange_file_view($id)
@@ -1256,7 +1259,21 @@ class VenController extends Controller
     public function actionPrint($id=null)
     {
         $model = VenChange::findOne($id);
-            $Pdf_print = '_pdf_A';
+        $Pdf_print = '_pdf_A';
+
+        $sms = '';
+        // $model_ven_old = Ven::find()->where([
+        //     'ven_date' => $model->ven1->ven_date,
+
+        //     ]);
+        // if($model_ven_old->count() >1){
+        //     foreach ($model_ven_old->all() as $model_v):
+
+        //         $sms .= $model_v->venChange->id;
+        //         $sms .= ' ';
+        //     endforeach;
+        // }
+
         
         Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
         $pdf = new Pdf([
@@ -1264,6 +1281,7 @@ class VenController extends Controller
             'destination' => Pdf::DEST_BROWSER,
             'content' => $this->renderPartial($Pdf_print,[
                 'model'=>$model,
+                'model_old' => $sms,
             ]),
             
             'cssFile' => 'css/pdf.css',
