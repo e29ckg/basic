@@ -966,6 +966,9 @@ class VenController extends Controller
             ->where([
                 'user_id1' => Yii::$app->user->identity->id,
             ])
+            ->orWhere([
+                'user_id2' => Yii::$app->user->identity->id,
+            ])
             ->orderBy([
             // 'date_create'=>SORT_DESC,
             'id' => SORT_DESC,
@@ -1199,23 +1202,23 @@ class VenController extends Controller
             try {
                 $modelV = Ven::findOne($model->ven_id1);
                 $modelV->file = null;
-                $modelV->status = 4;
+                $modelV->status = 2;
                 $modelV->save();
 
                 if(!($model->ven_id2 == null)){
                     $modelV = Ven::findOne($model->ven_id2);
                     $modelV->file = null;
-                    $modelV->status = 4;
+                    $modelV->status = 2;
                     $modelV->save();
                 }                
 
-                $modelV = Ven::findOne($model->ven_id1);
-                $modelV->status = 2;
+                $modelV = Ven::findOne($model->ven_id1_old);
+                $modelV->status = 4;
                 $modelV->save();
 
                 if(!($model->ven_id2_old == null)){
-                    $modelV = Ven::findOne($model->ven_id2);
-                    $modelV->status = 2;
+                    $modelV = Ven::findOne($model->ven_id2_old);
+                    $modelV->status = 4;
                     $modelV->save();
                 }
 

@@ -81,7 +81,6 @@ class Web_linkController extends Controller
             'id' => SORT_DESC,
             ])->all();
         
-
         return $this->render('index_admin', [
             'models' => $models,
         ]);

@@ -30,10 +30,10 @@ $this->params['breadcrumbs'][] = $this->title;
 							<table id="example1" class="table table-bordered table-striped dataTable" role="grid" >
                 				<thead>
                 					<tr role="row">										
-										<th class="text-center" >id</th>
-										<th class="text-center" >เลขที่คำสั่ง</th>
-										<th class="text-center" >ชื่อคำสั่ง</th>
-										<th class="text-center" >status</th>
+										<th class="text-center" >เลขที่ใบเปลี่ยน</th>
+										<th class="text-center" >เวร</th>
+										<th class="text-center" >เวร</th>
+										<th class="text-center" >รายละเอียด</th>
 										<th></th>
 									</tr>
                 				</thead>
