@@ -24,7 +24,7 @@ class VenTransfer extends \yii\db\ActiveRecord
     {
         return [
             [['ven_id1','user_id2'],'required'],   
-            // [['user_id2'], 'validateUser_id2'],
+            [['user_id2'], 'validateUser_id2'],
         ];
     }
 
