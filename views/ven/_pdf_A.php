@@ -75,8 +75,7 @@ use yii\helpers\Url;
             <td>ลงวันที่</td>	
             <td class="TableLine"></td>
             <td colspan="9" class="TableLine" >
-                <?=$model->DateThai_full($model->ven1_old->getVenComDate());?>
-                <?= $model_old ?>
+                <?=$model->DateThai_full($model->ven1_old->getVenComDate());?>               
                 <?= isset($model_old) ? $model_old : '' ;?>
             </td>
         </tr>

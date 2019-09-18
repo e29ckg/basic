@@ -466,9 +466,11 @@ class VenController extends Controller
                 }                
 
                 $modelV = Ven::findOne($model->ven_id1_old);
-                $modelV->status = 4;
-                $modelV->save();
-
+                if(isset($modelV)){
+                    $modelV->status = 4;
+                    $modelV->save();
+                }
+                
                 if(!($model->ven_id2_old == null)){
                     $modelV = Ven::findOne($model->ven_id2_old);
                     $modelV->status = 4;
@@ -1263,18 +1265,16 @@ class VenController extends Controller
         $model = VenChange::findOne($id);
         $Pdf_print = '_pdf_AA';
         
-        $model_VC = VenChange::find()
-            ->where(['ven_id1' => $model->ven_id1_old])
-            ->all(); 
+        $modelV = Ven::findOne($model->ven_id1_old); 
             
         $sms = '';
-        if(isset($model_VC)){
-            foreach ($model_VC as $modelV):
+        if(isset($modelV)){
+            // foreach ($model_VC as $modelV):
                 $sms .= ' และใบเปลี่ยนเวรเลขที่ ';
                 $sms .= $modelV->id;
                 $sms .= ' ลงวันที่ ';
                 $sms .= Ven::DateThai_full($modelV->create_at);
-            endforeach;
+            // endforeach;
             $Pdf_print = '_pdf_A';
         }
         
