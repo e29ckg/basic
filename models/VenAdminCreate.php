@@ -248,7 +248,7 @@ class VenAdminCreate extends \yii\db\ActiveRecord
                 'ven_time' => ['08:30:11','08:30:22'],
                 'status' => 1,
                 ])                
-                ->andWhere("ven_date >= $dB");
+                ->andWhere("ven_date >= '$dB'");
                 // ->count();             
                 return  $modelVO ? $modelVO : null ; //จำนวนเวรที่สามารถเปลียนได้
         } 
@@ -261,7 +261,7 @@ class VenAdminCreate extends \yii\db\ActiveRecord
                 'ven_time' => $model->ven_time,
                 'status' => 1,
                 ])                
-                ->andWhere("ven_date >= $dB");
+                ->andWhere("ven_date >= '$dB'");
                 // ->count();             
                 return  $modelVO ? $modelVO : null ; //จำนวนเวรที่สามารถเปลียนได้
         }
@@ -273,7 +273,7 @@ class VenAdminCreate extends \yii\db\ActiveRecord
                 'ven_time' => $model->ven_time,
                 'status' => 1,
                 ])                
-                ->andWhere("ven_date >= $dB");
+                ->andWhere("ven_date >= '$dB'");
                 // ->count();             
                 return  $modelVO ? $modelVO : null ; //จำนวนเวรที่สามารถเปลียนได้
         }
@@ -285,7 +285,7 @@ class VenAdminCreate extends \yii\db\ActiveRecord
                 'ven_time' => $model->ven_time,
                 'status' => 1,
                 ])                
-                ->andWhere("ven_date >= $dB");
+                ->andWhere("ven_date >= '$dB'");
                 // ->count();             
                 return  $modelVO ? $modelVO : null ; //จำนวนเวรที่สามารถเปลียนได้
         }
@@ -297,7 +297,7 @@ class VenAdminCreate extends \yii\db\ActiveRecord
                 'ven_time' => $model->ven_time,
                 'status' => 1,
                 ])                
-                ->andWhere("ven_date >= $dB");
+                ->andWhere("ven_date >= '$dB'");
                 // ->count();             
                 return  $modelVO ? $modelVO : null ; //จำนวนเวรที่สามารถเปลียนได้
         }

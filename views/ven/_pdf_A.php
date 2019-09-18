@@ -69,7 +69,7 @@ use yii\helpers\Url;
             <td></td>	
             <td></td>
             <td colspan="5">ตามคำสั่งศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์ ที่ </td>	
-            <td colspan="3" class="TableLine" style="text-align:center"><?=$model->ven1_old->getVenComNum()?></td>
+            <td colspan="3" class="TableLine" style="text-align:center"><?=$model->ven1_old->getVenComName()?></td>
 		</tr>
         <tr>
             <td>ลงวันที่</td>	
@@ -77,7 +77,7 @@ use yii\helpers\Url;
             <td colspan="9" class="TableLine" >
                 <?=$model->DateThai_full($model->ven1_old->getVenComDate());?>
                 <?= $model_old ?>
-                <?= isset($model_old->id) ? 'และใบเปลี่ยนเวรเลขที่ '.$model_old->id .' ลงวันที่ '.$model_old->create_at: 'id' ;?>
+                <?= isset($model_old) ? $model_old : '' ;?>
             </td>
         </tr>
         <tr>

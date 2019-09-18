@@ -207,7 +207,8 @@ class Ven extends \yii\db\ActiveRecord
     }    
 
     public function getVenForChangeAll($id)
-    {        
+    {      
+        $dB = date('Y-m-d');         
         $models = Ven::getVenForChange($id)->all();
         if(isset($models)){
             return ArrayHelper::map($models,'id',function($model){
@@ -225,37 +226,6 @@ class Ven extends \yii\db\ActiveRecord
         return isset($model) ? $model->count() : 0 ;     
     }
 
-    public function DateThai_full($strDate)
-	{
-        if($strDate == ''){
-            return "-";
-        }
-		$strYear = date("Y",strtotime($strDate))+543;
-		$strMonth= date("n",strtotime($strDate));
-		$strDay= date("j",strtotime($strDate));
-		$strHour= date("H",strtotime($strDate));
-		$strMinute= date("i",strtotime($strDate));
-		$strSeconds= date("s",strtotime($strDate));
-		$strMonthCut = Array("","มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม",
-                            "สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม");
-		$strMonthThai=$strMonthCut[$strMonth];
-		return "$strDay $strMonthThai $strYear";
-    }
-    
-    public function DateThai_month_full($strDate)
-	{
-		$strYear = date("Y",strtotime($strDate))+543;
-		$strMonth= date("n",strtotime($strDate));
-		$strDay= date("j",strtotime($strDate));
-		$strHour= date("H",strtotime($strDate));
-		$strMinute= date("i",strtotime($strDate));
-		$strSeconds= date("s",strtotime($strDate));
-		$strMonthCut = Array("","มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม",
-                            "สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม");
-		$strMonthThai=$strMonthCut[$strMonth];
-		return "$strMonthThai";
-    }
-
     public function getVenForChange($id)  //จำนวนเวรที่สามารถเปลียนได้
     {        
         $model = Ven::findOne($id);
@@ -268,7 +238,7 @@ class Ven extends \yii\db\ActiveRecord
                 'ven_time' => ['08:30:11','08:30:22'],
                 'status' => 1,
                 ])                
-                ->andWhere("ven_date >= $dB");
+                ->andWhere("ven_date >= '$dB'");
                 // ->count();             
                 return  $modelVO ? $modelVO : null ; //จำนวนเวรที่สามารถเปลียนได้
         } 
@@ -281,7 +251,7 @@ class Ven extends \yii\db\ActiveRecord
                 'ven_time' => $model->ven_time,
                 'status' => 1,
                 ])                
-                ->andWhere("ven_date >= $dB");
+                ->andWhere("ven_date >= '$dB'");
                 // ->count();             
                 return  $modelVO ? $modelVO : null ; //จำนวนเวรที่สามารถเปลียนได้
         }
@@ -293,7 +263,7 @@ class Ven extends \yii\db\ActiveRecord
                 'ven_time' => $model->ven_time,
                 'status' => 1,
                 ])                
-                ->andWhere("ven_date >= $dB");
+                ->andWhere("ven_date >= '$dB'");
                 // ->count();             
                 return  $modelVO ? $modelVO : null ; //จำนวนเวรที่สามารถเปลียนได้
         }
@@ -305,7 +275,7 @@ class Ven extends \yii\db\ActiveRecord
                 'ven_time' => $model->ven_time,
                 'status' => 1,
                 ])                
-                ->andWhere("ven_date >= $dB");
+                ->andWhere("ven_date >= '$dB'");
                 // ->count();             
                 return  $modelVO ? $modelVO : null ; //จำนวนเวรที่สามารถเปลียนได้
         }
@@ -317,7 +287,7 @@ class Ven extends \yii\db\ActiveRecord
                 'ven_time' => $model->ven_time,
                 'status' => 1,
                 ])                
-                ->andWhere("ven_date >= $dB");
+                ->andWhere("ven_date >= '$dB'");
                 // ->count();             
                 return  $modelVO ? $modelVO : null ; //จำนวนเวรที่สามารถเปลียนได้
         }
@@ -422,6 +392,36 @@ class Ven extends \yii\db\ActiveRecord
         });        
     }
     
+    public function DateThai_full($strDate)
+	{
+        if($strDate == ''){
+            return "-";
+        }
+		$strYear = date("Y",strtotime($strDate))+543;
+		$strMonth= date("n",strtotime($strDate));
+		$strDay= date("j",strtotime($strDate));
+		$strHour= date("H",strtotime($strDate));
+		$strMinute= date("i",strtotime($strDate));
+		$strSeconds= date("s",strtotime($strDate));
+		$strMonthCut = Array("","มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม",
+                            "สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม");
+		$strMonthThai=$strMonthCut[$strMonth];
+		return "$strDay $strMonthThai $strYear";
+    }
+    
+    public function DateThai_month_full($strDate)
+	{
+		$strYear = date("Y",strtotime($strDate))+543;
+		$strMonth= date("n",strtotime($strDate));
+		$strDay= date("j",strtotime($strDate));
+		$strHour= date("H",strtotime($strDate));
+		$strMinute= date("i",strtotime($strDate));
+		$strSeconds= date("s",strtotime($strDate));
+		$strMonthCut = Array("","มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม",
+                            "สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม");
+		$strMonthThai=$strMonthCut[$strMonth];
+		return "$strMonthThai";
+    }
 
     
 }

@@ -61,6 +61,8 @@ class VenController extends Controller
 
    public function actionTest()
    {
+    
+
        return $this->render('test');
    }
     
@@ -244,13 +246,13 @@ class VenController extends Controller
             return $this->redirect(['change_user_index']);            
         }
 
-        $ven_id2 = Ven::findOne($id);
-        $ven_id1 = Ven::getVenForChangeAll($id);        
+        $ven_id1 = Ven::findOne($id);
+        $ven_id2 = Ven::getVenForChangeAll($id);        
         
         return $this->renderAjax('_ven_change',[
             'model' => $model,
-            'ven_id2' => [$ven_id2->id => Ven::dateThai_full($ven_id2->ven_date).' '.$ven_id2->profile->name.'('.$ven_id2->id.')'],
-            'ven_id1' => $ven_id1,
+            'ven_id1' => [$ven_id1->id => Ven::dateThai_full($ven_id1->ven_date).' '.$ven_id1->profile->name.'('.$ven_id1->id.')'.$ven_id1->venCom->ven_com_num],
+            'ven_id2' => $ven_id2,
         ]);
     }
 
@@ -1259,21 +1261,23 @@ class VenController extends Controller
     public function actionPrint($id=null)
     {
         $model = VenChange::findOne($id);
-        $Pdf_print = '_pdf_A';
-
+        $Pdf_print = '_pdf_AA';
+        
+        $model_VC = VenChange::find()
+            ->where(['ven_id1' => $model->ven_id1_old])
+            ->all(); 
+            
         $sms = '';
-        // $model_ven_old = Ven::find()->where([
-        //     'ven_date' => $model->ven1->ven_date,
-
-        //     ]);
-        // if($model_ven_old->count() >1){
-        //     foreach ($model_ven_old->all() as $model_v):
-
-        //         $sms .= $model_v->venChange->id;
-        //         $sms .= ' ';
-        //     endforeach;
-        // }
-
+        if(isset($model_VC)){
+            foreach ($model_VC as $modelV):
+                $sms .= ' และใบเปลี่ยนเวรเลขที่ ';
+                $sms .= $modelV->id;
+                $sms .= ' ลงวันที่ ';
+                $sms .= Ven::DateThai_full($modelV->create_at);
+            endforeach;
+            $Pdf_print = '_pdf_A';
+        }
+        
         
         Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
         $pdf = new Pdf([
@@ -1299,6 +1303,20 @@ class VenController extends Controller
             ]
         ]);
         return $pdf->render();
+    }
+
+    public function actionUp()
+    {
+        $models = VenChange::find()->all();
+        foreach ($models as $model) :    
+            if (empty($model->month)){
+                $model->month = date("Y-m",strtotime($model->create_at));
+                $model->save();                
+            }
+            echo $model->id.'->'.$model->month.'<br>';
+
+        endforeach;
+        return 'ok';
     }
 
 }

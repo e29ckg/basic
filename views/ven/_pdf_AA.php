@@ -112,6 +112,7 @@ use yii\helpers\Url;
             <td colspan="5" style="text-align:center"></td>
             <td colspan="5" style="text-align:center"></td>
         </tr>
+        
       
         <tr>
             <td colspan="5" style="text-align:right">(ลงชื่อ)</td>
@@ -154,12 +155,15 @@ use yii\helpers\Url;
             <td colspan="1"></td>
 		</tr>
         <tr>
+            <td colspan="10"></td>           
+		</tr>
+        <tr>
             <td colspan="1"></td>
             <td colspan="3" class="TableLine" style="text-align:center"></td>
             <td colspan="2"></td>            
             <td colspan="3" class="TableLine" style="text-align:center"></td>
             <td colspan="1"></td>
-		</tr>
+		</tr>       
         
         <tr>
             <td colspan="1"></td>
