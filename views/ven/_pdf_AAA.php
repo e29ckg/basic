@@ -57,7 +57,7 @@ use yii\helpers\Url;
             
         </tr>
         <tr>
-            <td colspan="1">เรื่อง</td>	
+            <td colspan="1">เรื่อง000</td>	
             <td colspan="9">ขอเปลี่ยนเวร</td>
 		</tr>
         <tr>

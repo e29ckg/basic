@@ -101,13 +101,16 @@ use app\models\VenChange;
                     <tr>						                
                         <td><?=$modeld->id?></td>	
                         <td><?=$modeld->DateThai_full($modeld->ven_date)?></</td>									
-                        <td> <?=$modeld->getProfileName()?> <?= VenCom::getVen_time()[$modeld->ven_time];?></td>
-                        <td class = "text-center">
+                        <td> 
+                            <?=$modeld->getProfileName()?> <?= VenCom::getVen_time()[$modeld->ven_time];?>
                             <?=$modeld->status == 2 || $modeld->status == 4 || $modeld->status == 6 ?
                                 '<label class="label label-danger">'.VenChange::getStatusList()[$modeld->status].'</label>' 
                                 :
-                                '<label class="label label-primary" >'.VenChange::getStatusList()[$modeld->status].'</label>' ;?>				        
+                                '<label class="label label-primary" >'.VenChange::getStatusList()[$modeld->status].'</label>' ;?>	
+                            <?= $modeld->file ? 
+                                '<a href="'.Url::to('@web/uploads/ven/'.$modeld->file).'" target="_blank">ไฟล์ใบเปลี่ยน</a>'  : '';?>			        
                         </td>
+                        
                         
                     </tr>
                     <?php  endforeach; ?>								

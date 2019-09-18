@@ -23,8 +23,8 @@ class VenChange extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            // [['ven_id1','ven_id2'],'required'],   
-
+            [['ven_id1','ven_id2'],'required'],   
+            [['ven_id2'], 'validateVen_id2'],
         ];
     }
 
@@ -42,7 +42,107 @@ class VenChange extends \yii\db\ActiveRecord
             's_bb' => 'ผู้พิพากษาหัวหน้าฯลงนาม',   
             'comment' => 'เนื่องจาก',      
         ];
-    }    
+    }  
+    
+    public function validateVen_id2()
+    {
+        
+        // $this->addError('ven_id2', $this->ven_id1);
+        $model = Ven::findOne($this->ven_id1);
+        // $model2 = Ven::findOne($this->ven_id2);
+        
+        if($model->ven_time == '08:30:01' || $model->ven_time == '08:30:11' || $model->ven_time == '08:30:22'){   
+            $dB = date('Y-m-d', strtotime($model->ven_date));
+            $dB1 = date('Y-m-d', strtotime('-1 day', strtotime($model->ven_date)));
+            
+            $modelVO = Ven::find()
+                ->where([
+                    'ven_date' => [$dB,$dB1],
+                    'ven_time' => '16:30:55',
+                    'status' => 1,
+                    'user_id' => Yii::$app->user->identity->id,
+                ])->orWhere([
+                    'ven_date' => [$dB],
+                    'ven_time' => ['08:30:01','08:30:11','08:30:22'],
+                    'status' => 1,
+                    'user_id' => Yii::$app->user->identity->id,
+                ])->count();
+                // $this->addError('ven_id2', $modelVO );
+            if($modelVO >= 1){
+                $this->addError('ven_id2', 'เบิกไม่ได้นะ');
+            }   
+                        
+        }
+
+        if($model->ven_time == '08:30:00'){   
+            $dB = date('Y-m-d', strtotime($model->ven_date));
+            $dB1 = date('Y-m-d', strtotime('-1 day', strtotime($model->ven_date)));
+
+            $modelVO = Ven::find()
+                ->where([
+                    'ven_date' => [$dB,$dB1],
+                    'ven_time' => '16:30:00',
+                    'status' => 1,
+                    'user_id' => Yii::$app->user->identity->id,
+                ])->orWhere([
+                    'ven_date' => [$dB],
+                    'ven_time' => ['08:30:00'],
+                    'status' => 1,
+                    'user_id' => Yii::$app->user->identity->id,
+                ])->count();
+            if($modelVO >= 1){
+                $this->addError('ven_id2', 'เบิกไม่ได้นะ');
+            }               
+        }
+
+        if($model->ven_time == '16:30:55'){   
+            
+            $dB = date('Y-m-d', strtotime($model->ven_date));
+            $dB1 = date('Y-m-d', strtotime('+1 day', strtotime($model->ven_date)));
+
+            $modelVO = Ven::find()
+            ->where([
+                'ven_date' => [$dB,$dB1],
+                'ven_time' => ['08:30:01','08:30:11','08:30:22'],
+                'status' => 1,
+                // 'status' => 1,
+                'user_id' => Yii::$app->user->identity->id,
+            ])->orWhere([
+                'ven_date' => [$dB],
+                'ven_time' => ['16:30:55'],
+                'status' => 1,
+                // 'status' => 1,
+                'user_id' => Yii::$app->user->identity->id,
+            ])->count();   
+            if($modelVO >= 1){
+                $this->addError('ven_id2', 'เบิกไม่ได้นะ');
+            }
+        }
+
+        if($model->ven_time == '16:30:00'){   
+            $dB = date('Y-m-d', strtotime($model->ven_date));
+            $dB1 = date('Y-m-d', strtotime('+1 day', strtotime($model->ven_date)));
+
+            $modelVO = Ven::find()
+            ->where([
+                'ven_date' => [$dB,$dB1],
+                'ven_time' => ['08:30:00'],
+                'status' => 1,
+                // 'status' => 1,
+                'user_id' => Yii::$app->user->identity->id,
+            ])->orWhere([
+                'ven_date' => [$dB],
+                'ven_time' => ['16:30:00'],
+                'status' => 1,
+                // 'status' => 1,
+                'user_id' => Yii::$app->user->identity->id,
+            ])->count();   
+            if($modelVO >= 1){
+                $this->addError('ven_id2', 'เบิกไม่ได้นะ');
+            }
+        }
+        
+    }
 
     public function getProfile()
     {

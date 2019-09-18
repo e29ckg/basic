@@ -18,7 +18,7 @@ use yii\helpers\Url;
             <th ><H2>ใบขอเปลี่ยนเวร</H2> </th>	
             <th  width="10%">    
                 <img src="<?= $model->getQr($model->id,$model->user_id1);?>" height="60" width="60" >
-                <div style="font-size: 9px; "><?=$model->id ? $model->id : $model->id?></div>
+                <div style="font-size: 9px; "><?=$model->id?></div>
             </th>		
         </tr>
         
@@ -69,20 +69,13 @@ use yii\helpers\Url;
             <td></td>	
             <td></td>
             <td colspan="5">ตามคำสั่งศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์ ที่ </td>	
-            <td colspan="3" class="TableLine" style="text-align:center"><?=$model->ven1_old->getVenComName()?></td>
+            <td colspan="3" class="TableLine" style="text-align:center"><?=$model->ven1_old->getVenComNum()?></td>
 		</tr>
         <tr>
             <td>ลงวันที่</td>	
-            <td class="TableLine"></td>
-            <td colspan="9" class="TableLine" >
-                <?=$model->DateThai_full($model->ven1_old->getVenComDate());?>               
-                <?= isset($model_old) ? $model_old : '' ;?>
-            </td>
-        </tr>
-        <tr>
-            <td >ให้</td>	
-            <td colspan="8" class="TableLine" style="text-align:center"><?=$model->getProfileName()?></td>
-            <td class="TableLine"></td>
+            <td colspan="3" class="TableLine" style="text-align:center"><?=$model->DateThai_full($model->ven1_old->getVenComDate());?></td>
+            <td style="text-align:center">ให้</td>	
+            <td colspan="5" class="TableLine" style="text-align:center"><?=$model->getProfileName()?></td>
 		</tr>
         <tr>
             <td>อยู่เวร</td>	
@@ -119,6 +112,7 @@ use yii\helpers\Url;
             <td colspan="5" style="text-align:center"></td>
             <td colspan="5" style="text-align:center"></td>
         </tr>
+        
       
         <tr>
             <td colspan="5" style="text-align:right">(ลงชื่อ)</td>
@@ -161,11 +155,7 @@ use yii\helpers\Url;
             <td colspan="1"></td>
 		</tr>
         <tr>
-            <td colspan="1"></td>
-            <td colspan="3" style="text-align:center"></td>
-            <td colspan="2"></td>            
-            <td colspan="3" style="text-align:center"></td>
-            <td colspan="1"></td>
+            <td colspan="10"></td>           
 		</tr>
         <tr>
             <td colspan="1"></td>
@@ -173,7 +163,7 @@ use yii\helpers\Url;
             <td colspan="2"></td>            
             <td colspan="3" class="TableLine" style="text-align:center"></td>
             <td colspan="1"></td>
-		</tr>
+		</tr>       
         
         <tr>
             <td colspan="1"></td>
@@ -198,4 +188,5 @@ use yii\helpers\Url;
 </table>
 </div>
 <div>
+
 </div>

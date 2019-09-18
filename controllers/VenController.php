@@ -1263,19 +1263,44 @@ class VenController extends Controller
     public function actionPrint($id=null)
     {
         $model = VenChange::findOne($id);
-        $Pdf_print = '_pdf_AA';
-        
-        $modelV = Ven::findOne($model->ven_id1_old); 
-            
+        $Pdf_print = '_pdf_A';
         $sms = '';
+
+        
+        // $modelV = VenChange::findOne($model->ven_id1_old); 
+        if(isset($model->ven_id2_old)){
+            $modelV = VenChange::find()
+            ->where(['ven_id2' => $model->ven_id2_old])
+            ->orWhere(['ven_id1' => $model->ven_id2_old])
+            ->orderBy(['id' => SORT_DESC])
+            ->one(); 
+
+            if(isset($modelV)){
+                // foreach ($model_VC as $modelV):                
+                    $sms .= ' ตามใบเปลี่ยนเวร';
+                    // $sms .= 'เลขที่ '.$modelV->id;
+                    $sms .= 'ลงวันที่ '. Ven::DateThai_full($modelV->create_at);
+                    $sms .= ' ('. $modelV->id .')';
+                // endforeach;
+                $Pdf_print = '_pdf_AA';
+            }
+        }
+
+        $modelV = VenChange::find()
+            ->where(['ven_id2' => $model->ven_id1_old])
+            ->orWhere(['ven_id1' => $model->ven_id1_old])
+            ->orderBy(['id' => SORT_DESC])
+            ->one();             
+        
         if(isset($modelV)){
-            // foreach ($model_VC as $modelV):
-                $sms .= ' และใบเปลี่ยนเวรเลขที่ ';
-                $sms .= $modelV->id;
-                $sms .= ' ลงวันที่ ';
+            // foreach ($model_VC as $modelV):                
+                $sms .= "<br>".' และใบเปลี่ยนเวร';
+                // $sms .= 'เลขที่ '.$modelV->id;
+                $sms .= 'ลงวันที่ ';
                 $sms .= Ven::DateThai_full($modelV->create_at);
+                $sms .= ' ('. $modelV->id .')';
             // endforeach;
-            $Pdf_print = '_pdf_A';
+            $Pdf_print = '_pdf_AA';
         }
         
         
@@ -1307,13 +1332,23 @@ class VenController extends Controller
 
     public function actionUp()
     {
-        $models = VenChange::find()->all();
+        // $models = VenChange::find()->all();
+        // foreach ($models as $model) :    
+        //     if (empty($model->month)){
+        //         $model->month = date("Y-m",strtotime($model->create_at));
+        //         $model->save();                
+        //     }
+        //     echo $model->id.'->'.$model->month.'<br>';
+
+        // endforeach;
+        // return 'ok';
+        $models = Ven::find()->all();
         foreach ($models as $model) :    
-            if (empty($model->month)){
-                $model->month = date("Y-m",strtotime($model->create_at));
+            if (isset($model->status) == 3){
+                $model->status = 1;
                 $model->save();                
             }
-            echo $model->id.'->'.$model->month.'<br>';
+            echo $model->id.'->'.$model->status.'<br>';
 
         endforeach;
         return 'ok';
