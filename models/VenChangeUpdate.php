@@ -7,7 +7,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 /*
  */
-class VenChange extends \yii\db\ActiveRecord
+class VenChangeUpdate extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -23,8 +23,8 @@ class VenChange extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ven_id1','ven_id2'],'required'],   
-            [['ven_id2'], 'validateVen_id2'],
+            // [['ven_id1','ven_id2'],'required'],   
+            // [['ven_id2'], 'validateVen_id2'],
         ];
     }
 
@@ -235,8 +235,7 @@ class VenChange extends \yii\db\ActiveRecord
             '4' => 'รออนุมัติการเปลี่ยน',
             '5' => 'เรียบร้อย(เปลี่ยน)',
             '6' => 'รออนุมัติการยก',
-            '7' => 'เรียบร้อย(ยก)',  
-            '77' => 'ลบ',                        
+            '7' => 'เรียบร้อย(ยก)',                          
         ];
     }    
 

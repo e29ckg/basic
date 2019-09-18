@@ -186,6 +186,7 @@ use yii\helpers\Url;
     </tbody>
 	  
 </table>
+
 </div>
 <div>
 

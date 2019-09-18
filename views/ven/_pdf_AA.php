@@ -75,7 +75,7 @@ use yii\helpers\Url;
             <!-- <td class="TableLine"></td> -->
             <td colspan="9" class="TableLine" style="text-align:center">
                 <?=$model->DateThai_full($model->ven1_old->getVenComDate());?>               
-                <?= isset($model_old) ? $model_old : '' ;?>
+                <?= isset($sms) ? $sms : '' ;?>
             </td>
         </tr>
         <tr>

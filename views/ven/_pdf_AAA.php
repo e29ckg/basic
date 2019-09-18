@@ -57,7 +57,7 @@ use yii\helpers\Url;
             
         </tr>
         <tr>
-            <td colspan="1">เรื่อง000</td>	
+            <td colspan="1">เรื่อง</td>	
             <td colspan="9">ขอเปลี่ยนเวร</td>
 		</tr>
         <tr>
@@ -75,7 +75,14 @@ use yii\helpers\Url;
             <!-- <td class="TableLine"></td> -->
             <td colspan="9" class="TableLine" style="text-align:center">
                 <?=$model->DateThai_full($model->ven1_old->getVenComDate());?>               
-                <?= isset($model_old) ? $model_old : '' ;?>
+                <?= isset($sms) ? $sms : '' ;?>
+            </td>
+        </tr>
+        <tr>
+            <td></td>	
+            <!-- <td class="TableLine"></td> -->
+            <td colspan="9" class="TableLine" style="text-align:center">               
+                <?= $sms2 ? $sms2 : '' ;?>
             </td>
         </tr>
         <tr>

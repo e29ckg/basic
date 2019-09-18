@@ -101,7 +101,7 @@ $menu_admin = [
                 ['label' => 'ตารางเวร', 'icon' => 'fa fa-user-o', 'url' => ['/ven/index']],
                 ['label' => 'ใบเปลี่ยนเวร', 'icon' => 'fa fa-user-o', 'url' => ['/ven/change_user_index']],
                 ['label' => 'ใบเปลี่ยนเวรทั้งหมด', 'icon' => 'fa fa-user-o', 'url' => ['/ven/change_index']],
-                ['label' => 'จัดเวร จับ-ค้น (กลางคืน)', 'icon' => ' fa fa-user-o', 'url' => ['ven/admin_index']],
+                ['label' => 'จัดเวร จับ-ค้น (เบต้า)', 'icon' => ' fa fa-user-o', 'url' => ['ven/admin_index']],
                 // ['label' => 'ผู้อยู่เวร', 'icon' => ' fa fa-user-o', 'url' => ['ven/user']],
                 ['label' => 'คำสั่ง', 'icon' => ' fa fa-user-o', 'url' => ['ven/com_index']],
             ],

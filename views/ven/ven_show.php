@@ -83,10 +83,10 @@ use app\models\VenChange;
                         
                     </td>
                     <td>
-                        <?= $model->getVenForChangeCount($model->id) > 0 && $model->getCheck($model->id) && $model->status == 1 && $model->ven_date  >  date("Y-m-d")?
+                        <?= $model->getVenForChangeCount($model->id) > 0 && $model->getCheck($model->id) && $model->status == 1 && $model->ven_date  >=  date("Y-m-d")?
                             '<a class="btn btn-primary btn-xs act-ven-change" data-id="'.$model->id.'">ขอเปลี่ยน</a>'
                             : '';?>                        
-                        <?= Yii::$app->user->identity->id == $model->user_id && $model->ven_date  >  date("Y-m-d") && $model->status <> 2 ? 
+                        <?= Yii::$app->user->identity->id == $model->user_id && $model->ven_date  >=  date("Y-m-d") && $model->status <> 2 ? 
                             '<a class="btn btn-primary btn-xs act-ven-transfer" target="_blank" data-id='.$model->id.'>ยกให้</a>'
                             :'';?>
                     </td>
