@@ -49,6 +49,10 @@ use app\models\VenChange;
                     </td>
                     <td>
                         <?= $model->ven_time;?>
+                        <?=Html::a('setActive',['ven/admin_set_active','id' => $model->id],
+                        [
+                            'class' => 'btn btn-danger btn-sx ',
+                        ])?> 
                     </td>
                 </tr>
                 

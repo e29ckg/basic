@@ -678,7 +678,7 @@ class VenController extends Controller
 
     
 
-/*------------------------------------------------------------------------------------------------*/
+/*------------------------------------Admin ------------------------------------------------------------*/
 
     public function actionVen_admin_change()
     {
@@ -1046,6 +1046,16 @@ class VenController extends Controller
         if($model->delete()){            
             Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');                                            
         }   
+        return $this->redirect(['admin_index']);
+    }
+
+    public function actionAdmin_set_active($id)
+    {
+        $model = Ven::findOne($id);        
+        $model->status = 1 ;  
+        $model->save();          
+        Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');                                            
+        
         return $this->redirect(['admin_index']);
     }
 

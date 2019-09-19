@@ -58,11 +58,11 @@ class VenChange extends \yii\db\ActiveRecord
             
             $modelVO = Ven::find()
                 ->where([
-                    'ven_date' => [$dB,$dB1],
+                    'ven_date' => ['$dB','$dB1'],
                     'ven_time' => '16:30:55',
                 ])
                 ->orWhere([
-                    'ven_date' => [$dB],
+                    'ven_date' => ['$dB'],
                     'ven_time' => ['08:30:01','08:30:11','08:30:22'],
                 ])
                 ->andWhere([
