@@ -20,7 +20,7 @@ class m190823_134314_ven_change extends Migration
  
         $this->createTable('ven_change', [
             'id' => $this->primaryKey(),
-            'month' => $this->string(),
+            'ven_month' => $this->string(),
             'ven_id1' => $this->integer(),
             'ven_id2' => $this->integer(),
             'ven_id1_old' => $this->integer(),

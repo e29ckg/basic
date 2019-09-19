@@ -33,7 +33,7 @@ use kartik\file\FileInput;
                     <?php
                         echo $form->field($model, 'file')->widget(FileInput::classname(), [
                             'options' => [
-                                'accept' => 'image/*',
+                                'accept' => ['image/*','pdf'],
                                 'class' => 'form-control',],
                             // 'pluginOptions' => ['previewFileType' => 'any', 'uploadUrl' => Url::to(['/site/file-upload']),]
                         ]);

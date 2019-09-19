@@ -3,6 +3,8 @@
 namespace app\controllers;
 
 use Yii;
+use app\models\Bila;
+use app\models\Ven;
 use app\models\Line;
 use app\models\LineFormSend;
 use app\models\LineHome;
@@ -479,6 +481,59 @@ class LineController extends Controller
         return $this->redirect(['line_index']);
     }
 
+    /*------------------------------------------------------------------------------------------*/
+
+    public function actionLine_send_daily()
+    {
+        $strDate = date("Y-m-d",strtotime(date("Y-m-d"))) ;
+
+        $models = Bila::find()
+            ->where("date_begin <= '$strDate'")
+            ->andWhere("date_end >= '$strDate'")
+            ->andWhere("status <> 4")
+            ->all();
+
+        $sms = Bila::DateThai_full($strDate);
     
+        $sms .= "\n".'--------E-La่---------'."\n";
+        foreach ($models as $model):        
+            $sms .= $model->profile->name .'->';
+            $sms .= $model->cat.'('.$model->date_total.')';
+            $model->comment ? $sms .= "\n".$model->comment : '' ;
+            $sms .= "\n";
+        endforeach;  
+        // $sms .= "\n";
+
+        $models = Ven::find()
+            ->where([
+                'ven_date' => $strDate,
+                'status' => [1,2]
+                ])
+            ->orderBy(['ven_time'=>SORT_ASC])
+            ->all();
+
+        $sms .= '--------E-VeN---------'."\n";
+        foreach ($models as $model):        
+            $sms .= date("H:i ",strtotime($model->ven_time));
+            $sms .=' '.$model->getProfileNameCal();
+            $sms .= $model->status == 1 ? '':'(รออนุมัติ)';
+            $sms .= "\n";
+        endforeach;  
+        $sms .= '--------------------------';
+
+        $modelLine = Line::findOne(['name' => 'bila_admin']);     //bila_admin 
+        if(isset($modelLine->token)){                
+            $res = Line::notify_message($modelLine->token,$sms);  
+            $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') : Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+        }
+        // $modelLine = Line::findOne(['name' => 'ven']);     //Ven 
+        // if(isset($modelLine->token)){                
+        //     $res = Line::notify_message($modelLine->token,$sms);  
+        //     $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') : Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+        // }
+        Yii::$app->session->setFlash('success', 'เรียบร้อย'.$sms );   
+
+        return $this->render('test',['id' => $sms]);
+    }
 
 }

@@ -100,7 +100,7 @@ use app\models\VenChange;
                     <?php foreach ($modelDs as $modeld): ?>
                     <tr>						                
                         <td><?=$modeld->id?></td>	
-                        <td><?=$modeld->DateThai_full($modeld->ven_date)?></</td>									
+                        <!-- <td><?=$modeld->DateThai_full($modeld->ven_date)?></td>									 -->
                         <td> 
                             <?=$modeld->getProfileName()?> <?= VenCom::getVen_time()[$modeld->ven_time];?>
                             <?=$modeld->status == 2 || $modeld->status == 4 || $modeld->status == 6 ?
@@ -120,7 +120,7 @@ use app\models\VenChange;
 	</div>
 </div>
 
-<br>เปลี่ยน :  <?=$model->getCheck($model->id) ? 'ได้' : 'ไม่ได้';?> , จำนวนเวรที่เหลือ : <?= $model->getVenForChangeCount($model->id) >= 1 ? $model->getVenForChangeCount($model->id) : '';?>
+<br>เปลี่ยน :  <?=$model->getCheck($model->id) ? 'ได้' : 'ไม่ได้';?> , จำนวนเวรที่เหลือ : <?= $model->getVenForChangeCount($model->id) >= 1 ? $model->getVenForChangeCount($model->id) : '0';?>
 
 <?php
 

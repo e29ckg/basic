@@ -116,10 +116,19 @@ class VenController extends Controller
             ->andWhere('status <> 77')
             ->orderBy(['id' => SORT_DESC])->all();
 
-        return $this->renderAjax('ven_show',[
-            'model' => $model,
-            'modelDs' => $modelDs,
-        ]);
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('ven_show',[
+                'model' => $model,
+                'modelDs' => $modelDs,
+            ]);
+        }else{
+            return $this->render('ven_show',[
+                'model' => $model,
+                'modelDs' => $modelDs,
+            ]);
+        }
+       
+        
     }
 
     public function actionVen_user_index()
@@ -196,12 +205,13 @@ class VenController extends Controller
                 $modelVv->save(); 
 
                 $model->id = $id;
-                $model->ven_id1_old = $_POST['VenChange']['ven_id2'];
-                $model->ven_id2_old = $_POST['VenChange']['ven_id1'];
+                $model->ven_id1_old = $modelV1->id;
+                $model->ven_id2_old = $modelV2->id;
                 $model->ven_id1 = $id;
                 $model->ven_id2 = $id + 1;
                 $model->user_id1 = $modelV2->user_id;
                 $model->user_id2 = $modelV1->user_id;
+                $model->ven_month = $modelV1->ven_month;
                 $model->s_po = $_POST['VenChange']['s_po'];
                 $model->s_bb = $_POST['VenChange']['s_bb'];
                 $model->status = 2;
@@ -230,11 +240,11 @@ class VenController extends Controller
                     ->useForegroundColor(1, 1, 1);              
                 $qrCode->writeFile(Url::to('@webroot'.$this->filePath.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
                 /*---------------------ส่ง line ไปยัง Admin--------------------*/
-                $modelLine = Line::findOne(['name' => 'admin']);
+                $modelLine = Line::findOne(['name' => 'ven']);
                 if(isset($modelLine->token)){
                     $message = $model->profile->name;
-                    $message .= isset($model->ven_id2) ? 'เปลี่ยนเวร' : 'ยกเวร';
-                    $message .= "\n".' รายละเอียดเพิ่มเติม' ."\n".$sms_qr;
+                    $message .= isset($model->ven_id2) ? ' เปลี่ยนเวร ' : ' ยกเวร ';
+                    $message .= "\n".' รายละเอียดเพิ่มเติม ' ."\n".$sms_qr;
                     $res = Line::notify_message($modelLine->token,$message);  
                     $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
                 } 
@@ -253,7 +263,7 @@ class VenController extends Controller
         
         return $this->renderAjax('_ven_change',[
             'model' => $model,
-            'ven_id1' => [$ven_id1->id => Ven::dateThai_full($ven_id1->ven_date).' '.$ven_id1->profile->name.'('.$ven_id1->id.')'.$ven_id1->venCom->ven_com_num],
+            'ven_id1' => [$ven_id1->id => Ven::dateThai_full($ven_id1->ven_date).' '.$ven_id1->profile->fname.$ven_id1->profile->name.' '.$ven_id1->profile->sname.'('.$ven_id1->id.')'],
             'ven_id2' => $ven_id2,
         ]);
     }
@@ -296,6 +306,7 @@ class VenController extends Controller
                 $model->ven_id1 = $id;
                 $model->ven_id2 = null;
                 $model->user_id1 = $modelV1->user_id;
+                $model->ven_month = $modelV1->ven_month;
                 $model->user_id2 = $_POST['VenTransfer']['user_id2'];
                 $model->s_po = $_POST['VenTransfer']['s_po'];
                 $model->s_bb = $_POST['VenTransfer']['s_bb'];
@@ -306,8 +317,7 @@ class VenController extends Controller
                 $model->create_at = date("Y-m-d H:i:s");
                 $model->save();
                 
-                $transaction->commit();      
-                
+                $transaction->commit();    
                 
             } catch (\Exception $e) {
                 $transaction->rollBack();
@@ -326,10 +336,10 @@ class VenController extends Controller
                     ->useForegroundColor(1, 1, 1);              
                 $qrCode->writeFile(Url::to('@webroot'.$this->filePath.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
                 /*---------------------ส่ง line ไปยัง Admin--------------------*/
-                $modelLine = Line::findOne(['name' => 'admin']);
+                $modelLine = Line::findOne(['name' => 'ven']);
                 if(isset($modelLine->token)){
                     $message = $model->profile->name;
-                    $message .= $model->ven_id2 ? 'เปลี่ยนเวร' : 'ยกเวร';
+                    $message .= $model->ven_id2 ? ' เปลี่ยนเวร ' : ' ยกเวร ';
                     $message .= "\n".' รายละเอียดเพิ่มเติม' ."\n".$sms_qr;
                     $res = Line::notify_message($modelLine->token,$message);  
                     $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
@@ -344,7 +354,7 @@ class VenController extends Controller
         
         return $this->renderAjax('_ven_transfer',[
             'model' => $model,
-            'ven_id1' => [$ven_id1->id => Ven::dateThai_full($ven_id1->ven_date).' '.$ven_id1->profile->name.'('.$ven_id1->id.')'],
+            'ven_id1' => [$ven_id1->id => Ven::dateThai_full($ven_id1->ven_date).' '.$ven_id1->profile->fname.$ven_id1->profile->name.' '.$ven_id1->profile->sname.'('.$ven_id1->id.')'],
             // 'ven_id1' => $ven_id1,
         ]);
     }
@@ -377,7 +387,6 @@ class VenController extends Controller
                 $model->comment = $_POST['VenChangeUpdate']['comment'];
                 $model->create_at = date("Y-m-d H:i:s");
                 $model->save();
-
                 
                 $transaction->commit();   
                 
@@ -393,7 +402,7 @@ class VenController extends Controller
                     ->useForegroundColor(1, 1, 1);              
                 $qrCode->writeFile(Url::to('@webroot'.$this->filePath.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
                 /*---------------------ส่ง line ไปยัง Admin--------------------*/
-                $modelLine = Line::findOne(['name' => 'admin']);
+                $modelLine = Line::findOne(['name' => 'ven']);
                 if(isset($modelLine->token)){
                     $message = $model->profile->name.' แก้ไข ';
                     $message .= isset($model->ven_id2) ? 'เปลี่ยนเวร' : 'ยกเวร';
@@ -759,7 +768,7 @@ class VenController extends Controller
                     ->useForegroundColor(1, 1, 1);              
                 $qrCode->writeFile(Url::to('@webroot'.$this->filePath.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
                 /*---------------------ส่ง line ไปยัง Admin--------------------*/
-                $modelLine = Line::findOne(['name' => 'admin']);
+                $modelLine = Line::findOne(['name' => 'ven']);
                 if(isset($modelLine->token)){
                     $message = $model->profile->name;
                     $message .= isset($model->ven_id2) ? 'เปลี่ยนเวร' : 'ยกเวร';
@@ -846,7 +855,7 @@ class VenController extends Controller
                     ->useForegroundColor(1, 1, 1);              
                 $qrCode->writeFile(Url::to('@webroot'.$this->filePath.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
                 /*---------------------ส่ง line ไปยัง Admin--------------------*/
-                $modelLine = Line::findOne(['name' => 'admin']);
+                $modelLine = Line::findOne(['name' => 'ven']);
                 if(isset($modelLine->token)){
                     $message = $model->profile->name;
                     $message .= $model->ven_id2 ? 'เปลี่ยนเวร' : 'ยกเวร';
@@ -1366,28 +1375,37 @@ class VenController extends Controller
         return $pdf->render();
     }
 
-    public function actionUp()
-    {
-        // $models = VenChange::find()->all();
-        // foreach ($models as $model) :    
-        //     if (empty($model->month)){
-        //         $model->month = date("Y-m",strtotime($model->create_at));
-        //         $model->save();                
-        //     }
-        //     echo $model->id.'->'.$model->month.'<br>';
+    // public function actionUp()
+    // {
+    //     // $models = VenChange::find()->all();
+    //     // foreach ($models as $model) :    
+    //     //     if (empty($model->month)){
+    //     //         $model->month = date("Y-m",strtotime($model->create_at));
+    //     //         $model->save();                
+    //     //     }
+    //     //     echo $model->id.'->'.$model->month.'<br>';
 
-        // endforeach;
-        // return 'ok';
-        $models = Ven::find()->all();
-        foreach ($models as $model) :    
-            if (isset($model->status) == 3){
-                $model->status = 1;
-                $model->save();                
-            }
-            echo $model->id.'->'.$model->status.'<br>';
+    //     // endforeach;
+    //     // return 'ok';
+    //     $models = Ven::find()->all();
+    //     foreach ($models as $model) :    
+    //         if (isset($model->status) == 3){
+    //             $model->status = 1;
+    //             $model->save();                
+    //         }
+    //         echo $model->id.'->'.$model->status.'<br>';
 
-        endforeach;
-        return 'ok';
+    //     endforeach;
+    //     return 'ok';
+    // }
+
+    public function actionShow_ven_change($id){
+
+        $model = VenChange::findOne($id);
+
+        return $this->render('show_ven_change',[
+            'model' => $model
+        ]);
     }
 
 }
