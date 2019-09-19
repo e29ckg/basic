@@ -516,7 +516,7 @@ class LineController extends Controller
         foreach ($models as $model):        
             $sms .= date("H:i ",strtotime($model->ven_time));
             $sms .=' '.$model->getProfileNameCal();
-            $sms .= $model->status == 1 ? '':'(รออนุมัติ)';
+            $sms .= $model->status == 1 ? '':' (รออนุมัติ)';
             $sms .= "\n";
         endforeach;  
         $sms .= '--------------------------';
@@ -526,11 +526,7 @@ class LineController extends Controller
             $res = Line::notify_message($modelLine->token,$sms);  
             $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') : Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
         }
-        // $modelLine = Line::findOne(['name' => 'ven']);     //Ven 
-        // if(isset($modelLine->token)){                
-        //     $res = Line::notify_message($modelLine->token,$sms);  
-        //     $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') : Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
-        // }
+        
         Yii::$app->session->setFlash('success', 'เรียบร้อย'.$sms );   
 
         return $this->render('test',['id' => $sms]);
