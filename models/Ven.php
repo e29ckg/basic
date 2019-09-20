@@ -147,6 +147,11 @@ class Ven extends \yii\db\ActiveRecord
         return $this->hasOne(Profile::className(), ['id' => 'user_id']);
     }
 
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
     public function getProfileName(){
         $model=$this->profile;
         // return $model ? $model->name: '-';
