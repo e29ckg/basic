@@ -482,7 +482,7 @@ class LineController extends Controller
         return $this->redirect(['line_index']);
     }
 
-    /*------------------------------------------------------------------------------------------*/
+    /*---------------------------------------ส่ง line ประจำวัน--------------------------------------------*/
 
     public function actionLine_send_daily()
     {
@@ -519,6 +519,15 @@ class LineController extends Controller
             $sms .=' '.$model->getProfileNameCal();
             $sms .= $model->status == 1 ? '':' (รออนุมัติ)';
             $sms .= "\n";
+
+            $sms_a = Bila::DateThai_full($strDate).' '.date("H:i ",strtotime($model->ven_time)).$model->venCom->ven_com_name;
+            
+            $modelLine = Line::findOne(['name' => $model->user->username]);     //แจ้งส่วนตัว- เวร
+            if(isset($modelLine->token)){                
+                $res = Line::notify_message($modelLine->token,$sms_a);  
+                $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') : Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+            }
+
         endforeach;  
         $sms .= '--------------------------';
 
@@ -528,7 +537,7 @@ class LineController extends Controller
             $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') : Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
         }
 
-/*---------------------------------------------------------------------------------*/
+/*------------------------------------แจ้ง หนังสือเวียน lineGroup ---------------------------------------------*/
 
         $Q_model = CLetter::find()->where(['line_alert' => $strDate]);
         if($Q_model->count() >= 1){
