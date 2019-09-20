@@ -53,6 +53,10 @@ use app\models\VenChange;
                         [
                             'class' => 'btn btn-danger btn-sx ',
                         ])?> 
+                        <?=Html::a('setDis',['ven/admin_set_dis','id' => $model->id],
+                        [
+                            'class' => 'btn btn-info btn-sx ',
+                        ])?> 
                     </td>
                 </tr>
                 

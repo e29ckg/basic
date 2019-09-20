@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use kartik\select2\Select2;
+use kartik\date\DatePicker;
 use kartik\file\FileInput;
 
 /* @var $this yii\web\View */
@@ -35,19 +36,18 @@ use kartik\file\FileInput;
 
         <div class="box-body">
             <div class="row">
-                <div class ="col-md-8">
+                <div class ="col-md-12">
                     <div class="form-group">			
                     <?= $form->field($model, 'name', [
                             'inputOptions' => [
                                 'class'=>'form-control',
                                 'placeholder' => $model->getAttributeLabel('name')
                             ],
-                            // 'template' => '<section class=""><label class="label">{label}</label> <label class="input"> <i class="icon-append fa fa-user"></i>{input}<b class="tooltip tooltip-top-right">'.$model->getAttributeLabel('name').'</b></label><em for="name" class="invalid">{error}{hint}</em></section>'
                             ])->label(false);
                             ?>
                     </div>
                 </div>
-                <div class ="col-md-4">
+                <div class ="col-md-6">
                     <div class="form-group">			
                     <?php 
                         echo $form->field($model, 'ca_name')->widget(Select2::classname(), [
@@ -59,6 +59,20 @@ use kartik\file\FileInput;
                             ],
                         ])->label(false);
 
+                        ?>
+                    </div>
+                </div>
+                <div class ="col-md-6">
+                    <div class="form-group">			
+                        <?= $form->field($model, 'line_alert')->widget(DatePicker::classname(), [
+                            'options' => [
+                                'class'=>'form-control',
+                                'placeholder' => 'วันที่แจ้งผ่าน LineGroup'
+                            ],
+                            'pluginOptions' => [
+                                'autoclose'=>true,
+                                'format' => 'yyyy-mm-dd'
+                            ]])->label(false);
                         ?>
                     </div>
                 </div>

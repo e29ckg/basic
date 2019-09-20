@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					<tr>
 						<td><?=$model->id?></td>
 						<td><?= $model->file ? Html::a($model->name,['cletter/show','id' => $model->id],['target' => '_blank']) : $model->name;?></td>
-						<td><?=$model->ca_name?><br><?=$model->created_at?></td>
+						<td><?=$model->ca_name?><br><?=$model->DateThai_full($model->created_at);?></td>
 					</tr>
 					<?php  endforeach; ?>
 				</tbody>	

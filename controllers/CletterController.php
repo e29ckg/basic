@@ -149,9 +149,12 @@ class CletterController extends Controller
                     $model->file = $fileName;
                 }               
             } 
+
             $model->name = $_POST['CLetter']['name'];
             $model->created_at = date("Y-m-d H:i:s");
-            $model->updated_at = date("Y-m-d H:i:s");
+            $_POST['CLetter']['line_alert'] == null ? $model->line_alert = null
+                : $model->line_alert = date("Y-m-d",strtotime($_POST['CLetter']['line_alert']));
+
             if($model->save()){
                 if(!empty($model->file)){                    
                     // $res = $this->notify_message($message);
@@ -227,10 +230,14 @@ class CletterController extends Controller
                 $fileName = md5($f->baseName . time()) . '.' . $f->extension;
                 if($f->saveAs($dir . $fileName)){
                     $model->file = $fileName;
-                }
-                $model->save();   
+                }                
+                $model->save();  
                 return $this->redirect(['index', 'id' => $filename]);                            
             }
+            $_POST['CLetter']['line_alert'] == null ?
+                $model->line_alert = null
+                :
+                $model->line_alert = date("Y-m-d",strtotime($_POST['CLetter']['line_alert']));
             $model->file = $filename;
             if($model->save()){
                 $message = Yii::$app->user->identity->id .' แก้ไข '.$model->name;

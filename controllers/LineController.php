@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Bila;
 use app\models\Ven;
+use app\models\CLetter;
 use app\models\Line;
 use app\models\LineFormSend;
 use app\models\LineHome;
@@ -493,7 +494,7 @@ class LineController extends Controller
             ->andWhere("status <> 4")
             ->all();
 
-        $sms = Bila::DateThai_full($strDate);
+        $sms = 'วันที่ '.Bila::DateThai_full($strDate);
     
         $sms .= "\n".'--------E-La่---------'."\n";
         foreach ($models as $model):        
@@ -521,12 +522,34 @@ class LineController extends Controller
         endforeach;  
         $sms .= '--------------------------';
 
-        $modelLine = Line::findOne(['name' => 'bila_admin']);     //bila_admin 
+        $modelLine = Line::findOne(['name' => 'bila_admin']);     //แจ้ง bila_admin - เวร
         if(isset($modelLine->token)){                
             $res = Line::notify_message($modelLine->token,$sms);  
             $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') : Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
         }
-        
+
+/*---------------------------------------------------------------------------------*/
+
+        $Q_model = CLetter::find()->where(['line_alert' => $strDate]);
+        if($Q_model->count() >= 1){
+            $models = $Q_model->all();            
+
+            $modelLine = Line::findOne(['name' => 'LineGroup']);     //แจ้ง หนังสือเวียน lineGroup 
+
+            $sms = 'วันที่ '.Bila::DateThai_full($strDate);
+            $sms .= "\n";
+            foreach ($models as $model):        
+                $sms .= $model->name ;
+                $sms .= "\n";
+                $sms .= '(http://10.37.64.01/cletter.php?ref='.$model->id.')';
+                $sms .= "\n";
+                if(isset($modelLine->token)){                
+                    $res = Line::notify_message($modelLine->token,$sms);  
+                    $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') : Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+                }
+            endforeach; 
+        }
+   
         Yii::$app->session->setFlash('success', 'เรียบร้อย'.$sms );   
 
         return $this->render('test',['id' => $sms]);

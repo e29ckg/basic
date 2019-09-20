@@ -190,8 +190,7 @@ class BilaController extends Controller
             } catch (\Throwable $e) {
                 $transaction->rollBack();
                 throw $e;
-            }
-             
+            }             
         }
 
         $model_cat = Bila::find()

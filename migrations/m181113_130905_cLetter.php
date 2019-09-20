@@ -25,7 +25,7 @@ class m181113_130905_cLetter extends Migration
             'file' => $this->string(),
             'status' => $this->smallInteger()->notNull()->defaultValue(1),
             'created_at' => $this->dateTime(),
-            'updated_at' => $this->dateTime(),
+            'line_alert' => $this->date(),
         ], $tableOptions);
 
         $this->insert('c_letter', [
@@ -33,7 +33,7 @@ class m181113_130905_cLetter extends Migration
             'ca_name' => 'ประเภทหนังสือ',
             'status' => 1,
             'created_at' => date("Y-m-d H:i:s"),
-            'updated_at' => date("Y-m-d H:i:s")
+            'line_alert' => date("Y-m-d")
         ]);
     }
 

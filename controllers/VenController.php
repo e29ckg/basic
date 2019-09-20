@@ -35,7 +35,6 @@ class VenController extends Controller
 
     public $line_sms ='http://10.37.64.01';
     public $filePath = '/uploads/ven/';
-    // public $smsLineAlert = ' http://10.37.64.01/main/web/cletter/show/';
 
     public function behaviors()
     {
@@ -1063,7 +1062,17 @@ class VenController extends Controller
         $model = Ven::findOne($id);        
         $model->status = 1 ;  
         $model->save();          
-        Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');                                            
+        Yii::$app->session->setFlash('success', 'Active ข้อมูลเรียบร้อย');                                            
+        
+        return $this->redirect(['admin_index']);
+    }
+
+    public function actionAdmin_set_dis($id)
+    {
+        $model = Ven::findOne($id);        
+        $model->status = 77 ;  
+        $model->save();          
+        Yii::$app->session->setFlash('success', '77 เรียบร้อย');                                            
         
         return $this->redirect(['admin_index']);
     }
@@ -1375,29 +1384,6 @@ class VenController extends Controller
         return $pdf->render();
     }
 
-    // public function actionUp()
-    // {
-    //     // $models = VenChange::find()->all();
-    //     // foreach ($models as $model) :    
-    //     //     if (empty($model->month)){
-    //     //         $model->month = date("Y-m",strtotime($model->create_at));
-    //     //         $model->save();                
-    //     //     }
-    //     //     echo $model->id.'->'.$model->month.'<br>';
-
-    //     // endforeach;
-    //     // return 'ok';
-    //     $models = Ven::find()->all();
-    //     foreach ($models as $model) :    
-    //         if (isset($model->status) == 3){
-    //             $model->status = 1;
-    //             $model->save();                
-    //         }
-    //         echo $model->id.'->'.$model->status.'<br>';
-
-    //     endforeach;
-    //     return 'ok';
-    // }
 
     public function actionShow_ven_change($id){
 
@@ -1406,6 +1392,32 @@ class VenController extends Controller
         return $this->render('show_ven_change',[
             'model' => $model
         ]);
+    }
+
+    
+    public function actionUp()
+    {
+        // $models = VenChange::find()->all();
+        // foreach ($models as $model) :    
+        //     if (empty($model->ven_month)){
+        //         $model->ven_month = date("Y-m",strtotime($model->create_at));
+        //         $model->save();                
+        //     }
+        //     echo $model->id.'->'.$model->ven_month.'<br>';
+
+        // endforeach;
+        // // return 'ok';
+
+        // $models = Ven::find()->all();
+        // foreach ($models as $model) :    
+        //     if (isset($model->status) == 3){
+        //         $model->status = 1;
+        //         $model->save();                
+        //     }
+        //     echo $model->id.'->'.$model->status.'<br>';
+
+        // endforeach;
+        return 'ok';
     }
 
 }

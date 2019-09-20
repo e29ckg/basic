@@ -93,9 +93,6 @@ $menu_admin = [
             ['label' => 'ปฏิทินใบลา', 'icon' => 'briefcase', 'url' => ['bila/cal']],
             ['label' => 'ผู้ลงนาม', 'icon' => 'briefcase', 'url' => ['bila/sbn_index']],
         ]],
-        ['label' => 'สร้าง  QrCode', 'icon' => ' fa-qrcode', 'url' => ['qrgen/index']],  
-        ['label' => 'เบิกของ CartX', 'icon' => 'shopping-cart', 'url' => '/cartx/web'],       
-        // ['label' => 'ตารางเวร', 'icon' => 'shopping-cart', 'url' => ['/ven/index']],
         ['label' => 'ตารางเวร', 'icon' => 'users', 'url' => '#',
             'items' => [
                 ['label' => 'ตารางเวร', 'icon' => 'fa fa-user-o', 'url' => ['/ven/index']],
@@ -106,6 +103,9 @@ $menu_admin = [
                 ['label' => 'คำสั่ง', 'icon' => ' fa fa-user-o', 'url' => ['ven/com_index']],
             ],
         ],
+        ['label' => 'สร้าง  QrCode', 'icon' => ' fa-qrcode', 'url' => ['qrgen/index']],  
+        ['label' => 'เบิกของ CartX', 'icon' => 'shopping-cart', 'url' => '/cartx/web'],       
+        // ['label' => 'ตารางเวร', 'icon' => 'shopping-cart', 'url' => ['/ven/index']],
 
         ['label' => 'ตั้งค่า', 'options' => ['class' => 'header']],
         ['label' => 'Profile', 'icon' => 'id-card-o', 'url' => ['user/profile']],    

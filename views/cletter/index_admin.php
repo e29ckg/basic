@@ -34,8 +34,11 @@ $this->params['breadcrumbs'][] = $this->title;
 					<tr>
 						<td><?=$model->id?></td>
 						<td><?= $model->file ? Html::a($model->name,['cletter/show','id' => $model->id],['target' => '_blank']) : $model->name;?></td>
-						<td><?=$model->ca_name?> <br> <?=$model->created_at?></td>
-						
+						<td><?=$model->ca_name?> 
+							<br> <?=$model->DateThai_full($model->created_at);?>
+							<br> <?=$model->line_alert ? '<div class="mb-2 mr-2 badge badge-pill badge-primary">Line '.date("d m Y ",strtotime($model->line_alert)).'</div>' :'';?>
+							
+						</td>
 						
 						<td>
 							<?= Html::a('<i class="fa fa-paper-plane-o"></i> Line',['cletter/line_alert','id' => $model->id],
