@@ -494,7 +494,7 @@ class LineController extends Controller
             ->andWhere("status <> 4")
             ->all();
 
-        $sms = 'วันที่ '.Bila::DateThai_full($strDate);
+        $sms = Bila::DateThai_full($strDate);
     
         $sms .= "\n".'--------E-La่---------'."\n";
         foreach ($models as $model):        
