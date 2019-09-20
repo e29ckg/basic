@@ -64,7 +64,8 @@ $menu_operator = [
         ['label' => 'สร้าง  QrCode', 'icon' => ' fa-qrcode', 'url' => ['qrgen/index']], 
         ['label' => 'เบิกของ CartX', 'icon' => 'shopping-cart', 'url' => '/cartx/web'], 
         ['label' => 'ตั้งค่า', 'options' => ['class' => 'header']],
-        ['label' => 'Profile', 'icon' => 'id-card-o', 'url' => ['user/profile']],                              
+        ['label' => 'Profile', 'icon' => 'id-card-o', 'url' => ['user/profile']], 
+        ['label' => 'ผู้ลงนาม', 'icon' => 'briefcase', 'url' => ['bila/sbn_index']],                             
     ],
 ];
 
@@ -91,7 +92,7 @@ $menu_admin = [
             ['label' => 'เขียนใบลา', 'icon' => 'briefcase', 'url' => ['bila/index']],
             ['label' => 'ใบลาทั้งหมด', 'icon' => 'briefcase', 'url' => ['bila/admin']],
             ['label' => 'ปฏิทินใบลา', 'icon' => 'briefcase', 'url' => ['bila/cal']],
-            ['label' => 'ผู้ลงนาม', 'icon' => 'briefcase', 'url' => ['bila/sbn_index']],
+            // ['label' => 'ผู้ลงนาม', 'icon' => 'briefcase', 'url' => ['bila/sbn_index']],
         ]],
         ['label' => 'ตารางเวร', 'icon' => 'users', 'url' => '#',
             'items' => [
@@ -119,6 +120,7 @@ $menu_admin = [
                 ['label' => 'จัดการคำนำหน้าชื่อ', 'icon' => ' fa fa-user-o', 'url' => ['user/fname']],
             ],
         ],
+        ['label' => 'ผู้ลงนาม', 'icon' => 'briefcase', 'url' => ['bila/sbn_index']],
         ['label' => 'RunningNumber', 'icon' => ' fa fa-whatsapp', 'url' => ['running/index']],   
                 
         // ['label' => 'Login', 'url' => ['site/login']],

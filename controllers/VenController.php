@@ -1240,6 +1240,22 @@ class VenController extends Controller
         
     }
 
+    public function actionCom_set_status($id)
+    {
+        $model = VenCom::findOne($id);
+        if($model->status == 1){
+            $model->status = 0;
+        }else{
+            $model->status = 1;
+        }        
+        $model->save();
+
+    Yii::$app->session->setFlash('danger', 'ไม่สามารถลบได้');    
+            
+    return $this->redirect(['com_index']);
+        
+    }
+
 
     // /********************************------------------Change-------******************************** */
 

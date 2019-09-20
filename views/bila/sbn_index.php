@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use app\models\SignBossName;
 
 
@@ -42,7 +43,10 @@ $this->params['breadcrumbs'][] = $this->title;
 							<br><?=$model->dep3?>
 						</td>	
 						<td>
-							<?= $model->status == 1 ? '<span class="label label-primary">ใช้งาน</span>':'<span class="label label-danger">ยกเลิก</span>';?>
+							<a href="<?=Url::to(['bila/sbn_set_status','id' => $model->id])?>" >
+								<?= $model->status == 1 ? '<span class="label label-primary">ใช้งาน</span>'
+								:' <span class="label label-danger">ยกเลิก</span>';?>
+							</a>
 						</td>
 						<td>
 							<a href="#" class="act-update btn btn-info btn-xs" data-id=<?=$model['id']?>>แก้ไข</a> 

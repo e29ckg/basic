@@ -45,10 +45,12 @@ $this->params['breadcrumbs'][] = $this->title;
 										<td><?=$model->ven_com_num. ' '. $model->ven_com_date;?><br>เดือน <?=$model->ven_month;?></</td>									
                                         <td><?=$model->getVen_time()[$model->ven_time];?><br><?=$model->ven_com_name;?></td>
 										<td class = "text-center">
-												<?=$model->status == 1 ?
-												 '<a class="label label-primary act-update-status" data-id ="'.$model->id.'" >ใช้งาน</a>' 
-												 :
-												  '<a class="label label-danger act-update-status" data-id ="'.$model->id.'" >ไม่ใช้งาน</a>' ;?>				        
+											<a href="<?=Url::to(['ven/com_set_status','id'=>$model->id])?>">
+													<?=$model->status == 1 ?
+													'<span class="label label-primary ">ใช้งาน</span>' 
+													:
+													'<span class="label label-danger " >ไม่ใช้งาน</span>' ;?>				        
+											</a>
 										</td>
 										<td>
 											<button class="btn btn-warning btn-xs act-update" alt="act-update" data-id="<?=$model->id?>">

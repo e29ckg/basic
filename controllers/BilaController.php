@@ -636,6 +636,20 @@ class BilaController extends Controller
         }        
     }
 
+    public function actionSbn_set_status($id)
+    {
+        $model = SignBossName::findOne($id);
+        if($model->status == 1){
+            $model->status = 0;
+        }else{
+            $model->status = 1;
+        }
+        
+        $model->save();
+
+        return $this->redirect(['sbn_index']);
+    }
+
     public function actionSbn_delete($id)
     {
         $model = SignBossName::findOne($id);

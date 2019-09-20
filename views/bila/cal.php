@@ -1,7 +1,9 @@
 <?php
 use yii\helpers\Url;
 
-
+$this->title = 'ปฏิทินใบลา';
+$this->params['breadcrumbs'][] = ['label' => 'โปรแกรมใบลา', 'url' => ['bila/index']];
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 <link href="<?= Url::to('@web/plugins/fullcalendar/packages/core/main.css')?>" rel='stylesheet' />
 <link href="<?= Url::to('@web/plugins/fullcalendar/packages/daygrid/main.css')?>" rel='stylesheet' />
