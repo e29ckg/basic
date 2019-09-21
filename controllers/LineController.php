@@ -520,7 +520,9 @@ class LineController extends Controller
             $sms .= $model->status == 1 ? '':' (รออนุมัติ)';
             $sms .= "\n";
 
-            $sms_a = Bila::DateThai_full($strDate).' '.date("H:i ",strtotime($model->ven_time)).$model->venCom->ven_com_name;
+            $sms_a = Bila::DateThai_full($strDate);
+            $sms_a .= "\n";
+            $sms_a .= $model->getProfileNameCal().' '.date("H:i ",strtotime($model->ven_time)).$model->venCom->ven_com_name;
             
             $modelLine = Line::findOne(['name' => $model->user->username]);     //แจ้งส่วนตัว- เวร
             if(isset($modelLine->token)){                
