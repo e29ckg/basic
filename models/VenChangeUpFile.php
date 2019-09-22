@@ -50,7 +50,10 @@ class VenChangeUpFile extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Profile::className(), ['id' => 'user_id1']);
     }
-    
+    public function getProfile2()
+    {
+        return $this->hasOne(Profile::className(), ['id' => 'user_id2']);
+    }
 
     public function getVen2()
     {
@@ -75,9 +78,12 @@ class VenChangeUpFile extends \yii\db\ActiveRecord
 
     public function getProfileName(){
         $model=$this->profile;
-        return $model ? $model->fname.$model->name.' '.$model->sname : '-';
+        return $model ? $model->name : '-';
     }
-
+    public function getProfileName2(){
+        $model=$this->profile;
+        return $model ? $model->name: '-';
+    }
     
     public function getProfileDep(){
         $model=$this->profile;

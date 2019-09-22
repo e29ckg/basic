@@ -387,34 +387,21 @@ class VenController extends Controller
                 $model->create_at = date("Y-m-d H:i:s");
                 $model->save();
                 
-                $transaction->commit();   
+                $transaction->commit();                   
                 
-                $dir = Url::to('@webroot'.$this->filePath.'/');
-                    if (!is_dir($dir)) {
-                        mkdir($dir, 0777, true);
-                    } 
-                $sms_qr = isset($this->line_sms) ? $this->line_sms : Yii::$app->getRequest()->hostInfo ;
-                $sms_qr .= '/ven.php?ref='.$model->id;
-                $qrCode = (new QrCode($sms_qr))
-                    ->setSize(250)
-                    ->setMargin(5)
-                    ->useForegroundColor(1, 1, 1);              
-                $qrCode->writeFile(Url::to('@webroot'.$this->filePath.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
-                /*---------------------ส่ง line ไปยัง Admin--------------------*/
-                $modelLine = Line::findOne(['name' => 'ven']);
-                if(isset($modelLine->token)){
-                    $message = $model->profile->name.' แก้ไข ';
-                    $message .= isset($model->ven_id2) ? 'เปลี่ยนเวร' : 'ยกเวร';
-                    $message .= "\n".' รายละเอียดเพิ่มเติม' ."\n".$sms_qr;
-                    $res = Line::notify_message($modelLine->token,$message);  
-                    $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
-                } 
 
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'); 
             } catch (\Exception $e) {
                 $transaction->rollBack();
                 throw $e;
             } 
+                /*---------------------ส่ง line ไปยัง Admin--------------------*/
+                $modelLine = Line::findOne(['name' => 'ven']);
+                if(isset($modelLine->token)){
+                    $message = $model->profile->name.' แก้ไขเวร '.$model->id;
+                    $res = Line::notify_message($modelLine->token,$message);  
+                    $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+                } 
             
             return $this->redirect(['change_user_index']);            
         }     
@@ -562,10 +549,18 @@ class VenController extends Controller
                 Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');  
                                                 
                 $transaction->commit();
+
             } catch (\Exception $e) {
                 $transaction->rollBack();
                 throw $e;
             }
+            /*---------------------ส่ง line ไปยัง Admin--------------------*/
+            $modelLine = Line::findOne(['name' => 'ven']);
+            if(isset($modelLine->token)){
+                $message = $model->profile->name.' ลบไฟล์เวร '.$model->id;
+                $res = Line::notify_message($modelLine->token,$message);  
+                $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+            } 
         return $this->redirect(['change_user_index']);
     }
 
@@ -620,6 +615,13 @@ class VenController extends Controller
                 $transaction->rollBack();
                 throw $e;
             }
+             /*---------------------ส่ง line ไปยัง Admin--------------------*/
+             $modelLine = Line::findOne(['name' => 'ven']);
+             if(isset($modelLine->token)){
+                 $message = $model->profile->name.' ลบใบเปลี่ยนเวร '.$model->id;
+                 $res = Line::notify_message($modelLine->token,$message);  
+                 $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+             }
         return $this->redirect(['change_user_index']);
     }
 
@@ -666,12 +668,13 @@ class VenController extends Controller
                         // mkdir($dir, 0777, true);
                         rmdir($dir);
                     } 
-                    /*---------------------ส่ง line ไปยัง Admin--------------------*/
-                    $modelLine = Line::findOne(['name' => 'bila_admin']);
-                    if(isset($modelLine->token)){                
+                     /*---------------------ส่ง line ไปยัง Admin--------------------*/
+                    $modelLine = Line::findOne(['name' => 'ven']);
+                    if(isset($modelLine->token)){
+                        $message = $model->profile->name.' ลบใบเปลี่ยนเวร '.$model->id;
                         $res = Line::notify_message($modelLine->token,$message);  
                         $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
-                    } 
+                    }
                 }     
                 
                 Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');  

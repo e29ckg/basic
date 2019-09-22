@@ -87,7 +87,7 @@ use app\models\VenChange;
                             '<a class="btn btn-primary btn-xs act-ven-change" data-id="'.$model->id.'">ขอเปลี่ยน</a>'
                             : '';?>                        
                         <?= Yii::$app->user->identity->id == $model->user_id && $model->ven_date  >=  date("Y-m-d") && $model->status <> 2 ? 
-                            '<a class="btn btn-primary btn-xs act-ven-transfer" target="_blank" data-id='.$model->id.'>ยกให้</a>'
+                            '<a class="btn btn-success btn-xs act-ven-transfer" target="_blank" data-id='.$model->id.'>ยกให้</a>'
                             :'';?>
                     </td>
                 </tr>       
@@ -106,7 +106,7 @@ use app\models\VenChange;
                             <?=$modeld->status == 2 || $modeld->status == 4 || $modeld->status == 6 ?
                                 '<label class="label label-danger">'.VenChange::getStatusList()[$modeld->status].'</label>' 
                                 :
-                                '<label class="label label-primary" >'.VenChange::getStatusList()[$modeld->status].'</label>' ;?>	
+                                '<label class="label label-info" >'.VenChange::getStatusList()[$modeld->status].'</label>' ;?>	
                             <?= $modeld->file ? 
                                 '<a href="'.Url::to('@web/uploads/ven/'.$modeld->file).'" target="_blank">ไฟล์ใบเปลี่ยน</a>'  : '';?>			        
                         </td>
