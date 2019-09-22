@@ -83,8 +83,7 @@ use yii\helpers\Url;
             echo '<tr>
             <td>ลงวันที่</td>	
             <td colspan="9" class="TableLine" style="text-align:center">
-                '.$model->DateThai_full($model->ven1_old->getVenComDate()).              
-                $sms.'
+                '.$model->DateThai_full($model->ven1_old->getVenComDate()).' '.$sms.$sms2.'
             </td>
         </tr>
         <tr>
@@ -109,12 +108,12 @@ use yii\helpers\Url;
         </tr>';
         }
         ?>
-        <tr>
+        <!-- <tr>
             <td>ลงวันที่</td>	
             <td colspan="3" class="TableLine" style="text-align:center"><?=$model->DateThai_full($model->ven1_old->getVenComDate());?></td>
             <td style="text-align:center">ให้</td>	
             <td colspan="5" class="TableLine" style="text-align:center"><?=$model->getProfileName()?></td>
-		</tr>
+		</tr> -->
         <tr>
             <td>อยู่เวร</td>	
             <td colspan="3" class="TableLine" style="text-align:center"><?=$model->ven1_old->getVenComName()?></td>
@@ -227,5 +226,5 @@ use yii\helpers\Url;
 
 </div>
 <div>
-
+<?php $sms .' # '. $sms2?>
 </div>

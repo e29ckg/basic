@@ -231,7 +231,7 @@ class VenController extends Controller
                     if (!is_dir($dir)) {
                         mkdir($dir, 0777, true);
                     } 
-                $sms_qr = isset($this->line_sms) ? $this->line_sms : Yii::$app->getRequest()->hostInfo ;
+                $sms_qr = $this->line_sms;
                 $sms_qr .= '/ven.php?ref='.$model->id;
                 $qrCode = (new QrCode($sms_qr))
                     ->setSize(250)
@@ -241,8 +241,8 @@ class VenController extends Controller
                 /*---------------------ส่ง line ไปยัง Admin--------------------*/
                 $modelLine = Line::findOne(['name' => 'ven']);
                 if(isset($modelLine->token)){
-                    $message = $model->profile->name;
-                    $message .= isset($model->ven_id2) ? ' เปลี่ยนเวร ' : ' ยกเวร ';
+                    $message = $modelV2->getProfileNameCal().'<--เปลี่ยนเวร-->'.$modelV1->getProfileNameCal();
+                   
                     $message .= "\n".' รายละเอียดเพิ่มเติม ' ."\n".$sms_qr;
                     $res = Line::notify_message($modelLine->token,$message);  
                     $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
@@ -337,8 +337,8 @@ class VenController extends Controller
                 /*---------------------ส่ง line ไปยัง Admin--------------------*/
                 $modelLine = Line::findOne(['name' => 'ven']);
                 if(isset($modelLine->token)){
-                    $message = $model->profile->name;
-                    $message .= $model->ven_id2 ? ' เปลี่ยนเวร ' : ' ยกเวร ';
+                    $message = $model->getProfileName1().'--ยกเวร-->'.$model->getProfileName2();
+                    
                     $message .= "\n".' รายละเอียดเพิ่มเติม' ."\n".$sms_qr;
                     $res = Line::notify_message($modelLine->token,$message);  
                     $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
@@ -1280,10 +1280,10 @@ class VenController extends Controller
     {
         $models = VenChange::find()
             ->where([
-                'user_id1' => Yii::$app->user->identity->id,
+                'user_id1' => Yii::$app->user->id,
             ])
             ->orWhere([
-                'user_id2' => Yii::$app->user->identity->id,
+                'user_id2' => Yii::$app->user->id,
             ])
             ->orderBy([
             // 'date_create'=>SORT_DESC,
@@ -1343,7 +1343,7 @@ class VenController extends Controller
             }
         }
 
-        if(isset($model->ven_id1_old)){
+        if(isset($model->ven_id2_old)){
             $modelV = VenChange::find()
             ->where(['ven_id1' => $model->ven_id2_old])
             ->orWhere(['ven_id2' => $model->ven_id2_old])

@@ -151,6 +151,20 @@ class VenTransfer extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Profile::className(), ['id' => 'user_id1']);
     }
+    public function getProfile2()
+    {
+        return $this->hasOne(Profile::className(), ['id' => 'user_id2']);
+    }
+
+    public function getProfileName1(){
+        $model=$this->profile;
+        return $model ? $model->name: '-';
+    } 
+
+    public function getProfileName2(){
+        $model=$this->profile2;
+        return $model ? $model->name : '-';
+    } 
 
     
     public function getSignList(){

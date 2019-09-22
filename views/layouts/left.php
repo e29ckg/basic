@@ -8,8 +8,12 @@ $menuG = [
         ['label' => 'หนังสือเวียน', 'icon' => 'briefcase', 'url' => ['cletter/index']],
         ['label' => 'WebLink', 'icon' => 'link', 'url' => ['web_link/index']],
         ['label' => 'เขียนใบลา', 'icon' => 'briefcase', 'url' => ['bila/index']],
-        ['label' => 'สร้าง  QrCode', 'icon' => ' fa-qrcode', 'url' => ['qrgen/index']], 
-        ['label' => 'เบิกของ CartX', 'icon' => 'shopping-cart', 'url' => '/cartx/web'], 
+        ['label' => 'สร้าง  QrCode', 'icon' => ' fa-qrcode', 'url' => ['qrgen/index']],
+        [
+            'label' => 'เบิกของ CartX', 
+            'icon' => 'shopping-cart', 'url' => '/cartx/web', 
+            'template' => '<a href="{url}" target="_blank">{icon} {label}</a>'
+        ], 
         ['label' => '#', 'options' => ['class' => 'header']],
         ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],                    
     ],
@@ -34,7 +38,11 @@ $menu = [
             ],
         ],
         ['label' => 'สร้าง  QrCode', 'icon' => ' fa-qrcode', 'url' => ['qrgen/index']], 
-        ['label' => 'เบิกของ CartX', 'icon' => 'shopping-cart', 'url' => '/cartx/web'], 
+        [
+            'label' => 'เบิกของ CartX', 
+            'icon' => 'shopping-cart', 'url' => '/cartx/web', 
+            'template' => '<a href="{url}" target="_blank">{icon} {label}</a>'
+        ],
         ['label' => 'ตั้งค่า', 'options' => ['class' => 'header']],
         ['label' => 'Profile', 'icon' => 'id-card-o', 'url' => ['user/profile']],  
                             
@@ -62,7 +70,11 @@ $menu_operator = [
             ],
         ],
         ['label' => 'สร้าง  QrCode', 'icon' => ' fa-qrcode', 'url' => ['qrgen/index']], 
-        ['label' => 'เบิกของ CartX', 'icon' => 'shopping-cart', 'url' => '/cartx/web'], 
+        [
+            'label' => 'เบิกของ CartX', 
+            'icon' => 'shopping-cart', 'url' => '/cartx/web', 
+            'template' => '<a href="{url}" target="_blank">{icon} {label}</a>'
+        ],
         ['label' => 'ตั้งค่า', 'options' => ['class' => 'header']],
         ['label' => 'Profile', 'icon' => 'id-card-o', 'url' => ['user/profile']], 
         ['label' => 'ผู้ลงนาม', 'icon' => 'briefcase', 'url' => ['bila/sbn_index']],                             
@@ -83,17 +95,19 @@ $menu_admin = [
             ['label' => 'ประเภทหนังสือ', 'icon' => 'bullhorn', 'url' => ['cletter/caid_index']],
         ]], 
         ['label' => 'WebLink', 'icon' => 'link', 'url' => '#',
-          'items' => [
-            ['label' => 'WebLink', 'icon' => 'link', 'url' => ['web_link/index']],
-            ['label' => 'จัดการ WebLink', 'icon' => 'link', 'url' => ['web_link/index_admin']],
-        ]], 
+            'items' => [
+                ['label' => 'WebLink', 'icon' => 'link', 'url' => ['web_link/index']],
+                ['label' => 'จัดการ WebLink', 'icon' => 'link', 'url' => ['web_link/index_admin']],
+            ]
+        ], 
         ['label' => 'โปรแกรมใบลา', 'icon' => 'briefcase', 'url' => '#',
-          'items' => [
-            ['label' => 'เขียนใบลา', 'icon' => 'briefcase', 'url' => ['bila/index']],
-            ['label' => 'ใบลาทั้งหมด', 'icon' => 'briefcase', 'url' => ['bila/admin']],
-            ['label' => 'ปฏิทินใบลา', 'icon' => 'briefcase', 'url' => ['bila/cal']],
-            // ['label' => 'ผู้ลงนาม', 'icon' => 'briefcase', 'url' => ['bila/sbn_index']],
-        ]],
+            'items' => [
+                ['label' => 'เขียนใบลา', 'icon' => 'briefcase', 'url' => ['bila/index']],
+                ['label' => 'ใบลาทั้งหมด', 'icon' => 'briefcase', 'url' => ['bila/admin']],
+                ['label' => 'ปฏิทินใบลา', 'icon' => 'briefcase', 'url' => ['bila/cal']],
+                // ['label' => 'ผู้ลงนาม', 'icon' => 'briefcase', 'url' => ['bila/sbn_index']],
+            ]
+        ],
         ['label' => 'ตารางเวร', 'icon' => 'users', 'url' => '#',
             'items' => [
                 ['label' => 'ตารางเวร', 'icon' => 'fa fa-user-o', 'url' => ['/ven/index']],
@@ -105,8 +119,11 @@ $menu_admin = [
             ],
         ],
         ['label' => 'สร้าง  QrCode', 'icon' => ' fa-qrcode', 'url' => ['qrgen/index']],  
-        ['label' => 'เบิกของ CartX', 'icon' => 'shopping-cart', 'url' => '/cartx/web'],       
-        // ['label' => 'ตารางเวร', 'icon' => 'shopping-cart', 'url' => ['/ven/index']],
+        [
+            'label' => 'เบิกของ CartX', 
+            'icon' => 'shopping-cart', 'url' => '/cartx/web', 
+            'template' => '<a href="{url}" target="_blank">{icon} {label}</a>'
+        ],       
 
         ['label' => 'ตั้งค่า', 'options' => ['class' => 'header']],
         ['label' => 'Profile', 'icon' => 'id-card-o', 'url' => ['user/profile']],    
