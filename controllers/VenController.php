@@ -896,6 +896,7 @@ class VenController extends Controller
             ->orderBy([
             // 'date_create'=>SORT_DESC,
             'id' => SORT_DESC,
+            // 'status' => SORT_ASC,
             ])->limit(100)->all();  
         $event = [];
         foreach ($models as $model):
@@ -1336,7 +1337,7 @@ class VenController extends Controller
                     $sms .= ' ตามใบเปลี่ยนเวร';
                     // $sms .= 'เลขที่ '.$modelV->id;
                     $sms .= 'ลงวันที่ '. Ven::DateThai_full($modelV->create_at);
-                    $sms .= ' ('. $modelV->id .')';
+                    $sms .= ' (เลขอ้างอิง '. $modelV->id .')';
                 // endforeach;
                 // $Pdf_print = '_pdf_AA';
             }
@@ -1356,22 +1357,22 @@ class VenController extends Controller
                     // $sms .= 'เลขที่ '.$modelV->id;
                     $sms2 .= 'ลงวันที่ ';
                     $sms2 .= Ven::DateThai_full($modelV->create_at);
-                    $sms2 .= ' ('. $modelV->id .')';
+                    $sms2 .= ' (เลขอ้างอิง '. $modelV->id .')';
                 // endforeach;
             
             }
         }
         
 
-        if(empty($sms) && empty($sms2)){
-            $Pdf_print = '_pdf_A';
-        }elseif(empty($sms) || empty($sms2)){
-            $sms .= $sms2; 
-            $Pdf_print = '_pdf_AA';
-        }else{
-            $Pdf_print = '_pdf_AAA';
-        }
-        
+        // if(empty($sms) && empty($sms2)){
+        //     $Pdf_print = '_pdf_A';
+        // }elseif(empty($sms) || empty($sms2)){
+        //     $sms .= $sms2; 
+        //     $Pdf_print = '_pdf_AA';
+        // }else{
+        //     $Pdf_print = '_pdf_AAA';
+        // }
+        $Pdf_print = '_pdf_A';
         
         Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
         $pdf = new Pdf([

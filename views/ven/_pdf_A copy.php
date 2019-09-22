@@ -71,44 +71,6 @@ use yii\helpers\Url;
             <td colspan="5">ตามคำสั่งศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์ ที่ </td>	
             <td colspan="3" class="TableLine" style="text-align:center"><?=$model->ven1_old->getVenComNum()?></td>
 		</tr>
-        <?php
-        if(empty($sms) && empty($sms2)){
-            echo '<tr>
-            <td>ลงวันที่</td>	
-            <td colspan="3" class="TableLine" style="text-align:center">'.$model->DateThai_full($model->ven1_old->getVenComDate()).'</td>
-            <td style="text-align:center">ให้</td>	
-            <td colspan="5" class="TableLine" style="text-align:center">'.$model->getProfileName().'</td>
-		</tr>';
-        }elseif(empty($sms) || empty($sms2)){
-            echo '<tr>
-            <td>ลงวันที่</td>	
-            <td colspan="9" class="TableLine" style="text-align:center">
-                '.$model->DateThai_full($model->ven1_old->getVenComDate()).              
-                $sms.'
-            </td>
-        </tr>
-        <tr>
-            <td >ให้</td>	
-            <td colspan="8" class="TableLine" style="text-align:center">'.$model->getProfileName().'</td>
-            <td class="TableLine"></td>
-		</tr>';
-        }else{
-            echo '<tr>
-            <td>ลงวันที่</td>	
-            <td colspan="9" class="TableLine" style="text-align:center">
-                '.$model->DateThai_full($model->ven1_old->getVenComDate())             
-                . $sms.'
-            </td>
-        </tr>
-        <tr>
-            <td></td>	
-            <!-- <td class="TableLine"></td> -->
-            <td colspan="9" class="TableLine" style="text-align:center">               
-                '.$sms2.'
-            </td>
-        </tr>';
-        }
-        ?>
         <tr>
             <td>ลงวันที่</td>	
             <td colspan="3" class="TableLine" style="text-align:center"><?=$model->DateThai_full($model->ven1_old->getVenComDate());?></td>
