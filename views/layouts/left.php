@@ -8,6 +8,7 @@ $menuG = [
         ['label' => 'หนังสือเวียน', 'icon' => 'briefcase', 'url' => ['cletter/index']],
         ['label' => 'WebLink', 'icon' => 'link', 'url' => ['web_link/index']],
         ['label' => 'เขียนใบลา', 'icon' => 'briefcase', 'url' => ['bila/index']],
+        ['label' => 'ตารางเวร', 'icon' => 'fa fa-user-o', 'url' => ['/ven/index']],
         ['label' => 'สร้าง  QrCode', 'icon' => ' fa-qrcode', 'url' => ['qrgen/index']],
         [
             'label' => 'เบิกของ CartX', 
