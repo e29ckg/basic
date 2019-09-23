@@ -31,7 +31,7 @@ use yii\helpers\Url;
         center: 'title',
         right: 'dayGridMonth,listYear'
       },
-
+      firstDay : 1,
       locale: 'th',
 
       defaultDate:'<?=$defaultDate?>',

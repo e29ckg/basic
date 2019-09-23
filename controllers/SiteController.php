@@ -13,6 +13,7 @@ use app\models\CLetter;
 use app\models\LineHome;
 use app\models\Line;
 use app\models\User;
+use kartik\mpdf\Pdf;
 
 
 class SiteController extends Controller
@@ -57,6 +58,19 @@ class SiteController extends Controller
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];
+    }
+
+    public function actionTest()
+    {        
+        
+        $pdf = new Pdf();
+        $mpdf = $pdf->api; // fetches mpdf api
+        $mpdf->SetHeader('Kartik Header'); // call methods or set any properties
+        $mpdf->WriteHtml("222"); // call mpdf write html
+        $mpdf->writeBarcode('9-123-456-7890');
+        // echo $mpdf->Output('filename.pdf', 'D'); // call the mpdf api output as needed
+        return $mpdf->Output();
+
     }
 
     /**

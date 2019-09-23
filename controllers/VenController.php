@@ -1392,12 +1392,13 @@ class VenController extends Controller
                 // any mpdf options you wish to set
             ],
             'methods' => [
-                'SetTitle' => $model->id,
-                // 'SetSubject' => 'Generating PDF files via yii2-mpdf extension has never been easy',
+                'SetTitle' => 'ใบขอเปลี่ยนเวร '.$model->id,
+                'SetSubject' => 'ใบขอเปลี่ยนเวร '.$model->id,
                 // 'SetHeader' => ['Krajee Privacy Policy||Generated On: ' . date("r")],
                 // 'SetFooter' => ['|Page {PAGENO}|'],
-                // 'SetAuthor' => 'Kartik Visweswaran',
-                // 'SetCreator' => 'Kartik Visweswaran',
+                'SetFooter' => ['Pkkjc WebApp'],
+                'SetAuthor' => 'ศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์',
+                'SetCreator' => 'Pkkjc-Web',
                 // 'SetKeywords' => 'Krajee, Yii2, Export, PDF, MPDF, Output, Privacy, Policy, yii2-mpdf',
             ]
         ]);

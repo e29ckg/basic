@@ -31,12 +31,11 @@ use yii\helpers\Url;
         center: 'title',
         right: 'dayGridMonth,listYear'
       },
-
+      
       locale: 'th',
 
       displayEventTime: false, // don't show the time column in list view
-
-      
+            
       events: <?=$event?>,
     // {
     //   'title'  : 'event1',
@@ -47,6 +46,7 @@ use yii\helpers\Url;
     //   start  : '2019-08-05',
     //   end    : '2019-08-07'
     // }],
+    firstDay : 1, //monday
     allDay : true,
 
       

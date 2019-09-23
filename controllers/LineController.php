@@ -547,21 +547,21 @@ class LineController extends Controller
 
             $modelLine = Line::findOne(['name' => 'LineGroup']);     //แจ้ง หนังสือเวียน lineGroup 
 
-            $sms = 'วันที่ '.Bila::DateThai_full($strDate);
-            $sms .= "\n";
+            $sms_c = 'วันที่ '.Bila::DateThai_full($strDate);
+            $sms_c .= "\n";
             foreach ($models as $model):        
-                $sms .= $model->name ;
-                $sms .= "\n";
-                $sms .= '(http://10.37.64.01/cletter.php?ref='.$model->id.')';
-                $sms .= "\n";
+                $sms_c .= $model->name ;
+                $sms_c .= "\n";
+                $sms_c .= '(http://10.37.64.01/cletter.php?ref='.$model->id.')';
+                $sms_c .= "\n";
                 if(isset($modelLine->token)){                
-                    $res = Line::notify_message($modelLine->token,$sms);  
+                    $res = Line::notify_message($modelLine->token,$sms_c);  
                     $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') : Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
                 }
             endforeach; 
         }
    
-        Yii::$app->session->setFlash('success', 'เรียบร้อย'.$sms );   
+        Yii::$app->session->setFlash('success', 'เรียบร้อย'.$sms_c );   
 
         return $this->render('test',['id' => $sms]);
     }
