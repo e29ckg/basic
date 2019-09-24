@@ -349,6 +349,8 @@ class VenController extends Controller
         }
 
         $ven_id1 = Ven::findOne($id);
+        Yii::$app->session->set('v1_time',$ven_id1->ven_time);
+        Yii::$app->session->set('v1_date',$ven_id1->ven_date);
         // $ven_id2 = Ven::getVenForChangeAll($id); 
         
         return $this->renderAjax('_ven_transfer',[

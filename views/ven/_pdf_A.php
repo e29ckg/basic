@@ -118,7 +118,7 @@ use yii\helpers\Url;
             <td>อยู่เวร</td>	
             <td colspan="3" class="TableLine" style="text-align:center"><?=$model->ven1_old->getVenComName()?></td>
             <td style="text-align:center">วันที่</td>
-            <td colspan="2" class="TableLine" style="text-align:center"><?=$model->DateThai_full($model->ven1_old->ven_date)?></td>	
+            <td colspan="2" class="TableLine" style="text-align:center"><?=$model->ven_id2_old ? $model->DateThai_full($model->ven2_old->ven_date) :'-';?></td>	
             <td style="text-align:center">เวลา</td>
             <td colspan="2" class="TableLine" style="text-align:center"><?=$model->getVen_time()[$model->ven1_old->ven_time]?></td>	
 		</tr>
@@ -135,7 +135,7 @@ use yii\helpers\Url;
         <tr>
             <td colspan="6" >เป็นผู้ปฏิบัติหน้าที่แทน และข้าพเจ้าจะมาปฏิบัติหน้าที่แทนในวันที่ </td>	
             <td colspan="4" class="TableLine" style="text-align:center">
-                <?=$model->ven_id2_old ? $model->DateThai_full($model->ven2_old->ven_date) :'-';?></td>            
+            <?=$model->DateThai_full($model->ven1_old->ven_date)?></td>            
 		</tr>
         <tr>
             <td colspan="6" ></td>	
