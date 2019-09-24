@@ -41,7 +41,7 @@ class VenController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index','admin','create_a','create_b','sbm_index','com_del'],
+                'only' => ['change_user_index','index','change_del_user','change_del'],
                 'rules' => [
                     [
                         // 'actions' => ['index'],
@@ -618,7 +618,7 @@ class VenController extends Controller
              /*---------------------ส่ง line ไปยัง Admin--------------------*/
              $modelLine = Line::findOne(['name' => 'ven']);
              if(isset($modelLine->token)){
-                 $message = $model->profile->name.' ลบใบเปลี่ยนเวร '.$model->id;
+                 $message = Yii::$app->user->id.' ลบใบเปลี่ยนเวร '.$model->id;
                  $res = Line::notify_message($modelLine->token,$message);  
                  $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
              }
@@ -671,7 +671,7 @@ class VenController extends Controller
                      /*---------------------ส่ง line ไปยัง Admin--------------------*/
                     $modelLine = Line::findOne(['name' => 'ven']);
                     if(isset($modelLine->token)){
-                        $message = $model->profile->name.' ลบใบเปลี่ยนเวร '.$model->id;
+                        $message = Yii::$app->user->id.' ลบใบเปลี่ยนเวร '.$model->id;
                         $res = Line::notify_message($modelLine->token,$message);  
                         $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
                     }
