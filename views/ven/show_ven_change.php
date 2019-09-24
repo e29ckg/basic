@@ -86,15 +86,15 @@ use yii\helpers\Url;
             <table class="table ">
                 <tr>
                     <td class="text-center">
-                        <?= $model->file ?
-                        '<a href="'.Url::to(['ven/ven_file_view','id' => $model->id]).'"  target="_blank" data-id='.$model->id.'>ไฟล์เอกสาร</a>' 
-                        :
-                        '<a href="'.Url::to(['ven/print','id' => $model->id]).'" class="btn btn-primary btn-xs" target="_blank" data-id='.$model->id.'>print</a>' ?>
-                        <?php
-                            
-                        if(!Yii::$app->user->isGuest && empty($model->file) && Yii::$app->user->identity->role == 9){
-                            echo '<button class="btn btn-success btn-xs act-file-up" data-id='.$model->id.'>แนบไฟล์</button>' ;                           
-                        }?>
+                        <?php                            
+                        // if(!Yii::$app->user->isGuest && empty($model->file) && Yii::$app->user->identity->role == 9){
+                            // if($model->file){
+                                echo '<a href="'.Url::to(['ven/ven_file_view','id' => $model->id]).'"  target="_blank" data-id='.$model->id.'>ไฟล์เอกสาร</a>' ;
+                            // }else{
+                                echo ' <button class="btn btn-success btn-md act-file-up" data-id='.$model->id.'>แนบไฟล์</button>' ;
+                            // }                        
+                        // }
+                        ?>
                     </td>
                 </tr>       
             </table> 

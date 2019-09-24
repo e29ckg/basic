@@ -75,23 +75,23 @@ $this->params['breadcrumbs'][] = $this->title;
 													'data-id' => $model->id,
 													'target' => '_blank'
 												]).' '	
-												.Html::a('<i class="fa fa-remove"></i> ลบไฟล์ ', ['ven/change_del_file','id' => $model->id], [
-													'class' => 'btn btn-danger btn-block btn-xs',
-													'data-id' => $model->id,
-													'data-confirm' => 'Are you sure to delete this item?',
-													'data-method' => 'post',
-												]) 																			
+												// .Html::a('<i class="fa fa-remove"></i> ลบไฟล์ ', ['ven/change_del_file','id' => $model->id], [
+												// 	'class' => 'btn btn-danger btn-block btn-xs',
+												// 	'data-id' => $model->id,
+												// 	'data-confirm' => 'Are you sure to delete this item?',
+												// 	'data-method' => 'post',
+												// ]) 																			
 												:
 												Html::a('<i class="fa fa-print"></i> Print ', ['ven/print','id' => $model->id], [
 													'class' => 'btn btn-primary btn-xs',
 													'data-id' => $model->id,
 													'target' => '_blank'
 												])
-												.' '.Html::a('<i class="fa fa-print"></i> แนบไฟล์ ', '#', [
-													'class' => 'act-change-upfile btn btn-success btn-xs',
-													'data-id' => $model->id,
-													// 'target' => '_blank'
-												]).' '
+												// .' '.Html::a('<i class="fa fa-print"></i> แนบไฟล์ ', '#', [
+												// 	'class' => 'act-change-upfile btn btn-success btn-xs',
+												// 	'data-id' => $model->id,
+												// 	// 'target' => '_blank'
+												// ]).' '
 												 
 												.' ' .Html::a('<i class="fa fa-remove"></i> ยกเลิก ', ['ven/change_del_user', 'id' => $model->id], [
 													'class' => 'btn btn-danger btn-xs',

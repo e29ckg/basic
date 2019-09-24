@@ -69,13 +69,13 @@ use yii\helpers\Url;
             <td></td>	
             <td></td>
             <td colspan="5">ตามคำสั่งศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์ ที่ </td>	
-            <td colspan="3" class="TableLine" style="text-align:center"><?=$model->ven1_old->getVenComNum()?></td>
+            <td colspan="3" class="TableLine" style="text-align:center"><?=$model->ven2_old->getVenComNum()?></td>
 		</tr>
         <?php
         if(empty($sms) && empty($sms2)){
             echo '<tr>
             <td>ลงวันที่</td>	
-            <td colspan="3" class="TableLine" style="text-align:center">'.$model->DateThai_full($model->ven1_old->getVenComDate()).'</td>
+            <td colspan="3" class="TableLine" style="text-align:center">'.$model->DateThai_full($model->ven2_old->getVenComDate()).'</td>
             <td style="text-align:center">ให้</td>	
             <td colspan="5" class="TableLine" style="text-align:center">'.$model->getProfileName().'</td>
 		</tr>';
@@ -83,7 +83,7 @@ use yii\helpers\Url;
             echo '<tr>
             <td>ลงวันที่</td>	
             <td colspan="9" class="TableLine" style="text-align:center">
-                '.$model->DateThai_full($model->ven1_old->getVenComDate()).' '.$sms.$sms2.'
+                '.$model->DateThai_full($model->ven2_old->getVenComDate()).' '.$sms.$sms2.'
             </td>
         </tr>
         <tr>
@@ -110,17 +110,17 @@ use yii\helpers\Url;
         ?>
         <!-- <tr>
             <td>ลงวันที่</td>	
-            <td colspan="3" class="TableLine" style="text-align:center"><?=$model->DateThai_full($model->ven1_old->getVenComDate());?></td>
+            <td colspan="3" class="TableLine" style="text-align:center"><?=$model->DateThai_full($model->ven2_old->getVenComDate());?></td>
             <td style="text-align:center">ให้</td>	
             <td colspan="5" class="TableLine" style="text-align:center"><?=$model->getProfileName()?></td>
 		</tr> -->
         <tr>
             <td>อยู่เวร</td>	
-            <td colspan="3" class="TableLine" style="text-align:center"><?=$model->ven1_old->getVenComName()?></td>
+            <td colspan="3" class="TableLine" style="text-align:center"><?=$model->ven2_old->getVenComName()?></td>
             <td style="text-align:center">วันที่</td>
             <td colspan="2" class="TableLine" style="text-align:center"><?=$model->ven_id2_old ? $model->DateThai_full($model->ven2_old->ven_date) :'-';?></td>	
             <td style="text-align:center">เวลา</td>
-            <td colspan="2" class="TableLine" style="text-align:center"><?=$model->getVen_time()[$model->ven1_old->ven_time]?></td>	
+            <td colspan="2" class="TableLine" style="text-align:center"><?=$model->getVen_time()[$model->ven2_old->ven_time]?></td>	
 		</tr>
         <tr>
             <td>เนื่องจาก</td>	
@@ -135,7 +135,7 @@ use yii\helpers\Url;
         <tr>
             <td colspan="6" >เป็นผู้ปฏิบัติหน้าที่แทน และข้าพเจ้าจะมาปฏิบัติหน้าที่แทนในวันที่ </td>	
             <td colspan="4" class="TableLine" style="text-align:center">
-            <?=$model->DateThai_full($model->ven1_old->ven_date)?></td>            
+            <?=$model->ven_id1_old ? $model->DateThai_full($model->ven1_old->ven_date) :'-';?></td>            
 		</tr>
         <tr>
             <td colspan="6" ></td>	

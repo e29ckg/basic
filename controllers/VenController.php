@@ -32,6 +32,7 @@ class VenController extends Controller
     /**
      * {@inheritdoc}
      */
+    
 
     public $line_sms ='http://10.37.64.01';
     public $filePath = '/uploads/ven/';
@@ -41,7 +42,7 @@ class VenController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['change_user_index','index','change_del_user','change_del'],
+                'only' => ['change_user_index','index','change_del_user','change_del','Admin_index','change_index','com_index'],
                 'rules' => [
                     [
                         // 'actions' => ['index'],
@@ -62,7 +63,6 @@ class VenController extends Controller
    public function actionTest()
    {
     
-
        return $this->render('test');
    }
     
@@ -125,8 +125,7 @@ class VenController extends Controller
                 'model' => $model,
                 'modelDs' => $modelDs,
             ]);
-        }
-       
+        }       
         
     }
 
@@ -239,12 +238,12 @@ class VenController extends Controller
                     ->useForegroundColor(1, 1, 1);              
                 $qrCode->writeFile(Url::to('@webroot'.$this->filePath.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
                 /*---------------------ส่ง line ไปยัง Admin--------------------*/
-                $modelLine = Line::findOne(['name' => 'ven']);
-                if(isset($modelLine->token)){
-                    $message = $modelV2->getProfileNameCal().'<--เปลี่ยนเวร-->'.$modelV1->getProfileNameCal();
-                   
+                                
+                if($token = Line::getToken('ven')){
+                    $message = 'ven'."\n";
+                    $message .= $modelV2->getProfileNameCal().'<--เปลี่ยนเวร-->'.$modelV1->getProfileNameCal();                   
                     $message .= "\n".' รายละเอียดเพิ่มเติม ' ."\n".$sms_qr;
-                    $res = Line::notify_message($modelLine->token,$message);  
+                    $res = Line::notify_message($token,$message);  
                     $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
                 } 
 
@@ -276,18 +275,16 @@ class VenController extends Controller
             return ActiveForm::validate($model);
         } 
         
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+        if ($model->load(Yii::$app->request->post()) ) {
             $transaction = Yii::$app->db->beginTransaction();
             try {              
-                $modelV1 = Ven::findOne($_POST['VenTransfer']['ven_id1']);
-                $modelV1->status = 6; 
-                $modelV1->save();
-                
-                $id = (int)time();
+                $modelV1 = Ven::findOne($id);
+                                
+                $id_vn = (int)time();
                 $ref_vc = Yii::$app->security->generateRandomString();
 
                 $modelV = new Ven();
-                $modelV->id = $id ;
+                $modelV->id = $id_vn ;
                 $modelV->ven_date = $modelV1->ven_date;  
                 $modelV->ven_com_id = $modelV1->ven_com_id;
                 $modelV->ven_time = $modelV1->ven_time;
@@ -299,22 +296,26 @@ class VenController extends Controller
                 $modelV->create_at = date("Y-m-d H:i:s");   
                 $modelV->save();
 
-                $model->id = $id ;
-                $model->ven_id1_old = $_POST['VenTransfer']['ven_id1'];
-                $model->ven_id2_old = null;
-                $model->ven_id1 = null;
-                $model->ven_id2 = $id ;
-                $model->user_id1 = $modelV1->user_id;
+                $model->id = $id_vn;
                 $model->ven_month = $modelV1->ven_month;
+                $model->ven_id1 = $id_vn;
+                $model->ven_id2 =  null;
+                $model->ven_id1_old = null;
+                $model->ven_id2_old = $id;                
+                $model->user_id1 = $modelV1->user_id;                
                 $model->user_id2 = $_POST['VenTransfer']['user_id2'];
                 $model->s_po = $_POST['VenTransfer']['s_po'];
                 $model->s_bb = $_POST['VenTransfer']['s_bb'];
                 $model->status = 6;
                 $model->ref1 = $ref_vc;    
-                $model->ref2 = null;                
+                // // $model->ref2 = null;                
                 $model->comment = $_POST['VenTransfer']['comment'];
                 $model->create_at = date("Y-m-d H:i:s");
-                $model->save();
+                
+                $modelV1->status = 6; 
+                if($modelV1->save() && $model->save()){
+                    Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'); 
+                }
                 
                 $transaction->commit();    
                 
@@ -335,35 +336,30 @@ class VenController extends Controller
                     ->useForegroundColor(1, 1, 1);              
                 $qrCode->writeFile(Url::to('@webroot'.$this->filePath.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
                 /*---------------------ส่ง line ไปยัง Admin--------------------*/
-                $modelLine = Line::findOne(['name' => 'ven']);
-                if(isset($modelLine->token)){
-                    $message = $model->getProfileName1().'--ยกเวร-->'.$model->getProfileName2();
-                    
+                // $modelLine = Line::findOne(['name' => 'ven','status' => 1]);
+                if($token = Line::getToken('ven')){
+                    $message = $model->getProfileName1().'--ยกเวร-->'.$model->getProfileName2();                    
                     $message .= "\n".' รายละเอียดเพิ่มเติม' ."\n".$sms_qr;
-                    $res = Line::notify_message($modelLine->token,$message);  
+                    $res = Line::notify_message($token,$message);  
                     $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
                 } 
 
-                Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'); 
+                
             return $this->redirect(['change_user_index']);            
         }
 
         $ven_id1 = Ven::findOne($id);
-        Yii::$app->session->set('v1_time',$ven_id1->ven_time);
-        Yii::$app->session->set('v1_date',$ven_id1->ven_date);
-        // $ven_id2 = Ven::getVenForChangeAll($id); 
         
         return $this->renderAjax('_ven_transfer',[
             'model' => $model,
             'ven_id1' => [$ven_id1->id => Ven::dateThai_full($ven_id1->ven_date).' '.$ven_id1->profile->fname.$ven_id1->profile->name.' '.$ven_id1->profile->sname.'('.$ven_id1->id.')'],
-            // 'ven_id1' => $ven_id1,
+           
         ]);
     }
 
     public function actionVen_change_update($id)
     {
-        $model = VenChangeUpdate::findOne($id);
-        
+        $model = VenChangeUpdate::findOne($id);        
 
         if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -390,7 +386,6 @@ class VenController extends Controller
                 $model->save();
                 
                 $transaction->commit();                   
-                
 
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'); 
             } catch (\Exception $e) {
@@ -398,12 +393,13 @@ class VenController extends Controller
                 throw $e;
             } 
                 /*---------------------ส่ง line ไปยัง Admin--------------------*/
-                $modelLine = Line::findOne(['name' => 'ven']);
-                if(isset($modelLine->token)){
-                    $message = $model->profile->name.' แก้ไขเวร '.$model->id;
-                    $res = Line::notify_message($modelLine->token,$message);  
+                
+                if($token = Line::getToken('ven')){
+                    $message = 'ven'."\n";
+                    $message .= Yii::$app->user->id.' แก้ไขเวร '.$model->id;
+                    $res = Line::notify_message($token,$message);  
                     $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
-                } 
+                }
             
             return $this->redirect(['change_user_index']);            
         }     
@@ -456,23 +452,25 @@ class VenController extends Controller
                         
                         $model->status = 5;
                         $model->save();
-
-                        $modelV1 = Ven::findOne($model->ven_id1);
-                        $modelV1->file = $fileName;
-                        $modelV1->status = 1;
-                        $modelV1->save();
+                        if(!($model->ven_id1 == null)){
+                            $modelV1 = Ven::findOne($model->ven_id1);
+                            $modelV1->file = $fileName;
+                            $modelV1->status = 1;
+                            $modelV1->save();
+                        }
 
                         if(!($model->ven_id2 == null)){
                             $modelV1 = Ven::findOne($model->ven_id2);
                             $modelV1->file = $fileName;
                             $modelV1->status = 1;
                             $modelV1->save();
-                        }                        
+                        } 
 
-                        $modelV3 = Ven::findOne($model->ven_id1_old);
-                        $modelV3->status = 5;
-                        $modelV3->save();
-
+                        if(!($model->ven_id1_old == null)){
+                            $modelV3 = Ven::findOne($model->ven_id1_old);
+                            $modelV3->status = 5;
+                            $modelV3->save();
+                        }
                         if(!($model->ven_id2_old == null)){
                             $modelV4 = Ven::findOne($model->ven_id2_old);
                             $modelV4->status = 5;
@@ -482,7 +480,7 @@ class VenController extends Controller
                         Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
                                                   
                         $transaction->commit();
-                        return $this->redirect(['change_user_index']);
+                        return $this->redirect(['change_index']);
                         
                     } catch (\Exception $e) {
                         $transaction->rollBack();
@@ -491,7 +489,7 @@ class VenController extends Controller
 
             }else{
                 Yii::$app->session->setFlash('warning', 'ไม่ได้บันทึกข้อมูล');
-                return $this->redirect(['change_user_index']);
+                return $this->redirect(['change_index']);
             }
         }
         // $model->file = $model->file;
@@ -557,13 +555,13 @@ class VenController extends Controller
                 throw $e;
             }
             /*---------------------ส่ง line ไปยัง Admin--------------------*/
-            $modelLine = Line::findOne(['name' => 'ven']);
-            if(isset($modelLine->token)){
-                $message = $model->profile->name.' ลบไฟล์เวร '.$model->id;
-                $res = Line::notify_message($modelLine->token,$message);  
+            if($token = Line::getToken('ven')){
+                $message = 'ven'."\n";
+                $message .= $model->profile->name.' ลบไฟล์เวร '.$model->id;
+                $res = Line::notify_message($token,$message);  
                 $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
             } 
-        return $this->redirect(['change_user_index']);
+        return $this->redirect(['change_index']);
     }
 
     public function actionChange_del_user($id)
@@ -619,9 +617,9 @@ class VenController extends Controller
             }
              /*---------------------ส่ง line ไปยัง Admin--------------------*/
              $modelLine = Line::findOne(['name' => 'ven']);
-             if(isset($modelLine->token)){
+             if($token = Line::getToken('ven')){
                  $message = Yii::$app->user->id.' ลบใบเปลี่ยนเวร '.$model->id;
-                 $res = Line::notify_message($modelLine->token,$message);  
+                 $res = Line::notify_message($token,$message);  
                  $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
              }
         return $this->redirect(['change_user_index']);
@@ -671,10 +669,11 @@ class VenController extends Controller
                         rmdir($dir);
                     } 
                      /*---------------------ส่ง line ไปยัง Admin--------------------*/
-                    $modelLine = Line::findOne(['name' => 'ven']);
-                    if(isset($modelLine->token)){
-                        $message = Yii::$app->user->id.' ลบใบเปลี่ยนเวร '.$model->id;
-                        $res = Line::notify_message($modelLine->token,$message);  
+                    
+                    if($token = Line::getToken('ven')){
+                        $message = 'ven'."\n";
+                        $message .= Yii::$app->user->id.' ลบใบเปลี่ยนเวร '.$model->id;
+                        $res = Line::notify_message($token,$message);  
                         $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
                     }
                 }     
@@ -738,8 +737,8 @@ class VenController extends Controller
                 $modelVv->save(); 
 
                 $model->id = $id;
-                $model->ven_id1_old = $_POST['VenChange']['ven_id1'];
-                $model->ven_id2_old = $_POST['VenChange']['ven_id2'];
+                $model->ven_id1_old = $_POST['VenChange']['ven_id2'];
+                $model->ven_id2_old = $_POST['VenChange']['ven_id1'];
                 $model->ven_id1 = $id;
                 $model->ven_id2 = $id + 1;
                 $model->user_id1 = $modelV1->user_id;
@@ -772,12 +771,12 @@ class VenController extends Controller
                     ->useForegroundColor(1, 1, 1);              
                 $qrCode->writeFile(Url::to('@webroot'.$this->filePath.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
                 /*---------------------ส่ง line ไปยัง Admin--------------------*/
-                $modelLine = Line::findOne(['name' => 'ven']);
-                if(isset($modelLine->token)){
-                    $message = $model->profile->name;
+                // $modelLine = Line::findOne(['name' => 'ven']);
+                if($token = Line::getToken('ven')){
+                    $message = $model->profile->name;                    
                     $message .= isset($model->ven_id2) ? 'เปลี่ยนเวร' : 'ยกเวร';
                     $message .= "\n".' รายละเอียดเพิ่มเติม' ."\n".$sms_qr;
-                    $res = Line::notify_message($modelLine->token,$message);  
+                    $res = Line::notify_message($token,$message);  
                     $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
                 } 
 
@@ -813,11 +812,11 @@ class VenController extends Controller
                 $modelV1->status = 6; 
                 $modelV1->save();
                 
-                $id = (int)time();
+                $id_vn = (int)time();
                 $ref_vc = Yii::$app->security->generateRandomString();
 
                 $modelV = new Ven();
-                $modelV->id = $id ;
+                $modelV->id = $id_vn ;
                 $modelV->ven_date = $modelV1->ven_date;  
                 $modelV->ven_com_id = $modelV1->ven_com_id;
                 $modelV->ven_time = $modelV1->ven_time;
@@ -829,10 +828,11 @@ class VenController extends Controller
                 $modelV->create_at = date("Y-m-d H:i:s");   
                 $modelV->save();
 
-                $model->id = $id;
-                $model->ven_id1_old = $_POST['VenTransfer']['ven_id1'];
-                $model->ven_id2_old = null;
-                $model->ven_id1 = $id;
+                $model->id = $id_vn;
+                $model->ven_month = $modelV1->ven_month;
+                $model->ven_id1_old = null;
+                $model->ven_id2_old = $_POST['VenTransfer']['ven_id1'];
+                $model->ven_id1 = $id_vn;
                 $model->ven_id2 = null;
                 $model->user_id1 = $modelV1->user_id;
                 $model->user_id2 = $_POST['VenTransfer']['user_id2'];
@@ -859,12 +859,12 @@ class VenController extends Controller
                     ->useForegroundColor(1, 1, 1);              
                 $qrCode->writeFile(Url::to('@webroot'.$this->filePath.'/'.$model->id.'.png')); // writer defaults to PNG when none is specified
                 /*---------------------ส่ง line ไปยัง Admin--------------------*/
-                $modelLine = Line::findOne(['name' => 'ven']);
-                if(isset($modelLine->token)){
+                // $modelLine = Line::findOne(['name' => 'ven']);
+                if($token = Line::getToken('ven')){
                     $message = $model->profile->name;
                     $message .= $model->ven_id2 ? 'เปลี่ยนเวร' : 'ยกเวร';
                     $message .= "\n".' รายละเอียดเพิ่มเติม' ."\n".$sms_qr;
-                    $res = Line::notify_message($modelLine->token,$message);  
+                    $res = Line::notify_message($token,$message);  
                     $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
                 } 
 
@@ -877,15 +877,11 @@ class VenController extends Controller
             return $this->redirect(['change_user_index']);            
         }
 
-        // $ven_id1 = Ven::findOne($id);
-        // $ven_id2 = Ven::getVenForChangeAll($id);        
         
         return $this->renderAjax('_ven_transfer',[
             'model' => $model,
             'ven_id1' => Ven::getVen_all(),
-            // [$ven_id1->id => Ven::dateThai_full($ven_id1->ven_date).' '.$ven_id1->profile->name.'('.$ven_id1->id.')'],
-            // 'ven_id1' => $ven_id1,
-        ]);
+            ]);
     }
 
     
@@ -968,8 +964,7 @@ class VenController extends Controller
                     Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');                   
                 }  
 
-                $transaction->commit();
-               
+                $transaction->commit();               
                 
             } catch (\Exception $e) {
                 $transaction->rollBack();

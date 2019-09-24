@@ -8,7 +8,7 @@ use kartik\date\DatePicker;
 use yii\helpers\ArrayHelper;
 // use kartik\file\FileInput;
 
-$this->title = 'ใบเปลี่ยนเวร';
+$this->title = 'ใบยก';
 $this->params['breadcrumbs'][] = ['label' => 'เวร', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -39,6 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     
                     <?=  $form->field($model, 'ven_id1')->widget(Select2::classname(), [
                             'data' => $ven_id1,
+                            // 'data' => [1 => '1'],                            
                             'language' => 'th',
                             'options' => [
                                 // 'placeholder' => ' ',
@@ -56,6 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="form-group">
                 <?=  $form->field($model, 'user_id2')->widget(Select2::classname(), [
                             'data' =>  $model->getUserList(),
+                            // 'data' => [2=>'2'],                            
                             'language' => 'th',
                             'options' => [
                                 'placeholder' => $model->getAttributeLabel('user_id2'),

@@ -160,24 +160,10 @@ class Line extends \yii\db\ActiveRecord
         return $json;
     }
 
-    /*public function actionIndex11()
+    public function getToken($name)
     {
-        $client_id = '4FLzeUXbqtIa5moAG1wtel';
-        $api_url = 'https://notify-bot.line.me/oauth/authorize?';
-        $callback_url = 'http://192.168.0.15/basic/web/line/callback';
-
-        $query = [
-            'response_type' => 'code',
-            'client_id' => $client_id,
-            'redirect_uri' => $callback_url,
-            'scope' => 'notify',
-            'state' => 'Cletter'
-        ];
+        $modelLine = Line::findOne(['name' => $name,'status' => 1]);
         
-        $result = $api_url . http_build_query($query);
-
-        return $this->render('index11',[
-            'result' => $result
-        ]);
-    }*/
+        return $modelLine ? $modelLine->token : false;
+    }
 }
