@@ -302,6 +302,8 @@ class VenController extends Controller
                 $model->id = $id ;
                 $model->ven_id1_old = $_POST['VenTransfer']['ven_id1'];
                 $model->ven_id2_old = null;
+                $model->ven_id1 = null;
+                $model->ven_id2 = $id ;
                 $model->user_id1 = $modelV1->user_id;
                 $model->ven_month = $modelV1->ven_month;
                 $model->user_id2 = $_POST['VenTransfer']['user_id2'];
