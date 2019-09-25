@@ -165,12 +165,12 @@ class CletterController extends Controller
 
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'); 
                 
-                $modelLine = Line::findOne(['name' => 'LineGroup']);        
-                if(!empty($modelLine->token) && $modelLine->status == 1){
+                // $modelLine = Line::findOne(['name' => 'LineGroup']);        
+                if($token = Line::getToken('LineGroup')){
                     // $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.';
                     $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.'.$this->smsLineAlert.$model->id;
                 
-                    $res = Line::notify_message($modelLine->token,$message);
+                    $res = Line::notify_message($token,$message);
                     
                     if($res['status'] == 200){
                         Yii::$app->session->setFlash('info', 'Line Notify ส่งได้');
@@ -206,7 +206,7 @@ class CletterController extends Controller
     {
         $model = $this->findModel($id);
 
-        $filename = $model->file;
+        $fileName = $model->file;
 
         //Add This For Ajax Email Exist Validation 
         if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){
@@ -222,50 +222,32 @@ class CletterController extends Controller
                 $dir = Url::to('@webroot'.$this->filePath);
                 if (!is_dir($dir)) {
                     mkdir($dir, 0777, true);
-                }                
-                if($filename && is_file($dir.$filename)){
-                    unlink($dir.$filename);// ลบ รูปเดิม;                    
+                }  
+
+                if($fileName && is_file($dir.$fileName)){
+                    unlink($dir.$fileName);// ลบ รูปเดิม;                    
                     
                 }
+
                 $fileName = md5($f->baseName . time()) . '.' . $f->extension;
                 if($f->saveAs($dir . $fileName)){
                     $model->file = $fileName;
+                    $model->save(); 
                 }                
-                $model->save();  
-                return $this->redirect(['index', 'id' => $filename]);                            
+                                            
             }
-            $_POST['CLetter']['line_alert'] == null ?
-                $model->line_alert = null
-                :
+            if($_POST['CLetter']['line_alert'] == null){
+                $model->line_alert = null;
+            }else{
                 $model->line_alert = date("Y-m-d",strtotime($_POST['CLetter']['line_alert']));
-            $model->file = $filename;
+            }                 
+
+
             if($model->save()){
-                $message = Yii::$app->user->identity->id .' แก้ไข '.$model->name;
-                $modelLog = new Log();
-                $modelLog->user_id = Yii::$app->user->identity->id;
-                $modelLog->manager = 'Cletter_Update';
-                $modelLog->detail =  'แกไข '.$model->name;
-                $modelLog->create_at = date("Y-m-d H:i:s");
-                $modelLog->ip = Yii::$app->getRequest()->getUserIP();
-            if($modelLog->save()){
-                
-                $modelLine = Line::findOne(['name' => 'Admin']);        
-                if(!empty($modelLine->token) && $modelLine->status == 1){
-                    // $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.';
-                    $message = $model->name.' มีการปรับปรุง '.$this->smsLineAlert.$model->id;
-                
-                    $res = Line::notify_message($modelLine->token,$message);
-                    
-                    if($res['status'] == 200){
-                        Yii::$app->session->setFlash('info', 'Line Notify ส่งได้');
-                    }else{
-                        Yii::$app->session->setFlash('warning', 'Line Notify ส่งไม่ได้ Error'.$res['status']);
-                    }
-                } 
-            }
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
-            };          
-            return $this->redirect(['index_admin', 'id' => $filename]);
+            }; 
+      
+            return $this->redirect(['index_admin', 'id' => $fileName]);
         }
 
         if(Yii::$app->request->isAjax){
@@ -304,10 +286,10 @@ class CletterController extends Controller
             $modelLog->create_at = date("Y-m-d H:i:s");
             $modelLog->ip = Yii::$app->getRequest()->getUserIP();
             Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');    
-            $modelLine = Line::findOne(['name' => 'admin']);        
-                    if(!empty($modelLine->token) && $modelLine->status == 1){
+            // $modelLine = Line::findOne(['name' => 'admin']);        
+                    if($token = Line::getToken('admin')){
                         $message = Profile::getProfileNameById(Yii::$app->user->identity->id).' ลบ '.$model->name.' '.date("Y-m-d H:i:s");
-                        Line::notify_message($modelLine->token,$message);                        
+                        Line::notify_message($token,$message);                        
                     }                                
         }        
 
@@ -324,20 +306,39 @@ class CletterController extends Controller
         $completePath = Url::to('@webroot').$this->filePath.$model->file;
         if(is_file($completePath)){
             
-            $modelLog = new Log();
-            $modelLog->user_id = Yii::$app->user->identity->id;
-            $modelLog->manager = 'Cletter_Read';
-            $modelLog->detail =  'เปิดอ่าน '.$model->name;
-            $modelLog->create_at = date("Y-m-d H:i:s");
-            $modelLog->ip = Yii::$app->getRequest()->getUserIP();
-            if($modelLog->save()){
-                $modelLine = Line::findOne(['name' => 'admin']);        
-                    if(!empty($modelLine->token) && $modelLine->status == 1){
-                        $message = Profile::getProfileNameById(Yii::$app->user->identity->id).' เปิดอ่าน '.$model->name.' '.date("Y-m-d H:i:s");
-                        Line::notify_message($modelLine->token,$message);                        
-                    }                        
-                return Yii::$app->response->sendFile($completePath, $model->file, ['inline'=>true]);
-            }
+            // $modelLog = new Log();
+            // $modelLog->user_id = Yii::$app->user->identity->id;
+            // $modelLog->manager = 'Cletter_Read';
+            // $modelLog->detail =  'เปิดอ่าน '.$model->name;
+            // $modelLog->create_at = date("Y-m-d H:i:s");
+            // $modelLog->ip = Yii::$app->getRequest()->getUserIP();
+            // if($modelLog->save()){
+            //     // $modelLine = Line::findOne(['name' => 'admin']);        
+            //         if($token = Line::getToken('admin')){
+            //             $message = Profile::getProfileNameById(Yii::$app->user->identity->id).' เปิดอ่าน '.$model->name.' '.date("Y-m-d H:i:s");
+            //             Line::notify_message($token,$message);                        
+            //         }                        
+            //     return Yii::$app->response->sendFile($completePath, $model->file, ['inline'=>true]);                
+            // }
+        $stylesheet = file_get_contents(Url::to('@webroot/css/pdf.css'));
+
+        $mpdf = new \Mpdf\Mpdf();
+        $mpdf->WriteHTML($stylesheet,\Mpdf\HTMLParserMode::HEADER_CSS);
+        // // $mpdf->SetImportUse();
+        $mpdf->SetDocTemplate(Url::to('@webroot/uploads/cletter/'.$model->file),true);
+        $mpdf->SetTitle('webApp '.$model->id);
+        $mpdf->SetCreator('pkkjc webApp');
+        $mpdf->SetKeywords('My Keywords, More Keywords');
+       
+        $mpdf->SetHTMLHeader('<div style="color:red;">ศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์</div>');
+        $mpdf->SetWatermarkText('http://pkkjc.coj.go.th');
+        $mpdf->showWatermarkText = true;
+        $mpdf->watermark_font = 'thsarabun';
+        // $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
+        // $mpdf->AddPage();
+        // $html .= '<b>Hello world! ทดส่อบ</b>';
+        // $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
+        $mpdf->Output('filename.pdf');
             
         }else{
             Yii::$app->session->setFlash('warning', 'ไม่พบ File... '.$completePath);

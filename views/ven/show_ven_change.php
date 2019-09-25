@@ -88,9 +88,10 @@ use yii\helpers\Url;
                     <td class="text-center">
                         <?php                            
                         // if(!Yii::$app->user->isGuest && empty($model->file) && Yii::$app->user->identity->role == 9){
-                            // if($model->file){
+                            if($model->file){
                                 echo '<a href="'.Url::to(['ven/ven_file_view','id' => $model->id]).'"  target="_blank" data-id='.$model->id.'>ไฟล์เอกสาร</a>' ;
-                            // }else{
+                            }
+                            // else{
                                 echo ' <button class="btn btn-success btn-md act-file-up" data-id='.$model->id.'>แนบไฟล์</button>' ;
                             // }                        
                         // }
