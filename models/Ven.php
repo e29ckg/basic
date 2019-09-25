@@ -391,7 +391,12 @@ class Ven extends \yii\db\ActiveRecord
     }
 
     public function getVen_all(){
-        $models = Ven::find()->where(['status' => 1])->orderBy(['ven_date' => SORT_ASC ])->all();
+        $dt = date("Y-m-d");
+        $models = Ven::find()
+            ->where(['status' => 1])
+            ->andWhere("ven_date >= '$dt'")
+            ->orderBy(['ven_date' => SORT_ASC ])
+            ->all();
         return ArrayHelper::map($models,'id',function($model){
             return Ven::DateThai_full($model->ven_date).' ' .$model->getProfileName().'('.$model->id.')'.VenCom::getVen_time()[$model->ven_time].VenChange::getVen_time()[$model->ven_time] ;
         });        

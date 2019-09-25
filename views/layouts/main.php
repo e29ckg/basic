@@ -36,7 +36,7 @@ $profileActive = Profile::getProfileActive();
   <?php $this->head() ?>
   
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini ">
 <?php $this->beginBody() ?>
 
 <!-- Site wrapper -->
@@ -155,7 +155,7 @@ $profileActive = Profile::getProfileActive();
   <!-- =============================================== -->
 
   <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+  <div class="content-wrapper ">
     <!-- Content Header (Page header) -->
     <section class="content-header">
               
@@ -185,7 +185,7 @@ $profileActive = Profile::getProfileActive();
     </section>
 
     <!-- Main content -->
-    <section class="content">
+    <section class="content animsition">
       
      
         <?= $content ?>
@@ -223,6 +223,11 @@ $profileActive = Profile::getProfileActive();
     $('.sidebar-menu').tree()
   })
 </script>
+<script>
+  $(document).ready(function() {
+    $('.animsition').animsition();
+  });
+  </script>
 <?= Alert::widget() ?>
 <?php
         Modal::begin([
