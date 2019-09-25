@@ -318,27 +318,27 @@ class CletterController extends Controller
             //             $message = Profile::getProfileNameById(Yii::$app->user->identity->id).' เปิดอ่าน '.$model->name.' '.date("Y-m-d H:i:s");
             //             Line::notify_message($token,$message);                        
             //         }                        
-            //     return Yii::$app->response->sendFile($completePath, $model->file, ['inline'=>true]);                
+                return Yii::$app->response->sendFile($completePath, $model->file, ['inline'=>true]);                
             // }
-        $stylesheet = file_get_contents(Url::to('@webroot/css/pdf.css'));
+        // $stylesheet = file_get_contents(Url::to('@webroot/css/pdf.css'));
 
-        $mpdf = new \Mpdf\Mpdf();
-        $mpdf->WriteHTML($stylesheet,\Mpdf\HTMLParserMode::HEADER_CSS);
-        // // $mpdf->SetImportUse();
-        $mpdf->SetDocTemplate(Url::to('@webroot/uploads/cletter/'.$model->file),true);
-        $mpdf->SetTitle('webApp '.$model->id);
-        $mpdf->SetCreator('pkkjc webApp');
-        $mpdf->SetKeywords('My Keywords, More Keywords');
+        // $mpdf = new \Mpdf\Mpdf();
+        // $mpdf->WriteHTML($stylesheet,\Mpdf\HTMLParserMode::HEADER_CSS);
+        // // // $mpdf->SetImportUse();
+        // $mpdf->SetDocTemplate(Url::to('@webroot/uploads/cletter/'.$model->file),true);
+        // $mpdf->SetTitle('webApp '.$model->id);
+        // $mpdf->SetCreator('pkkjc webApp');
+        // $mpdf->SetKeywords('My Keywords, More Keywords');
        
-        $mpdf->SetHTMLHeader('<div style="color:red;">ศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์</div>');
-        $mpdf->SetWatermarkText('http://pkkjc.coj.go.th');
-        $mpdf->showWatermarkText = true;
-        $mpdf->watermark_font = 'thsarabun';
+        // // $mpdf->SetHTMLHeader('<div style="color:red;">ศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์</div>');
+        // // $mpdf->SetWatermarkText('http://pkkjc.coj.go.th');
+        // // $mpdf->showWatermarkText = true;
+        // // $mpdf->watermark_font = 'thsarabun';
+        // // $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
+        // // $mpdf->AddPage();
+        // $html = '<b>Hello world! ทดส่อบ</b>';
         // $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
-        // $mpdf->AddPage();
-        // $html .= '<b>Hello world! ทดส่อบ</b>';
-        // $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
-        $mpdf->Output('filename.pdf');
+        // $mpdf->Output();
             
         }else{
             Yii::$app->session->setFlash('warning', 'ไม่พบ File... '.$completePath);
