@@ -29,7 +29,7 @@ class AppAsset extends AssetBundle
         'adminlte2/bower_components/PACE/themes/green/pace-theme-minimal.css',         
         'adminlte2/bower_components/bootstrap/dist/css/bootstrap.min.css',
         'adminlte2/bower_components/toastr/toastr.min.css',
-        'adminlte2/plugins/animisition/css/animsition.min.css',
+        // 'adminlte2/plugins/animisition/css/animsition.min.css',
         'css/site.css?v=1.16',     
     ];
     public $js = [
@@ -43,7 +43,7 @@ class AppAsset extends AssetBundle
         'adminlte2/bower_components/PACE/pace.min.js',
         'adminlte2/bower_components/toastr/toastr.min.js',
         'adminlte2/bower_components/moment/moment.js',
-        'adminlte2/plugins/animisition/js/animsition.min.js',
+        // 'adminlte2/plugins/animisition/js/animsition.min.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
