@@ -225,7 +225,7 @@ class CletterController extends Controller
                 }  
 
                 if($fileName && is_file($dir.$fileName)){
-                    unlink($dir.$fileName);// ลบ รูปเดิม;                    
+                    unlink($dir.$fileName);// ลบ รูปเดิม;                   
                     
                 }
 
