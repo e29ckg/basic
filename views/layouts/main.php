@@ -185,7 +185,7 @@ $profileActive = Profile::getProfileActive();
     </section>
 
     <!-- Main content -->
-    <section class="content ">
+    <section class="content">
       
      
         <?= $content ?>

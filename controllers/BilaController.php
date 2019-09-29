@@ -639,6 +639,39 @@ class BilaController extends Controller
         return $this->redirect(['sbn_index']);
     }
 
+    public function actionGovernor_create()	
+    {	
+        $model = new Bila();	
+        //Add This For Ajax Email Exist Validation 	
+        if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){	
+            Yii::$app->response->format = Response::FORMAT_JSON;	
+            return ActiveForm::validate($model);	
+        } 	
+     	
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {            	
+            $model->user_id = $_POST['Bila']['user_id'];	
+            $model->date_begin = $_POST['Bila']['date_begin'];	
+            $model->date_end = $_POST['Bila']['date_end'];	
+            $model->date_total = $_POST['Bila']['date_total'];	
+            $model->cat = 'ไปราชการ';	
+            $model->date_create = date("Y-m-d H:i:s");	
+            if($model->save()){	
+                Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');	
+                return $this->redirect(['admin']);	
+            }   	
+        }	
+        	
+        if(Yii::$app->request->isAjax){	
+            return $this->renderAjax('_form_governor',[	
+                    'model' => $model,                    	
+            ]);	
+        }else{	
+            return $this->render('_form_governor',[	
+                'model' => $model,                    	
+            ]); 	
+        }	
+    }
+
     public function actionCal()
     {
         $models = Bila::find()->orderBy([
