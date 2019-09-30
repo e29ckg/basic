@@ -902,7 +902,7 @@ class VenController extends Controller
         $event = [];
         foreach ($models as $model):
             if($model->status == 2){
-                $backgroundColor = 'red';  
+                $backgroundColor = 'orange';  
             }elseif($model->ven_time == '16:30:55'){
                 $backgroundColor = 'blue';
             }elseif($model->ven_time == '08:30:01'){
@@ -1407,9 +1407,13 @@ class VenController extends Controller
 
         $model = VenChange::findOne($id);
 
-        return $this->render('show_ven_change',[
-            'model' => $model
-        ]);
+        if($model){
+            return $this->render('show_ven_change',[
+                'model' => $model
+            ]);
+        }
+
+        return 'ไม่พบข้อมูล';
     }
 
     
