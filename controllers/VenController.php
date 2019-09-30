@@ -42,7 +42,7 @@ class VenController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['change_user_index','index','change_del_user','change_del','Admin_index','change_index','com_index'],
+                'only' => ['change_user_index','index','change_del_user','change_del','admin_index','change_index','com_index','show_ven_change','show_ven'],
                 'rules' => [
                     [
                         // 'actions' => ['index'],
