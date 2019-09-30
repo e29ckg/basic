@@ -60,11 +60,11 @@ class CletterController extends Controller
     public function actionIndex()
     {
         $model = CLetter::find()
-            // ->orderBy([
+            ->orderBy([
             // // 'created_at'=>SORT_DESC,
-            // 'id' => SORT_DESC,
-            // ])
-            // ->limit(100)
+            'id' => SORT_DESC,
+            ])
+            ->limit(100)
             ->all();
         
         return $this->render('index',[
