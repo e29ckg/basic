@@ -433,6 +433,27 @@ class BilaController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionDelete_admin($id)
+    {
+        $model = $this->findModel($id);
+        $message = $model->getProfileName().' ลบ ใบ'.$model->cat."\n".'เลขที่ ' .$model->id;
+        
+        $dir = Url::to('@webroot'.$this->filePath.$model->user_id.'/'.$model->id);
+
+        if(is_file($dir.'/'.$model->id.'.png')){
+            unlink($dir.'/'.$model->id.'.png');// ลบ รูปเดิม;                  
+            rmdir($dir);
+        }
+        if($model->delete()){
+            // $modelLine = Line::findOne(['name' => 'bila_admin']);
+            if($token = Line::getToken('bila_admin')){                
+                $res = Line::notify_message($token,$message);  
+                $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+            } 
+        }
+       
+        return $this->redirect(['index']);
+    }
     
     /**
      * Finds the Bila model based on its primary key value.
@@ -677,21 +698,25 @@ class BilaController extends Controller
         $models = Bila::find()->orderBy([
             // 'date_create'=>SORT_DESC,
             'id' => SORT_DESC,
+            // 'cat' => SORT_ASC,
             ])->limit(100)->all();  
         $event = [];
         foreach ($models as $model):
             if($model->cat == 'ลาพักผ่อน'){
                 $backgroundColor = 'blue';
+                $time = 'T12:32:00';
             }elseif($model->cat == 'ไปราชการ'){
+                $time = 'T12:30:00';
                 $backgroundColor = 'orange';
             }else{
                 $backgroundColor = 'red';
+                $time = 'T12:31:00';
             }
             
             $even = [
                 'id' => $model->id,
                 'title' => $model->getProfileNameCal().' '.$model->cat.'('.$model->date_total.')',
-                'start' => $model->date_begin,
+                'start' => $model->date_begin.$time,
                 'end' => $model->date_end.'T12:30:00',
                 'backgroundColor' => $backgroundColor,
                 'borderColor' => $backgroundColor,
