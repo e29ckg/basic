@@ -18,8 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
               <h3 class="profile-username text-center"><?= $model->profile->fname.$model->profile->name.' '.$model->profile->sname;?> </h3>
 
-              <p class="text-muted text-center"><?=$model->profile->dep?></p>
-
+              <p class="text-muted text-center"><?=$model->profile->dep?> - <?=$model->getProfileWorkgroup()?></p>
               <ul class="list-group list-group-unbordered">
                 <li class="list-group-item">
                   <b>Id Card</b> <a class="pull-right"><?=$model->profile->id_card?></a>
@@ -62,13 +61,13 @@ $this->params['breadcrumbs'][] = $this->title;
         <strong><i class="fa fa-map-marker margin-r-5"></i> Location</strong>
         <p class="text-muted"><?=$model->profile->address?></p>
         <hr>
-        <strong><i class="fa fa-pencil margin-r-5"></i> Skills</strong>
+        <strong><i class="fa fa-pencil margin-r-5"></i> WorkGroup</strong>
         <p>
-          <!-- <span class="label label-danger">UI Design</span>
+          <span class="label label-danger">UI Design</span>
           <span class="label label-success">Coding</span>
           <span class="label label-info">Javascript</span>
           <span class="label label-warning">PHP</span>
-          <span class="label label-primary">Node.js</span> -->
+          <span class="label label-primary">Node.js</span>
         </p>
         <hr>
         <strong><i class="fa fa-file-text-o margin-r-5"></i> Notes</strong>

@@ -230,7 +230,10 @@ class User extends ActiveRecord implements IdentityInterface
         $model=$this->profile;
         return !empty($model->dep) ? $model->dep : '-';
     }
-
+    public function getProfileWorkgroup(){
+        $model=$this->profile;
+        return !empty($model->workgroup) ? $model->workgroup : '-';
+    }
     public function getProfilePhone(){
         $model=$this->profile;
         return $model ? $model->phone : '-';

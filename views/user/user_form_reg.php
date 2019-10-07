@@ -149,16 +149,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					</div>
 					<div class ="col-md-4">
 						<div class="form-group">			
-							<?php
-							// echo $form->field($model, 'dep', [
-							// 	'inputOptions' => [
-							// 		'placeholder' => $model->getAttributeLabel('dep'),
-							// 		'class' => 'form-control',
-							// 		// 'type' => 'password'
-							// 	],
-							// 	// 'template' => '{label}{input}{error}{hint}'
-							// ]);
-							?>	
+								
 							<?php 
 								echo $form->field($model, 'dep')->widget(Select2::classname(), [
 									'data' => User::getDepList(),
@@ -166,6 +157,24 @@ $this->params['breadcrumbs'][] = $this->title;
 									'options' => [
 										'class' => 'form-control',
 										'placeholder' => ' เลือก ตำแหน่ง'
+									],
+									'pluginOptions' => [
+										'allowClear' => true
+									],
+								]);
+                    		?>				
+						</div>
+					</div>
+					<div class ="col-md-4">
+						<div class="form-group">			
+								
+							<?php 
+								echo $form->field($model, 'workgroup')->widget(Select2::classname(), [
+									'data' => $model->getGroupList(),
+									'language' => 'th',
+									'options' => [
+										'class' => 'form-control',
+										'placeholder' => ' เลือก กลุ่มงาน'
 									],
 									'pluginOptions' => [
 										'allowClear' => true

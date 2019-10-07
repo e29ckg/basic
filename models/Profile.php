@@ -113,11 +113,14 @@ class Profile extends \yii\db\ActiveRecord
         // return Yii::getAlias('@web').(!empty($model->img)  ? '/uploads/user/'.$model->img : '/img/nopic.png');
     }
 
-    public function getProfileNameById($id){        
-        
+    public function getProfileNameById($id){ 
         $model = Profile::findOne($id);
-        
         return !empty($model->id)  ? $model->fname.$model->name .' ' .$model->sname : '';
+    }
+
+    public function getGroupList(){
+        $model = Group::find()->orderBy(['name'=>SORT_ASC])->all();
+        return ArrayHelper::map($model,'name','name');
     }
         
 }

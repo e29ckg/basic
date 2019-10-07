@@ -145,6 +145,7 @@ class UserController extends Controller{
             $modelP->birthday = Yii::$app->request->post('RegForm')['birthday'];
             $modelP->id_card = Yii::$app->request->post('RegForm')['id_card'];
             $modelP->dep  = Yii::$app->request->post('RegForm')['dep'];
+            $modelP->workgroup  = Yii::$app->request->post('RegForm')['workgroup'];
             $modelP->address = Yii::$app->request->post('RegForm')['address'];
             $modelP->phone = Yii::$app->request->post('RegForm')['phone'];
             if($model->save() && $modelP->save() ){  
@@ -237,6 +238,7 @@ class UserController extends Controller{
             $model->profile->sname = $_POST['RegFormUpdate']['sname'];
             $model->profile->id_card = $_POST['RegFormUpdate']['id_card'];
             $model->profile->dep = $_POST['RegFormUpdate']['dep'];
+            $model->profile->workgroup = $_POST['RegFormUpdate']['workgroup'];
             $model->profile->address = $_POST['RegFormUpdate']['address'];
             $model->profile->phone = $_POST['RegFormUpdate']['phone'];
             $model->profile->birthday = Yii::$app->request->post('RegFormUpdate')['birthday'];
@@ -259,6 +261,7 @@ class UserController extends Controller{
         $modelReg->sname = $model->profile->sname;
         $modelReg->id_card = $model->profile->id_card;
         $modelReg->dep = $model->profile->dep;
+        $modelReg->workgroup = $model->profile->workgroup;
         $modelReg->address = $model->profile->address;
         $modelReg->phone = $model->profile->phone;
         $modelReg->birthday  = $model->profile->birthday ;
@@ -509,6 +512,7 @@ class UserController extends Controller{
             $model->profile->sname = $_POST['RegFormUpdate']['sname'];
             $model->profile->id_card = $_POST['RegFormUpdate']['id_card'];
             $model->profile->dep = $_POST['RegFormUpdate']['dep'];
+            $model->profile->workgroup = $_POST['RegFormUpdate']['workgroup'];
             $model->profile->address = $_POST['RegFormUpdate']['address'];
             $model->profile->phone = $_POST['RegFormUpdate']['phone'];
             $model->profile->birthday = Yii::$app->request->post('RegFormUpdate')['birthday'];
@@ -532,6 +536,7 @@ class UserController extends Controller{
         $modelReg->sname = $model->profile->sname;
         $modelReg->id_card = $model->profile->id_card;
         $modelReg->dep = $model->profile->dep;
+        $modelReg->workgroup = $model->profile->workgroup;
         $modelReg->address = $model->profile->address;
         $modelReg->phone = $model->profile->phone;
         $modelReg->birthday  = $model->profile->birthday ;

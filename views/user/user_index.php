@@ -132,7 +132,8 @@ $this->params['breadcrumbs'][] = $this->title;
 										<td >
 											<?= $model->getProfileName()?> 												
 											<br><?=$model->getProfileDep()?>
-											<br><span class="label label-info"><?= $model->getRoleName($model->role)?></span>
+											<br><?=$model->getProfileWorkgroup()?>
+											<br><span class="label label-info act-update-role" data-id=<?=$model->id?>><?= $model->getRoleName($model->role)?></span>
 											<?= $model->status == 0 ? '<span class="label label-danger">ระงับ</span>':'<span class="label label-primary">อนุญาต</span>';?>
 											</td>
 										<td>

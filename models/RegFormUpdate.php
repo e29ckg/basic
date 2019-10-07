@@ -36,6 +36,7 @@ class RegFormUpdate extends ActiveRecord implements IdentityInterface
     public $birthday;
     public $id_card;
     public $dep;
+    public $workgroup;
     public $address;
     public $phone;
     public $img;
@@ -274,6 +275,11 @@ class RegFormUpdate extends ActiveRecord implements IdentityInterface
 
     public function getDepList(){
         $model = Dep::find()->orderBy('name')->all();
+        return ArrayHelper::map($model,'name','name');
+    }
+
+    public function getGroupList(){
+        $model = Group::find()->orderBy(['name'=>SORT_ASC])->all();
         return ArrayHelper::map($model,'name','name');
     }
 }

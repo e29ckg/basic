@@ -38,8 +38,7 @@ function DateThai_full($strDate)
 
               <h3 class="profile-username text-center"><?= $model->fname.$model->name.' '.$model->sname;?> </h3>
 
-              <p class="text-muted text-center"><?=$model->dep?></p>
-
+              <p class="text-muted text-center"><?=$model->dep?> - <?=$model->workgroup?></p>
               <ul class="list-group list-group-unbordered">
                 <li class="list-group-item">
                   <b>Id Card</b> <a class="pull-right"><?=$model->id_card?></a>
