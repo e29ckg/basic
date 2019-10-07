@@ -135,6 +135,7 @@ $menu_admin = [
                 // ['label' => 'จัดการสมาชิก2', 'icon' => ' fa fa-user-o', 'url' => ['user/user_index2']],
                 // ['label' => 'เพิ่มสมาชิก', 'icon' => ' fa fa-user-o', 'url' => ['user/reg']],
                 ['label' => 'จัดการตำแหน่ง', 'icon' => ' fa fa-user-o', 'url' => ['user/dep']],
+                ['label' => 'จัดการกลุ่มงาน', 'icon' => ' fa fa-user-o', 'url' => ['user/group']],
                 ['label' => 'จัดการคำนำหน้าชื่อ', 'icon' => ' fa fa-user-o', 'url' => ['user/fname']],
             ],
         ],

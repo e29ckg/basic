@@ -6,6 +6,7 @@ use app\models\User;
 use app\models\RegForm;
 use app\models\RegFormUpdate;
 use app\models\Dep;
+use app\models\Group;
 use app\models\Fname;
 use app\models\Profile;
 use app\models\Line;
@@ -690,20 +691,86 @@ class UserController extends Controller{
         return $this->redirect(['fname']);
     }
 
-    public function actionU()
-    {
-        $models = User::find()->all();
-        
-        foreach ($models as $model):
-            if($model->role == 0)
-
-                $model->role = 1 ;
-                
-               $model->save() ;        
-               Yii::$app->session->setFlash('success', 'อัพข้อมูลเรียบร้อย');
-        endforeach;                
-
-        return $this->redirect(['user_index']);
+    public function actionGroup(){        
+        $models = Group::find()->orderBy('name')->all();
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('Group_index',[
+                    'models' => $models,                    
+            ]);
+        }        
+        return $this->render('Group_index',[
+               'models' => $models,                    
+        ]);
     }
+
+    public function actionGroup_create(){        
+        $model = new Group();
+        // if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){
+        //     Yii::$app->response->format = Response::FORMAT_JSON;
+        //     return ActiveForm::validate($model);
+        //   }      
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+
+            if($model->save()){                
+                Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
+                return $this->redirect(['group']);
+            }  
+        }
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('group_form',[
+                    'model' => $model,                    
+            ]);
+        }        
+        return $this->render('group_form',[
+               'model' => $model,                    
+        ]);
+    }
+
+    public function actionGroup_update($id){        
+        $model = Group::findOne($id);
+        if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+          }      
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if($model->save()){                
+                Yii::$app->session->setFlash('success', 'ปรับปรุงข้อมูลเรียบร้อย');
+                return $this->redirect(['group']);
+            }  
+        }
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('group_form',[
+                    'model' => $model,                    
+            ]);
+        }        
+        return $this->render('group_form',[
+               'model' => $model,                    
+        ]);
+    }
+
+    public function actionGroup_delete($id){
+        $model = Group::findOne($id);
+        if($model->delete()){
+            Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');
+            return $this->redirect(['group']);
+        }        
+        return $this->redirect(['group']);
+    }
+
+    // public function actionU()
+    // {
+    //     $models = User::find()->all();
+        
+    //     foreach ($models as $model):
+    //         if($model->role == 0)
+
+    //             $model->role = 1 ;
+                
+    //            $model->save() ;        
+    //            Yii::$app->session->setFlash('success', 'อัพข้อมูลเรียบร้อย');
+    //     endforeach;                
+
+    //     return $this->redirect(['user_index']);
+    // }
     
 }
