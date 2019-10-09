@@ -237,13 +237,14 @@ class CletterController extends Controller
                 }                
                                             
             }
+
             if($_POST['CLetter']['line_alert'] == null){
                 $model->line_alert = null;
             }else{
                 $model->line_alert = date("Y-m-d",strtotime($_POST['CLetter']['line_alert']));
             }                 
 
-
+            $model->file = $fileName;
             if($model->save()){
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
             }; 
