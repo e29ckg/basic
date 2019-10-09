@@ -88,19 +88,26 @@ $menu_admin = [
         ['label' => 'Menu', 'options' => ['class' => 'header']],
         ['label' => 'หน้าหลัก', 'icon' => 'home', 'url' => ['site/index'],
         // 'template' => '<a href="{url}" title="{label}"><i class="fa fa-lg fa-fw fa-wrench"></i> <span class="menu-item-parent">{label}</span></a>',
-    ],
+        ],
         ['label' => 'หนังสือเวียน', 'icon' => 'bullhorn', 'url' => '#',
           'items' => [
             ['label' => 'หนังสือเวียน', 'icon' => 'bullhorn', 'url' => ['cletter/index']],
             ['label' => 'จัดการ หนังสือเวียน', 'icon' => 'bullhorn', 'url' => ['cletter/index_admin']],
             ['label' => 'ประเภทหนังสือ', 'icon' => 'bullhorn', 'url' => ['cletter/caid_index']],
         ]], 
+        ['label' => 'คำสั่งศาล', 'icon' => 'bullhorn', 'url' => '#',
+          'items' => [
+            ['label' => 'คำสั่งศาลรวม', 'icon' => 'bullhorn', 'url' => ['courtorder/index']],
+            ['label' => 'คำสั่งศาล', 'icon' => 'bullhorn', 'url' => ['courtorder/bigboss']],
+            ['label' => 'คำสั่งสำนักงาน', 'icon' => 'bullhorn', 'url' => ['courtorder/boss']],
+        ]],
         ['label' => 'WebLink', 'icon' => 'link', 'url' => '#',
             'items' => [
                 ['label' => 'WebLink', 'icon' => 'link', 'url' => ['web_link/index']],
                 ['label' => 'จัดการ WebLink', 'icon' => 'link', 'url' => ['web_link/index_admin']],
             ]
         ], 
+
         ['label' => 'โปรแกรมใบลา', 'icon' => 'briefcase', 'url' => '#',
             'items' => [
                 ['label' => 'เขียนใบลา', 'icon' => 'briefcase', 'url' => ['bila/index']],

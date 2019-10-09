@@ -42,6 +42,38 @@ class Running extends \yii\db\ActiveRecord
         $model_run->save();
         return $model_run->r;
     }
+
+    public function getRunNumberOrBB()
+    {
+        $year = date('Y') + 543;
+        $model_run = Running::findOne(['name' => 'คำสั่งศาล','y' => $year]);        
+        if(empty($model_run)){
+            $model_run = new Running();
+            $model_run->name = 'คำสั่งศาล';
+            $model_run->y = $year;
+            $model_run->r = '0';
+            $model_run->save();
+        } 
+        $model_run->r = $model_run->r + 1;
+        $model_run->save();
+        return $model_run->r;
+    }
+
+    public function getRunNumberOrB()
+    {
+        $year = date('Y') + 543;
+        $model_run = Running::findOne(['name' => 'คำสั่งสำนักงาน','y' => $year]);        
+        if(empty($model_run)){
+            $model_run = new Running();
+            $model_run->name = 'คำสั่งสำนักงาน';
+            $model_run->y = $year;
+            $model_run->r = '0';
+            $model_run->save();
+        } 
+        $model_run->r = $model_run->r + 1;
+        $model_run->save();
+        return $model_run->r;
+    }
     
 
 }
