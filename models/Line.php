@@ -131,8 +131,11 @@ class Line extends \yii\db\ActiveRecord
             $model = new Line();
 
         
-            if ($res == false)
+            if ($res == false){
+                Yii::$app->session->setFlash('info', 'ส่งไม่ได้');
+                return false;
                 throw new Exception(curl_error($ch), curl_errno($ch));
+            }
         
             $json = json_decode($res);
 

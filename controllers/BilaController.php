@@ -695,7 +695,7 @@ class BilaController extends Controller
 
     public function actionCal()
     {
-        $models = Bila::find()->orderBy([
+        $models = Bila::find()->where(['status' => 1])->orderBy([
             // 'date_create'=>SORT_DESC,
             'id' => SORT_DESC,
             // 'cat' => SORT_ASC,

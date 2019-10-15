@@ -19,6 +19,7 @@ use yii\widgets\ActiveForm;
 use yii\web\Session;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\web\NotFoundHttpException;
 use yii\base\Model;
 
 class UserController extends Controller{
@@ -342,7 +343,7 @@ class UserController extends Controller{
 
                     
             if ($res == false)
-                throw new Exception(curl_error($ch), curl_errno($ch));
+                throw new NotFoundHttpException(curl_error($ch), curl_errno($ch));
         
             $json = json_decode($res);
 
@@ -360,8 +361,8 @@ class UserController extends Controller{
             
         
            echo var_dump($json);
-        } catch(Exception $e) {
-            throw new Exception($e->getMessage());
+        } catch(NotFoundHttpException $e) {
+            throw new NotFoundHttpException($e->getMessage());
             //var_dump($e);
         }
         // return $this->render('callback', [
