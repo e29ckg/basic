@@ -33,21 +33,16 @@ $this->params['breadcrumbs'][] = $this->title;
 					<?php foreach ($models as $model): ?>
 					<tr>
 						<td><?=$model->id?></td>
-						<td><?= $model->file ? Html::a($model->name,['cletter/show','id' => $model->id],['target' => '_blank']) : $model->name;?></td>
+						<td><?= $model->file ? Html::a($model->name,['courtorder/showbb','id' => $model->id],['target' => '_blank']) : $model->name;?></td>
 						<td><?=$model->name?> 
 							<br><?=$model->create_at;?>							
 						</td>						
 						<td>
-							<?= Html::a('<i class="fa fa-paper-plane-o"></i> Line',['cletter/line_alert','id' => $model->id],
-									[
-										'class' => 'btn btn-success btn-xs act-update',
-										'data-confirm' => 'Are you sure to Line this item?'
-									]);
-							?>
+							
 							<a href= "#" class="btn btn-warning act-update btn-xs" data-id=<?=$model->id?>><i class="fa fa-pencil-square-o"></i> แก้ไข</a>
 							<!-- <a href= "#" class="btn btn-info act-view btn-xs" data-id=<?=$model->id?>><i class="fa fa-eye"></i> ดู</a> -->
 							
-								<?= Html::a('<i class="fa fa-remove"></i> ลบ',['cletter/delete','id' => $model->id],
+								<?= Html::a('<i class="fa fa-remove"></i> ลบ',['courtorder/delete','id' => $model->id],
 									[
 										'name'=>'Yii::$app->request->csrfParam',
 										'value'=>'Yii::$app->request->csrfToken',
@@ -80,7 +75,7 @@ $(document).ready(function() {
 
 	function init_click_handlers(){        	
 		
-		var url_update = "update";
+		var url_update = "updatebb";
     	$(".act-update").click(function(e) {            
 			var fID = $(this).data("id");
 			// alert(fID);
@@ -92,17 +87,7 @@ $(document).ready(function() {
         	});
     	});
 
-		var url_line = "line_alert";		
-    	$(".act-line").click(function(e) {			
-                var fID = $(this).data("id");				
-                $.get(url_line,{id: fID},function (data){
-                        // $("#activity-modal").find(".modal-body").html(data);
-                        // $(".modal-body").html(data);
-                        // $(".modal-title").html("ข้อมูล");
-                        // $("#activity-modal").modal("show");
-                    }
-                );
-            }); 
+		
 
     	var url_view = "view";		
     	$(".act-view").click(function(e) {			
@@ -122,7 +107,7 @@ $(document).ready(function() {
     init_click_handlers(); //first run
 			
 	
-		var url_create = "create";
+		var url_create = "createbb";
     	$( "#act-create" ).click(function() {
         	$.get(url_create,function (data){
                 $("#activity-modal").find(".modal-body").html(data);

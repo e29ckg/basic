@@ -563,9 +563,10 @@ class LineController extends Controller
                     $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') : Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
                 }
             endforeach; 
+            Yii::$app->session->setFlash('success', 'เรียบร้อย'.$sms_c );   
         }
    
-        Yii::$app->session->setFlash('success', 'เรียบร้อย'.$sms_c );   
+        
 
         return $this->render('test',['id' => $sms]);
     }
