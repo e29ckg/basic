@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						<div class="box-header with-border">
 							<h3 class="box-title">คำสั่งศาลฯ</h3>
 							<div class="box-tools pull-right">
-								<button id="act-create" class="btn btn-danger btn-md" alt="act-create"><i class="fa fa-pencil-square-o "></i> เพิ่ม</button>  
+								<button id="act-create" class="btn btn-danger btn-md" alt="act-create"><i class="fa fa-pencil-square-o "></i> เพิ่มคำสั่งศาลฯ</button>  
 							</div>
 						</div>	
 						<div class="box-body">
@@ -59,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						<div class="box-header with-border">
 							<h3 class="box-title">คำสั่งสำนักงาน</h3>
 							<div class="box-tools pull-right">
-								<button id="act-create2" class="btn btn-danger btn-md" alt="act-create"><i class="fa fa-pencil-square-o "></i> เพิ่ม</button>  
+								<button id="act-create2" class="btn btn-info btn-md" alt="act-create"><i class="fa fa-pencil-square-o "></i> เพิ่มคำสั่งสำนักงาน</button>  
 							</div>	
 						</div>	
 						<div class="box-body">

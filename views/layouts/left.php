@@ -95,12 +95,7 @@ $menu_admin = [
             ['label' => 'จัดการ หนังสือเวียน', 'icon' => 'bullhorn', 'url' => ['cletter/index_admin']],
             ['label' => 'ประเภทหนังสือ', 'icon' => 'bullhorn', 'url' => ['cletter/caid_index']],
         ]], 
-        ['label' => 'คำสั่งศาล', 'icon' => 'bullhorn', 'url' => '#',
-          'items' => [
-            ['label' => 'คำสั่งศาลรวม', 'icon' => 'bullhorn', 'url' => ['courtorder/index']],
-            ['label' => 'คำสั่งศาล', 'icon' => 'bullhorn', 'url' => ['courtorder/bigboss']],
-            ['label' => 'คำสั่งสำนักงาน', 'icon' => 'bullhorn', 'url' => ['courtorder/boss']],
-        ]],
+        ['label' => 'คำสั่งศาลฯ/สำนักงาน', 'icon' => 'bullhorn', 'url' => ['courtorder/index']],
         ['label' => 'WebLink', 'icon' => 'link', 'url' => '#',
             'items' => [
                 ['label' => 'WebLink', 'icon' => 'link', 'url' => ['web_link/index']],

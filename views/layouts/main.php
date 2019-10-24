@@ -223,11 +223,7 @@ $profileActive = Profile::getProfileActive();
     $('.sidebar-menu').tree()
   })
 </script>
-<script>
-  $(document).ready(function() {
-    $('.animsition').animsition();
-  });
-  </script>
+
 <?= Alert::widget() ?>
 <?php
         Modal::begin([
