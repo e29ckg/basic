@@ -764,20 +764,22 @@ class BilaController extends Controller
         ]);
 
         return $pdf->render();
-        
-        // $stylesheet = file_get_contents(Url::to('@webroot/css/pdf.css'));
-        // $mpdf = new \Mpdf\Mpdf();
-        // $mpdf->WriteHTML($stylesheet,\Mpdf\HTMLParserMode::HEADER_CSS);
-        // // $mpdf->SetImportUse();
-        // $mpdf->SetDocTemplate(Url::to('@webroot/pdfTemplate/33.pdf'),true);
+    }
 
-        // $html = '<div>Hello world! ทดส่อบ</div>';
-        
-        // // $mpdf->AddPage();
-        // $html .= '<b>Hello world! ทดส่อบ</b>';
-        // $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
-        // $mpdf->Output();
-
+    public function actionG_report()
+    {
+        $m = '2019-09';
+        $models = Bila::find()
+        ->where(['status' => 1])
+        ->andWhere(['LIKE','date_begin',$m])
+        ->orderBy([
+            // 'date_create'=>SORT_DESC,
+            // 'id' => SORT_DESC,
+            'user_id' => SORT_ASC,
+            ])->limit(100)->all(); 
+        return $this->render('g_report',[
+            'models' => $models,
+        ]);
     }
 
     // public function actionUp_status()
