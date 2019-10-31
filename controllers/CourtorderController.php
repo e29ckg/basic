@@ -418,12 +418,11 @@ class CourtorderController extends Controller
             $modelLog->detail =  'ลบ '.$model->name;
             $modelLog->create_at = date("Y-m-d H:i:s");
             $modelLog->ip = Yii::$app->getRequest()->getUserIP();
-            Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');    
-            // $modelLine = Line::findOne(['name' => 'admin']);        
-                    if($token = Line::getToken('admin')){
-                        $message = Profile::getProfileNameById(Yii::$app->user->identity->id).' ลบ '.$model->name.' '.date("Y-m-d H:i:s");
-                        Line::notify_message($token,$message);                        
-                    }                                
+            Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');  
+            if($token = Line::getToken('admin')){
+                $message = Profile::getProfileNameById(Yii::$app->user->identity->id).' ลบ '.$model->name.' '.date("Y-m-d H:i:s");
+                Line::notify_message($token,$message);                        
+            }                                
         }        
 
         return $this->redirect(['index_admin']);
@@ -438,40 +437,8 @@ class CourtorderController extends Controller
         // Might need to change '@app' for another alias
         $completePath = Url::to('@webroot').$this->filePath.$model->file;
         if(is_file($completePath)){
-            
-            // $modelLog = new Log();
-            // $modelLog->user_id = Yii::$app->user->identity->id;
-            // $modelLog->manager = 'CourtOrderBigboss_Read';
-            // $modelLog->detail =  'เปิดอ่าน '.$model->name;
-            // $modelLog->create_at = date("Y-m-d H:i:s");
-            // $modelLog->ip = Yii::$app->getRequest()->getUserIP();
-            // if($modelLog->save()){
-            //     // $modelLine = Line::findOne(['name' => 'admin']);        
-            //         if($token = Line::getToken('admin')){
-            //             $message = Profile::getProfileNameById(Yii::$app->user->identity->id).' เปิดอ่าน '.$model->name.' '.date("Y-m-d H:i:s");
-            //             Line::notify_message($token,$message);                        
-            //         }                        
+                                   
                 return Yii::$app->response->sendFile($completePath, $model->file, ['inline'=>true]);                
-            // }
-        // $stylesheet = file_get_contents(Url::to('@webroot/css/pdf.css'));
-
-        // $mpdf = new \Mpdf\Mpdf();
-        // $mpdf->WriteHTML($stylesheet,\Mpdf\HTMLParserMode::HEADER_CSS);
-        // // // $mpdf->SetImportUse();
-        // $mpdf->SetDocTemplate(Url::to('@webroot/uploads/CourtOrderBigboss/'.$model->file),true);
-        // $mpdf->SetTitle('webApp '.$model->id);
-        // $mpdf->SetCreator('pkkjc webApp');
-        // $mpdf->SetKeywords('My Keywords, More Keywords');
-       
-        // // $mpdf->SetHTMLHeader('<div style="color:red;">ศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์</div>');
-        // // $mpdf->SetWatermarkText('http://pkkjc.coj.go.th');
-        // // $mpdf->showWatermarkText = true;
-        // // $mpdf->watermark_font = 'thsarabun';
-        // // $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
-        // // $mpdf->AddPage();
-        // $html = '<b>Hello world! ทดส่อบ</b>';
-        // $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
-        // $mpdf->Output();
             
         }else{
             Yii::$app->session->setFlash('warning', 'ไม่พบ File... '.$completePath);
