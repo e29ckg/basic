@@ -70,6 +70,7 @@ $menu_operator = [
                 ['label' => 'ใบเปลี่ยนเวรทั้งหมด', 'icon' => 'fa fa-user-o', 'url' => ['/ven/change_index']],                
             ],
         ],
+        ['label' => 'เสี้อฟ้า', 'icon' => 'id-card-o', 'url' => ['blueshirt/index']],  
         ['label' => 'สร้าง  QrCode', 'icon' => ' fa-qrcode', 'url' => ['qrgen/index']], 
         [
             'label' => 'เบิกของ CartX', 
@@ -121,6 +122,7 @@ $menu_admin = [
                 ['label' => 'คำสั่ง', 'icon' => ' fa fa-user-o', 'url' => ['ven/com_index']],
             ],
         ],
+        ['label' => 'เสี้อฟ้า', 'icon' => 'id-card-o', 'url' => ['blueshirt/index']],
         ['label' => 'สร้าง  QrCode', 'icon' => ' fa-qrcode', 'url' => ['qrgen/index']],  
         [
             'label' => 'เบิกของ CartX', 

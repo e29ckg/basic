@@ -9,6 +9,7 @@ use app\models\CLetter;
 use app\models\Line;
 use app\models\LineFormSend;
 use app\models\LineHome;
+use app\models\Blueshirt;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -542,6 +543,15 @@ class LineController extends Controller
             $res = Line::notify_message($modelLine->token,$sms);  
             $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') : Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
         }
+
+/*------------------------------------แจ้ง เสี้อฟ้า ---------------------------------------------*/
+        $modelBS = Blueshirt::findOne(['line_alert' => $strDate]);
+        $message = 'เวรเสื้อฟ้า '.$modelBS->line_alert."\n";
+        $message .= $modelBS->getProfileName() .'(เวร)'."\n".$modelBS->getProfileName2().'(ตรวจ)';
+        if($token = Line::getToken('blueshirt')){                
+            $res = Line::notify_message($token,$message);  
+            $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+        } 
 
 /*------------------------------------แจ้ง หนังสือเวียน lineGroup ---------------------------------------------*/
 
