@@ -77,6 +77,7 @@ class Legal_cController extends Controller{
             $model->id_card = Yii::$app->request->post('LegalC')['id_card'];
             $model->address = Yii::$app->request->post('LegalC')['address'];
             $model->phone = Yii::$app->request->post('LegalC')['phone'];
+            $model->status = '10';
             $model->created_at = time();
             if($model->save() && $model->save() ){  
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
@@ -151,14 +152,10 @@ class Legal_cController extends Controller{
         if($filename && is_file($dir.$filename)){
             unlink($dir.$filename);// ลบ รูปเดิม;                    
         }
-        if($model->delete() && $model->delete()){
+        if($model->delete()){
             Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');
         }
         return $this->redirect(['index']);
     }
-
-    
-
-    
     
 }

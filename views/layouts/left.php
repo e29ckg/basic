@@ -129,7 +129,7 @@ $menu_admin = [
         ['label' => 'ที่ปรึกษากฎหมาย', 'icon' => 'users', 'url' => '#',
             'items' => [
                 ['label' => 'รายชื่อที่ปรึกษากฎหมาย', 'icon' => 'id-card-o', 'url' => ['legal_c/index']],
-                ['label' => 'ตารางเวรที่ปรึกษา', 'icon' => 'fa fa-user-o', 'url' => ['legal_c/index']],
+                ['label' => 'ตารางเวรที่ปรึกษา', 'icon' => 'fa fa-user-o', 'url' => ['legal_c_ven/index']],
                 
             ],
         ],

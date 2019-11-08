@@ -11,8 +11,8 @@ use kartik\file\FileInput;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'เพิ่มสมาชิก';
-$this->params['breadcrumbs'][] = ['label' => 'จัดการสมาชิก', 'url' => ['user/index']];
+$this->title = 'ที่ปรึกษากฎหมาย';
+$this->params['breadcrumbs'][] = ['label' => 'จัดการที่ปรึกษากฎหมาย', 'url' => ['legal_c/index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 

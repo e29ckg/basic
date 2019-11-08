@@ -10,6 +10,7 @@ use app\models\Line;
 use app\models\LineFormSend;
 use app\models\LineHome;
 use app\models\Blueshirt;
+use app\models\LegalCVen;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -546,12 +547,42 @@ class LineController extends Controller
 
 /*------------------------------------แจ้ง เสี้อฟ้า ---------------------------------------------*/
         $modelBS = Blueshirt::findOne(['line_alert' => $strDate]);
-        $message = 'เวรเสื้อฟ้า '.$modelBS->line_alert."\n";
-        $message .= $modelBS->getProfileName() .'(เวร)'."\n".$modelBS->getProfileName2().'(ตรวจ)';
-        if($token = Line::getToken('blueshirt')){                
-            $res = Line::notify_message($token,$message);  
-            $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
-        } 
+        if($modelBS){
+            $message = 'เวรเสื้อฟ้า '.$modelBS->line_alert."\n";
+            $message .= $modelBS->getProfileName() .'(เวร)'."\n".$modelBS->getProfileName2().'(ตรวจ)';
+            if($token = Line::getToken('blueshirt')){                
+                $res = Line::notify_message($token,$message);  
+                $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+            }
+        }
+/*------------------------------------แจ้ง เวรที่ปรึกษา lineGroup ---------------------------------------------*/
+
+        $Q_model = LegalCVen::find()->where(['ven_date' => $strDate]);
+        if($Q_model->count() >= 1){
+            $models = $Q_model->all();            
+
+            $modelLine = Line::findOne(['name' => 'LineGroup']);     //แจ้ง lineGroup 
+            $modelLineT = Line::findOne(['name' => 'ที่ปรึกษากฎหมาย']);     //แจ้ง lineGroup 
+
+            $sms_c = Bila::DateThai_full($strDate);
+            $sms_c .= "\n";
+            foreach ($models as $model):        
+                $sms_c .= $model->getName() ;
+                $sms_c .= "\n";
+                $sms_c .= '(เวรที่ปรึกษากฎหมาย)';
+                $sms_c .= "\n";                
+            endforeach; 
+            if(isset($modelLine->token)){                
+                $res = Line::notify_message($modelLine->token,$sms_c);  
+                $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') : Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+            }
+            if(isset($modelLineT->token)){                
+                $res = Line::notify_message($modelLineT->token,$sms_c);  
+                $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') : Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+            }
+            Yii::$app->session->setFlash('success', 'เรียบร้อย'.$sms_c );   
+        }
+                
 
 /*------------------------------------แจ้ง หนังสือเวียน lineGroup ---------------------------------------------*/
 
@@ -575,8 +606,7 @@ class LineController extends Controller
             endforeach; 
             Yii::$app->session->setFlash('success', 'เรียบร้อย'.$sms_c );   
         }
-   
-        
+
 
         return $this->render('test',['id' => $sms]);
     }

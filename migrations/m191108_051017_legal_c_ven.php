@@ -5,7 +5,7 @@ use yii\db\Migration;
 /**
  * Class m191108_051017_counsel
  */
-class m191108_051017_counsel extends Migration
+class m191108_051017_legal_c_ven extends Migration
 {
     /**
      * {@inheritdoc}
@@ -18,7 +18,7 @@ class m191108_051017_counsel extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
  
-        $this->createTable('counsel_ven', [
+        $this->createTable('legal_c_ven', [
             'id' => $this->primaryKey(),
             'ven_date' => $this->date()->notNull(),
             'legal_c_id' => $this->string(),
@@ -33,7 +33,7 @@ class m191108_051017_counsel extends Migration
     public function safeDown()
     {
         echo "m191108_051017_counsel cannot be reverted.\n";
-        $this->dropTable('counsel_ven');
+        $this->dropTable('legal_c_ven');
         return false;
     }
 
