@@ -416,14 +416,48 @@ class UserController extends Controller{
 
     public function actionUser_line_send()
     {
+        $modelLine = Line::findOne(['name' => Yii::$app->user->identity->username]);
+
+        $api_url = 'https://notify-api.line.me/api/notify';
+        $token = $modelLine->token;
+
         $model = new LineFormSend();
         $json = null;
         if($model->load(Yii::$app->request->post())){
-            if($token = Line::getToken(Yii::$app->user->identity->username)){                
-                $res = Line::notify_message($token,$model->name);  
-                $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+            $headers = [
+                'Authorization: Bearer ' . $token
+            ];
+            $fields = [
+                'message' => Yii::$app->user->identity->username.' ทดสอบการส่งข้อความ :'. $model->name
+            ];
+            
+            try {
+                $ch = curl_init();
+            
+                curl_setopt($ch, CURLOPT_URL, $api_url);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                curl_setopt($ch, CURLOPT_POST, count($fields));
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            
+                $res = curl_exec($ch);
+                curl_close($ch);
+            
+                if ($res == false)
+                    throw new Exception(curl_error($ch), curl_errno($ch));
+            
+                $json = json_decode($res);
+                //$status = $json->status;
+                if(!empty($json->status) == 200){
+                    Yii::$app->session->setFlash('success', 'แจ้งสำเร็จ'.$json->status);
+                }
+                //var_dump($status);                
+                return $this->redirect(['profile']);
+
+            } catch (Exception $e) {
+                throw new Exception($e->getMessage);
             }
-            return $this->redirect('profile'); 
         }
 
         if(Yii::$app->request->isAjax){

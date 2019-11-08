@@ -126,6 +126,7 @@ $menu_admin = [
                 ['label' => 'คำสั่ง', 'icon' => ' fa fa-user-o', 'url' => ['ven/com_index']],
             ],
         ],
+        ['label' => 'รายชื่อที่ปรึกษากฎหมาย', 'icon' => 'id-card-o', 'url' => ['legal_c/index']],
         ['label' => 'เสี้อฟ้า', 'icon' => 'id-card-o', 'url' => ['blueshirt/index']],
         ['label' => 'ส่งคำพิพากษา 7', 'icon' => ' fa-qrcode', 'url' => ['ppss/index']], 
         ['label' => 'สร้าง  QrCode', 'icon' => ' fa-qrcode', 'url' => ['qrgen/index']],  
