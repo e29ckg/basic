@@ -85,7 +85,7 @@ use yii\helpers\Url;
                         <?= $model->file ?
                         '<a href="'.Url::to(['bila/file_view','id' => $model->id]).'"  target="_blank" data-id='.$model->id.'>ไฟล์เอกสาร</a>' 
                         :
-                        ' ' ?>
+                        ' <a href="'.Url::to(['bila/print1','id' => $model->id]).'" class="btn btn-primary btn-xs" target="_blank" data-id='.$model->id.'>print</a>' ?>
                         <?php
                             
                             if(!Yii::$app->user->isGuest && empty($model->file) && Yii::$app->user->identity->role == 9){

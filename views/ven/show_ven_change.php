@@ -16,7 +16,7 @@ use yii\helpers\Url;
                         ชื่อ
                     </td>
                     <td>
-                        <?= $model->getProfileName();?>
+                        <?= $model->ven1->getProfileName();?>
                     </td>
                 </tr>
                 <tr>
@@ -46,7 +46,8 @@ use yii\helpers\Url;
                 </tr>                       
             </table> 
             <hr>
-            <?= $model->ven_id2_old ? '
+            <?php if($model->ven_id2){
+                echo '
             <table class="table table-bordered table-condensed">                            
                 <tr>   
                     <td class="text-right">
@@ -61,7 +62,13 @@ use yii\helpers\Url;
                         อยู่เวรวันที่
                     </td>
                     <td>
-                        '. $model->DateThai_full($model->ven2->ven_date).' เวลา '. date(" H : i ", strtotime($model->ven2->ven_time)).'
+                        ';
+                         if($model->ven2){ 
+                            echo $model->DateThai_full($model->ven2->ven_date).' เวลา '. date(" H : i ", strtotime($model->ven2->ven_time));
+                        }else{
+                            echo $model->DateThai_full($model->ven1->ven_date).' เวลา '. date(" H : i ", strtotime($model->ven1->ven_time));
+                        }  
+                        echo '
                     </td>
                 </tr>
                 <tr>
@@ -82,7 +89,7 @@ use yii\helpers\Url;
                 </tr> 
                 
             </table>
-        ' : '' ;?>      
+        ' ;}?>      
             <table class="table ">
                 <tr>
                     <td class="text-center">

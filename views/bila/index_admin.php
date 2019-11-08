@@ -70,23 +70,18 @@ $this->params['breadcrumbs'][] = $this->title;
 												'data-id' => $model->id,
 												// 'target' => '_blank'
 											]).' '
-											
+											.Html::a('<i class="fa fa-print"></i> Print ', ['bila/print1','id' => $model->id], [
+												'class' => 'btn btn-primary btn-xs',
+												'data-id' => $model->id,
+												'target' => '_blank'
+											]) 
 											. ' <a href= "#" class="btn btn-warning btn-xs act-update" data-id='.$model->id.'><i class="fa fa-wrench"></i> แก้ไข</a>';
 							
 											;?>
 											<!-- <a href="#" class="act-file-up btn btn-danger btn-xs" data-id=<?=$model->id?>>แนบไฟล์</a>  -->
 																				
 											<?=
-											!($model->cat == 'ไปราชการ') ? 
-											Html::a('<i class="fa fa-print"></i> Print ', ['bila/print1','id' => $model->id], [
-												'class' => 'btn btn-primary btn-xs',
-												'data-id' => $model->id,
-												'target' => '_blank'
-											]) :'';
-											?>
-											<?=
-											' '.
-											 	Html::a('<i class="fa fa-remove"></i> ลบ',['bila/delete_admin','id' => $model->id],
+											 	Html::a('<i class="fa fa-remove"></i> ลบ',['bila/delete','id' => $model->id],
 													[
 														'class' => 'btn btn-danger btn-xs',
 														'data-confirm' => 'Are you sure to delete this item?',

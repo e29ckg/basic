@@ -6,7 +6,7 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'คำสั่งศาลฯ';
+$this->title = 'เสื้อฟ้า';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -16,38 +16,33 @@ $this->params['breadcrumbs'][] = $this->title;
 		<h3 class="box-title"><?= Html::encode($this->title) ?></h3>
 		<div class="box-tools pull-right">
 			<button id="act-create" class="btn btn-danger btn-md" alt="act-create"><i class="fa fa-pencil-square-o "></i> เพิ่ม</button>  
-		</div>	
+		</div>			
 	</div>	
 	<div class="box-body">
 		<div id="wra_example1" class="dataTables_wrapper form-inline dt-bootstrap">
 			<table id="example1" class="table table-striped table-bordered" width="100%">
 				<thead>
 					<tr>
-						<th data-class="expand">Id</th>
-						<th >เรื่อง</th>
-						<th style="width:150px">ประเภท</th>
-						<th style="width:150px">เครื่องมือ</th>							
+						<th class="text-center">วันที่</th>
+						<th class="text-center">เวร</th>
+						<th class="text-center">ผู้ตรวจ</th>	
+						<th class="text-center"style="width:150px"></th>			
 					</tr>
 				</thead>
 				<tbody>
 					<?php foreach ($models as $model): ?>
 					<tr>
-						<td><?=$model->id?></td>
-						<td><?= $model->file ? Html::a($model->name,['cletter/show','id' => $model->id],['target' => '_blank']) : $model->name;?></td>
-						<td><?=$model->name?> 
-							<br><?=$model->create_at;?>							
-						</td>						
+						<td><?=$model->line_alert?></td>
+						<td><?=$model->getProfileName()?></td>
+						<td><?=$model->getProfileName2()?></td>
 						<td>
-							<?= Html::a('<i class="fa fa-paper-plane-o"></i> Line',['cletter/line_alert','id' => $model->id],
+							<?= Html::a('<i class="fa fa-paper-plane-o"></i> Line',['blueshirt/line_alert','id' => $model->id],
 									[
 										'class' => 'btn btn-success btn-xs act-update',
 										'data-confirm' => 'Are you sure to Line this item?'
 									]);
 							?>
-							<a href= "#" class="btn btn-warning act-update btn-xs" data-id=<?=$model->id?>><i class="fa fa-pencil-square-o"></i> แก้ไข</a>
-							<!-- <a href= "#" class="btn btn-info act-view btn-xs" data-id=<?=$model->id?>><i class="fa fa-eye"></i> ดู</a> -->
-							
-								<?= Html::a('<i class="fa fa-remove"></i> ลบ',['cletter/delete','id' => $model->id],
+							<?= Html::a('<i class="fa fa-remove"></i> ลบ',['blueshirt/delete','id' => $model->id],
 									[
 										'name'=>'Yii::$app->request->csrfParam',
 										'value'=>'Yii::$app->request->csrfToken',
@@ -55,10 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
 										'data-confirm' => 'Are you sure to delete this item?',
 										'data-method' => 'post',
 									]);
-							?>
-							
-						</td>
-													
+							?></td>
 					</tr>
 					<?php  endforeach; ?>
 				</tbody>	
@@ -73,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $script = <<< JS
      
-$(document).ready(function() {	
+	 $(document).ready(function() {	
 /* BASIC ;*/
 
 	

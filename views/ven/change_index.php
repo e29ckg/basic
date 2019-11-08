@@ -43,10 +43,9 @@ $this->params['breadcrumbs'][] = $this->title;
 									<?php foreach ($models as $model): ?>
 						            <tr>						                
 										<td><?=$model->id;?>
-										
-											<br>เวรเดือน <label for=""><?=$model->DateThai_month_full($model->ven_month);?></label>
+											<br>เวรเดือน <?=$model->DateThai_month_full($model->ven_month);?>
 											<br>(<?=$model->DateThai_full($model->create_at);?>)
-											</td>	
+										</td>	
 										<td><?= isset($model->ven_id1) ? 
 											$model->DateThai_full($model->ven1['ven_date'])
 											.'<br>'.$model->ven1->getProfileName()
@@ -115,7 +114,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	</div>		
 </div>
 <div id=content1></div>
-<?= date("Y-m-d",strtotime(date("Y-m-d")));?>
+
 <?php
 
 $script = <<< JS

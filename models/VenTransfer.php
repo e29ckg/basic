@@ -24,7 +24,7 @@ class VenTransfer extends \yii\db\ActiveRecord
     {
         return [
             [['ven_id1','user_id2'],'required'],   
-            // [['ven_id1','user_id2',], 'integer'],
+            [['ven_id1','user_id2',], 'integer'],
             [['user_id2'], 'validateUser_id2'],
         ];
     }
@@ -47,19 +47,15 @@ class VenTransfer extends \yii\db\ActiveRecord
         ];
     }
 
-    public function validateUser_id2($ven_id1,$user_id2, $params)
+    public function validateUser_id2()
     {
-    //     return false;
+        
         // $this->addError('user_id2', $this->ven_id1);
         $model = Ven::findOne($this->ven_id1);
-        $ven_time = $model->ven_time;
-        $ven_date = $model->ven_date;
-        // // $this->addError('user_id2',Yii::$app->session->get('v1_time'));
-        // $ven_time = Yii::$app->session->get('v1_time');
-        // $ven_date = Yii::$app->session->get('v1_date');
-        if($ven_time == '08:30:01' || $ven_time  == '08:30:11' || $ven_time  == '08:30:22'){   
-            $dB = date('Y-m-d', strtotime($ven_date));
-            $dB1 = date('Y-m-d', strtotime('-1 day', strtotime($ven_date)));
+        
+        if($model->ven_time == '08:30:01' || $model->ven_time == '08:30:11' || $model->ven_time == '08:30:22'){   
+            $dB = date('Y-m-d', strtotime($model->ven_date));
+            $dB1 = date('Y-m-d', strtotime('-1 day', strtotime($model->ven_date)));
             
             $modelVO = Ven::find()
                 ->where([
@@ -73,15 +69,16 @@ class VenTransfer extends \yii\db\ActiveRecord
                     'status' => 1,
                     'user_id' => $this->user_id2,
                 ])->count();
+                // $this->addError('user_id2', $modelVO );
             if($modelVO >= 1){
                 $this->addError('user_id2', 'เบิกไม่ได้นะ');
-            } 
-            return true;                          
+            }   
+                        
         }
 
-        if($ven_time  == '08:30:00'){   
-            $dB = date('Y-m-d', strtotime($ven_date));
-            $dB1 = date('Y-m-d', strtotime('-1 day', strtotime($ven_date)));
+        if($model->ven_time == '08:30:00'){   
+            $dB = date('Y-m-d', strtotime($model->ven_date));
+            $dB1 = date('Y-m-d', strtotime('-1 day', strtotime($model->ven_date)));
 
             $modelVO = Ven::find()
                 ->where([
@@ -100,9 +97,11 @@ class VenTransfer extends \yii\db\ActiveRecord
             }               
         }
 
-        if($ven_time  == '16:30:55'){               
-            $dB = date('Y-m-d', strtotime($ven_date));
-            $dB1 = date('Y-m-d', strtotime('+1 day', strtotime($ven_date)));
+        if($model->ven_time == '16:30:55'){   
+            
+            $dB = date('Y-m-d', strtotime($model->ven_date));
+            $dB1 = date('Y-m-d', strtotime('+1 day', strtotime($model->ven_date)));
+
             $modelVO = Ven::find()
             ->where([
                 'ven_date' => [$dB,$dB1],
@@ -122,9 +121,9 @@ class VenTransfer extends \yii\db\ActiveRecord
             }
         }
 
-        if($ven_time  == '16:30:00'){   
-            $dB = date('Y-m-d', strtotime($ven_date));
-            $dB1 = date('Y-m-d', strtotime('+1 day', strtotime($ven_date)));
+        if($model->ven_time == '16:30:00'){   
+            $dB = date('Y-m-d', strtotime($model->ven_date));
+            $dB1 = date('Y-m-d', strtotime('+1 day', strtotime($model->ven_date)));
 
             $modelVO = Ven::find()
             ->where([

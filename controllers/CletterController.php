@@ -315,11 +315,11 @@ class CletterController extends Controller
             // $modelLog->create_at = date("Y-m-d H:i:s");
             // $modelLog->ip = Yii::$app->getRequest()->getUserIP();
             // if($modelLog->save()){
-            //     // $modelLine = Line::findOne(['name' => 'admin']);        
-            //         if($token = Line::getToken('admin')){
-            //             $message = Profile::getProfileNameById(Yii::$app->user->identity->id).' เปิดอ่าน '.$model->name.' '.date("Y-m-d H:i:s");
-            //             Line::notify_message($token,$message);                        
-            //         }                        
+                // $modelLine = Line::findOne(['name' => 'admin']);        
+                    if($token = Line::getToken('admin')){
+                        $message = Profile::getProfileNameById(Yii::$app->user->identity->id).' เปิดอ่าน '.$model->name.' '.date("Y-m-d H:i:s");
+                        Line::notify_message($token,$message);                        
+                    }                        
                 return Yii::$app->response->sendFile($completePath, $model->file, ['inline'=>true]);                
             // }
         // $stylesheet = file_get_contents(Url::to('@webroot/css/pdf.css'));

@@ -676,6 +676,7 @@ class BilaController extends Controller
             $model->date_total = $_POST['Bila']['date_total'];	
             $model->cat = 'ไปราชการ';	
             $model->date_create = date("Y-m-d H:i:s");	
+            $model->status = 1;
             if($model->save()){	
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');	
                 return $this->redirect(['admin']);	

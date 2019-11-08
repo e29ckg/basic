@@ -74,7 +74,7 @@ class VenController extends Controller
             ->orderBy([
             // 'date_create'=>SORT_DESC,
             'ven_date' => SORT_DESC,
-            ])->limit(100)->all(); 
+            ])->limit(500)->all(); 
         $i = 1 ;
         $event = [];
         foreach ($models as $model):
@@ -896,9 +896,12 @@ class VenController extends Controller
             // ->orWhere(['status' => 3 ])
             ->orderBy([
             // 'date_create'=>SORT_DESC,
-            'id' => SORT_DESC,
+            // 'id' => SORT_DESC,
+            'ven_date' => SORT_DESC,
             // 'status' => SORT_ASC,
-            ])->limit(100)->all();  
+            ])
+            ->limit(500)
+            ->all();  
         $event = [];
         foreach ($models as $model):
             if($model->status == 2){

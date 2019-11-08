@@ -34,7 +34,7 @@ use yii\helpers\Url;
             <td width="10%"></td>
             <td width="10%"></td>
             <td width="10%"></td>
-            <td width="10%"></td>
+            <td width="12%"></td>
             <td width="10%"></td>
             <td width="10%"></td>
         </tr>

@@ -44,32 +44,27 @@ $this->params['breadcrumbs'][] = $this->title;
 						<?= $model->status == 4 ? '<span class="label label-danger">ยกเลิกการลา</span>' : '' ;?>
 					</td>
 					<td class="text-center"> 
-					<?php if(!empty($model->file)){
-						echo Html::a('<i class="fa fa-file-o"></i> ไฟล์เอกสาร ', ['bila/file_view','id' => $model->id], [
+					<?= !empty($model->file) ? 
+						Html::a('<i class="fa fa-file-o"></i> ไฟล์เอกสาร ', ['bila/file_view','id' => $model->id], [
 							// 'class' => 'btn btn-xs',
 							'data-id' => $model->id,
 							'target' => '_blank'
-						]);
-					}else{
-						if(!($model->cat == 'ไปราชการ')){
-							echo Html::a('<i class="fa fa-print"></i> Print ', ['bila/print1','id' => $model->id], [
-								'class' => 'btn btn-primary btn-xs',
-								'data-id' => $model->id,
-								'target' => '_blank'
-							]).' ' ;
-						}
-						echo Html::a('<i class="fa fa-wrench"></i> แก้ไข ', '#', [
+						])
+						:
+						 Html::a('<i class="fa fa-print"></i> Print ', ['bila/print1','id' => $model->id], [
+							'class' => 'btn btn-primary btn-xs',
+							'data-id' => $model->id,
+							'target' => '_blank'
+						]). ' '.
+						Html::a('<i class="fa fa-wrench"></i> แก้ไข ', '#', [
 							'class' => 'act-update btn btn-warning btn-xs',
 							'data-id' => $model->id,
-						]).' ';
-						echo Html::a('<i class="fa fa-remove"></i> ยกเลิกการลา ', ['bila/delete', 'id' => $model->id], [
+						]). ' '.
+						 Html::a('<i class="fa fa-remove"></i> ยกเลิกการลา ', ['bila/delete', 'id' => $model->id], [
 							'class' => 'btn btn-danger btn-xs',
 							'data-confirm' => 'Are you sure?',
 							'data-method' => 'post',
-						]);
-
-					}
-					?>
+						]) ?>			        
 					</td>
 				</tr>
 				<?php  endforeach; ?>								

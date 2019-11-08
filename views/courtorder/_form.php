@@ -48,6 +48,17 @@ use kartik\file\FileInput;
                         ?>
                     </div>
                 </div>
+                <div class ="col-md-2">
+                    <div class="form-group">			
+                        <?= $form->field($model, 'num', [
+                                'inputOptions' => [
+                                    'class'=>'form-control',
+                                    'placeholder' => $model->getAttributeLabel('num')
+                                ],
+                            ]); // ->label(false);
+                        ?>
+                    </div>
+                </div>
 
                 <div class ="col-md-5">
                     <div class="form-group">			

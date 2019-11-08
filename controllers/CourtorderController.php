@@ -176,8 +176,8 @@ class CourtorderController extends Controller
 
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'); 
                 
-                // $modelLine = Line::findOne(['name' => 'LineGroup']);        
-                if($token = Line::getToken('LineGroup')){
+                // $modelLine = Line::findOne(['name' => 'admin']);        
+                if($token = Line::getToken('admin')){
                     // $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.';
                     $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.'.$this->smsLineAlert.$model->id;
                 
@@ -246,8 +246,8 @@ class CourtorderController extends Controller
 
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'); 
                 
-                // $modelLine = Line::findOne(['name' => 'LineGroup']);        
-                if($token = Line::getToken('LineGroup')){
+                // $modelLine = Line::findOne(['name' => 'admin']);        
+                if($token = Line::getToken('admin')){
                     // $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.';
                     $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.'.$this->smsLineAlert.$model->id;
                 
@@ -499,7 +499,7 @@ class CourtorderController extends Controller
         $model = $this->findModel($id);        
         if($model->name){            
             $message = $model->name .' ดูรายละเอียดเพิ่มเติมได้ที่ เว็บภายใน ';
-            $modelLine = Line::findOne(['name' => 'LineGroup']);        
+            $modelLine = Line::findOne(['name' => 'admin']);        
             if(!empty($modelLine->token) && $modelLine->status == 1){
                 // $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.'.Yii::$app->request->hostInfo.Url::to(['CourtOrderBigboss/show','id'=>$model->id]);
                 $message = $model->name.' ดูรายละเอียดที่เว็บภายใน.'.$this->smsLineAlert.$model->id;
