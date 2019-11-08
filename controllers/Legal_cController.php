@@ -78,7 +78,7 @@ class Legal_cController extends Controller{
             $model->address = Yii::$app->request->post('LegalC')['address'];
             $model->phone = Yii::$app->request->post('LegalC')['phone'];
             $model->status = '10';
-            $model->created_at = time();
+            $model->created_at = date("Y-m-d H:i:s");
             if($model->save() && $model->save() ){  
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
                 return $this->redirect(['index']);
@@ -127,7 +127,7 @@ class Legal_cController extends Controller{
             $model->id_card = Yii::$app->request->post('LegalC')['id_card'];
             $model->address = Yii::$app->request->post('LegalC')['address'];
             $model->phone = Yii::$app->request->post('LegalC')['phone'];
-            $model->updated_at = time();
+            $model->updated_at = date("Y-m-d H:i:s");
             if($model->save()){
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
             };          

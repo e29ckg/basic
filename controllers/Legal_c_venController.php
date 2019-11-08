@@ -104,7 +104,7 @@ class Legal_c_venController extends Controller
                 $model->ven_date = $request['ven_date'];
                 $model->legal_c_id = $request['legal_c_id'];  
                 $model->comment = $request['comment'];
-                $model->create_at = time(); 
+                $model->create_at = date("Y-m-d H:i:s");
 
                 if($model->save()){                                       
                     Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');                   

@@ -10,6 +10,8 @@ $menuG = [
         ['label' => 'เขียนใบลา', 'icon' => 'briefcase', 'url' => ['bila/index']],
         ['label' => 'ตารางเวร', 'icon' => 'fa fa-user-o', 'url' => ['/ven/index']],
         ['label' => 'ส่งคำพิพากษา 7', 'icon' => ' fa-qrcode', 'url' => ['ppss/index']], 
+        ['label' => 'ตารางเวรที่ปรึกษา', 'icon' => 'fa fa-user-o', 'url' => ['legal_c_ven/index']],
+         
         ['label' => 'สร้าง  QrCode', 'icon' => ' fa-qrcode', 'url' => ['qrgen/index']],
         [
             'label' => 'เบิกของ CartX', 
@@ -40,7 +42,13 @@ $menu = [
             ],
         ],
         ['label' => 'ส่งคำพิพากษา 7', 'icon' => ' fa-qrcode', 'url' => ['ppss/index']], 
-        
+        ['label' => 'ที่ปรึกษากฎหมาย', 'icon' => 'users', 'url' => '#',
+            'items' => [
+                ['label' => 'รายชื่อที่ปรึกษากฎหมาย', 'icon' => 'id-card-o', 'url' => ['legal_c/index']],
+                ['label' => 'ตารางเวรที่ปรึกษา', 'icon' => 'fa fa-user-o', 'url' => ['legal_c_ven/index']],
+                
+            ],
+        ],
         ['label' => 'สร้าง  QrCode', 'icon' => ' fa-qrcode', 'url' => ['qrgen/index']], 
         [
             'label' => 'เบิกของ CartX', 
@@ -75,6 +83,13 @@ $menu_operator = [
         ],
         ['label' => 'เสี้อฟ้า', 'icon' => 'id-card-o', 'url' => ['blueshirt/index']],  
         ['label' => 'ส่งคำพิพากษา 7', 'icon' => ' fa-qrcode', 'url' => ['ppss/index']], 
+        ['label' => 'ที่ปรึกษากฎหมาย', 'icon' => 'users', 'url' => '#',
+            'items' => [
+                ['label' => 'รายชื่อที่ปรึกษากฎหมาย', 'icon' => 'id-card-o', 'url' => ['legal_c/index']],
+                ['label' => 'ตารางเวรที่ปรึกษา', 'icon' => 'fa fa-user-o', 'url' => ['legal_c_ven/index']],
+                
+            ],
+        ],
         ['label' => 'สร้าง  QrCode', 'icon' => ' fa-qrcode', 'url' => ['qrgen/index']], 
         [
             'label' => 'เบิกของ CartX', 
