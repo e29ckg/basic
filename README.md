@@ -25,7 +25,7 @@
 admin/admin  
 demo/demo
 
-
+```
 public function actionReport2($ven_com_num)
     {
     
@@ -49,3 +49,5 @@ public function actionReport2($ven_com_num)
             'datas' => $datas
         ]);
     }
+    
+    ```
