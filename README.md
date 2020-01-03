@@ -26,17 +26,17 @@ admin/admin
 demo/demo
 
 
-
 public function actionReport2($ven_com_num)
     {
+    
         $this->layout = 'blank';             
         $modelVenMonth = VenCom::find()->select('ven_month')->where(['ven_com_num' => $ven_com_num])->one();                
         $models_ven_user = VenUser::find()
             // ->where(['DN'  => $DN])
             ->groupBy('user_id')
             ->orderBy(['order' => SORT_ASC])
-            ->all();             
-        foreach ($models_ven_user as $model_ven_user):               
+            ->all();  
+            foreach ($models_ven_user as $model_ven_user):               
             $datas[$model_ven_user->user_id]['name'] = $model_ven_user->getProfileName();            
             $datas[$model_ven_user->user_id]['d_price'] = VenUser::find()->select('price')->where(['user_id'  => $model_ven_user->user_id,'DN'=>2])->one()['price'];
             $datas[$model_ven_user->user_id]['d'] = Ven::find()->where(['status' => 1,'user_id' => $model_ven_user->user_id,'ven_month' => $modelVenMonth->ven_month,'ven_time' => ['08:30:00','08:30:01','08:30:11','08:30:22']])->count();
