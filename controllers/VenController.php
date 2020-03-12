@@ -4,6 +4,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Ven;
 use app\models\VenCom;
+use app\models\VenUser;
 use app\models\VenChange;
 use app\models\VenAdminCreate;
 use app\models\VenTransfer;
@@ -60,11 +61,270 @@ class VenController extends Controller
         ];
     }
 
-   public function actionTest()
-   {
+    public function actionReport($ven_com_num)
+    {
+        $this->layout = 'blank';
+        $modelComs = VenCom::find()->select('id')->where(['ven_com_num' => $ven_com_num])->all();        
+        $com_id = [ ];
+        foreach ($modelComs as $modelcom): 
+            $com_id[]=$modelcom->id;
+        endforeach;       
+
+        $modelVenMonth = VenCom::find()->select('ven_month')->where(['ven_com_num' => $ven_com_num])->one();
+        
+        $modelHoliday = Ven::find()->select('ven_date')->where(['ven_month' => $modelVenMonth,'ven_time'=>'08:30:01'])->all();
+         
+        $models = Ven::find()
+            ->where([
+                'status' => 1,
+                'ven_month' => $modelVenMonth,
+                'ven_com_id' => $com_id])
+            ->orderBy(['ven_date' => SORT_ASC,'ven_time' => SORT_ASC])
+            ->all();
+
+        $modelVenMonthCount = VenCom::find()->select('ven_month')->where(['ven_com_num' => $ven_com_num])->count();
+        
+        $modelVenMonthCount > 2 ?  $DN = 2 : $DN = 1;
+        
+        $models_ven_user = VenUser::find()
+            ->where(['DN'  => $DN])
+            ->orderBy(['order' => SORT_ASC])
+            ->all(); 
+        
+        $model_ven_user_count = VenUser::find()->where(['DN'  => $DN])->count();
+       
+        $VenMonth = Ven::DateThai_month_full($modelVenMonth->ven_month).' ';  
+        $VenMonth .= date('Y', strtotime($modelVenMonth->ven_month)) + 543;     
+        $x = 1;
+        foreach ($models_ven_user as $model_ven_user):
+            $datas[$x]['name'] = $model_ven_user->getProfileName();
+            $datas[$x]['price'] = $model_ven_user->price;
+                for ($y = 1; $y <= 31; $y++) {
+                    $dateY = date('Y-m-d', strtotime(date('Y-m-', strtotime($modelVenMonth->ven_month)) . $y));
+                    $datas[$x][$y] = Ven::find()->where([
+                        'status' => 1,
+                        'ven_date' => $dateY,
+                        'user_id' => $model_ven_user->user_id,
+                        'ven_com_id' =>$com_id])->count();
+                }
+            $x++;
+        endforeach;
+
+        return $this->render('report',[
+            'models' =>$models,
+            'models_ven_user' => $models_ven_user,
+            'modelHoliday'  => $modelHoliday, 
+            'modelVenMonth' => $VenMonth,
+            'ven_com_num' => $ven_com_num,
+            'modelVenMonthCount' => $modelVenMonthCount,
+            'model_ven_user_count' => $model_ven_user_count,
+            'datas' => $datas,
+            
+        ]);
+        
+    }
+
+    public function actionReport_l65($ven_com_num)
+    {
+        $this->layout = 'blank';
+        $modelComs = VenCom::find()->select('id')->where(['ven_com_num' => $ven_com_num])->all();        
+        $com_id = [ ];
+        $data = [];
+        foreach ($modelComs as $modelcom): 
+            $com_id[]=$modelcom->id;
+        endforeach;       
+
+        $modelVenMonth = VenCom::find()->select('ven_month')->where(['ven_com_num' => $ven_com_num])->one();
+                 
+        $models = Ven::find()
+            ->where([
+                'status' => 1,
+                'ven_month' => $modelVenMonth,
+                'ven_com_id' => $com_id])
+            ->orderBy(['ven_date' => SORT_ASC,'ven_time' => SORT_ASC])
+            ->all();
+
+        $modelVenMonthCount = VenCom::find()->select('ven_month')->where(['ven_com_num' => $ven_com_num])->count();
+        
+        $modelVenMonthCount > 2 ?  $DN = 2 : $DN = 1;
+        
+        $models_ven_user = VenUser::find()
+            ->where(['DN'  => $DN])
+            ->orderBy(['order' => SORT_ASC])
+            ->all(); 
+        
+        $model_ven_user_count = VenUser::find()->where(['DN'  => $DN])->count();
+       
+        $VenMonth = Ven::DateThai_month_full($modelVenMonth->ven_month).' ';  
+        $VenMonth .= date('Y', strtotime($modelVenMonth->ven_month)) + 543;     
+       
+        $data = [];
+        $totals = 0;
+        foreach ($models_ven_user as $model_ven_user):            
+            $day = [];
+            $day_na = 0;
+            $day_off = 0;
+            
+            for ($y = 1; $y <= 31; $y++) {
+                $dateY = date('Y-m-d', strtotime(date('Y-m-', strtotime($modelVenMonth->ven_month)) . $y));                
+                $st = Ven::find()->where([
+                        'status' => 1,
+                        'ven_date' => $dateY,
+                        'user_id' => $model_ven_user->user_id,
+                        'ven_com_id' =>$com_id])->count();
+                $h = Ven::find()->where(['ven_date' => $dateY,'ven_month' => $modelVenMonth,'ven_time'=>'08:30:01'])->count();
+                $day[] = [
+                    'd' => $dateY,
+                    'y' => $y,
+                    'st' => $st,
+                    'h' => $h,
+                ] ;
+                if($h && $st){$day_off++;}
+                if($h == 0 && $st == 1){$day_na++;}
+            }
+            $money = ($day_na + $day_off ) * $model_ven_user->price ;
+            $totals = $totals + $money;
+            $data[] =[
+                'id' => $model_ven_user->order,
+                'name' => $model_ven_user->getProfileName(),
+                'price' => $model_ven_user->price,
+                'day' =>  $day,
+                'day_na' => $day_na,
+                'day_off' => $day_off,
+                'money' => $money                 
+            ] ;
+        endforeach;
+
+        // return $this->render('report_l65',[
+        //     'modelVenMonth' => $VenMonth,
+        //     'ven_com_num' => $ven_com_num,
+        //     'modelVenMonthCount' => $modelVenMonthCount,
+        //     'data' => json_encode($data),
+        //     'totals' => $totals
+        // ]);
+        $Pdf_print = 'report_l65';
+        
+        Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+        $pdf = new Pdf([
+            'mode' => Pdf::MODE_UTF8, // leaner size using standard fonts
+            'format' => Pdf::FORMAT_A4,
+            'orientation' => Pdf::ORIENT_LANDSCAPE,
+            'destination' => Pdf::DEST_BROWSER,
+            'content' => $this->renderPartial($Pdf_print,[
+                'modelVenMonth' => $VenMonth,
+                'ven_com_num' => $ven_com_num,
+                'modelVenMonthCount' => $modelVenMonthCount,
+                'data' => json_encode($data),
+                'totals' => $totals
+            ]),
+            
+            'cssFile' => 'css/pdf_l65.css',
+            'options' => [
+                // any mpdf options you wish to set
+            ],
+            'methods' => [
+                'SetTitle' => 'ค่าเวรเดือน '.$VenMonth.' ('.$ven_com_num.')',
+                // 'SetSubject' => 'ใบขอเปลี่ยนเวร '.$model->id,
+                // 'SetHeader' => ['Krajee Privacy Policy||Generated On: ' . date("r")],
+                // 'SetFooter' => ['|Page {PAGENO}|'],
+                // 'SetFooter' => ['Pkkjc WebApp'],
+                'SetAuthor' => 'ศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์',
+                'SetCreator' => 'Pkkjc-Web',
+                // 'SetKeywords' => 'Krajee, Yii2, Export, PDF, MPDF, Output, Privacy, Policy, yii2-mpdf',
+            ]
+        ]);
+        return $pdf->render();
+        
+    }
+
+    public function actionReport2($ven_com_num)
+    {
+        $this->layout = 'blank';             
+        $modelVenMonth = VenCom::find()->select('ven_month')->where(['ven_com_num' => $ven_com_num])->one();
+                
+        $models_ven_user = VenUser::find()
+            // ->where(['DN'  => $DN])
+            ->groupBy('user_id')
+            ->orderBy(['order' => SORT_ASC])
+            ->all(); 
+
+        foreach ($models_ven_user as $model_ven_user):               
+            $datas[$model_ven_user->user_id]['name'] = $model_ven_user->getProfileName();            
+            $datas[$model_ven_user->user_id]['d_price'] = VenUser::find()->select('price')->where(['user_id'  => $model_ven_user->user_id,'DN'=>2])->one()['price'];
+            $datas[$model_ven_user->user_id]['d'] = Ven::find()->where(['status' => 1,'user_id' => $model_ven_user->user_id,'ven_month' => $modelVenMonth->ven_month,'ven_time' => ['08:30:00','08:30:01','08:30:11','08:30:22']])->count();
+            $datas[$model_ven_user->user_id]['n_price'] = VenUser::find()->select('price')->where(['user_id'  => $model_ven_user->user_id,'DN'=>1])->one()['price'];
+            $datas[$model_ven_user->user_id]['n'] = Ven::find()->where(['status' => 1,'user_id' => $model_ven_user->user_id,'ven_month' => $modelVenMonth->ven_month,'ven_time' => ['16:30:00','16:30:55']])->count();
+        endforeach; 
+        $x =1;
+$totals = 0;
+$total_n = 0;
+$total_d = 0;
+        $data = [];
+        foreach ($models_ven_user as $model_ven_user):            
+            $d_price = VenUser::find()->select('price')->where(['user_id'  => $model_ven_user->user_id,'DN'=>2])->one()['price'];
+            $d = Ven::find()->where(['status' => 1,'user_id' => $model_ven_user->user_id,'ven_month' => $modelVenMonth->ven_month,'ven_time' => ['08:30:00','08:30:01','08:30:11','08:30:22']])->count();
+            $n_price = VenUser::find()->select('price')->where(['user_id'  => $model_ven_user->user_id,'DN'=>1])->one()['price'];
+            $n = Ven::find()->where(['status' => 1,'user_id' => $model_ven_user->user_id,'ven_month' => $modelVenMonth->ven_month,'ven_time' => ['16:30:00','16:30:55']])->count();
+            
+            $total_d = $d_price * $d;
+            $total_n = $n_price * $n;
+            $total = $total_d + $total_n;
+            $data[] = [
+                'name' => $model_ven_user->getProfileName(),
+                'd_text' => 'กลางวัน '.$d_price.' X '.$d,
+                'd_price' => $total_d,
+                'n_text' => 'กลางคืน '.$n_price.' X '.$n,
+                'n_price' => $total_n,
+                'total' => $total,
+            ];
+        endforeach; 
+        
+        // return $this->render('report2',[
+        //     'VenMonth' => $modelVenMonth->ven_month,
+        //     'models_ven_user' => $models_ven_user,
+        //     'datas' => $datas
+        // ]);
+
+        $Pdf_print = 'report2';
+        
+        Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+        $pdf = new Pdf([
+            'mode' => Pdf::MODE_UTF8, // leaner size using standard fonts
+            'format' => Pdf::FORMAT_A4,
+            'orientation' => Pdf::ORIENT_PORTRAIT,
+            'destination' => Pdf::DEST_BROWSER,
+            'content' => $this->renderPartial($Pdf_print,[
+                'VenMonth' => $modelVenMonth->ven_month,
+                'models_ven_user' => $models_ven_user,
+                'datas' => $datas,
+                'data' => json_encode($data),
+            ]),
+            
+            'cssFile' => 'css/pdf_l65.css',
+            'options' => [
+                // any mpdf options you wish to set
+            ],
+            'methods' => [
+                'SetTitle' => 'ค่าเวรเดือน ',
+                // 'SetSubject' => 'ใบขอเปลี่ยนเวร '.$model->id,
+                // 'SetHeader' => ['Krajee Privacy Policy||Generated On: ' . date("r")],
+                // 'SetFooter' => ['|Page {PAGENO}|'],
+                // 'SetFooter' => ['Pkkjc WebApp'],
+                'SetAuthor' => 'ศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์',
+                'SetCreator' => 'Pkkjc-Web',
+                // 'SetKeywords' => 'Krajee, Yii2, Export, PDF, MPDF, Output, Privacy, Policy, yii2-mpdf',
+            ]
+        ]);
+        return $pdf->render();
+    }
     
-       return $this->render('test');
-   }
+
+    public function actionTest()
+    {
+       return $this->render('test',[
+           'models' => $models
+       ]);
+    }
     
     public function actionIndex()
     {
@@ -78,15 +338,7 @@ class VenController extends Controller
         $i = 1 ;
         $event = [];
         foreach ($models as $model):
-            if($model->status == 2){
-                $backgroundColor = 'orange';  
-            }elseif($model->ven_time == '16:30:55'){
-                $backgroundColor = 'blue';
-            }elseif($model->ven_time == '08:30:01'){
-                $backgroundColor = '#FF6347';
-            }else{
-                $backgroundColor = 'green';
-            }
+            
             $even = [
                 'id' => $model->id,
                 'title' => $model->profile->name.' '.VenChange::getStatusList()[$model->status],
@@ -94,7 +346,8 @@ class VenController extends Controller
                 'start' => $model->ven_date.' '.$model->ven_time,
                 'textColor' => $model->user_id == Yii::$app->user->identity->id ? 'yellow' :'',
                 // 'end' => $model->date_end.'T12:30:00',
-                'backgroundColor' => $backgroundColor,
+                'backgroundColor' => $model->backgroundColor($model->ven_time,$model->status),
+                // 'backgroundColor' => $backgroundColor,
                 'borderColor' => $model->status == 1 ? '' :'#f56954'
             ];
             $event[] = $even;
@@ -125,8 +378,7 @@ class VenController extends Controller
                 'model' => $model,
                 'modelDs' => $modelDs,
             ]);
-        }       
-        
+        }               
     }
 
     public function actionVen_user_index()
@@ -396,7 +648,7 @@ class VenController extends Controller
                 
                 if($token = Line::getToken('ven')){
                     $message = 'ven'."\n";
-                    $message .= Yii::$app->user->id.' แก้ไขเวร '.$model->id;
+                    $message .= Ven::getNameById(Yii::$app->user->id).' แก้ไขเวร '.$model->id;
                     $res = Line::notify_message($token,$message);  
                     $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
                 }
@@ -480,6 +732,17 @@ class VenController extends Controller
                         Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
                                                   
                         $transaction->commit();
+                        
+                        if($token = Line::getTokenbyid($model->ven_id1)){                            
+                            $message = 'ใบเปลี่ยนเวรเลขที่ '.$model->id;                    
+                            $message .= "\n".' อนุมัติแล้ว';
+                            $res = Line::notify_message($token,$message);  
+                            $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย1') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+                        } 
+                        if($token = Line::getTokenbyid($model->ven_id2)){                            
+                            $res = Line::notify_message($token,$message);  
+                            $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย2') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+                        } 
                         return $this->redirect(['change_index']);
                         
                     } catch (\Exception $e) {
@@ -618,7 +881,7 @@ class VenController extends Controller
              /*---------------------ส่ง line ไปยัง Admin--------------------*/
              $modelLine = Line::findOne(['name' => 'ven']);
              if($token = Line::getToken('ven')){
-                 $message = Yii::$app->user->id.' ลบใบเปลี่ยนเวร '.$model->id;
+                 $message = Ven::getNameById(Yii::$app->user->id).' ลบใบเปลี่ยนเวร '.$model->id;
                  $res = Line::notify_message($token,$message);  
                  $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
              }
@@ -672,7 +935,7 @@ class VenController extends Controller
                     
                     if($token = Line::getToken('ven')){
                         $message = 'ven'."\n";
-                        $message .= Yii::$app->user->id.' ลบใบเปลี่ยนเวร '.$model->id;
+                        $message .= Ven::getNameById(Yii::$app->user->id).' ลบใบเปลี่ยนเวร '.$model->id;
                         $res = Line::notify_message($token,$message);  
                         $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
                     }
@@ -737,12 +1000,13 @@ class VenController extends Controller
                 $modelVv->save(); 
 
                 $model->id = $id;
-                $model->ven_id1_old = $_POST['VenChange']['ven_id2'];
-                $model->ven_id2_old = $_POST['VenChange']['ven_id1'];
+                $model->ven_month = $modelV1->ven_month;
+                $model->ven_id1_old = $_POST['VenChange']['ven_id1'];
+                $model->ven_id2_old = $_POST['VenChange']['ven_id2'];
                 $model->ven_id1 = $id;
                 $model->ven_id2 = $id + 1;
-                $model->user_id1 = $modelV1->user_id;
-                $model->user_id2 = $modelV2->user_id;
+                $model->user_id1 = $modelV2->user_id;
+                $model->user_id2 = $modelV1->user_id;
                 $model->s_po = $_POST['VenChange']['s_po'];
                 $model->s_bb = $_POST['VenChange']['s_bb'];
                 $model->status = 2;
@@ -830,10 +1094,10 @@ class VenController extends Controller
 
                 $model->id = $id_vn;
                 $model->ven_month = $modelV1->ven_month;
-                $model->ven_id1_old = null;
-                $model->ven_id2_old = $_POST['VenTransfer']['ven_id1'];
                 $model->ven_id1 = $id_vn;
                 $model->ven_id2 = null;
+                $model->ven_id1_old = null;
+                $model->ven_id2_old = $_POST['VenTransfer']['ven_id1'];                
                 $model->user_id1 = $modelV1->user_id;
                 $model->user_id2 = $_POST['VenTransfer']['user_id2'];
                 $model->s_po = $_POST['VenTransfer']['s_po'];
@@ -904,15 +1168,7 @@ class VenController extends Controller
             ->all();  
         $event = [];
         foreach ($models as $model):
-            if($model->status == 2){
-                $backgroundColor = 'orange';  
-            }elseif($model->ven_time == '16:30:55'){
-                $backgroundColor = 'blue';
-            }elseif($model->ven_time == '08:30:01'){
-                $backgroundColor = '#FF6347';
-            }else{
-                $backgroundColor = 'green';
-            }
+            
             $even = [
                 'id' => $model->id,
                 'title' => $model->profile->name.' '.VenChange::getStatusList()[$model->status],
@@ -920,7 +1176,7 @@ class VenController extends Controller
                 'start' => $model->ven_date.' '.$model->ven_time,
                 'textColor' => $model->user_id == Yii::$app->user->identity->id ? 'yellow' :'',
                 // 'end' => $model->date_end.'T12:30:00',
-                'backgroundColor' => $backgroundColor,
+                'backgroundColor' => $model->backgroundColor($model->ven_time,$model->status),
                 'borderColor' => $model->status == 1 ? '' :'#f56954'
             ];
             $event[] = $even;
@@ -961,7 +1217,7 @@ class VenController extends Controller
                 $model->ref2 = $modelVC->ref;
                 $model->status = 1;                
                 $model->comment = '';
-                $model->create_at = date("Y-m-d H:i:s"); 
+                $model->create_at = $modelVC->ven_com_date; 
 
                 if($model->save()){                                       
                     Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');                   
@@ -1014,7 +1270,7 @@ class VenController extends Controller
                 $model->file = $modelVC->file;
                 $model->status = 1;                
                 $model->comment = '';
-                $model->create_at = date("Y-m-d H:i:s");  
+                // $model->create_at = date("Y-m-d H:i:s");  
 
                 if($model->save()){
                                        
@@ -1084,7 +1340,7 @@ class VenController extends Controller
 
     // ---------------------------------------------------------Ven Com-------------------------------------
 
-    public function actionCom_index()
+    public function actionCom_index_ba()
     {
         $models = VenCom::find()->orderBy([
             // 'ven_month' => SORT_DESC,
@@ -1092,8 +1348,62 @@ class VenController extends Controller
             'id' => SORT_DESC,
             ])->limit(100)->all();  
         
-        return $this->render('com_index',[
+        return $this->render('com_index_ba',[
             'models' => $models,
+        ]);
+    }
+    
+    public function actionCom_index()
+    {
+        $models = VenCom::find()->orderBy(['id' => SORT_DESC])->groupBy('ven_month')->limit(100)->all();  
+        $data = [];
+        // $data1 = [];
+        // $num = [];
+        foreach ($models as $model):
+                                
+                $model_nums = VenCom::find()->select(['ven_com_num','ven_time','ven_month'])->where(['ven_month'=> $model->ven_month])->groupBy('ven_com_num')->orderBy(['ven_com_num' => SORT_DESC])->all();
+                $num =[];
+                
+                foreach ($model_nums as $model_num):  
+
+                    $moedel_com_names = VenCom::find()->where(['ven_com_num' => $model_num->ven_com_num,'ven_month'=> $model->ven_month])->orderBy(['ven_time' => SORT_ASC])->all();
+                    $com_name =[];
+                    foreach ($moedel_com_names as $moedel_com_name):    
+                        $modelVen = Ven::findOne(['ven_com_id'=>$moedel_com_name->id]);    
+                        if(isset($modelVen->id)){
+                            $status_del = true;
+                        }else{
+                            $status_del = false;
+                        }          
+                        $com_name[] = [
+                            'id' => $moedel_com_name->id,
+                            'ven_com_num' => $moedel_com_name->ven_com_num,
+                            'ven_time'=>$moedel_com_name->ven_time,
+                            'ven_month'=>$moedel_com_name->ven_month,
+                            'status'=>$moedel_com_name->status,
+                            'status_del'=>$status_del
+                        ];
+                    endforeach;
+                    $num[] = [
+                        'ven_com_num' => $model_num->ven_com_num,
+                        'com_name' => $com_name
+                    ];
+                endforeach;
+
+                $data[] = [
+                    'month' => $model->ven_month,
+                    'num' => $num,
+                ];
+                // $data[] = ['com' => VenCom::find()->select(['ven_com_num'])->where(['ven_month'=> $model->ven_month])->groupBy('ven_com_num')->orderBy(['id' => SORT_DESC])->all()];
+                // $data[] = ['com_name' => VenCom::find()->select(['ven_com_name'])->where(['ven_month'=> $model->ven_month])->orderBy(['id' => SORT_DESC])->all()];
+                
+        endforeach;
+
+        return $this->render('com_index',[
+            // 'data' => $data,
+            'data' => json_encode($data),
+            'num' => json_encode($num)
+            // 'models' => $models,
         ]);
     }
 
@@ -1311,6 +1621,11 @@ class VenController extends Controller
         // $completePath = Url::to('@webroot').$this->filePath.$model->file;
         $completePath  = Url::to('@webroot'.$this->filePath.'/'.$model->file);
         if(is_file($completePath)){
+            if(Yii::$app->request->isAjax){
+                return $this->renderAjax('show',[
+                        'completePath' => Url::to('@web').$this->filePath.$model->file,                    
+                ]);
+            }
             return Yii::$app->response->sendFile($completePath, $model->file, ['inline'=>true]);                        
         }else{
             Yii::$app->session->setFlash('warning', 'ไม่พบ File... '.$completePath);            
@@ -1321,7 +1636,6 @@ class VenController extends Controller
     public function actionPrint($id=null)
     {
         $model = VenChange::findOne($id);
-        // $Pdf_print = '_pdf_A';
         $sms = '';
         $sms2 = '';
 
@@ -1365,16 +1679,7 @@ class VenController extends Controller
             
             }
         }
-        
-
-        // if(empty($sms) && empty($sms2)){
-        //     $Pdf_print = '_pdf_A';
-        // }elseif(empty($sms) || empty($sms2)){
-        //     $sms .= $sms2; 
-        //     $Pdf_print = '_pdf_AA';
-        // }else{
-        //     $Pdf_print = '_pdf_AAA';
-        // }
+       
         $Pdf_print = '_pdf_A';
         
         Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
@@ -1443,6 +1748,107 @@ class VenController extends Controller
 
         // endforeach;
         return 'ok';
+    }
+
+    // ---------------------------------------------------------Ven User-------------------------------------
+
+    public function actionUser_index()
+    {
+        $models_N = VenUser::find()->where(['DN' => 1])->orderBy([
+            'order' => SORT_ASC,
+            ])->all();
+        
+        $models_D = VenUser::find()->where(['DN' => 2])->orderBy([
+            'order' => SORT_ASC,
+            ])->all();  
+        
+        return $this->render('user_index',[
+            'models_D' => $models_D,
+            'models_N' => $models_N,
+        ]);
+    }
+
+    public function actionUser_create()
+    {
+        $model = new VenUser();          
+
+        if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        } 
+     
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->user_id = $_POST['VenUser']['user_id'];
+            $model->order = $_POST['VenUser']['order'];
+            $model->DN = $_POST['VenUser']['DN'];
+            $model->price = $_POST['VenUser']['price'];
+                if($model->save()){    
+                    Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');                   
+                }  
+               
+                return $this->redirect(['user_index']);
+                      
+        }
+        
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('_user_create',[
+                'model' => $model,         
+            ]);
+        }
+        
+        return $this->render('_user_create',[
+            'model' => $model,
+        ]);
+    }
+
+    public function actionUser_update($id)
+    {
+        $model = VenUser::findOne($id);  
+
+
+        if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        } 
+     
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->user_id = $_POST['VenUser']['user_id'];
+            $model->order = $_POST['VenUser']['order'];
+            $model->DN = $_POST['VenUser']['DN'];
+            $model->price = $_POST['VenUser']['price'];
+                if($model->save()){                                       
+                    Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');                   
+                }  
+                
+            return $this->redirect(['user_index']);                
+                     
+        }
+
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('_user_create',[
+                'model' => $model,         
+            ]);
+        }        
+        return $this->render('_user_create',[
+            'model' => $model,
+        ]);
+    }
+
+    public function actionUser_del($id)
+    {
+        $model = VenUser::findOne($id);
+        
+           
+            if($model->delete()){
+                
+                Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');    
+                return $this->redirect(['user_index']);                          
+            }   
+ 
+    Yii::$app->session->setFlash('danger', 'ไม่สามารถลบได้');    
+            
+    return $this->redirect(['user_index']);
+        
     }
 
 }

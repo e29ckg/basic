@@ -1,20 +1,22 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use yii\helpers\Url;
+use app\models\CLetter;
 
+$data = json_decode($data);
+// arsort($data);
+// krsort($data,3);
+// var_dump($data);
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'หนังสือเวียนทราบ';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-
- <!-- Default box -->
 <div class="box box-primary">
 	<div class="box-header with-border">
 		<h3 class="box-title"><?= Html::encode($this->title) ?></h3>
-			
 	</div>	
 	<div class="box-body">
 		<div id="wra_example1" class="dataTables_wrapper form-inline dt-bootstrap">
@@ -27,11 +29,16 @@ $this->params['breadcrumbs'][] = $this->title;
 					</tr>
 				</thead>
 				<tbody>
-					<?php foreach ($models as $model): ?>
+					<?php foreach ($data as $d): ?>
 					<tr>
-						<td><?=$model->id?></td>
-						<td><?= $model->file ? Html::a($model->name,['cletter/show','id' => $model->id],['target' => '_blank']) : $model->name;?></td>
-						<td><?=$model->ca_name?><br><?=$model->DateThai_full($model->created_at);?></td>
+						<td><i class="fa fa-bullhorn" alt="<?=$d->id?>"></i></td>
+						<td><?= $d->file ? 
+							// '<a href="#" class="act-show" data-id="'.$model->id.'">'.$model->name.'</a>'
+							'<a href="'.Url::to(['show','id'=>$d->id,'ca_name'=>$d->ca_name]).'" target="_blank" data-id="'.$d->id.'">'.$d->name.'</a>'
+							: $d->name;
+							?>
+						</td>
+						<td><?=$d->ca_name?><br><?=Cletter::DateThai_full($d->created_at);?></td>
 					</tr>
 					<?php  endforeach; ?>
 				</tbody>	
@@ -39,6 +46,8 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div>
 	</div>
 </div>
+ <!-- Default box -->
+<!--  -->
 
 
 
@@ -65,7 +74,20 @@ $(document).ready(function() {
       'info'        : true,
       'autoWidth'   : false
     })	
-	
+
+	var url_show = "show";
+	$( ".act-show" ).click(function() {
+		var fID = $(this).data("id");
+			// alert(fID);
+        	$.get(url_show,{id: fID},function (data){
+			$("#activity-modal").find(".modal-body").html(data);
+			$(".modal-body").html(data);
+			$(".modal-title").html("show");
+			// $(".modal-footer").html(footer);
+			$("#activity-modal").modal("show");
+			//   $("#myModal").modal('toggle');
+		});     
+	}); 
 	
 		
 });

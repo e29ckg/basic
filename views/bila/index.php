@@ -6,9 +6,10 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'โปรแกรมใบลา';
+$this->title = 'โปรแกรมใบลา ';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
  <!-- Default box -->
 <div class="box box-primary">
 	<div class="box-header with-border">
@@ -18,6 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			<button id="act-create-b" class="btn btn-primary btn-md" alt="act-create"><i class="fa fa-pencil-square-o "></i> เขียนใบลาพักผ่อน</button>
 		</div>			
 	</div>		
+	
 	<div class="box-body">
 		<div id="wra_example1" class="dataTables_wrapper form-inline dt-bootstrap">
 				
@@ -44,6 +46,11 @@ $this->params['breadcrumbs'][] = $this->title;
 						<?= $model->status == 4 ? '<span class="label label-danger">ยกเลิกการลา</span>' : '' ;?>
 					</td>
 					<td class="text-center"> 
+					<?=$model->cat <> 'ไปราชการ' && empty($model->file) ? Html::a('<i class="fa fa-print"></i> Print ', ['bila/print1','id' => $model->id], [
+												'class' => 'btn btn-primary btn-xs',
+												'data-id' => $model->id,
+												'target' => '_blank'
+											]) : '';?>
 					<?= !empty($model->file) ? 
 						Html::a('<i class="fa fa-file-o"></i> ไฟล์เอกสาร ', ['bila/file_view','id' => $model->id], [
 							// 'class' => 'btn btn-xs',
@@ -51,11 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
 							'target' => '_blank'
 						])
 						:
-						 Html::a('<i class="fa fa-print"></i> Print ', ['bila/print1','id' => $model->id], [
-							'class' => 'btn btn-primary btn-xs',
-							'data-id' => $model->id,
-							'target' => '_blank'
-						]). ' '.
+						 
 						Html::a('<i class="fa fa-wrench"></i> แก้ไข ', '#', [
 							'class' => 'act-update btn btn-warning btn-xs',
 							'data-id' => $model->id,

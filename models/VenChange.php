@@ -261,6 +261,10 @@ class VenChange extends \yii\db\ActiveRecord
 		return "$strMonthThai";
     }
     
+    public function getProfileNameById($id){ 
+        $model = Profile::findOne($id);
+        return !empty($model->id)  ? $model->name : '';
+    }
     
 
 }

@@ -5,6 +5,8 @@ namespace app\controllers;
 use Yii;
 use app\models\CLetter;
 use app\models\CLetterCaid;
+use app\models\CourtOrderBigboss;
+use app\models\CourtOrderBoss;
 use app\models\Log;
 use app\models\Line;
 use app\models\Profile;
@@ -26,7 +28,6 @@ class CletterController extends Controller
      * {@inheritdoc}
      */
     public $line_sms ='10.37.64.01';
-    public $upload ='/uploads/user/';
     public $filePath = '/uploads/cletter/';
     public $smsLineAlert = ' http://10.37.64.01/main/web/cletter/show/';
 
@@ -59,22 +60,76 @@ class CletterController extends Controller
      */
     public function actionIndex()
     {
-        $model = CLetter::find()
+        $models = CLetter::find()
+            ->select(['name','id','ca_name','line_alert','created_at','file'])
             ->orderBy([
             // // 'created_at'=>SORT_DESC,
             'id' => SORT_DESC,
             ])
-            ->limit(100)
+            // ->limit(100)
             ->all();
-        
+                
+        $data=[]; 
+        foreach ($models as $model): 
+            $data[] =[
+                'created_at' =>  $model->created_at,
+                'id' => $model->id,
+                'name' => $model->name,
+                'file' => $model->file,
+                'ca_name' => $model->ca_name
+                
+            ] ;
+        endforeach;
+
+        $model_cs = CourtOrderBigboss::find()
+            ->select(['name','id','num','year','date_write','file'])
+            ->orderBy([
+            // // 'created_at'=>SORT_DESC,
+            'id' => SORT_DESC,
+            ])
+            // ->limit(100)
+            ->all();
+ 
+        foreach ($model_cs as $model): 
+            $data[] =[
+                'created_at' =>  $model->date_write,
+                'id' => $model->id,
+                'name' => 'คำสั่งศาลฯ '.$model->num.'/'.$model->year.' ลว.'.Cletter::DateThai_full($model->date_write).' เรื่อง '.$model->name,
+                'file' => $model->file,
+                'ca_name' => 'คำสั่งศาลฯ'
+            ] ;
+        endforeach;
+
+        $model_cs = CourtOrderBoss::find()
+            ->select(['name','id','num','year','date_write','file'])
+            ->orderBy([
+            // // 'created_at'=>SORT_DESC,
+            'id' => SORT_DESC,
+            ])
+            // ->limit(100)
+            ->all();
+ 
+        foreach ($model_cs as $model): 
+            $data[] =[
+                'created_at' =>  $model->date_write,
+                'id' => $model->id,
+                'name' => 'คำสั่งสำนักงานฯ '.$model->num.'/'.$model->year.' ลว.'.Cletter::DateThai_full($model->date_write).' เรื่อง '.$model->name,
+                'file' => $model->file,
+                'ca_name' => 'คำสั่งสำนักงานฯ'
+            ] ;
+        endforeach;
+
         return $this->render('index',[
-            'models' => $model,
+            // 'models' => $models,
+            'data' => json_encode($data),
         ]);
 
     }
     public function actionIndex_admin()
     {
-        $model = CLetter::find()->orderBy([
+        $model = CLetter::find()
+            ->select(['name','id','ca_name','line_alert','created_at','file'])
+            ->orderBy([
             // 'created_at'=>SORT_DESC,
             'id' => SORT_DESC,
             ])
@@ -88,18 +143,17 @@ class CletterController extends Controller
     }
     public function actionAll()
     {
-        $model = CLetter::find()->orderBy([
+        $model = CLetter::find()
+            ->select(['name','id','ca_name','line_alert','created_at','file'])
+            ->orderBy([
             // 'created_at'=>SORT_ASC,
             'id' => SORT_DESC,
             ])
             // ->limit(10)
-            ->all();
-        
-            $countAll = CLetter::getCountAll();
+            ->all();        
         
         return $this->render('index',[
             'models' => $model,
-            'countAll' => $countAll,
         ]);
 
     }
@@ -298,16 +352,24 @@ class CletterController extends Controller
         return $this->redirect(['index_admin']);
     }
 
-    public function actionShow($id) {
-        
-        $model = Cletter::findOne($id);           
+    public function actionShow($id,$ca_name = null) {
+        if($ca_name == 'คำสั่งศาลฯ'){
+            $model = CourtOrderBigboss::findOne($id); 
+            $completePath = Url::to('@webroot'.'/uploads/courtorderbigboss/').$model->file;
+        }elseif($ca_name == 'คำสั่งสำนักงานฯ'){
+            $model = CourtOrderBoss::findOne($id); 
+            $completePath = Url::to('@webroot'.'/uploads/courtorderbigboss/').$model->file;
+        }else{
+            $model = Cletter::findOne($id);    
+            $completePath = Url::to('@webroot').$this->filePath.$model->file;
+        }
+
+                   
                 
         // This will need to be the path relative to the root of your app.
         // $filePath = '/web/uploads/cletter';
         // Might need to change '@app' for another alias
-        $completePath = Url::to('@webroot').$this->filePath.$model->file;
-        if(is_file($completePath)){
-            
+        if(is_file($completePath)){             
             // $modelLog = new Log();
             // $modelLog->user_id = Yii::$app->user->identity->id;
             // $modelLog->manager = 'Cletter_Read';
@@ -319,28 +381,13 @@ class CletterController extends Controller
                     if($token = Line::getToken('admin')){
                         $message = Profile::getProfileNameById(Yii::$app->user->identity->id).' เปิดอ่าน '.$model->name.' '.date("Y-m-d H:i:s");
                         Line::notify_message($token,$message);                        
-                    }                        
-                return Yii::$app->response->sendFile($completePath, $model->file, ['inline'=>true]);                
-            // }
-        // $stylesheet = file_get_contents(Url::to('@webroot/css/pdf.css'));
-
-        // $mpdf = new \Mpdf\Mpdf();
-        // $mpdf->WriteHTML($stylesheet,\Mpdf\HTMLParserMode::HEADER_CSS);
-        // // // $mpdf->SetImportUse();
-        // $mpdf->SetDocTemplate(Url::to('@webroot/uploads/cletter/'.$model->file),true);
-        // $mpdf->SetTitle('webApp '.$model->id);
-        // $mpdf->SetCreator('pkkjc webApp');
-        // $mpdf->SetKeywords('My Keywords, More Keywords');
-       
-        // // $mpdf->SetHTMLHeader('<div style="color:red;">ศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์</div>');
-        // // $mpdf->SetWatermarkText('http://pkkjc.coj.go.th');
-        // // $mpdf->showWatermarkText = true;
-        // // $mpdf->watermark_font = 'thsarabun';
-        // // $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
-        // // $mpdf->AddPage();
-        // $html = '<b>Hello world! ทดส่อบ</b>';
-        // $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
-        // $mpdf->Output();
+                    }  
+                if(Yii::$app->request->isAjax){
+                    return $this->renderAjax('show',[
+                            'completePath' => Url::to('@web').$this->filePath.$model->file,                    
+                    ]);
+                }                       
+                return Yii::$app->response->sendFile($completePath, $model->file, ['inline'=>true]); 
             
         }else{
             Yii::$app->session->setFlash('warning', 'ไม่พบ File... '.$completePath);

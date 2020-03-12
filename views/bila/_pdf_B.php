@@ -84,7 +84,10 @@ use app\models\SignBossName;
     </tr>
     <tr>
         <td colspan="1">เรียน</td>
-        <td colspan="11">ผู้อำนวยการสำนักงานประจำศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์</td>
+        <td colspan="11">
+        <?=$model->getProfileDep() == 'ผู้อำนวยการฯ' ? 'ผู้พิพากษาหัวหน้าศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์' : 'ผู้อำนวยการสำนักงานประจำศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์';?>
+        <!-- ผู้อำนวยการสำนักงานประจำศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์ -->
+        </td>
     </tr>
     <tr>
         <td colspan="2" ></td>
@@ -176,24 +179,28 @@ use app\models\SignBossName;
             <table class="bl_detail" width="100%" border="0" cellpadding="2" cellspacing="0"> 
                 <tr>
                     <td colspan="8"><br>
-                    ประธานเสนอ ผู้พิพากษาหัวหน้าศาลฯ<br>
-                    - เพื่อโปรดทราบ<br><br><br>
+                    <?=$model->getProfileDep() == 'ผู้อำนวยการฯ' ?
+                     '' : 
+                    'ประธานเสนอ ผู้พิพากษาหัวหน้าศาลฯ<br>
+                    - เพื่อโปรดทราบ<br><br>';?>
+                    <!-- ประธานเสนอ ผู้พิพากษาหัวหน้าศาลฯ<br>
+                    - เพื่อโปรดทราบ<br><br><br> -->
                     </td>
                 </tr>
                 <tr>
-                <td colspan="8" style="text-align:center">
-                    <br> 
-                    <?php 
-                        if(!empty($model->po)){
-                            $model_s_po = SignBossName::find()->where(['id' => $model->po])->one();
-                            if($model_s_po){
-                                echo '('.$model_s_po->name.')<br>'.$model_s_po->dep1.'<br>'.$model_s_po->dep2.'<br>'.$model_s_po->dep3; 
+                    <td colspan="8" style="text-align:center">
+                        <br> 
+                        <?php 
+                            if(!empty($model->po)){
+                                $model_s_po = SignBossName::find()->where(['id' => $model->po])->one();
+                                if($model_s_po){
+                                    echo '('.$model_s_po->name.')<br>'.$model_s_po->dep1.'<br>'.$model_s_po->dep2.'<br>'.$model_s_po->dep3; 
+                                }
+                            }else{
+                                echo '';
                             }
-                        }else{
-                            echo '';
-                        }
-                    ?>
-                </td>
+                        ?>
+                    </td>
                 </tr>
                 <tr>
                     <td colspan="8"><br><br>                      

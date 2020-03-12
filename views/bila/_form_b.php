@@ -35,7 +35,8 @@ $this->params['breadcrumbs'][] = $this->title;
 	]);  ?>
     
     <?= $form->field($model, 'date_create')->hiddenInput(['readonly' => true, 'value' => date("Y-m-d")])->label(false) ?>
-
+    <?= $form->field($model, 'user_id')->hiddenInput(['readonly' => true, 'value' => Yii::$app->user->identity->id])->label(false) ?>
+   
     <div class="box-body">
         <div class="row">
             <div class ="col-md-3">
@@ -49,6 +50,15 @@ $this->params['breadcrumbs'][] = $this->title;
                             // 'template' => '<section class="col col-3"><label class="input">{label}</label> <label class="input">{input}<b class="tooltip tooltip-top-right">'.$model->getAttributeLabel('p1').'</b></label><em for="name" class="invalid">{error}{hint}</em></section>'
                         ]);
                     ?>
+                </div>
+            </div>
+            <div class ="col-md-7">
+                
+            </div>
+            <div class ="col-md-2">            
+                <div class="form-group">
+                   <label class='label'>วันลาคงเหลือ</label>
+                   <input type="text" class="form-control" placeholder="<?=$model->p1 + 10 - $model->t1?>" disabled="">
                 </div>
             </div>
 		</div>	

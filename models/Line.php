@@ -169,4 +169,12 @@ class Line extends \yii\db\ActiveRecord
         
         return $modelLine ? $modelLine->token : false;
     }
+    
+    public function getTokenbyid($id)
+    {
+        $model_user = User::findOne($id);
+        $modelLine = Line::findOne(['name' => $model_user['username'],'status' => 1]);
+        
+        return $modelLine ? $modelLine->token : false;
+    }
 }

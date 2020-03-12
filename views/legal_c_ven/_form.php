@@ -34,13 +34,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-body">
         <div class="row">
             <div class="col-md-12">
-                <div class="form-group">
-                    
+                <div class="form-group text-center">
+                    วันที่ <?=$model->DateThai_full($date_id)?> 
                     <?= $form->field($model, 'ven_date')->hiddenInput(['class'=>'form-control','value'=>$date_id])->label(false)?>
                 </div> 
             </div>
-            
-        
+            <hr>        
             <div class ="col-md-12">
                 <div class="form-group">			
                     <?= $form->field($model, 'legal_c_id')->widget(Select2::classname(), [

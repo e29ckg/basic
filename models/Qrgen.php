@@ -60,5 +60,30 @@ class Qrgen extends Model
         ];
     }
 
+    public function shout_url()
+    {
+        $key = "";//ใส่ api
+        $url = "https://medium.com/@nattaponsirikamonnet";
+        $long_url = str_replace(" ","%20",$url);
+        $domain_data["fullName"] = "rebrand.ly";
+        $post_data["destination"] = $long_url;
+        $post_data["domain"] = $domain_data;
+        
+        $ch = curl_init("https://api.rebrandly.com/v1/links");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+           "apikey: ".$key,
+           "Content-Type: application/json"
+        ));
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($post_data));
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($result, true);
+        
+        return $response["shortUrl"];
+    }
+
     
 }

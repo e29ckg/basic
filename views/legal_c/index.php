@@ -19,6 +19,9 @@ $this->params['breadcrumbs'][] = $this->title;
        	<div class="box">
            	<div class="box-header">
 				<h3 class="box-title"><?=$this->title;?></h3>
+				
+					<a target ="_blank" href ="https://drive.google.com/drive/folders/136N6efVhEEWHFk1boD8SsJNLYJgiIqBz?usp=sharing" class="btn btn-primary btn-xs" alt="act-form"> แบบฟอร์มสำหรับที่ปรึกษากฎหมาย </a> 
+				
 				<div class="box-tools pull-right">
 					<button id="act-create" class="btn btn-danger btn-md" alt="act-create"><i class="fa fa-plus "></i> เพิ่ม</button> 
 				</div>
@@ -54,13 +57,22 @@ $this->params['breadcrumbs'][] = $this->title;
 																		
 										<td >
 											<?= $model->fname.$model->name.' '.$model->sname ?>
+											<?= $model->status == '10' ? 
+												Html::a('ปกติ', ['legal_c/status', 'id' => $model->id], ['class' => 'btn btn-primary btn-xs','data-confirm'=>'Are you sure to ระงับ this item?']) 
+												:
+												Html::a('ระงับ', ['legal_c/status', 'id' => $model->id], ['class' => 'btn btn-danger btn-xs','data-confirm'=>'Are you sure to ปกติ this item?']) 
+											?>
+											<br><?= $model->phone ? 'โทร : <a href="tel:'.$model->phone.'">'.$model->phone.'</a>' : '' ?>
 										</td>
 										<td>
 											<?= Html::label('แก้ไข', 'update', [
 												'class' => 'btn btn-success btn-xs act-update',
 												'data-id' => $model->id]) ?>																					
-											
-											<?= Html::a('ลบ', ['legal_c/delete', 'id' => $model->id], ['class' => 'btn btn-danger btn-xs','data-confirm'=>'Are you sure to ยกเลิก this item?']) ?>
+											<?= $model->status == '10' ? 
+												Html::a('แก้ไขสถานะ', ['legal_c/status', 'id' => $model->id], ['class' => 'btn btn-primary btn-xs','data-confirm'=>'Are you sure to ระงับ this item?']) 
+												:
+												Html::a('แก้ไขสถานะ', ['legal_c/status', 'id' => $model->id], ['class' => 'btn btn-danger btn-xs','data-confirm'=>'Are you sure to ปกติ this item?']) 
+											?>
 												
 										</td>
 									</tr>

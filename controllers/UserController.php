@@ -52,10 +52,10 @@ class UserController extends Controller{
               
         if($id == 'dis'){
             $models = User::find()->where(['status' => 0])->limit(100)->all();     
-        } elseif($id == 'active'){
-            $models = User::find()->where(['status' => 10])->limit(100)->all(); 
+        } elseif($id == 'all'){
+            $models = User::find()->limit(100)->all();            
         } else{
-            $models = User::find()->limit(100)->all();
+            $models = User::find()->where(['status' => 10])->limit(100)->all(); 
         }
         return $this->render('user_index',[
             'models' => $models,

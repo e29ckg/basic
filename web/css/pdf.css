@@ -1,11 +1,10 @@
 html,
 body{
-    font-family: "Garuda";
+    /* font-family: "Garuda"; */
     font-size: 10pt;
-    /* font-family: "thsarabun";
-    font-size: 16pt; */
+    font-family: "thsarabun";
+    /* font-size: 16pt;  */
 }
-
 
 .table_bordered{
     border: 1px solid #000;
@@ -22,14 +21,14 @@ body{
 .bl_detail{
     /* border:0.6px solid #000; */
     vertical-align: bottom;
-    padding: 3px;
+    padding: 4px;
 }
 .bl_detail td{
     /* border:1px solid #fff; */
     /* border-top-width: 1px; */
     height: 30px;
     /* vertical-align: bottom; */
-    padding: 3px;
+    padding: 4px;
 }
 .TableLine {
     border-top-style: none;

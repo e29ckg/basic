@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			<div class="icon">
 				<i class="fa fa-users"></i>
 			</div>
-			<a href="<?=Url::to(['user/user_index']);?>" class="small-box-footer">
+			<a href="<?=Url::to(['user/user_index','id'=>'all']);?>" class="small-box-footer">
 				More info <i class="fa fa-arrow-circle-right"></i>
 			</a>
 		</div>

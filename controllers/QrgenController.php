@@ -77,12 +77,36 @@ class QrgenController extends Controller
         ]);
     }
 
+    public function actionTrack($prebid=null,$bid=null,$byear=null)
+    {    
+        if(empty($prebid) || empty($bid) || empty($byear)){
+            return $this->render('track',[
+                'Qrgen' => Url::to('@web/img/coj.png'),
+                'sms' => '',
+                'title_track' => 'ศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์',
+            ]);  
+        }    
+        $sms_qr = 'https://cios.coj.go.th/tracking/service.php?courtcode=pkkjc&prebid='.$prebid.'&bid='.$bid.'&byear='.$byear;
+
+        $dir = Url::to('@webroot/uploads/Qrgen/');
+            $qrCode = (new QrCode($sms_qr))
+                ->setSize(250)
+                ->setMargin(5)
+                ->useForegroundColor(1, 1, 1);              
+            $qrCode->writeFile($dir.'Qrgen1.png'); // writer defaults to PNG when none is specified
+            $Qrgen = Url::to('@web/uploads/Qrgen/Qrgen1.png');      
+                
+        return $this->render('track',[
+            'Qrgen' => $Qrgen,
+            'sms' => $sms_qr,
+            'title_track' => $prebid.$bid.'/'.$byear,
+        ]);
+    }
+
     public function actionDownload()
     {
         $completePath = Url::to('@webroot/uploads/Qrgen/Qrgen.png');
         return Yii::$app->response->sendFile($completePath, 'Qrgen.png', ['inline'=>false]);
     }
-    
-
     
 }

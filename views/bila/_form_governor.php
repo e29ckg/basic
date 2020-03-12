@@ -35,8 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	]);  ?>
     
     <?= $form->field($model, 't1')->hiddenInput(['readonly' => true, 'value' => 99])->label(false) ?>
-    
-    
+        
     <div class="box-body">
         <div class="row">
             <div class ="col-md-6">

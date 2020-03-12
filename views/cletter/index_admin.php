@@ -33,7 +33,10 @@ $this->params['breadcrumbs'][] = $this->title;
 					<?php foreach ($models as $model): ?>
 					<tr>
 						<td><?=$model->id?></td>
-						<td><?= $model->file ? Html::a($model->name,['cletter/show','id' => $model->id],['target' => '_blank']) : $model->name;?></td>
+						<td><?= $model->file ? 
+							'<a href="#" class="act-show" data-id="'.$model->id.'">'.$model->name.'</a>'
+							// Html::a($model->name,['cletter/show','id' => $model->id],['target' => '_blank']) 
+							: $model->name;?></td>
 						<td><?=$model->ca_name?> 
 							<br> <?=$model->DateThai_full($model->created_at);?>
 							<br> <?=$model->line_alert ? '<div class="mb-2 mr-2 badge badge-pill badge-primary">Line '.date("d m Y ",strtotime($model->line_alert)).'</div>' :'';?>
@@ -94,6 +97,20 @@ $(document).ready(function() {
             	$("#activity-modal").modal("show");
         	});
     	});
+
+		var url_show = "show";
+	$( ".act-show" ).click(function() {
+		var fID = $(this).data("id");
+			// alert(fID);
+        	$.get(url_show,{id: fID},function (data){
+			$("#activity-modal").find(".modal-body").html(data);
+			$(".modal-body").html(data);
+			$(".modal-title").html("show");
+			// $(".modal-footer").html(footer);
+			$("#activity-modal").modal("show");
+			//   $("#myModal").modal('toggle');
+		});     
+	}); 
 
 		var url_line = "line_alert";		
     	$(".act-line").click(function(e) {			

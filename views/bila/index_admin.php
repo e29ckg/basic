@@ -7,7 +7,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'ใบลาทั้งหมด';
+$this->title = 'ใบลาทั้งหมด ';
 $this->params['breadcrumbs'][] = ['label' => 'โปรแกรมใบลา', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -52,6 +52,12 @@ $this->params['breadcrumbs'][] = $this->title;
 											<?= $model->status == 4 ? '<span class="label label-danger">ยกเลิกการลา</span>' : '' ;?>
 										</td>
 										<td class = "text-center">
+										<?=$model->cat <> 'ไปราชการ' ? Html::a('<i class="fa fa-print"></i> Print ', ['bila/print1','id' => $model->id], [
+												'class' => 'btn btn-primary btn-xs',
+												'data-id' => $model->id,
+												'target' => '_blank'
+											]) : '';?>
+
 											<?= !empty($model->file) ? 
 											Html::a('ไฟล์เอกสาร', ['bila/file_view','id' => $model->id], [
 												
@@ -70,11 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
 												'data-id' => $model->id,
 												// 'target' => '_blank'
 											]).' '
-											.Html::a('<i class="fa fa-print"></i> Print ', ['bila/print1','id' => $model->id], [
-												'class' => 'btn btn-primary btn-xs',
-												'data-id' => $model->id,
-												'target' => '_blank'
-											]) 
+											 
 											. ' <a href= "#" class="btn btn-warning btn-xs act-update" data-id='.$model->id.'><i class="fa fa-wrench"></i> แก้ไข</a>';
 							
 											;?>

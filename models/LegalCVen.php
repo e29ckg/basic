@@ -45,7 +45,7 @@ class LegalCVen extends \yii\db\ActiveRecord
             'id' => 'ID',
             'ven_date' => 'Ven Date',
             'legal_c_id' => 'ชื่อที่ปรึกษากฎหมาย',
-            'comment' => 'Comment',
+            'comment' => 'หมายเหตุ',
             'create_at' => 'Create At',
         ];
     }
@@ -66,5 +66,28 @@ class LegalCVen extends \yii\db\ActiveRecord
         $model=$this->legal;
         // return $model ? $model->name: '-';
         return $model ? $model->fname.$model->name.' '.$model->sname : '-';
+    }
+
+    public function getPhone(){
+        $model=$this->legal;
+        // return $model ? $model->name: '-';
+        return $model ? $model->phone:'';
+    }
+
+    public function DateThai_full($strDate)
+	{
+        if($strDate == ''){
+            return "-";
+        }
+		$strYear = date("Y",strtotime($strDate))+543;
+		$strMonth= date("n",strtotime($strDate));
+		$strDay= date("j",strtotime($strDate));
+		$strHour= date("H",strtotime($strDate));
+		$strMinute= date("i",strtotime($strDate));
+		$strSeconds= date("s",strtotime($strDate));
+		$strMonthCut = Array("","มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม",
+                            "สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม");
+		$strMonthThai=$strMonthCut[$strMonth];
+		return "$strDay $strMonthThai $strYear";
     }
 }

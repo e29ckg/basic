@@ -51,11 +51,11 @@ class BilaController extends Controller
             ],
         ];
     }
-
     
     public function actionIndex()
     {
         $models = Bila::find()
+            ->select(['id','running','user_id','cat','date_begin','date_end','date_total','status'])
             ->where(['user_id' => Yii::$app->user->id])
             ->orderBy([
                 // 'date_create'=>SORT_DESC,
@@ -204,10 +204,16 @@ class BilaController extends Controller
             ])->one();         
         
         if(!empty($model_cat)){
+            
             $model->dateO_begin = $model_cat->date_begin;
             $model->dateO_end = $model_cat->date_end;
             $model->dateO_total = $model_cat->date_total;
-            $model->t1 =  $model_cat->t3;
+            if ($model_cat->date_end < date('Y-m-d',strtotime((date('Y')-1).'-10-01'))){
+               $model->t1 = 0;
+            }else{
+               $model->t1 =  $model_cat->t3;
+            } 
+            
             }else{
                 $model->dateO_begin = '';
                 $model->dateO_end = '';
@@ -289,22 +295,32 @@ class BilaController extends Controller
         }
 
         $model_cat = Bila::find()
-            ->where(['user_id' => Yii::$app->user->id,
-                'cat'=>'ลาพักผ่อน'
+            ->where([
+                'user_id' => Yii::$app->user->id,
+                'cat'=>'ลาพักผ่อน',
+                'status' => 1
                 ])
             ->orderBy([
                 'date_create'=>SORT_DESC,
                 'id' => SORT_DESC,
             ])->one(); 
 
-            if(!empty($model_cat)){                
-                $model->p1 = $model_cat->p1;
-                $model->t1 = $model_cat->t3;
+            if(!empty($model_cat)){    
+                if ($model_cat->date_end < date('Y-m-d',strtotime((date('Y')-1).'-10-01'))){
+                    // $y = 'ใบลาใบสุดท้าย ' ; //
+                    $model->p1 = $model_cat->p1 + 10;
+                    $model->t1 = 0;
                 }else{
-                    $model->p1 = null;
-                    $model->t1 = null;
-                } 
-            
+                    // $y = date('y'); //
+                    $model->p1 = $model_cat->p1;
+                    $model->t1 = $model_cat->t3;
+                }         
+                
+            }else{
+                $model->p1 = null;
+                $model->t1 = null;
+            } 
+            // $model->comment = $model_cat->date_end.' : ' .date('Y-m-d',strtotime((date('Y')).'-01-01'));
             $model->address = Bila::getProfileAddressById(Yii::$app->user->id);
 
         if(Yii::$app->request->isAjax){
@@ -378,6 +394,7 @@ class BilaController extends Controller
                 $model->date_create = date("Y-m-d H:i:s");
     
             }
+            $model->status = 1;
             if($model->save()){
                 /*---------------------ส่ง line ไปยัง Admin--------------------*/
                 $message = $model->getProfileName().' แก้ไข ใบ'.$model->cat."\n".'เลขที่ ' .$model->running;
@@ -436,6 +453,7 @@ class BilaController extends Controller
     public function actionDelete_admin($id)
     {
         $model = $this->findModel($id);
+        $model->status = 4;    
         $message = $model->getProfileName().' ลบ ใบ'.$model->cat."\n".'เลขที่ ' .$model->id;
         
         $dir = Url::to('@webroot'.$this->filePath.$model->user_id.'/'.$model->id);

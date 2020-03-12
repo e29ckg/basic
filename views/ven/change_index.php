@@ -73,10 +73,12 @@ $this->params['breadcrumbs'][] = $this->title;
 										<td class = "text-center">
 											
 											<?= !empty($model->file) ? 
-												Html::a('ไฟล์เอกสาร', ['ven/change_file_view','id' => $model->id], [													
-													'data-id' => $model->id,
-													'target' => '_blank'
-												]).' '	
+											'<a href="#" class="act-show" data-id="'.$model->id.'">ไฟล์เอกสาร</a>'
+												// Html::a('ไฟล์เอกสาร', ['ven/change_file_view','id' => $model->id], [													
+												// 	'data-id' => $model->id,
+												// 	'target' => '_blank'
+												// ])
+												.' '	
 												.Html::a('<i class="fa fa-remove"></i> ลบไฟล์ ', ['ven/change_del_file','id' => $model->id], [
 													'class' => 'btn btn-danger btn-block btn-xs',
 													'data-id' => $model->id,
@@ -179,6 +181,19 @@ $(document).ready(function() {
         	});     
 		}); 
 		
+	var url_show = "change_file_view";
+	$( ".act-show" ).click(function() {
+		var fID = $(this).data("id");
+			// alert(fID);
+        	$.get(url_show,{id: fID},function (data){
+			$("#activity-modal").find(".modal-body").html(data);
+			$(".modal-body").html(data);
+			$(".modal-title").html("show");
+			// $(".modal-footer").html(footer);
+			$("#activity-modal").modal("show");
+			//   $("#myModal").modal('toggle');
+		});     
+	}); 
 			
 		$('#example1').DataTable({
 			"pageLength": 50,

@@ -133,6 +133,52 @@ class Legal_c_venController extends Controller
         ]);
     }
 
+    public function actionUpdate($id)
+    {
+        $model = LegalCVen::findOne($id);  
+        
+        if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        } 
+     
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                $request = Yii::$app->request->post('LegalCVen');
+                $model->id = time();
+                $model->ven_date = $request['ven_date'];
+                $model->legal_c_id = $request['legal_c_id'];  
+                $model->comment = $request['comment'];
+                $model->create_at = date("Y-m-d H:i:s");
+
+                if($model->save()){                                       
+                    Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');                   
+                }  
+
+                $transaction->commit();               
+                
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            }   
+            
+            return $this->redirect(['index']);
+        }
+        
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('_form',[
+                'model' => $model,  
+                'date_id'   => $model->ven_date,   
+            ]);
+        }
+        
+        return $this->render('_form',[
+            'model' => $model,
+            'date_id'   => $model->ven_date,  
+        ]);
+    }
+
     
     public function actionView($id)
     {
@@ -154,6 +200,43 @@ class Legal_c_venController extends Controller
             Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');                                            
         }   
         return $this->redirect(['index']);
+    }
+
+    protected function findModel($id)
+    {
+        if (($model = LegalCVen::findOne($id)) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionLine_alert($id) {
+        $model = $this->findModel($id);        
+        
+        $sms = $model->ven_date;
+        $sms .= "\n";
+                
+        $sms .= $model->getName() ;
+        $sms .= "\n";
+        $sms .= '(เวรที่ปรึกษากฎหมาย)';
+        $sms .= "\n";                
+         
+        $modelLine = Line::findOne(['name' => 'LineGroup']);     //แจ้ง lineGroup 
+        
+        if(isset($modelLine->token)){                
+            $res = Line::notify_message($modelLine->token,$sms);  
+            $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'lineGroup ส่งไลน์เรียบร้อย') : Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+        }
+
+        $modelLine = Line::findOne(['name' => 'ที่ปรึกษากฎหมาย']);     //แจ้ง lineGroup 
+        if(isset($modelLine->token)){                
+            $res = Line::notify_message($modelLine->token,$sms);  
+            $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ที่ปรึกษากฎหมาย ส่งไลน์เรียบร้อย') : Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+        }
+        Yii::$app->session->setFlash('success', 'เรียบร้อย'.$sms );   
+            
+        return $this->redirect(['index']);        
     }
     
 }

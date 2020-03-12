@@ -203,7 +203,7 @@ $profileActive = Profile::getProfileActive();
       <small>
         <?php Yii::$app->requestedAction->id.' # '.Yii::$app->controller->getRoute().' # '.Yii::$app->controller->id.' # ' ?> 
           # <?php $csrf = yii::$app->request->csrfParam;?> 
-      <?php $token = yii::$app->request->csrfToken;?> <?= Yii::$app->getRequest()->getUserIP().' Date : '.date("Y-m-d");;?></small>
+      <?php $token = yii::$app->request->csrfToken;?> <?= Yii::$app->getRequest()->getUserIP().' Date : '.date("Y-m-d");?></small>
     <!-- <strong>Copyright &copy; 2014-2019 <a href="https://adminlte.io">AdminLTE</a>.</strong> All rights -->
     <!-- reserved. -->
   </footer>

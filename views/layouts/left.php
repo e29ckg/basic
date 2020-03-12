@@ -6,18 +6,19 @@ $menuG = [
         ['label' => 'Menu', 'options' => ['class' => 'header']],
         ['label' => 'หน้าหลัก', 'icon' => 'home', 'url' => ['site/index']],
         ['label' => 'หนังสือเวียน', 'icon' => 'briefcase', 'url' => ['cletter/index']],
+        ['label' => 'คำสั่งศาลฯ/สำนักงาน', 'icon' => 'bullhorn', 'url' => ['courtorder/index']],
         ['label' => 'WebLink', 'icon' => 'link', 'url' => ['web_link/index']],
         ['label' => 'เขียนใบลา', 'icon' => 'briefcase', 'url' => ['bila/index']],
         ['label' => 'ตารางเวร', 'icon' => 'fa fa-user-o', 'url' => ['/ven/index']],
         ['label' => 'ส่งคำพิพากษา 7', 'icon' => ' fa-qrcode', 'url' => ['ppss/index']], 
-        ['label' => 'ตารางเวรที่ปรึกษา', 'icon' => 'fa fa-user-o', 'url' => ['legal_c_ven/index']],
-         
+        ['label' => 'ตารางเวรที่ปรึกษา', 'icon' => 'fa fa-user-o', 'url' => ['legal_c_ven/index']],         
         ['label' => 'สร้าง  QrCode', 'icon' => ' fa-qrcode', 'url' => ['qrgen/index']],
         [
             'label' => 'เบิกของ CartX', 
-            'icon' => 'shopping-cart', 'url' => '/cartx/web', 
+            'icon' => 'shopping-cart', 'url' => '/cartx/web/cart/index', 
             'template' => '<a href="{url}" target="_blank">{icon} {label}</a>'
         ], 
+        ['label' => 'จองห้องประชุมผ่านจอภาพ', 'icon' => ' fa-qrcode', 'url' => ['emeeting/index']],
         ['label' => '#', 'options' => ['class' => 'header']],
         ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],                    
     ],
@@ -29,6 +30,7 @@ $menu = [
         ['label' => 'Menu', 'options' => ['class' => 'header']],
         ['label' => 'หน้าหลัก', 'icon' => 'home', 'url' => ['site/index']],
         ['label' => 'หนังสือเวียน', 'icon' => 'bullhorn', 'url' => ['cletter/index']],
+        ['label' => 'คำสั่งศาลฯ/สำนักงาน', 'icon' => 'bullhorn', 'url' => ['courtorder/index']],
         ['label' => 'WebLink', 'icon' => 'link', 'url' => ['web_link/index']],
         ['label' => 'โปรแกรมใบลา', 'icon' => 'briefcase', 'url' => '#',
           'items' => [
@@ -46,15 +48,16 @@ $menu = [
             'items' => [
                 ['label' => 'รายชื่อที่ปรึกษากฎหมาย', 'icon' => 'id-card-o', 'url' => ['legal_c/index']],
                 ['label' => 'ตารางเวรที่ปรึกษา', 'icon' => 'fa fa-user-o', 'url' => ['legal_c_ven/index']],
-                
+                ['label' => 'ทนายความโดนแบน', 'icon' => 'user-times', 'url' => ['law_ban/index']], 
             ],
         ],
         ['label' => 'สร้าง  QrCode', 'icon' => ' fa-qrcode', 'url' => ['qrgen/index']], 
         [
             'label' => 'เบิกของ CartX', 
-            'icon' => 'shopping-cart', 'url' => '/cartx/web', 
+            'icon' => 'shopping-cart', 'url' => '/cartx/web/cart/index', 
             'template' => '<a href="{url}" target="_blank">{icon} {label}</a>'
         ],
+        ['label' => 'จองห้องประชุมผ่านจอภาพ', 'icon' => ' fa-qrcode', 'url' => ['emeeting/index']],
         ['label' => 'ตั้งค่า', 'options' => ['class' => 'header']],
         ['label' => 'Profile', 'icon' => 'id-card-o', 'url' => ['user/profile']],  
                             
@@ -67,6 +70,11 @@ $menu_operator = [
         ['label' => 'Menu', 'options' => ['class' => 'header']],
         ['label' => 'หน้าหลัก', 'icon' => 'home', 'url' => ['site/index']],
         ['label' => 'หนังสือเวียน', 'icon' => 'bullhorn', 'url' => ['cletter/index']],
+        ['label' => 'คำสั่งศาลฯ/สำนักงาน', 'icon' => 'bullhorn', 'url' => '#',
+          'items' => [
+            ['label' => 'คำสั่งศาลฯ/สำนักงาน', 'icon' => 'bullhorn', 'url' => ['courtorder/index']],
+            ['label' => 'สมุดคุม', 'icon' => 'bullhorn', 'url' => ['courtorder/report']],
+        ]],
         ['label' => 'WebLink', 'icon' => 'link', 'url' => ['web_link/index']],
         ['label' => 'โปรแกรมใบลา', 'icon' => 'briefcase', 'url' => '#',
           'items' => [
@@ -87,15 +95,16 @@ $menu_operator = [
             'items' => [
                 ['label' => 'รายชื่อที่ปรึกษากฎหมาย', 'icon' => 'id-card-o', 'url' => ['legal_c/index']],
                 ['label' => 'ตารางเวรที่ปรึกษา', 'icon' => 'fa fa-user-o', 'url' => ['legal_c_ven/index']],
-                
+                ['label' => 'ทนายความโดนแบน', 'icon' => 'user-times', 'url' => ['law_ban/index']],
             ],
         ],
         ['label' => 'สร้าง  QrCode', 'icon' => ' fa-qrcode', 'url' => ['qrgen/index']], 
         [
             'label' => 'เบิกของ CartX', 
-            'icon' => 'shopping-cart', 'url' => '/cartx/web', 
+            'icon' => 'shopping-cart', 'url' => '/cartx/web/cart/index', 
             'template' => '<a href="{url}" target="_blank">{icon} {label}</a>'
         ],
+        ['label' => 'จองห้องประชุมผ่านจอภาพ', 'icon' => ' fa-qrcode', 'url' => ['emeeting/index']],
         ['label' => 'ตั้งค่า', 'options' => ['class' => 'header']],
         ['label' => 'Profile', 'icon' => 'id-card-o', 'url' => ['user/profile']], 
         ['label' => 'ผู้ลงนาม', 'icon' => 'briefcase', 'url' => ['bila/sbn_index']],                             
@@ -115,7 +124,12 @@ $menu_admin = [
             ['label' => 'จัดการ หนังสือเวียน', 'icon' => 'bullhorn', 'url' => ['cletter/index_admin']],
             ['label' => 'ประเภทหนังสือ', 'icon' => 'bullhorn', 'url' => ['cletter/caid_index']],
         ]], 
-        ['label' => 'คำสั่งศาลฯ/สำนักงาน', 'icon' => 'bullhorn', 'url' => ['courtorder/index']],
+        // ['label' => 'คำสั่งศาลฯ/สำนักงาน', 'icon' => 'bullhorn', 'url' => ['courtorder/index']],
+        ['label' => 'คำสั่งศาลฯ/สำนักงาน', 'icon' => 'bullhorn', 'url' => '#',
+          'items' => [
+            ['label' => 'คำสั่งศาลฯ/สำนักงาน', 'icon' => 'bullhorn', 'url' => ['courtorder/index']],
+            ['label' => 'สมุดคุม', 'icon' => 'bullhorn', 'url' => ['courtorder/report']],
+        ]],
         ['label' => 'WebLink', 'icon' => 'link', 'url' => '#',
             'items' => [
                 ['label' => 'WebLink', 'icon' => 'link', 'url' => ['web_link/index']],
@@ -136,16 +150,16 @@ $menu_admin = [
                 ['label' => 'ตารางเวร', 'icon' => 'fa fa-user-o', 'url' => ['/ven/index']],
                 ['label' => 'ใบเปลี่ยนเวร', 'icon' => 'fa fa-user-o', 'url' => ['/ven/change_user_index']],
                 ['label' => 'ใบเปลี่ยนเวรทั้งหมด', 'icon' => 'fa fa-user-o', 'url' => ['/ven/change_index']],
-                ['label' => 'จัดเวร จับ-ค้น (เบต้า)', 'icon' => ' fa fa-user-o', 'url' => ['ven/admin_index']],
-                // ['label' => 'ผู้อยู่เวร', 'icon' => ' fa fa-user-o', 'url' => ['ven/user']],
+                ['label' => 'จัดเวร จับ-ค้น (เบต้า)', 'icon' => ' fa fa-user-o', 'url' => ['ven/admin_index']],                
                 ['label' => 'คำสั่ง', 'icon' => ' fa fa-user-o', 'url' => ['ven/com_index']],
+                ['label' => 'ผู้อยู่เวร', 'icon' => ' fa fa-user-o', 'url' => ['ven/user_index']],
             ],
         ],
         ['label' => 'ที่ปรึกษากฎหมาย', 'icon' => 'users', 'url' => '#',
             'items' => [
                 ['label' => 'รายชื่อที่ปรึกษากฎหมาย', 'icon' => 'id-card-o', 'url' => ['legal_c/index']],
                 ['label' => 'ตารางเวรที่ปรึกษา', 'icon' => 'fa fa-user-o', 'url' => ['legal_c_ven/index']],
-                
+                ['label' => 'ทนายความโดนแบน', 'icon' => 'user-times', 'url' => ['law_ban/index']],                
             ],
         ],
         
@@ -154,10 +168,10 @@ $menu_admin = [
         ['label' => 'สร้าง  QrCode', 'icon' => ' fa-qrcode', 'url' => ['qrgen/index']],  
         [
             'label' => 'เบิกของ CartX', 
-            'icon' => 'shopping-cart', 'url' => '/cartx/web', 
+            'icon' => 'shopping-cart', 'url' => '/cartx/web/cart/index', 
             'template' => '<a href="{url}" target="_blank">{icon} {label}</a>'
         ],       
-
+        ['label' => 'จองห้องประชุมผ่านจอภาพ', 'icon' => ' fa-qrcode', 'url' => ['emeeting/index']],
         ['label' => 'ตั้งค่า', 'options' => ['class' => 'header']],
         ['label' => 'Profile', 'icon' => 'id-card-o', 'url' => ['user/profile']],    
         ['label' => 'Line + ตั้งค่าพื้นฐาน', 'icon' => ' fa fa-whatsapp', 'url' => ['line/line_index']],    

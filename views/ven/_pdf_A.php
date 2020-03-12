@@ -62,7 +62,10 @@ use yii\helpers\Url;
 		</tr>
         <tr>
             <td >เรียน</td>	
-            <td colspan="9">ผู้อำนวยการสำนักงานประจำศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์</td>
+            <td colspan="9">
+            <?= $model->ven2_old->ven_time == '08:30:00' || $model->ven2_old->ven_time == '16:30:00' ?
+            'ผู้พิพากษาหัวหน้าศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์':
+            'ผู้อำนวยการสำนักงานประจำศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์';?></td>
 		</tr>
   
         <tr>
@@ -183,22 +186,36 @@ use yii\helpers\Url;
             <td colspan="5" style="text-align:center"></td>
             <td colspan="5" style="text-align:center"></td>
 		</tr>
-    
-        <tr>
+        <?= $model->ven2_old->ven_time == '08:30:00' || $model->ven2_old->ven_time == '16:30:00' ?
+            '<tr>
+            <td colspan="1"></td>
+            <td colspan="3" style="text-align:center">[ / ] เห็นควรอนุญาต</td>
+            <td colspan="2"></td>            
+            <td colspan="3" style="text-align:center"> </td>
+            <td colspan="1"></td>
+		</tr>':
+            '<tr>
             <td colspan="1"></td>
             <td colspan="3" style="text-align:center">ทราบ</td>
             <td colspan="2"></td>            
             <td colspan="3" style="text-align:center">[ / ] เห็นควรอนุญาต </td>
             <td colspan="1"></td>
-		</tr>
+		</tr>';?>
+        
+        
+
         <tr>
             <td colspan="10"></td>           
 		</tr>
         <tr>
             <td colspan="1"></td>
             <td colspan="3" class="TableLine" style="text-align:center"></td>
-            <td colspan="2"></td>            
-            <td colspan="3" class="TableLine" style="text-align:center"></td>
+            <td colspan="2"></td> 
+            <?= $model->ven2_old->ven_time == '08:30:00' || $model->ven2_old->ven_time == '16:30:00' ?
+            '<td colspan="3" style="text-align:center"></td>'
+            :
+            '<td colspan="3" class="TableLine" style="text-align:center"></td>' ; ?>          
+            
             <td colspan="1"></td>
 		</tr>       
         

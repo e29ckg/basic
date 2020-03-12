@@ -32,6 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ]);  ?>
       
     <?= $form->field($model, 'date_create')->hiddenInput(['readonly' => true, 'value' => date("Y-m-d")])->label(false) ?>
+    <?= $form->field($model, 'user_id')->hiddenInput(['readonly' => true, 'value' => Yii::$app->user->identity->id])->label(false) ?>
     
     <div class="box-body">
         <div class="row">

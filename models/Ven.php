@@ -433,5 +433,22 @@ class Ven extends \yii\db\ActiveRecord
 		return "$strMonthThai";
     }
 
+    public function BackGroundColor($time,$st)
+	{
+		if($st == 2){return 'orange';}
+        if($time == '08:30:00'){return 'yellowgreen';}
+        if($time == '08:30:01'){return 'green';}
+        if($time == '08:30:11'){return 'gray';}
+        if($time == '08:30:22'){return 'gray';}
+        if($time == '16:30:00'){return 'blueviolet';}
+        if($time == '16:30:55'){return 'blue';}
+        return '';
+    }
+
+    public function getNameById($id)
+    {
+        $PR = Profile::findOne($id);
+        return $PR->user_id.' '.$PR->name;
+    }
     
 }

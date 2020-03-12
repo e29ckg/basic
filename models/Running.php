@@ -30,50 +30,90 @@ class Running extends \yii\db\ActiveRecord
     public function getRunNumber($name)
     {
         $year = date('Y') + 543;
-        $model_run = Running::findOne(['name' => 'bila','y' => $year]);        
+        $model_run = Running::findOne(['name' => 'bila']);        
         if(empty($model_run)){
             $model_run = new Running();
             $model_run->name = 'bila';
             $model_run->y = $year;
-            $model_run->r = date('y') + 43 . '000';
+            $model_run->r = date('y') + 43 . '001';
             $model_run->save();
+            return $model_run->r ;
         } 
-        $model_run->r = $model_run->r + 1;
-        $model_run->save();
+        if($model_run->y == $year){
+            $model_run->r = $model_run->r + 1;
+            $model_run->save();
+            return $model_run->r;
+        }
+            $model_run->y = $year;
+            $model_run->r =  date('y') + 43 . '001';
+            $model_run->save();
+        
         return $model_run->r;
     }
 
     public function getRunNumberOrBB()
     {
         $year = date('Y') + 543;
-        $model_run = Running::findOne(['name' => 'คำสั่งศาล','y' => $year]);        
-        if(empty($model_run)){
+        $model_run = Running::findOne(['name' => 'คำสั่งศาล']);
+        if (empty($model_run)) {
             $model_run = new Running();
             $model_run->name = 'คำสั่งศาล';
             $model_run->y = $year;
             $model_run->r = '0';
             $model_run->save();
-        } 
-        $model_run->r = $model_run->r + 1;
+            return ['r' => $model_run->r + 1, 'y' => $year];
+        }
+
+        if($model_run->y == $year ){
+            return ['r' => $model_run->r + 1, 'y' => $year];
+        }else{
+            $model_run->y = $year;
+            $model_run->r = '0';
+            $model_run->save();
+            return ['r' => $model_run->r + 1, 'y' => $year];
+        }
+        return ['r' => $model_run->r + 1, 'y' => $year];
+    }
+
+    public function addRunNumberOrBB($r, $y)
+    {
+        $model_run = Running::findOne(['name' => 'คำสั่งศาล']);
+        $model_run->y = $y;
+        $model_run->r = $r;
         $model_run->save();
-        return $model_run->r;
+        return true;
     }
 
     public function getRunNumberOrB()
     {
         $year = date('Y') + 543;
-        $model_run = Running::findOne(['name' => 'คำสั่งสำนักงาน','y' => $year]);        
-        if(empty($model_run)){
+        $model_run = Running::findOne(['name' => 'คำสั่งสำนักงาน']);
+        if (empty($model_run)) {
             $model_run = new Running();
             $model_run->name = 'คำสั่งสำนักงาน';
             $model_run->y = $year;
             $model_run->r = '0';
             $model_run->save();
-        } 
-        $model_run->r = $model_run->r + 1;
-        $model_run->save();
-        return $model_run->r;
-    }
-    
+            return ['r' => $model_run->r + 1, 'y' => $year];
+        }
 
+        if($model_run->y == $year ){
+            return ['r' => $model_run->r + 1, 'y' => $year];
+        }else{
+            $model_run->y = $year;
+            $model_run->r = '0';
+            $model_run->save();
+            return ['r' => $model_run->r + 1, 'y' => $year];
+        }
+        return ['r' => $model_run->r + 1, 'y' => $year];
+    }
+
+    public function addRunNumberOrB($r, $y)
+    {
+        $model_run = Running::findOne(['name' => 'คำสั่งสำนักงาน', 'y' => $y]);
+
+        $model_run->r = $r;
+        $model_run->save();
+        return true;
+    }
 }

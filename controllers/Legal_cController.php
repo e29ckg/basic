@@ -157,5 +157,19 @@ class Legal_cController extends Controller{
         }
         return $this->redirect(['index']);
     }
+
+    public function actionStatus($id)
+    {
+        $model = LegalC::findOne($id);
+                
+        if($model->status == '10'){
+            $model->status = '0';                    
+        }else{
+            $model->status = '10';  
+        }
+        $model->updated_at = date("Y-m-d H:i:s");
+        $model->save();
+        return $this->redirect(['index']);
+    }
     
 }

@@ -122,6 +122,7 @@ $this->params['breadcrumbs'][] = $this->title;
 								'inputOptions' => [
 									'placeholder' => $model->getAttributeLabel('phone'),
 									'class' => 'form-control',
+									'type' => 'tel',
 									// 'type' => 'password'
 								],
 								// 'template' => '{label}{input}{error}{hint}'

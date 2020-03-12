@@ -3,7 +3,10 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-
+use app\models\VenCom;
+// var_dump($data);
+$data = json_decode($data); 
+// var_dump($data);
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
@@ -30,39 +33,70 @@ $this->params['breadcrumbs'][] = $this->title;
 							<table id="example1" class="table table-bordered table-striped dataTable" role="grid" >
                 				<thead>
                 					<tr role="row">										
-										<th class="text-center" >id</th>
+										<th class="text-center" >เดือน</th>
 										<th class="text-center" >เลขที่คำสั่ง</th>
-										<th class="text-center" >ชื่อคำสั่ง</th>
-										<th class="text-center" >status</th>
-										<th></th>
+										
 									</tr>
                 				</thead>
-                				<tbody>  
-									                          
-									<?php foreach ($models as $model): ?>
+                				<tbody>                  
+									
+									<?php 
+										
+										foreach ($data as $d): 
+									?>
 						            <tr>						                
-										<td><?=$model->id?></td>	
-										<td><?=$model->ven_com_num. ' '. $model->ven_com_date;?><br>เดือน <?=$model->ven_month;?></</td>									
-                                        <td><?=$model->getVen_time()[$model->ven_time];?><br><?=$model->ven_com_name;?></td>
-										<td class = "text-center">
-											<a href="<?=Url::to(['ven/com_set_status','id'=>$model->id])?>">
-													<?=$model->status == 1 ?
-													'<span class="label label-primary ">ใช้งาน</span>' 
-													:
-													'<span class="label label-danger " >ไม่ใช้งาน</span>' ;?>				        
-											</a>
-										</td>
 										<td>
-											<button class="btn btn-warning btn-xs act-update" alt="act-update" data-id="<?=$model->id?>">
-												<i class="fa fa-pencil-square-o "></i> แก้ไข</button>  
-												<?=Html::a('<i class="fa fa-remove"></i> ลบ ', ['ven/com_del', 'id' => $model->id], [
-													'class' => 'btn btn-danger btn-xs',
-													'data-confirm' => 'Are you sure?',
-													'data-method' => 'post',
-												]) ?>
+											<?=VenCom::DateThai_full($d->month)?>
+											<?=Html::a('สรุปรายบุคคล', ['ven/report2', 'ven_com_num' => $d->num[0]->ven_com_num], [
+												'class' => 'btn btn-sucess btn-xs',
+												'target' => '_blank',
+											]) ?>
 										</td>
+													
+										<td>
+											<?php foreach ($d->num as $da): ?>
+												<?=$da->ven_com_num?>
+												 - 
+												<!-- <?=Html::a('พิมพ์ใบขวางเสนอ', ['ven/report', 'ven_com_num' => $da->ven_com_num], [
+													'class' => 'btn btn-sucess btn-xs',
+													'target' => '_blank',
+												]) ?> -->
+												<?=Html::a('พิมพ์ใบขวางเสนอ L65', ['ven/report_l65', 'ven_com_num' => $da->ven_com_num], [
+													'class' => 'btn btn-sucess btn-xs',
+													'target' => '_blank',
+												]) ?>
+												<br>
+												<ol>
+													<?php foreach ($da->com_name as $da_com_name): ?>
+														
+														<li>
+															<?=VenCom::getVen_time()[$da_com_name->ven_time];?>
+															<a href="<?=Url::to(['ven/com_set_status','id'=>$da_com_name->id])?>">
+																<?=$da_com_name->status == 1 ?
+																'<span class="label label-primary ">ใช้งาน</span>' 
+																:
+																'<span class="label label-danger " >ไม่ใช้งาน</span>' ;?>				        
+															</a>
+															<button class="btn btn-warning btn-xs act-update" alt="act-update" data-id="<?=$da_com_name->id?>">
+																<i class="fa fa-pencil-square-o "></i> แก้ไข</button>  
+																<?php
+																// echo $da_com_name['status_del'];
+																if(!$da_com_name->status_del){
+																	echo Html::a('<i class="fa fa-remove"></i> ลบ ', ['ven/com_del', 'id' => $da_com_name->id], [
+																		'class' => 'btn btn-danger btn-xs',
+																		'data-confirm' => 'Are you sure?',
+																		'data-method' => 'post',
+																	]);
+																}
+																?>																	
+														</li>														
+														
+													<?php  endforeach; ?>
+												</ol>												
+											<?php  endforeach; ?>
+										</td>	
 									</tr>
-									<?php  endforeach; ?>								
+									<?php  endforeach; ?>							
 								</tbody>
 							</table>
 						</div>
@@ -78,8 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $script = <<< JS
     
-$(document).ready(function() {	
-	
+$(document).ready(function() {
 	  
 			
 	$('#activity-modal').on('hidden.bs.modal', function () {
