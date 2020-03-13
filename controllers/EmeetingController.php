@@ -68,7 +68,7 @@ class EmeetingController extends Controller
             
             $even = [
                 'id' => $model->id,
-                'title' => date('H:i', strtotime($model->start)).' '.$model->title,
+                'title' => date('H:i', strtotime($model->start)).' '.$model->cname,
                 // 'title' => $model->ven_date.' '.$model->ven_time,
                 'start' => $model->start,
                 // 'textColor' => $model->legal_c_id == Yii::$app->user->identity->id ? 'yellow' :'',
@@ -81,6 +81,7 @@ class EmeetingController extends Controller
         $event = json_encode($event);
         return $this->render('index',[
             'event' => $event,
+            'models' => $models
         ]);
     }
 
@@ -106,6 +107,8 @@ class EmeetingController extends Controller
                     if($f->saveAs($dir . $fileName)){
                         $model->file = $fileName;
                     }               
+                }else{
+                    $model->file = null;
                 } 
 
                 $request = Yii::$app->request->post('Emeeting');
@@ -118,8 +121,9 @@ class EmeetingController extends Controller
                 $model->tel = $request['tel'];
                 $model->detail = $request['detail'];            
                 $model->created_at = date("Y-m-d H:i:s");
-
-                if($model->save()){                                       
+                $message = $model->cname .' '.$model->title.' '.$model->start .' โดย '.$model->fname.':'.$model->tel;
+                if($model->save()){          
+                    Line::send_sms_to('admin99',$message);                           
                     Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');                   
                 }  
 
@@ -147,7 +151,7 @@ class EmeetingController extends Controller
     public function actionUpdate($id)
     {
         $model = Emeeting::findOne($id);  
-        
+        $fileName = $model->file;
         if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ActiveForm::validate($model);
@@ -156,6 +160,21 @@ class EmeetingController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $transaction = Yii::$app->db->beginTransaction();
             try {
+                $f = UploadedFile::getInstance($model, 'file');
+                if(!empty($f)){
+                    $dir = Url::to('@webroot'.$this->filePath);
+                    if (!is_dir($dir)) {
+                        mkdir($dir, 0777, true);
+                    }
+                    if($fileName && is_file($dir.$fileName)){
+                        unlink($dir.$fileName);// ลบ ไฟล์เดิม; 
+                    }
+                    $fileName = md5($f->baseName . time()) . '.' . $f->extension;
+                    if($f->saveAs($dir . $fileName)){
+                        $model->file = $fileName;
+                    }               
+                }
+
                 $request = Yii::$app->request->post('Emeeting');
                 
                 $model->title = $request['title'];
@@ -183,14 +202,12 @@ class EmeetingController extends Controller
         
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('_form',[
-                'model' => $model,  
-                'date_id'   => $model->ven_date,   
+                'model' => $model,   
             ]);
         }
         
         return $this->render('_form',[
             'model' => $model,
-            'date_id'   => $model->ven_date,  
         ]);
     }
 
@@ -212,18 +229,18 @@ class EmeetingController extends Controller
 
     public function actionDel($id)
     {
-        $model = Emeeting::findOne($id);   
-        $filePath = Url::to('@webroot'.$this->filePath.'/'.$model->file);       
-        if(is_file($filePath)){
-            unlink($filePath);// ลบ ไฟล์;   
-            Yii::$app->session->setFlash('success', 'ลบไฟล์เรียบร้อย');
-        }else{
-            Yii::$app->session->setFlash('error', 'ไม่พบ File... ');
-            return $this->redirect(['index']);
-        }   
-
-        if($model->delete()){            
-            Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');                                            
+        $model = Emeeting::findOne($id);  
+        $fileName = $model->file; 
+        $message = Yii::$app->user->id.' [ลบ] '.$model->cname.$model->title.' วันที่ '.$model->start;
+        $filePath = Url::to('@webroot'.$this->filePath.'/'.$fileName);     
+        // $dir = Url::to('@webroot'.$this->filePath);
+        if($fileName && is_file($filePath)){
+            unlink($filePath);// ลบ ไฟล์เดิม;        
+        } 
+       
+        if($model->delete()){ 
+            Line::send_sms_to('admin99',$message);              
+            Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');   
         }   
         return $this->redirect(['index']);
     }
@@ -237,32 +254,4 @@ class EmeetingController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionLine_alert($id) {
-        $model = $this->findModel($id);        
-        
-        $sms = $model->ven_date;
-        $sms .= "\n";
-                
-        $sms .= $model->getName() ;
-        $sms .= "\n";
-        $sms .= '(เวรที่ปรึกษากฎหมาย)';
-        $sms .= "\n";                
-         
-        $modelLine = Line::findOne(['name' => 'LineGroup']);     //แจ้ง lineGroup 
-        
-        if(isset($modelLine->token)){                
-            $res = Line::notify_message($modelLine->token,$sms);  
-            $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'lineGroup ส่งไลน์เรียบร้อย') : Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
-        }
-
-        $modelLine = Line::findOne(['name' => 'ที่ปรึกษากฎหมาย']);     //แจ้ง lineGroup 
-        if(isset($modelLine->token)){                
-            $res = Line::notify_message($modelLine->token,$sms);  
-            $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ที่ปรึกษากฎหมาย ส่งไลน์เรียบร้อย') : Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
-        }
-        Yii::$app->session->setFlash('success', 'เรียบร้อย'.$sms );   
-            
-        return $this->redirect(['index']);        
-    }
-    
 }

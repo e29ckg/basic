@@ -1,6 +1,6 @@
 <?php
 use yii\helpers\Url;
-
+use yii\helpers\Html;
 $this->title = 'ระบบจองใช้ห้องประชุมทางจอภาพ Web Conference ศาลเยาวชนฯ จ.ประจวบฯ';
 // $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -10,8 +10,7 @@ $this->title = 'ระบบจองใช้ห้องประชุมท�
 <div class="row">
     <div class="col-md-12">
     <center>
-				<button id="act-create" class="btn btn-primary"">
-						
+				<button id="act-create" class="btn btn-primary"">						
 				+ บันทึกจองคิวนัดประชุมผ่านจอภาพ (Web Conference) +  
 				</button>
 				</center>
@@ -21,6 +20,57 @@ $this->title = 'ระบบจองใช้ห้องประชุมท�
       <div class="box box-primary">
         <div class="box-body">
           <div id="calendar"></div>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="col-md-12">
+      <div class="box box-primary">
+        <div class="box-body">
+        <table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+			<thead>
+				<tr role="row">
+					<th class = "text-center" style="width: 100px;">ประเภทการลา</th>
+					<th class = "text-center" style="width: 500px;">รายละเอียด</th>
+					<th style="width: 100px;"></th>
+				</tr>
+			</thead>
+			<tbody>  
+				<?php $i = 1?>                              
+				<?php foreach ($models as $model): ?>
+				<tr>
+					<td class="text-center" alt="<?=$model->id?>">
+						<?=$model->cname?>
+						<br><?= $model->title;?>
+					</td>										
+					<td>
+						<?=$model->start?> ถึง <?=$model->end?>
+					</td>
+					<td class="text-center"> 
+					
+					<?= !empty($model->file) ? 
+						Html::a('<i class="fa fa-file-o"></i> ไฟล์เอกสาร ', ['emeeting/viewfile_view','id' => $model->id], [
+							// 'class' => 'btn btn-xs',
+							'data-id' => $model->id,
+							'target' => '_blank'
+						])
+						:'';?>
+            <button class ="act-update1 btn btn-warning btn-xs" data-id = "<?=$model->id?>">
+              <i class="fa fa-wrench"></i> แก้ไข 
+            </button>
+
+						<?=						
+						 Html::a('<i class="fa fa-remove"></i> ลบ ', ['emeeting/del', 'id' => $model->id], [
+							'class' => 'btn btn-danger btn-xs',
+							'data-confirm' => 'Are you sure?',
+							'data-method' => 'post',
+						]) ?>			        
+					</td>
+				</tr>
+				<?php  endforeach; ?>								
+			</tbody>
+		</table>
+
         </div>
       </div>
     </div>
@@ -85,6 +135,18 @@ $script = <<< JS
             //   $("#myModal").modal('toggle');
       });     
 }); 
+
+$( ".act-update1" ).click(function() {
+  var url_update = "view";
+  var fID = $(this).data("id");
+    $.get(url_update,{id:fID},function (data){
+
+        $("#activity-modal").find(".modal-body").html(data);
+        $(".modal-body").html(data);
+        $(".modal-title").html("view");
+        $("#activity-modal").modal("show");
+    });
+});
 
 $(document).on('click','.fc-day-top',function(){
   var url_create = "create";

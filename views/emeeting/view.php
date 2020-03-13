@@ -22,6 +22,14 @@ use yii\helpers\Url;
                 </tr>
                 <tr>   
                     <td class="text-right">
+                        เรื่อง
+                    </td>
+                    <td>
+                        <?= $model->title;?>
+                    </td>
+                </tr>
+                <tr>   
+                    <td class="text-right">
                         วันที่
                     </td>
                     <td>
@@ -63,10 +71,17 @@ use yii\helpers\Url;
                 </tr>
                        
             </table>  
-            <?php  if(isset($model->file)){?>
+            <?php  if( !empty($model->file)){?>
                     <embed src="<?= $completePath?>" frameborder="0" width="100%" height="800px">
             <?php }?>
             
+            <?= !Yii::$app->user->isGuest ? 
+                '<div class="text-center">
+                    <label for="update" data-id='.$model->id.' class="btn btn-success act-update">แก้ไข</label> '
+                    .Html::a('ลบ', ['del', 'id' => $model->id], ['class' => 'btn btn-danger btn-md','data-confirm'=>'Are you sure to ยกเลิก this item?'])
+                    .'</div>'
+                : '';?>
+
             <!-- <div class="text-center">
                 <label for="update" data-id=<?=$model->id?> class="btn btn-success act-update">แก้ไข</label>
                 <?= Html::a('ลบ', ['del', 'id' => $model->id], ['class' => 'btn btn-danger btn-md','data-confirm'=>'Are you sure to ยกเลิก this item?']) ?>

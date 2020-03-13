@@ -51,7 +51,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= $form->field($model, 'title', [
                         'inputOptions' => [
                             'placeholder' => $model->getAttributeLabel('title'),
-                                'class'=>'form-control'
+                                'class'=>'form-control',
+                                'value' => $model->title ? $model->title : 'ขอใช้ห้องประชุมทางจอภาพ Web Conference',
                             ],
                         ]);
                     ?>

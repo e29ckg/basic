@@ -58,6 +58,29 @@ class Line extends \yii\db\ActiveRecord
         return $model ? $model->profile->fname.$model->profile->name.' '.$model->profile->sname : null ;
     }
 
+    public function send_sms_to($name,$message)
+    {
+        $modelLine = Line::findOne(['name' => $name,'status' => 1]);
+        if(isset($modelLine->token)){
+            return Line::notify_message($modelLine->token,$message);            
+        }
+        return false;
+    }
+    
+    public function getToken($name)
+    {
+        $modelLine = Line::findOne(['name' => $name,'status' => 1]);
+        
+        return $modelLine ? $modelLine->token : false;
+    }
+    
+    public function getTokenbyid($id)
+    {
+        $model_user = User::findOne($id);
+        $modelLine = Line::findOne(['name' => $model_user['username'],'status' => 1]);
+        
+        return $modelLine ? $modelLine->token : false;
+    }
 
     public function notify_message($token,$message){
         $mms =  trim($message);
@@ -163,18 +186,5 @@ class Line extends \yii\db\ActiveRecord
         return $json;
     }
 
-    public function getToken($name)
-    {
-        $modelLine = Line::findOne(['name' => $name,'status' => 1]);
-        
-        return $modelLine ? $modelLine->token : false;
-    }
     
-    public function getTokenbyid($id)
-    {
-        $model_user = User::findOne($id);
-        $modelLine = Line::findOne(['name' => $model_user['username'],'status' => 1]);
-        
-        return $modelLine ? $modelLine->token : false;
-    }
 }

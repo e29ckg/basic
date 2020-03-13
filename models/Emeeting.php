@@ -29,7 +29,7 @@ class Emeeting extends \yii\db\ActiveRecord
         return [
             [['title','start','end', 'cname', 'fname','tel'], 'required'],
             [['title', 'cname', 'fname'], 'string', 'max' => 255],
-            [['file'], 'file', 'extensions' => 'pdf, png, jpg, jpeg', 'skipOnEmpty' => true, 'maxSize'=> 1024 * 1024 * 5],
+            [['file'], 'file', 'extensions' => 'pdf, png, jpg, jpeg', 'skipOnEmpty' => true, 'maxSize'=> 1024 * 1024 * 10],
         ];
     }
 

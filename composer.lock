@@ -54,9 +54,9 @@
             "authors": [
                 {
                     "name": "2amigOS! Consulting Group",
+                    "role": "Developer",
                     "email": "hola@2amigos.us",
-                    "homepage": "http://2amigos.us",
-                    "role": "Developer"
+                    "homepage": "http://2amigos.us"
                 }
             ],
             "description": "QrCode Generator",
@@ -620,9 +620,9 @@
             "authors": [
                 {
                     "name": "Dave Gandy",
+                    "role": "Developer",
                     "email": "dave@fontawesome.io",
-                    "homepage": "http://twitter.com/davegandy",
-                    "role": "Developer"
+                    "homepage": "http://twitter.com/davegandy"
                 }
             ],
             "description": "The iconic font and CSS framework",
@@ -1046,9 +1046,9 @@
             "authors": [
                 {
                     "name": "Ashot Khanamiryan",
+                    "role": "Developer",
                     "email": "a.khanamiryan@gmail.com",
-                    "homepage": "https://github.com/khanamiryan",
-                    "role": "Developer"
+                    "homepage": "https://github.com/khanamiryan"
                 }
             ],
             "description": "QR code decoder / reader",
