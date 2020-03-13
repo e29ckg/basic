@@ -47,14 +47,7 @@ $this->title = 'ระบบจองใช้ห้องประชุมท�
 						<?=$model->start?> ถึง <?=$model->end?>
 					</td>
 					<td class="text-center"> 
-					
-					<?= !empty($model->file) ? 
-						Html::a('<i class="fa fa-file-o"></i> ไฟล์เอกสาร ', ['emeeting/viewfile_view','id' => $model->id], [
-							// 'class' => 'btn btn-xs',
-							'data-id' => $model->id,
-							'target' => '_blank'
-						])
-						:'';?>
+										
             <button class ="act-update1 btn btn-warning btn-xs" data-id = "<?=$model->id?>">
               <i class="fa fa-wrench"></i> แก้ไข 
             </button>
