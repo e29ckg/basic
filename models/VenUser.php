@@ -26,7 +26,8 @@ class VenUser extends \yii\db\ActiveRecord
     {
         return [
             [['user_id','order','price'],'required'],   
-            [['order'], 'integer']
+            [['order'], 'integer'],
+            [['price'], 'number']
         ];
     }
 
@@ -39,7 +40,7 @@ class VenUser extends \yii\db\ActiveRecord
             'id' => 'ID',
             'user_id' => 'ชื่อ',
             'order' => 'ลำดับ',
-            'ND' => 'กางคืน/กลางวัน',
+            'DN' => 'กลางคืน/กลางวัน',
             'price' => 'ค่าตอบแทน',
             'comment' => 'รายละเอียด',
         ];

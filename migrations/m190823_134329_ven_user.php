@@ -22,6 +22,8 @@ class m190823_134329_ven_user extends Migration
             'id' => $this->primaryKey(),
             'user_id' => $this->integer(),
             'order' => $this->string(),
+            'DN' => $this->integer(2),
+            'price' => $this->string(),
             'comment' => $this->string(),
             'create_at' => $this->dateTime(),
         ], $tableOptions);
