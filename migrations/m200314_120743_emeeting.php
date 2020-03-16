@@ -30,6 +30,7 @@ class m200314_120743_emeeting extends Migration
             'tel' => $this->string(),
             'detail' => $this->string(),
             'status' => $this->string(),
+            'ip' => $this->string(),
             'created_at' => $this->dateTime(),
         ], $tableOptions);
     }
