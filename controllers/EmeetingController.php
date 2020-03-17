@@ -25,6 +25,7 @@ class EmeetingController extends Controller
 
     public $line_sms ='http://10.37.64.01';
     public $filePath = '/uploads/emeeting/';
+    public $line_name = 'emeeting';
 
     public function behaviors()
     {
@@ -123,7 +124,7 @@ class EmeetingController extends Controller
                 $model->created_at = date("Y-m-d H:i:s");
                 $message = $model->cname .' '.$model->title.' '.$model->start .' โดย '.$model->fname.':'.$model->tel;
                 if($model->save()){          
-                    Line::send_sms_to('admin99',$message);                           
+                    Line::send_sms_to($this->line_name,$message);                           
                     Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');                   
                 }  
 
@@ -185,8 +186,9 @@ class EmeetingController extends Controller
                 $model->tel = $request['tel'];
                 $model->detail = $request['detail'];            
                 // $model->created_at = date("Y-m-d H:i:s");
-
-                if($model->save()){                                       
+                $message = '[แก้ไข]'.$model->title.$model->start;
+                if($model->save()){                      
+                    Line::send_sms_to($this->line_name,$message);                                        
                     Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');                   
                 }  
 
@@ -239,7 +241,7 @@ class EmeetingController extends Controller
         } 
        
         if($model->delete()){ 
-            Line::send_sms_to('admin99',$message);              
+            Line::send_sms_to($this->line_name,$message);              
             Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');   
         }   
         return $this->redirect(['index']);

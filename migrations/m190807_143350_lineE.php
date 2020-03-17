@@ -29,6 +29,8 @@ class m190807_143350_lineE extends Migration
         $this->insert('line', ['name' => 'LineGroup','token' => null]);
         $this->insert('line', ['name' => 'bila_admin','token' => null]);
         $this->insert('line', ['name' => 'ven','token' => null]);  
+        $this->insert('line', ['name' => 'court_order','token' => null]); 
+        $this->insert('line', ['name' => 'emeeting','token' => null]);  
     }
 
     /**
