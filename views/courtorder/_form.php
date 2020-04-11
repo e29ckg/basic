@@ -66,7 +66,7 @@ $form->field($model, 'date_write')->widget(DatePicker::classname(), [
     'options' => [
         'class' => 'form-control',
         'placeholder' => $model->getAttributeLabel('date_write'),
-        'value' => date('Y-m-d', strtotime('today')),
+        'value' => $model->date_write ? $model->date_write : date('Y-m-d', strtotime('today')),
     ],
     'pluginOptions' => [
         'autoclose' => true,

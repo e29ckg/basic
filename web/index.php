@@ -9,29 +9,31 @@ require __DIR__ . '/../vendor/yiisoft/yii2/Yii.php';
 
 $config = require __DIR__ . '/../config/web.php';
 
-$defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
-$fontDirs = $defaultConfig['fontDir'];
+// $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+// $fontDirs = $defaultConfig['fontDir'];
 
-$defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
-$fontData = $defaultFontConfig['fontdata'];
+// $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+// $fontData = $defaultFontConfig['fontdata'];
 
 
-$mpdf = new \Mpdf\Mpdf([
-    'fontDir' => array_merge($fontDirs, [
-        __DIR__ . '/css/font',
-    ]),
-    'fontdata' => $fontData + [
-        // จุดสำคัญคือตรงชื่อ font ตรงนี้ต้องตัวเล็กหมดครับ
-        'thsarabun' => [
-            'R' => 'THSarabunNew.ttf',
-        ]
-    ],
-    'sans_fonts' => 'thsarabun',
-    'default_font' => 'thsarabun',
+// $mpdf = new \Mpdf\Mpdf([
+//     'fontDir' => array_merge($fontDirs, [
+//         __DIR__ . '/css/fonts',
+//     ]),
+//     'fontdata' => $fontData + [
+//         // จุดสำคัญคือตรงชื่อ font ตรงนี้ต้องตัวเล็กหมดครับ
+//         'thsarabun' => [
+//             // 'R' => 'THSarabunNew.ttf',
+//             'R' => 'thsarabunnew-webfont.ttf',
+            
+//         ]
+//     ],
+//     'sans_fonts' => 'thsarabun',
+//     'default_font' => 'thsarabun',
     
-]);
+// ]);
 
-// $mpdf->WriteHTML('<p>ทดสอบภาษาไทย</p>');
+// $mpdf->WriteHTML('<p>ทดสอบภาษาไทย ไร่</p>');
 // $mpdf->Output();
 
 (new yii\web\Application($config))->run();

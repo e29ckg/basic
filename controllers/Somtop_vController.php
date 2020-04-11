@@ -2,7 +2,8 @@
 
 namespace app\controllers;
 use Yii;
-use app\models\Emeeting;
+use app\models\SomtopV;
+use app\models\Somtop;
 use app\models\Line;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -13,28 +14,30 @@ use yii\helpers\Url;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
 use kartik\mpdf\Pdf;
+use Da\QrCode\QrCode;
+use yii\db\Transaction;
+use yii\db\Connection;
 
 /**
  * Web_linkController implements the CRUD actions for Ven model.
  */
-class EmeetingController extends Controller
+class Somtop_vController extends Controller
 {
     /**
      * {@inheritdoc}
      */    
 
     public $line_sms ='http://10.37.64.01';
-    public $filePath = '/uploads/emeeting/';
 
     public function behaviors()
     {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['test'],
+                'only' => ['change_user_index','index','change_del_user','change_del','admin_index','change_index','com_index','show_ven_change','show_ven'],
                 'rules' => [
                     [
-                        'actions' => ['test'],
+                        // 'actions' => ['index'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -57,10 +60,10 @@ class EmeetingController extends Controller
     
     public function actionIndex()
     {
-        $models = Emeeting::find()
+        $models = SomtopV::find()
             ->orderBy([
             // 'date_create'=>SORT_DESC,
-            'id' => SORT_DESC,
+            'ven_date' => SORT_DESC,
             ])->limit(500)->all(); 
 
         $event = [];
@@ -68,11 +71,11 @@ class EmeetingController extends Controller
             
             $even = [
                 'id' => $model->id,
-                'title' => date('H:i', strtotime($model->start)).' '.$model->cname,
+                'title' => $model->getName(),
                 // 'title' => $model->ven_date.' '.$model->ven_time,
-                'start' => $model->start,
-                // 'textColor' => $model->legal_c_id == Yii::$app->user->identity->id ? 'yellow' :'',
-                'end' => $model->end,
+                'start' => $model->ven_date,
+                // 'textColor' => $model->somtop_id == Yii::$app->user->identity->id ? 'yellow' :'',
+                // 'end' => $model->date_end.'T12:30:00',
                 // 'backgroundColor' => $backgroundColor,
                 // 'borderColor' => $model->status == 1 ? '' :'#f56954'
             ];
@@ -81,13 +84,12 @@ class EmeetingController extends Controller
         $event = json_encode($event);
         return $this->render('index',[
             'event' => $event,
-            'models' => $models
         ]);
     }
 
-    public function actionCreate()
+    public function actionCreate($date_id)
     {
-        $model = new Emeeting();  
+        $model = new SomtopV();  
         
         if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -97,97 +99,11 @@ class EmeetingController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $transaction = Yii::$app->db->beginTransaction();
             try {
-                $f = UploadedFile::getInstance($model, 'file');
-                if(!empty($f)){
-                    $dir = Url::to('@webroot'.$this->filePath);
-                    if (!is_dir($dir)) {
-                        mkdir($dir, 0777, true);
-                    }
-                    $fileName = md5($f->baseName . time()) . '.' . $f->extension;
-                    if($f->saveAs($dir . $fileName)){
-                        $model->file = $fileName;
-                    }               
-                }else{
-                    $model->file = null;
-                } 
-
-                $request = Yii::$app->request->post('Emeeting');
-                // $model->id = time();
-                $model->title = $request['title'];
-                $model->start = $request['start'];
-                $model->end = $request['end'];
-                $model->cname = $request['cname'];
-                $model->fname = $request['fname'];
-                $model->tel = $request['tel'];
-                $model->detail = $request['detail'];            
+                $request = Yii::$app->request->post('SomtopV');
+                $model->id = time();
+                $model->ven_date = $request['ven_date'];
+                $model->somtop_id = $request['somtop_id'];  
                 $model->created_at = date("Y-m-d H:i:s");
-                $model->ip = $request['ip'];
-                $model->status = 'ขอใช้';
-                $message = $model->cname .' '.$model->title.' '.$model->start .' โดย '.$model->fname.':'.$model->tel;
-                if($model->save()){          
-                    Line::send_sms_to('admin99',$message);                           
-                    Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');                   
-                }  
-
-                $transaction->commit();               
-                
-            } catch (\Exception $e) {
-                $transaction->rollBack();
-                throw $e;
-            }   
-            
-            return $this->redirect(['index']);
-        }
-        
-        if(Yii::$app->request->isAjax){
-            return $this->renderAjax('_form',[
-                'model' => $model,   
-            ]);
-        }
-        
-        return $this->render('_form',[
-            'model' => $model,  
-        ]);
-    }
-
-    public function actionUpdate($id)
-    {
-        $model = Emeeting::findOne($id);  
-        $fileName = $model->file;
-        if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ActiveForm::validate($model);
-        } 
-     
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $transaction = Yii::$app->db->beginTransaction();
-            try {
-                $f = UploadedFile::getInstance($model, 'file');
-                if(!empty($f)){
-                    $dir = Url::to('@webroot'.$this->filePath);
-                    if (!is_dir($dir)) {
-                        mkdir($dir, 0777, true);
-                    }
-                    if($fileName && is_file($dir.$fileName)){
-                        unlink($dir.$fileName);// ลบ ไฟล์เดิม; 
-                    }
-                    $fileName = md5($f->baseName . time()) . '.' . $f->extension;
-                    if($f->saveAs($dir . $fileName)){
-                        $model->file = $fileName;
-                    }               
-                }
-
-                $request = Yii::$app->request->post('Emeeting');
-                
-                $model->title = $request['title'];
-                $model->start = $request['start'];
-                $model->end = $request['end'];
-                $model->cname = $request['cname'];
-                $model->fname = $request['fname'];
-                $model->tel = $request['tel'];
-                $model->detail = $request['detail'];   
-                $model->ip = $request['ip'];         
-                // $model->created_at = date("Y-m-d H:i:s");
 
                 if($model->save()){                                       
                     Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');                   
@@ -205,56 +121,115 @@ class EmeetingController extends Controller
         
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('_form',[
-                'model' => $model,   
+                'model' => $model,  
+                'date_id'   => $date_id,   
             ]);
         }
         
         return $this->render('_form',[
             'model' => $model,
+            'date_id'   => $date_id,   
+        ]);
+    }
+
+    public function actionUpdate($id)
+    {
+        $model = SomtopV::findOne($id);  
+        
+        if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        } 
+     
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                $request = Yii::$app->request->post('SomtopV');
+                $model->id = time();
+                $model->ven_date = $request['ven_date'];
+                $model->somtop_id = $request['somtop_id']; 
+                $model->created_at = date("Y-m-d H:i:s");
+
+                if($model->save()){                                       
+                    Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');                   
+                }  
+
+                $transaction->commit();               
+                
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            }   
+            
+            return $this->redirect(['index']);
+        }
+        
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('_form',[
+                'model' => $model,  
+                'date_id'   => $model->ven_date,   
+            ]);
+        }
+        
+        return $this->render('_form',[
+            'model' => $model,
+            'date_id'   => $model->ven_date,  
         ]);
     }
 
     
     public function actionView($id)
     {
-        $model = Emeeting::findOne($id);        
-        $completePath = Url::to('@web'.'/uploads/emeeting/').$model->file;
+        $model = SomtopV::findOne($id);        
+           
         return $this->renderAjax('view',[
             'model' => $model,
-            'completePath' => $completePath
         ]);
 
         return $this->render('view',[
-            'model' => $model, 
-            'completePath' => $completePath 
+            'model' => $model,  
         ]);
     }
 
     public function actionDel($id)
     {
-        $model = Emeeting::findOne($id);  
-        $fileName = $model->file; 
-        $message = Yii::$app->user->id.' [ลบ] '.$model->cname.$model->title.' วันที่ '.$model->start;
-        $filePath = Url::to('@webroot'.$this->filePath.'/'.$fileName);     
-        // $dir = Url::to('@webroot'.$this->filePath);
-        if($fileName && is_file($filePath)){
-            unlink($filePath);// ลบ ไฟล์เดิม;        
-        } 
-       
-        if($model->delete()){ 
-            Line::send_sms_to('admin99',$message);              
-            Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');   
+        $model = SomtopV::findOne($id);        
+        if($model->delete()){            
+            Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');                                            
         }   
         return $this->redirect(['index']);
     }
 
     protected function findModel($id)
     {
-        if (($model = Emeeting::findOne($id)) !== null) {
+        if (($model = SomtopV::findOne($id)) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
+    public function actionLine_alert($id) {
+        $model = $this->findModel($id);        
+        
+        $sms = $model->ven_date;
+        $sms .= "\n";
+                
+        $sms .= $model->getName() ;
+        $sms .= "\n";
+        $sms .= '(เวรที่ผู้พิพากษาสมทบ)';
+        $sms .= "\n";                
+         
+        $modelLine = Line::findOne(['name' => 'LineGroup']);     //แจ้ง lineGroup 
+        
+        if(isset($modelLine->token)){                
+            $res = Line::notify_message($modelLine->token,$sms);  
+            $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'lineGroup ส่งไลน์เรียบร้อย') : Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+        }
+        
+        Yii::$app->session->setFlash('success', 'เรียบร้อย'.$sms );   
+            
+        return $this->redirect(['index']);        
+    }
+    
 }

@@ -27,41 +27,43 @@ $this->title = 'ระบบจองใช้ห้องประชุมท�
     <div class="col-md-12">
       <div class="box box-primary">
         <div class="box-body">
-          <table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
-            <thead>
-              <tr role="row">
-                <th class = "text-center" ></th>
-                <th class = "text-center" >รายละเอียด</th>
-                <th style="width: 100px;"></th>
-              </tr>
-            </thead>
-            <tbody>                              
-              <?php foreach ($models as $model): ?>
-                <tr>
-                  <td class="text-center" alt="<?=$model->id?>">
-                    <?=$model->cname?>
-                    <br><?= $model->title;?>
-                  </td>										
-                  <td>
-                    <?=$model->start?> ถึง <?=$model->end?>
-                  </td>
-                  <td class="text-center"> 
-                            
-                    <button class ="act-update1 btn btn-warning btn-xs" data-id = "<?=$model->id?>">
-                      <i class="fa fa-wrench"></i> แก้ไข 
-                    </button>
+        <table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+			<thead>
+				<tr role="row">
+					<th class = "text-center" style="width: 100px;">ประเภทการลา</th>
+					<th class = "text-center" style="width: 500px;">รายละเอียด</th>
+					<th style="width: 100px;"></th>
+				</tr>
+			</thead>
+			<tbody>  
+				<?php $i = 1?>                              
+				<?php foreach ($models as $model): ?>
+				<tr>
+					<td class="text-center" alt="<?=$model->id?>">
+						<?=$model->cname?>
+						<br><?= $model->title;?>
+					</td>										
+					<td>
+						<?=$model->start?> ถึง <?=$model->end?>
+					</td>
+					<td class="text-center"> 
+										
+            <button class ="act-update1 btn btn-warning btn-xs" data-id = "<?=$model->id?>">
+              <i class="fa fa-wrench"></i> แก้ไข 
+            </button>
 
-                    <?=						
-                    Html::a('<i class="fa fa-remove"></i> ลบ ', ['emeeting/del', 'id' => $model->id], [
-                      'class' => 'btn btn-danger btn-xs',
-                      'data-confirm' => 'Are you sure?',
-                      'data-method' => 'post',
-                    ]) ?>			        
-                  </td>
-                </tr>
-              <?php  endforeach; ?>								
-            </tbody>
-          </table>
+						<?=						
+						 Html::a('<i class="fa fa-remove"></i> ลบ ', ['emeeting/del', 'id' => $model->id], [
+							'class' => 'btn btn-danger btn-xs',
+							'data-confirm' => 'Are you sure?',
+							'data-method' => 'post',
+						]) ?>			        
+					</td>
+				</tr>
+				<?php  endforeach; ?>								
+			</tbody>
+		</table>
+
         </div>
       </div>
     </div>

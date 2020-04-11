@@ -164,6 +164,12 @@ class Ven extends \yii\db\ActiveRecord
         // return $model ? $model->fname.$model->name.' '.$model->sname : '-';
     }
 
+    public function getProfilePhone(){
+        $model=$this->profile;
+        // return $model ? $model->name: '-';
+        return $model ? $model->phone : '-';
+    }
+
     public function getVenComNum(){
         $model = $this->venCom;
         return $model ? $model->ven_com_num : '-';

@@ -11,6 +11,7 @@ use app\models\LineFormSend;
 use app\models\LineHome;
 use app\models\Blueshirt;
 use app\models\LegalCVen;
+use app\models\SomtopV;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -493,122 +494,180 @@ class LineController extends Controller
     public function actionLine_send_daily()
     {
         $strDate = date("Y-m-d",strtotime(date("Y-m-d"))) ;
+        $thaiDate = Bila::DateThai_full($strDate); 
+        $sms = $thaiDate; 
+        $sms .= "\n";
 
-        $models = Bila::find()
-            ->where("date_begin <= '$strDate'")
-            ->andWhere("date_end >= '$strDate'")
-            ->andWhere("status <> 4")
-            ->all();
-
-        $sms = Bila::DateThai_full($strDate);
-    
-        $sms .= "\n".'--------E-La่---------'."\n";
-        foreach ($models as $model):        
-            $sms .= $model->profile->name .'->';
-            $sms .= $model->cat.'('.$model->date_total.')';
-            $model->comment ? $sms .= "\n".$model->comment : '' ;
+        $Q_model = Bila::find()
+                        ->where("date_begin <= '$strDate'")
+                        ->andWhere("date_end >= '$strDate'")
+                        ->andWhere("status <> 4");
+        if($Q_model->count() >= 1){
+            $models = $Q_model->all();               
+            $sms .= "\n".'--------E-La่---------'."\n";
+            foreach ($models as $model):        
+                $sms .= $model->profile->name .'->';
+                $sms .= $model->cat.'('.$model->date_total.')';
+                $model->comment ? $sms .= "\n".$model->comment : '' ;
+                $sms .= "\n";
+            endforeach;  
             $sms .= "\n";
-        endforeach;  
-        // $sms .= "\n";
-
-        $models = Ven::find()
-            ->where([
-                'ven_date' => $strDate,
-                'status' => [1,2]
-                ])
-            ->orderBy(['ven_time'=>SORT_ASC])
-            ->all();
-
-        $sms .= '--------E-VeN---------'."\n";
-        foreach ($models as $model):        
-            $sms .= date("H:i ",strtotime($model->ven_time));
-            $sms .=' '.$model->getProfileNameCal();
-            $sms .= $model->status == 1 ? '':' (รออนุมัติ)';
-            $sms .= "\n";
-
-            $sms_a = Bila::DateThai_full($strDate);
-            $sms_a .= "\n";
-            $sms_a .= $model->getProfileNameCal().' '.date("H:i ",strtotime($model->ven_time)).$model->venCom->ven_com_name;
-            
-            $modelLine = Line::findOne(['name' => $model->user->username]);     //แจ้งส่วนตัว- เวร
-            if(isset($modelLine->token)){                
-                $res = Line::notify_message($modelLine->token,$sms_a);  
-                $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') : Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
-            }
-
-        endforeach;  
-        $sms .= '--------------------------';
-
-        $modelLine = Line::findOne(['name' => 'bila_admin']);     //แจ้ง bila_admin - เวร
-        if(isset($modelLine->token)){                
-            $res = Line::notify_message($modelLine->token,$sms);  
-            $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') : Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
         }
+                
+        $Q_model = Ven::find()->where(['ven_date' => $strDate,'status' => [1,2]]);        
+        if($Q_model->count() >= 1){
+            $models = $Q_model->orderBy(['ven_time'=>SORT_ASC])->all();  
+            $sms .= '--------E-VeN---------'."\n";
+            foreach ($models as $model):
 
+                if($model->ven_time == '08:30:00'){
+                    $ven_boss['name'] = $model->getProfileName();
+                    $ven_boss['phone'] = $model->getProfilePhone();
+                }
+                if($model->ven_time == '08:30:01'){
+                    $ven_boss_h['name'] = $model->getProfileName();
+                    $ven_boss_h['phone'] = $model->getProfilePhone();
+                }  
+
+                $sms .= date("H:i ",strtotime($model->ven_time));
+                $sms .=' '.$model->getProfileNameCal();
+                $sms .= $model->status == 1 ? '':' (รออนุมัติ)';
+                $sms .= "\n";
+                $sms_a = $thaiDate;
+                $sms_a .= "\n";
+                $sms_a .= $model->getProfileNameCal().' '.date("H:i ",strtotime($model->ven_time)).$model->venCom->ven_com_name;
+                
+                $modelLine = Line::findOne(['name' => $model->user->username]);     //แจ้งส่วนตัว- เวร
+                if(isset($modelLine->token)){                
+                    $res = Line::notify_message($modelLine->token,$sms_a);  
+                    $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') : Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+                }
+            endforeach;  
+            $sms .= '--------------------------';
+        }
+        if(isset($ven_boss['name']) && isset($ven_boss_h['name'])){
+            $sms_to_group = 'สวัสดีค่ะ วันนี้'.$ven_boss_h['name'];
+            $sms_to_group .= '.เป็นหัวหน้าเวรธุรการหากมีเหตุขัดข้องหรือประสานงานติดต่อเบอร์ ';
+            $sms_to_group .= $ven_boss_h['phone']."\n";
+            $sms_to_group .= 'สภ.ใดมีคดีรบกวนแจ้ง';
+            $sms_to_group_g = $sms_to_group;
+            $sms_to_group_g .= "\n".$ven_boss['name'].' ('.$ven_boss['phone'].')';
+            $sms_to_group .= 'ล่วงหน้าด้วยนะค่ะ ขอบคุณค่ะ';
+            $sms_to_group_g .= 'ล่วงหน้าด้วยนะค่ะ ขอบคุณค่ะ';
+        }
+        Line::send_sms_to('LineGroup',$sms_to_group);
+        Line::notify_img('LineGroupG',$sms_to_group_g);
+        Line::send_sms_to('bila_admin',$sms);
+                
+    
 /*------------------------------------แจ้ง เสี้อฟ้า ---------------------------------------------*/
         $modelBS = Blueshirt::findOne(['line_alert' => $strDate]);
         if($modelBS){
             $message = 'เวรเสื้อฟ้า '.$modelBS->line_alert."\n";
             $message .= $modelBS->getProfileName() .'(เวร)'."\n".$modelBS->getProfileName2().'(ตรวจ)';
-            if($token = Line::getToken('blueshirt')){                
-                $res = Line::notify_message($token,$message);  
-                $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
-            }
+            Line::send_sms_to('LineGroupG',$message);
         }
 /*------------------------------------แจ้ง เวรที่ปรึกษา lineGroup ---------------------------------------------*/
-
         $Q_model = LegalCVen::find()->where(['ven_date' => $strDate]);
         if($Q_model->count() >= 1){
-            $models = $Q_model->all();            
-
-            $modelLine = Line::findOne(['name' => 'LineGroup']);     //แจ้ง lineGroup 
-            $modelLineT = Line::findOne(['name' => 'ที่ปรึกษากฎหมาย']);     //แจ้ง lineGroup 
-
-            $sms_c = Bila::DateThai_full($strDate);
+            $models = $Q_model->all();   
+            $sms_c = $thaiDate;
             $sms_c .= "\n";
             foreach ($models as $model):        
                 $sms_c .= $model->getName() ;
                 $sms_c .= "\n";
                 $sms_c .= '(เวรที่ปรึกษากฎหมาย)';
                 $sms_c .= "\n";                
-            endforeach; 
-            if(isset($modelLine->token)){                
-                $res = Line::notify_message($modelLine->token,$sms_c);  
-                $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') : Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
-            }
-            if(isset($modelLineT->token)){                
-                $res = Line::notify_message($modelLineT->token,$sms_c);  
-                $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') : Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
-            }
-            Yii::$app->session->setFlash('success', 'เรียบร้อย'.$sms_c );   
+            endforeach;            
+            Line::send_sms_to('ที่ปรึกษากฎหมาย',$sms_c);
+            Line::send_sms_to('LineGroup',$sms_c);              
         }
-                
-
+/*------------------------------------แจ้ง เวรผู้พิพากษาสมทบ lineGroup ---------------------------------------*/
+        $Q_model = SomtopV::find()->where(['ven_date' => $strDate]);
+        if($Q_model->count() >= 1){
+            $models = $Q_model->all(); 
+            $sms_c = $thaiDate; 
+            $sms_c = "\n";
+            $sms_c .= 'เวรผู้พิพากษาสมทบ';
+            $sms_c .= "\n";
+            foreach ($models as $model):        
+                $sms_c .= $model->getName() ;
+                $sms_c .= "\n";                            
+            endforeach;             
+            Line::send_sms_to('LineGroup',$sms_c);
+        }
 /*------------------------------------แจ้ง หนังสือเวียน lineGroup ---------------------------------------------*/
-
         $Q_model = CLetter::find()->where(['line_alert' => $strDate]);
         if($Q_model->count() >= 1){
-            $models = $Q_model->all();            
-
-            $modelLine = Line::findOne(['name' => 'LineGroup']);     //แจ้ง หนังสือเวียน lineGroup 
-
-            $sms_c = 'วันที่ '.Bila::DateThai_full($strDate);
+            $models = $Q_model->all();
+            $sms_c = 'วันที่ '.$thaiDate;
             $sms_c .= "\n";
             foreach ($models as $model):        
                 $sms_c .= $model->name ;
                 $sms_c .= "\n";
                 $sms_c .= '(http://10.37.64.01/cletter.php?ref='.$model->id.')';
                 $sms_c .= "\n";
-                if(isset($modelLine->token)){                
-                    $res = Line::notify_message($modelLine->token,$sms_c);  
-                    $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') : Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
-                }
+                $sms_c .= '-------------------'."\n";
             endforeach; 
-            Yii::$app->session->setFlash('success', 'เรียบร้อย'.$sms_c );   
+            Line::send_sms_to('LineGroupG',$sms_c);
         }
-
-
+        Yii::$app->session->setFlash('success', 'เรียบร้อย');   
         return $this->render('test',['id' => $sms]);
     }
 
+    public function actionTest()
+    {
+        $strDate = date("Y-m-d",strtotime(date("Y-m-d"))) ;
+        $thaiDate = Bila::DateThai_full($strDate);
+        $sms = $thaiDate; 
+        $sms .= "\n";
+
+        $Q_model = Ven::find()->where(['ven_date' => $strDate,'status' => [1,2]]);  
+              
+        if($Q_model->count() >= 1){
+            $models = $Q_model->orderBy(['ven_time'=>SORT_ASC])->all();  
+            $sms .= '--------E-VeN---------'."\n";
+            foreach ($models as $model): 
+
+                if($model->ven_time == '08:30:00'){
+                    $ven_boss['name'] = $model->getProfileName();
+                    $ven_boss['phone'] = $model->getProfilePhone();
+                }
+                if($model->ven_time == '08:30:01'){
+                    $ven_boss_h['name'] = $model->getProfileName();
+                    $ven_boss_h['phone'] = $model->getProfilePhone();
+                }  
+
+                $sms .= date("H:i ",strtotime($model->ven_time));
+                $sms .=' '.$model->getProfileNameCal();
+                $sms .= $model->status == 1 ? '':' (รออนุมัติ)';
+                $sms .= "\n";
+                $sms_a = $thaiDate;
+                $sms_a .= "\n";
+                $sms_a .= $model->getProfileNameCal().' '.date("H:i ",strtotime($model->ven_time)).$model->venCom->ven_com_name;
+                
+                $modelLine = Line::findOne(['name' => $model->user->username]);     //แจ้งส่วนตัว- เวร
+                if(isset($modelLine->token)){                
+                    $res = Line::notify_message($modelLine->token,$sms_a);  
+                    $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') : Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
+                }
+            endforeach;  
+            $sms .= '--------------------------';
+        }
+
+        if(isset($ven_boss['name']) && isset($ven_boss_h['name'])){
+            $sms_to_group = 'สวัสดีค่ะ วันนี้'.$ven_boss_h['name'];
+            $sms_to_group .= '.เป็นหัวหน้าเวรธุรการหากมีเหตุขัดข้องหรือประสานงานติดต่อเบอร์ ';
+            $sms_to_group .= $ven_boss_h['phone']."\n";
+            $sms_to_group .= 'สภ.ใดมีคดีรบกวนแจ้ง';
+            $sms_to_group_g = $sms_to_group;
+            $sms_to_group_g .= "\n".$ven_boss['name'].' ('.$ven_boss['phone'].')';
+            $sms_to_group .= 'ล่วงหน้าด้วยนะค่ะ ขอบคุณค่ะ';
+            $sms_to_group_g .= 'ล่วงหน้าด้วยนะค่ะ ขอบคุณค่ะ';
+        }
+        // $sms_to_group_g = $sms_to_group.$sms_to_group_g;
+        Line::notify_img('9929',$sms_to_group);
+        // Line::send_sms_to('LineGroupG',$sms_to_group); 
+        return 'ok'; 
+    }
 }

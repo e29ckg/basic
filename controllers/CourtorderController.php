@@ -31,7 +31,6 @@ class CourtorderController extends Controller
     public $upload ='/uploads/user/';
     public $filePath = '/uploads/CourtOrderBigboss/';
     public $smsLineAlert = ' http://10.37.64.01/main/web/CourtOrderBigboss/show/';
-    public $line_name = 'court_order';
 
     public function behaviors()
     {
@@ -178,17 +177,17 @@ class CourtorderController extends Controller
 
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'); 
                    
-                
+                if($token = Line::getToken('bila_admin')){
                     $message = 'เพิ่ม-คำสั่งศาลฯ '. $model->num.'/'.$model->year.' '.$model->name.'#'. Profile::getProfileNameById(Yii::$app->user->identity->id).'#';
             
-                    $res = Line::send_sms_to($this->line_name,$message);
+                    $res = Line::notify_message($token,$message);
                     
                     if($res['status'] == 200){
                         Yii::$app->session->setFlash('info', 'Line Notify ส่งได้');
                     }else{
                         Yii::$app->session->setFlash('warning', 'Line Notify ส่งไม่ได้ Error'.$res['status']);
                     }
-                             
+                }               
                 return $this->redirect(['index']);
             }   
         }
@@ -249,17 +248,17 @@ class CourtorderController extends Controller
 
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย'); 
                 
-                
+                if($token = Line::getToken('bila_admin')){
                     $message = 'เพิ่ม-คำสั่งสำนักงานฯ '. $model->num.'/'.$model->year.' '.$model->name.'#'. Profile::getProfileNameById(Yii::$app->user->identity->id).'#';
             
-                    $res = Line::send_sms_to($this->line_name,$message);
+                    $res = Line::notify_message($token,$message);
                     
                     if($res['status'] == 200){
                         Yii::$app->session->setFlash('info', 'Line Notify ส่งได้');
                     }else{
                         Yii::$app->session->setFlash('warning', 'Line Notify ส่งไม่ได้ Error'.$res['status']);
                     }
-                             
+                }               
                 return $this->redirect(['index']);
             }   
         }
@@ -328,17 +327,18 @@ class CourtorderController extends Controller
             $model->date_write = $_POST['CourtOrderBigboss']['date_write'];
             $model->file = $fileName;
             if($model->save()){
-                                
-                $message = 'แก้ไข-คำสั่งศาลฯ '. $model->num.'/'.$model->year.' '.$model->name.'#'. Profile::getProfileNameById(Yii::$app->user->identity->id).'#';
-        
-                $res = Line::send_sms_to($this->line_name,$message);
-                
-                if($res['status'] == 200){
-                    Yii::$app->session->setFlash('info', 'Line Notify ส่งได้');
-                }else{
-                    Yii::$app->session->setFlash('warning', 'Line Notify ส่งไม่ได้ Error'.$res['status']);
-                }
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
+                if($token = Line::getToken('bila_admin')){
+                    $message = 'แก้ไข-คำสั่งศาลฯ '. $model->num.'/'.$model->year.' '.$model->name.'#'. Profile::getProfileNameById(Yii::$app->user->identity->id).'#';
+            
+                    $res = Line::notify_message($token,$message);
+                    
+                    if($res['status'] == 200){
+                        Yii::$app->session->setFlash('info', 'Line Notify ส่งได้');
+                    }else{
+                        Yii::$app->session->setFlash('warning', 'Line Notify ส่งไม่ได้ Error'.$res['status']);
+                    }
+                } 
             }; 
       
             return $this->redirect(['index', 'id' => $fileName]);
@@ -393,17 +393,17 @@ class CourtorderController extends Controller
             $model->file = $fileName;
             if($model->save()){
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
-                
+                if($token = Line::getToken('bila_admin')){
                     $message = 'แก้ไข-คำสั่งสำนักงานฯ '. $model->num.'/'.$model->year.' '.$model->name.'#'. Profile::getProfileNameById(Yii::$app->user->identity->id).'#';
             
-                    $res = Line::send_sms_to($this->line_name,$message);
+                    $res = Line::notify_message($token,$message);
                     
                     if($res['status'] == 200){
                         Yii::$app->session->setFlash('info', 'Line Notify ส่งได้');
                     }else{
                         Yii::$app->session->setFlash('warning', 'Line Notify ส่งไม่ได้ Error'.$res['status']);
                     }
-                
+                } 
             }; 
       
             return $this->redirect(['index', 'id' => $fileName]);
@@ -440,17 +440,17 @@ class CourtorderController extends Controller
         if($model->delete()){
 
             Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');   
-           
-            $message = 'ลบ-คำสั่งศาลฯ '. $model->num.'/'.$model->year.' '.$model->name.'#'. Profile::getProfileNameById(Yii::$app->user->identity->id).'#';
-        
-            $res = Line::send_sms_to($this->line_name,$message);
+            if($token = Line::getToken('bila_admin')){
+                $message = 'ลบ-คำสั่งศาลฯ '. $model->num.'/'.$model->year.' '.$model->name.'#'. Profile::getProfileNameById(Yii::$app->user->identity->id).'#';
             
-            if($res['status'] == 200){
-                Yii::$app->session->setFlash('info', 'Line Notify ส่งได้');
-            }else{
-                Yii::$app->session->setFlash('warning', 'Line Notify ส่งไม่ได้ Error'.$res['status']);
-            }
-                                           
+                $res = Line::notify_message($token,$message);
+                
+                if($res['status'] == 200){
+                    Yii::$app->session->setFlash('info', 'Line Notify ส่งได้');
+                }else{
+                    Yii::$app->session->setFlash('warning', 'Line Notify ส่งไม่ได้ Error'.$res['status']);
+                }
+            }                                
         }        
 
         return $this->redirect(['index']);
@@ -469,17 +469,17 @@ class CourtorderController extends Controller
         if($model->delete()){
                         
             Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');    
+            if($token = Line::getToken('bila_admin')){
+                $message = 'ลบ-คำสั่งสำนักงานฯ '. $model->num.'/'.$model->year.' '.$model->name.'#'. Profile::getProfileNameById(Yii::$app->user->identity->id).'#';
             
-            $message = 'ลบ-คำสั่งสำนักงานฯ '. $model->num.'/'.$model->year.' '.$model->name.'#'. Profile::getProfileNameById(Yii::$app->user->identity->id).'#';
-        
-            $res = Line::send_sms_to($this->line_name,$message);
-            
-            if($res['status'] == 200){
-                Yii::$app->session->setFlash('info', 'Line Notify ส่งได้');
-            }else{
-                Yii::$app->session->setFlash('warning', 'Line Notify ส่งไม่ได้ Error'.$res['status']);
-            }
-                                            
+                $res = Line::notify_message($token,$message);
+                
+                if($res['status'] == 200){
+                    Yii::$app->session->setFlash('info', 'Line Notify ส่งได้');
+                }else{
+                    Yii::$app->session->setFlash('warning', 'Line Notify ส่งไม่ได้ Error'.$res['status']);
+                }
+            }                                 
         }        
 
         return $this->redirect(['index']);

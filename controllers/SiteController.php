@@ -119,9 +119,14 @@ class SiteController extends Controller
                 $res = Line::notify_message($modelLine->token,$message);  
                 $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
             } 
+            $name = 'admin';
+            Line::send_sms_to($name,$message);
             Yii::$app->session->setFlash('success','เข้าสู่ระบบเรียบร้อย');
             return $this->goBack();
         }
+
+        
+
 
         $model->password = '';
         return $this->render('login', [

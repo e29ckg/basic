@@ -51,6 +51,12 @@ $menu = [
                 ['label' => 'ทนายความโดนแบน', 'icon' => 'user-times', 'url' => ['law_ban/index']], 
             ],
         ],
+        ['label' => 'เวรผู้พิพากษาสมทบ', 'icon' => 'users', 'url' => '#',
+            'items' => [
+                ['label' => 'รายชื่อผู้พิพากษาสมทบ', 'icon' => 'id-card-o', 'url' => ['somtop/index']],
+                ['label' => 'ตารางเวรผู้พิพากษาสมทบ', 'icon' => 'fa fa-user-o', 'url' => ['somtop_v/index']],
+            ],
+        ],
         ['label' => 'สร้าง  QrCode', 'icon' => ' fa-qrcode', 'url' => ['qrgen/index']], 
         [
             'label' => 'เบิกของ CartX', 
@@ -162,7 +168,12 @@ $menu_admin = [
                 ['label' => 'ทนายความโดนแบน', 'icon' => 'user-times', 'url' => ['law_ban/index']],                
             ],
         ],
-        
+        ['label' => 'เวรผู้พิพากษาสมทบ', 'icon' => 'users', 'url' => '#',
+            'items' => [
+                ['label' => 'รายชื่อผู้พิพากษาสมทบ', 'icon' => 'id-card-o', 'url' => ['somtop/index']],
+                ['label' => 'ตารางเวรผู้พิพากษาสมทบ', 'icon' => 'fa fa-user-o', 'url' => ['somtop_v/index']],
+            ],
+        ],
         ['label' => 'เสี้อฟ้า', 'icon' => 'id-card-o', 'url' => ['blueshirt/index']],
         ['label' => 'ส่งคำพิพากษา 7', 'icon' => ' fa-qrcode', 'url' => ['ppss/index']], 
         ['label' => 'สร้าง  QrCode', 'icon' => ' fa-qrcode', 'url' => ['qrgen/index']],  

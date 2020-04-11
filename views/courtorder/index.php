@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
 											<?=$model->getProfileName()?>
 											<?php
 if ($model->owner == Yii::$app->user->identity->id || Yii::$app->user->identity->role == 9) {
-    echo Html::a('<i class="fa fa-wrench"></i> แก้ไข ','#', [
+    echo Html::label('<i class="fa fa-wrench"></i> แก้ไข ','javascript:void(0)', [
         'class' => 'act-update btn btn-warning btn-xs',
         'data-id' => $model->id,
     ]) . ' ';}?>
@@ -122,7 +122,7 @@ $(document).ready(function() {
 /* BASIC ;*/
 
 		$('#example1').DataTable({
-			"pageLength": 10,
+			"pageLength": 100,
 			'ordering'    : false,
 			'lengthChange': true,
 			'paging'      : true,
@@ -130,7 +130,7 @@ $(document).ready(function() {
 		})
 
 	$('#example2').DataTable({
-			"pageLength": 10,
+			"pageLength": 100,
 			'ordering'    : false,
 			'lengthChange': true,
 			'paging'      : true,

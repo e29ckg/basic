@@ -41,7 +41,7 @@ use app\models\SignBossName;
             <th  width="90%" class=""><H2>ใบลาพักผ่อน</H2> </th>	
             <th  width="10%" class="">
                 <img src="<?= $model->getQr($model->id,$model->user_id);?>" height="60" width="60" >
-                <div style="font-size: 12px; "><?=isset($model->running) ? $model->running : $model->id?></div>
+                <div style="font-size: 9px; "><?=$model->id?></div>
             </th>				
 		</tr>
 	</thead>    
@@ -84,10 +84,7 @@ use app\models\SignBossName;
     </tr>
     <tr>
         <td colspan="1">เรียน</td>
-        <td colspan="11">
-        <?=$model->getProfileDep() == 'ผู้อำนวยการฯ' ? 'ผู้พิพากษาหัวหน้าศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์' : 'ผู้อำนวยการสำนักงานประจำศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์';?>
-        <!-- ผู้อำนวยการสำนักงานประจำศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์ -->
-        </td>
+        <td colspan="11">ผู้อำนวยการสำนักงานประจำศาลเยาวชนและครอบครัวจังหวัดประจวบคีรีขันธ์</td>
     </tr>
     <tr>
         <td colspan="2" ></td>
@@ -127,31 +124,29 @@ use app\models\SignBossName;
     <tr>
         <td colspan="14" ><?= $model->comment ? '( หมายเหตุ ' .$model->comment. ' )' : '' ;?></td>
     </tr>
-
     <tr>
-        <td colspan="7" style="text-align:center">
-            - ทราบ<br><br><br>
-            (ลงชื่อ)................................................................
-            <?php 
-                if(!empty($model->bigboss)){
-                    $model_s_bigboss = SignBossName::find()->where(['id' => $model->bigboss])->one();
-                    
-                        echo $model_s_bigboss ? '<br><br>('.$model_s_bigboss->name.')<br>'.$model_s_bigboss->dep1.'<br>'.$model_s_bigboss->dep2.'<br>'.$model_s_bigboss->dep3 : '<br><br><br><br><br><br><br>'; 
-                    
-                }else{
-                    echo '<br><br><br><br><br><br><br>';
-                }
-            ?>
-        </td>       
-        <td colspan="7" style="text-align:center;">
-            ขอแสดงความนับถือ<br><br><br>
-            (ลงชื่อ)................................................................<br><br>
-            ( <?= $model->getProfileName();?> )
+    <td colspan="8" style="text-align:center">
+        - ทราบ<br><br><br>
+        (ลงชื่อ)................................................................
+        <?php 
+            if(!empty($model->bigboss)){
+                $model_s_bigboss = SignBossName::find()->where(['id' => $model->bigboss])->one();
+                
+                    echo $model_s_bigboss ? '<br><br>('.$model_s_bigboss->name.')<br>'.$model_s_bigboss->dep1.'<br>'.$model_s_bigboss->dep2.'<br>'.$model_s_bigboss->dep3 : '<br><br><br><br><br><br><br>'; 
+                
+            }else{
+                echo '<br><br><br><br><br><br><br>';
+            }
+        ?>
+    </td>       
+    <td colspan="10" style="text-align:center;">
+        ขอแสดงความนับถือ<br><br><br>
+        (ลงชื่อ)................................................................<br><br>
+        ( <?= $model->getProfileName();?> )
         </td>        
     </tr>
-      
     <tr>
-        <td colspan="7"> 
+        <td colspan="8"> 
             <table class="table_bordered" width="100%" border="0" cellpadding="2" cellspacing="0">
                 <tr>
                     <td colspan="6" style="text-align:center">สถิติการลาในปีงบประมาณนี้</td>
@@ -181,28 +176,24 @@ use app\models\SignBossName;
             <table class="bl_detail" width="100%" border="0" cellpadding="2" cellspacing="0"> 
                 <tr>
                     <td colspan="8"><br>
-                    <?=$model->getProfileDep() == 'ผู้อำนวยการฯ' ?
-                     '' : 
-                    'ประธานเสนอ ผู้พิพากษาหัวหน้าศาลฯ<br>
-                    - เพื่อโปรดทราบ<br><br>';?>
-                    <!-- ประธานเสนอ ผู้พิพากษาหัวหน้าศาลฯ<br>
-                    - เพื่อโปรดทราบ<br><br><br> -->
+                    ประธานเสนอ ผู้พิพากษาหัวหน้าศาลฯ<br>
+                    - เพื่อโปรดทราบ<br><br><br>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="8" style="text-align:center">
-                        <br> 
-                        <?php 
-                            if(!empty($model->po)){
-                                $model_s_po = SignBossName::find()->where(['id' => $model->po])->one();
-                                if($model_s_po){
-                                    echo '('.$model_s_po->name.')<br>'.$model_s_po->dep1.'<br>'.$model_s_po->dep2.'<br>'.$model_s_po->dep3; 
-                                }
-                            }else{
-                                echo '';
+                <td colspan="8" style="text-align:center">
+                    <br> 
+                    <?php 
+                        if(!empty($model->po)){
+                            $model_s_po = SignBossName::find()->where(['id' => $model->po])->one();
+                            if($model_s_po){
+                                echo '('.$model_s_po->name.')<br>'.$model_s_po->dep1.'<br>'.$model_s_po->dep2.'<br>'.$model_s_po->dep3; 
                             }
-                        ?>
-                    </td>
+                        }else{
+                            echo '';
+                        }
+                    ?>
+                </td>
                 </tr>
                 <tr>
                     <td colspan="8"><br><br>                      
@@ -212,7 +203,6 @@ use app\models\SignBossName;
                 </tr>
             </table>
         </td>
-
         <td colspan="7">
             <table class="table_bordered" width="100%" border="0" cellpadding="2" cellspacing="0">
                 <tr>

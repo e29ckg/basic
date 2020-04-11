@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'enableAjaxValidation' => true,
         ]);  ?>
-      
+    <?= $form->field($model, 'ip')->hiddenInput(['value'=> Yii::$app->getRequest()->getUserIP()  ])->label(false);?>
     <div class="box-body">
         <div class="row">
             <div class="col-md-12">

@@ -158,7 +158,7 @@ class VenController extends Controller
         $VenMonth = Ven::DateThai_month_full($modelVenMonth->ven_month).' ';  
         $VenMonth .= date('Y', strtotime($modelVenMonth->ven_month)) + 543;     
        
-        // $data = [];
+        $data = [];
         $totals = 0;
         foreach ($models_ven_user as $model_ven_user):            
             $day = [];
@@ -1358,11 +1358,11 @@ $total_d = 0;
         $models = VenCom::find()->orderBy(['id' => SORT_DESC])->groupBy('ven_month')->limit(100)->all();  
         $data = [];
         // $data1 = [];
-        $num = [];
+        // $num = [];
         foreach ($models as $model):
                                 
                 $model_nums = VenCom::find()->select(['ven_com_num','ven_time','ven_month'])->where(['ven_month'=> $model->ven_month])->groupBy('ven_com_num')->orderBy(['ven_com_num' => SORT_DESC])->all();
-                // $num =[];
+                $num =[];
                 
                 foreach ($model_nums as $model_num):  
 
