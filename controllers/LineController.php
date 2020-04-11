@@ -554,11 +554,10 @@ class LineController extends Controller
             $sms_to_group_g .= "\n".$ven_boss['name'].' ('.$ven_boss['phone'].')';
             $sms_to_group .= 'ล่วงหน้าด้วยนะค่ะ ขอบคุณค่ะ';
             $sms_to_group_g .= 'ล่วงหน้าด้วยนะค่ะ ขอบคุณค่ะ';
-        }
-        Line::send_sms_to('LineGroup',$sms_to_group);
-        Line::notify_img('LineGroupG',$sms_to_group_g);
-        Line::send_sms_to('bila_admin',$sms);
-                
+            Line::send_sms_to('LineGroup',$sms_to_group);
+            Line::notify_img('LineGroupG',$sms_to_group_g);
+        }        
+        Line::send_sms_to('bila_admin',$sms);                
     
 /*------------------------------------แจ้ง เสี้อฟ้า ---------------------------------------------*/
         $modelBS = Blueshirt::findOne(['line_alert' => $strDate]);
@@ -664,10 +663,10 @@ class LineController extends Controller
             $sms_to_group_g .= "\n".$ven_boss['name'].' ('.$ven_boss['phone'].')';
             $sms_to_group .= 'ล่วงหน้าด้วยนะค่ะ ขอบคุณค่ะ';
             $sms_to_group_g .= 'ล่วงหน้าด้วยนะค่ะ ขอบคุณค่ะ';
-        }
-        // $sms_to_group_g = $sms_to_group.$sms_to_group_g;
-        Line::notify_img('9929',$sms_to_group);
-        // Line::send_sms_to('LineGroupG',$sms_to_group); 
+            // $sms_to_group_g = $sms_to_group.$sms_to_group_g;
+            Line::notify_img('9929',$sms_to_group);
+            // Line::send_sms_to('LineGroupG',$sms_to_group); 
+        }        
         return 'ok'; 
     }
 }
