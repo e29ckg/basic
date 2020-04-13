@@ -495,16 +495,16 @@ class LineController extends Controller
     {
         $strDate = date("Y-m-d",strtotime(date("Y-m-d"))) ;
         $thaiDate = Bila::DateThai_full($strDate); 
-        $sms = $thaiDate; 
-        $sms .= "\n";
+        $sms = $thaiDate;        
 
         $Q_model = Bila::find()
                         ->where("date_begin <= '$strDate'")
                         ->andWhere("date_end >= '$strDate'")
                         ->andWhere("status <> 4");
         if($Q_model->count() >= 1){
-            $models = $Q_model->all();               
-            $sms .= "\n".'--------E-La่---------'."\n";
+            $models = $Q_model->all();  
+            $sms .= "\n";             
+            $sms .= '--------E-La่---------'."\n";
             foreach ($models as $model):        
                 $sms .= $model->profile->name .'->';
                 $sms .= $model->cat.'('.$model->date_total.')';
@@ -517,6 +517,7 @@ class LineController extends Controller
         $Q_model = Ven::find()->where(['ven_date' => $strDate,'status' => [1,2]]);        
         if($Q_model->count() >= 1){
             $models = $Q_model->orderBy(['ven_time'=>SORT_ASC])->all();  
+            $sms .= "\n";
             $sms .= '--------E-VeN---------'."\n";
             foreach ($models as $model):
 
