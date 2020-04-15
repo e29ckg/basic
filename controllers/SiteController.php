@@ -113,20 +113,16 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
 
             $modelUser = User::findOne(Yii::$app->user->identity->id);
+            Yii::$app->user->identity->username;
             $message = $modelUser->getProfileName().' เข้าสู่ระบบ ด้วย IP '.Yii::$app->getRequest()->getUserIP();
-            $modelLine = Line::findOne(['name' => $modelUser->username]);
-            if(isset($modelLine->token)){                
-                $res = Line::notify_message($modelLine->token,$message);  
-                $res['status'] == 200 ? Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย') :  Yii::$app->session->setFlash('info', 'ส่งไลน์ ไม่ได้') ;  
-            } 
-            $name = 'admin';
-            Line::send_sms_to($name,$message);
+            
+            if(Line::send_sms_to($modelUser->username,$message)['status'] == 200){
+                Yii::$app->session->setFlash('info', 'ส่งไลน์เรียบร้อย');
+            }
+            Line::send_sms_to('admin',$message);
             Yii::$app->session->setFlash('success','เข้าสู่ระบบเรียบร้อย');
             return $this->goBack();
         }
-
-        
-
 
         $model->password = '';
         return $this->render('login', [
