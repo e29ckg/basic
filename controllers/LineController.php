@@ -556,7 +556,8 @@ class LineController extends Controller
             $sms_to_group .= 'ล่วงหน้าด้วยนะค่ะ ขอบคุณค่ะ';
             $sms_to_group_g .= 'ล่วงหน้าด้วยนะค่ะ ขอบคุณค่ะ';
             Line::send_sms_to('LineGroup',$sms_to_group);
-            Line::notify_img('LineGroupG',$sms_to_group_g);
+            $url_img = 'https://sv1.picz.in.th/images/2020/04/11/UWMBT0.jpg';
+            Line::notify_img('LineGroupG',$sms_to_group_g,$url_img);
         }        
         Line::send_sms_to('bila_admin',$sms);                
     
@@ -657,15 +658,17 @@ class LineController extends Controller
 
         if(isset($ven_boss['name']) && isset($ven_boss_h['name'])){
             $sms_to_group = 'สวัสดีค่ะ วันนี้'.$ven_boss_h['name'];
-            $sms_to_group .= '.เป็นหัวหน้าเวรธุรการหากมีเหตุขัดข้องหรือประสานงานติดต่อเบอร์ ';
+            $sms_to_group = '.เป็นหัวหน้าเวรธุรการหากมีเหตุขัดข้องหรือประสานงานติดต่อเบอร์ ';
             $sms_to_group .= $ven_boss_h['phone']."\n";
             $sms_to_group .= 'สภ.ใดมีคดีรบกวนแจ้ง';
             $sms_to_group_g = $sms_to_group;
             $sms_to_group_g .= "\n".$ven_boss['name'].' ('.$ven_boss['phone'].')';
             $sms_to_group .= 'ล่วงหน้าด้วยนะค่ะ ขอบคุณค่ะ';
             $sms_to_group_g .= 'ล่วงหน้าด้วยนะค่ะ ขอบคุณค่ะ';
-            // $sms_to_group_g = $sms_to_group.$sms_to_group_g;
-            Line::notify_img('9929',$sms_to_group);
+            $sms_to_group_g = $sms_to_group.$sms_to_group_g;
+            $url_img = 'https://sv1.picz.in.th/images/2020/04/11/UWMBT0.jpg';
+            Line::notify_img('9929',$sms_to_group_g,$url_img);
+            // Line::notify_img('9929',$sms_to_group);
             // Line::send_sms_to('LineGroupG',$sms_to_group); 
         }        
         return 'ok'; 
