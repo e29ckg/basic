@@ -115,7 +115,7 @@ class Line extends \yii\db\ActiveRecord
      return $res;
     }
 
-    public function notify_img($name,$sms){
+    public function notify_img($name,$sms,$url_img){
         $modelLine = Line::findOne(['name' => $name,'status' => 1]);
         if(isset($modelLine->token)){
        
@@ -125,8 +125,8 @@ class Line extends \yii\db\ActiveRecord
             $access_token = $modelLine->token;
 
             $message = $sms;    //text max 1,000 charecter
-            $image_thumbnail_url = 'https://sv1.picz.in.th/images/2020/04/11/UWMBT0.jpg';  // max size 240x240px JPEG
-            $image_fullsize_url = 'https://sv1.picz.in.th/images/2020/04/11/UWMBT0.jpg'; //max size 1024x1024px JPEG
+            $image_thumbnail_url = $url_img;  // max size 240x240px JPEG
+            $image_fullsize_url = $url_img; //max size 1024x1024px JPEG
             // $imageFile = 'copy/240.jpg';
             // $sticker_package_id = '';  // Package ID sticker
             // $sticker_id = '';    // ID sticker
@@ -139,11 +139,8 @@ class Line extends \yii\db\ActiveRecord
                 // 'stickerPackageId' => $sticker_package_id,
                 // 'stickerId' => $sticker_id
                     );
-            $result = Line::send_notify_message($line_api, $access_token, $message_data);
+        return Line::send_notify_message($line_api, $access_token, $message_data);
 
-            // echo '<pre>';
-            //     print_r($result);
-            //     echo '</pre>';  
         } 
     }
 
